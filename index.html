@@ -157,7 +157,7 @@ summary{cursor:pointer;font-weight:700}
 #qrBox img,#qrBox canvas{max-width:100%;height:auto}
 .url{font:12px var(--f-mono);word-break:break-all;background:var(--paper);border-radius:8px;padding:6px 8px}
 @media (max-width:860px){
-  .panel>.head{order:1} #form{order:2} #fb{order:3} .story{order:4} .general{order:4} .targets{order:5} .hints{order:6} details{order:7}
+  .panel>.head{order:1} #form{order:2} #fb{order:3} .story{order:4} .panel.tut .story{order:1} .general{order:4} .targets{order:5} .hints{order:6} details{order:7}
 }
 </style>
 
@@ -269,13 +269,13 @@ if(ML){ try{ MathfieldElement.fontsDirectory=null; MathfieldElement.soundsDirect
 /* ============ Niveles ============ */
 const LEVELS = [
  {id:"t0", tutorial:true, title:"Primeros pasos", kind:"Tutorial · no cuenta para la nota",
-  story:"Vector camina por la curva que tú escribes. Tiene que ir de la salida a la meta sin tocar obstáculos y recogiendo monedas. Para practicar, escribe con el teclado x² + y² = 9: toca x, □², +, y, □², =, 9 y luego Trazar. Después elige con las flechas por qué lado va Vector: ¡ojo con el obstáculo!",
+  story:"Vector camina por la curva que tú escribes. Tiene que ir de la salida a la meta sin tocar obstáculos y recogiendo monedas. Para practicar, escribe con el teclado x² + y² = 9: toca x, □², +, y, □², =, 9. Pero ojo: la circunferencia llega a la meta por arriba y por abajo, y abajo hay un obstáculo. Elige el lado con la ecuación: en Restricción toca x para cambiarla por y, y escribe 0 en la primera casilla. Queda 0 ≤ y, solo la mitad de arriba. Luego pulsa Trazar.",
   targets:["x^2+y^2=9"], start:[-3,0], goal:[3,0], coins:[[0,3],[-2.12,2.12]], obstacles:[[0,-3]], view:{cx:0,cy:0,span:12},
-  hints:["Las pistas orientan sin darte la respuesta. En el tutorial no gastan tus 3 pistas gratis.","Si fallas, Vector recorre tu camino igual y ves dónde se equivocó. El intento anterior queda tenue en el mapa."]},
+  hints:["Las pistas orientan sin darte la respuesta. En el tutorial no gastan tus 3 pistas gratis.","Una curva cerrada, como la circunferencia, llega a la meta por dos lados. La restricción (por ejemplo 0 ≤ y) recorta la curva y deja solo el lado que quieres.","Si fallas, Vector recorre tu camino igual y ves dónde se equivocó. El intento anterior queda tenue en el mapa."]},
  {id:"c1", title:"Isla Circular", kind:"Circunferencia",
   story:"El camino rodea la isla por arriba. La salida y la meta están en lados opuestos de la orilla. Escribe la circunferencia que las une.",
   targets:["(x+1)^2+(y-2)^2=9"], start:[-4,2], goal:[2,2], coins:[[-1,5],[0.8,4.4]], obstacles:[[-1,-1]], view:{cx:-1,cy:2,span:14},
-  hints:["Mira la salida y la meta: el centro de la circunferencia está en el punto medio entre ellas.","Mide la distancia del centro a la salida: ese es el radio. Luego usa (x − h)² + (y − k)² = r²."]},
+  hints:["Mira la salida y la meta: el centro de la circunferencia está en el punto medio entre ellas.","Mide la distancia del centro a la salida: ese es el radio. Luego usa (x − h)² + (y − k)² = r².","Para ir por arriba, la restricción deja solo los puntos con y mayor o igual que la altura del centro."]},
  {id:"c2", title:"Valle Elíptico", kind:"Elipse · forma general",
   story:"El mapa da la ecuación del valle en forma general. Complétale los cuadrados y escríbela en forma canónica para que Vector cruce por abajo.",
   general:"4x² + 9y² − 16x + 18y − 11 = 0",
@@ -561,9 +561,10 @@ function walk(F,start,sgn,I,L){
 }
 function dirLabel(w){ const n=Math.min(12,w.pts.length-1); const dx=w.pts[n][0]-w.pts[0][0], dy=w.pts[n][1]-w.pts[0][1];
   return Math.abs(dx)>Math.abs(dy)?(dx>0?"hacia la derecha":"hacia la izquierda"):(dy>0?"hacia arriba":"hacia abajo"); }
-// choices[i]: sentido elegido por el estudiante para el tramo i (1 o -1)
-function plan(eqs,choices){
-  const L=level(), path=[], res={path,hit:-1,hitObs:-1,reached:false,breakAt:-1,coinAt:L.coins.map(()=>-1),nocurve:false,offStart:false,need:null};
+// Vector siempre va hacia donde su camino lo lleva a la meta (o al siguiente tramo).
+// Si la curva llega por los dos lados, el estudiante debe recortarla con una restricción: no se elige con flechas.
+function plan(eqs){
+  const L=level(), L0={...L,obstacles:[]}, path=[], res={path,hit:-1,hitObs:-1,reached:false,breakAt:-1,coinAt:L.coins.map(()=>-1),nocurve:false,offStart:false,ambiguous:null};
   let pos=L.start;
   for(let i=0;i<eqs.length;i++){
     const {F,I}=eqs[i];
@@ -571,14 +572,12 @@ function plan(eqs,choices){
       if(!g2.curves[i].some(sg=>sg.in)){ res.nocurve=true; res.badPiece=i; }
       else if(i===0) res.offStart=true; else res.breakAt=i;
       res.fallAt=pos; break; }
-    const A=walk(F,pos,1,I,L), B=walk(F,pos,-1,I,L);
-    let w;
-    const okA=A.len>0.3||A.reached||A.hit>=0, okB=B.len>0.3||B.reached||B.hit>=0;
-    if(okA&&okB){
-      if(choices[i]==null){ let la=dirLabel(A), lb=dirLabel(B); if(la===lb){ la+=" (flecha 1)"; lb+=" (flecha 2)"; }
-        res.need={piece:i,at:pos,opts:[{sgn:1,label:la,pts:A.pts},{sgn:-1,label:lb,pts:B.pts}]}; break; }
-      w=choices[i]===1?A:B;
-    } else w=okA?A:(okB?B:(A.len>=B.len?A:B));
+    const A0=walk(F,pos,1,I,L0), B0=walk(F,pos,-1,I,L0), nx=eqs[i+1];
+    const good=w=>{ if(w.len<0.3) return false; if(!nx) return w.reached; return w.pts.some((e,k)=>k>3&&dist2(nx.F,e)<0.15&&inI(nx.I,e)); };
+    const gA=good(A0), gB=good(B0);
+    if(gA&&gB){ res.ambiguous={piece:i,at:pos,opts:[{pts:A0.pts},{pts:B0.pts}]}; break; }
+    const sgn=gA?1:gB?-1:(A0.len>=B0.len?1:-1);
+    const w=walk(F,pos,sgn,I,L);
     w.pts.forEach((p,k)=>{ path.push({x:p[0],y:p[1]}); const gi=path.length-1;
       L.coins.forEach((c,ci)=>{ if(res.coinAt[ci]<0&&d2(c,p)<0.22) res.coinAt[ci]=gi; }); });
     if(w.hit>=0){ res.hit=path.length-1; res.hitObs=L.obstacles.findIndex(o=>d2(o,w.pts[w.hit])<0.35); break; }
@@ -663,14 +662,14 @@ function draw(){
     const sq=Math.abs(Math.cos(t*2.2+ci)); x2.fillStyle=C.gold; x2.strokeStyle=C.ink; x2.lineWidth=1.5;
     x2.beginPath(); x2.ellipse(sx,sy,9*Math.max(0.25,sq),9,0,0,7); x2.fill(); x2.stroke();
     label(fmtP(c),sx+11,sy-7,C); });
-  // flechas para elegir el camino
+  // dos caminos posibles: el estudiante debe recortar la curva con una restricción
   if(g2.choose){ const o=g2.choose; o.opts.forEach((op,k)=>{ const n=Math.min(25,op.pts.length-1); const a=toS(o.at[0],o.at[1],V), b=toS(op.pts[n][0],op.pts[n][1],V);
       const dx=b[0]-a[0], dy=b[1]-a[1], l=Math.hypot(dx,dy)||1, ux=dx/l, uy=dy/l, tip=[a[0]+ux*58,a[1]+uy*58]; op.tip=tip;
       const col=k===0?C.acc:C.curve; x2.strokeStyle=col; x2.fillStyle=col; x2.lineWidth=5; x2.lineCap="round";
       x2.beginPath(); x2.moveTo(a[0]+ux*14,a[1]+uy*14); x2.lineTo(tip[0],tip[1]); x2.stroke();
       x2.beginPath(); x2.moveTo(tip[0]+ux*10,tip[1]+uy*10); x2.lineTo(tip[0]-uy*9,tip[1]+ux*9); x2.lineTo(tip[0]+uy*9,tip[1]-ux*9); x2.closePath(); x2.fill();
       const pulse=1+0.12*Math.sin(t*6); x2.beginPath(); x2.arc(tip[0]+ux*22,tip[1]+uy*22,12*pulse,0,7); x2.fill();
-      x2.fillStyle="#fff"; x2.font="800 13px "+css("--f-body"); x2.textAlign="center"; x2.textBaseline="middle"; x2.fillText(String(k+1),tip[0]+ux*22,tip[1]+uy*22); }); }
+      x2.fillStyle="#fff"; x2.font="800 13px "+css("--f-body"); x2.textAlign="center"; x2.textBaseline="middle"; x2.fillText("?",tip[0]+ux*22,tip[1]+uy*22); }); }
   // letrero con la ecuación del mapa
   if(L.general){ x2.font="600 12px "+css("--f-mono"); const txt=L.general, w=x2.measureText(txt).width;
     const bx=8, by=8, bw=Math.min(W-16,w+20); x2.fillStyle=C.paper; x2.globalAlpha=0.92; x2.fillRect(bx,by,bw,38); x2.globalAlpha=1; x2.strokeStyle=C.ink; x2.lineWidth=1.5; x2.strokeRect(bx,by,bw,38);
@@ -691,26 +690,23 @@ function doSubmit(){
     L.targets.forEach((_,i)=>{ const tag=L.mixed?`Tramo ${i+1}: `:"";
       let e; try{ e=compileEq(eqText($("eq"+i))); }catch(err){ throw new Error(tag+err.message); }
       const pb=canonicalProblem(e); if(pb) throw new Error(tag+pb);
-      let I=null; if(L.mixed){ try{ I=ivFrom(i); }catch(err){ throw new Error(tag+"intervalo. "+err.message); } }
+      let I=null; try{ I=ivFrom(i,!L.mixed); }catch(err){ throw new Error(tag+(L.mixed?"intervalo. ":"restricción. ")+err.message); }
       eqs.push({F:e.F,L:e.L,R:e.R,I}); });
   }catch(err){ showFb("bad","Revisa lo que escribiste.",err.message); return; }
   if(g2.curves.length) g2.prevCurves=g2.curves;
-  g2.eqs=eqs; g2.curves=eqs.map(e=>buildSegs(e.F,e.I)); $("win").hidden=true; g2.choices=[];
-  run();
+  g2.eqs=eqs; g2.curves=eqs.map(e=>buildSegs(e.F,e.I)); $("win").hidden=true;   run();
   const st=$("stage").getBoundingClientRect(); if(st.top<0) $("stage").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function run(){
-  const r=plan(g2.eqs,g2.choices);
-  if(r.need){ g2.choose=r.need; g2.result=null; g2.path=[]; g2.prog=0; g2.anim=false; g2.mood="idle";
-    const f=$("fb"); f.className="feedback"; f.innerHTML=`<span class="t">${g2.eqs.length>1?`Tramo ${r.need.piece+1}: `:""}¿Por dónde va Vector?</span><span>Toca una flecha en el mapa o elige aquí.</span><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>`;
-    r.need.opts.forEach((o,k)=>{ const b=document.createElement("button"); b.type="button"; b.className=k?"btn ghost":"btn"; b.textContent=`${k+1}. Ir ${o.label}`; b.onclick=()=>pick(o.sgn); f.lastChild.appendChild(b); });
+  const r=plan(g2.eqs);
+  if(r.ambiguous){ g2.choose=r.ambiguous; g2.result=null; g2.path=[]; g2.prog=0; g2.anim=false; setMood("sad");
+    const L=level(), tag=g2.eqs.length>1?`Tramo ${r.ambiguous.piece+1}: tu`:"Tu";
+    showFb("bad",tag+" curva llega por dos lados y Vector no sabe cuál tomar.",
+      (L.mixed?"Ajusta el intervalo de este tramo":"Agrega una restricción debajo de la ecuación")+" para quedarte solo con el lado que quieres. Por ejemplo, 0 ≤ y deja la parte de arriba del eje x, y x ≤ 2 deja la parte a la izquierda de x = 2.");
     return; }
   g2.choose=null; g2.result=r; g2.path=r.path; g2.prog=0; g2.anim=r.path.length>1; g2.speed=Math.max(110,r.path.length/6);
   if(!g2.anim){ finish(); } else { setMood("walk"); showFb("","Vector está recorriendo tu camino…",""); }
 }
-function pick(sgn){ if(!g2.choose) return; g2.choices[g2.choose.piece]=sgn; run(); }
-c2.addEventListener("click",e=>{ if(!g2.choose) return; const r=c2.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top;
-  let best=null,bd=40; g2.choose.opts.forEach(o=>{ if(!o.tip) return; const d=Math.hypot(o.tip[0]-x,o.tip[1]-y); if(d<bd){bd=d;best=o;} }); if(best) pick(best.sgn); });
 function errorNote(){
   const L=level(); const out=[];
   g2.eqs.forEach((e,i)=>{ const d=diagnose(classify(e.F),classify(compileEq(L.targets[i]).F)); if(d) out.push((L.mixed?`Tramo ${i+1}: `:"")+d); });
@@ -741,7 +737,7 @@ function finish(){
   else if(r.breakAt>0) title=`El tramo ${r.breakAt+1} no empieza donde termina el tramo ${r.breakAt}: Vector se cae en el hueco.`;
   else title="Tu camino no llega a la meta.";
   const sameCurve=!notes.length&&!r.offStart&&!(r.breakAt>0)&&!r.nocurve;
-  showFb("bad",title,sameCurve?"Tu ecuación es la correcta, pero Vector se fue por el otro lado. Pulsa Trazar otra vez y elige la otra flecha.":notes.join(" ")||(L.mixed?"Revisa los intervalos: cada tramo debe empezar donde termina el anterior.":""));
+  showFb("bad",title,sameCurve?(L.mixed?"Tu ecuación es la correcta, pero el intervalo deja a Vector del lado equivocado. Cámbialo para quedarte con la otra parte de la curva.":"Tu ecuación es la correcta, pero la restricción deja a Vector del lado equivocado. Cámbiala para quedarte con la otra parte de la curva."):notes.join(" ")||(L.mixed?"Revisa los intervalos: cada tramo debe empezar donde termina el anterior.":""));
 }
 
 /* ============ Resultados (Google Sheets) ============ */
@@ -815,7 +811,7 @@ const TEX={sq:"#@^{2}",pw:"#@^{#?}",rt:"\\sqrt{#0}",fr:"\\frac{#@}{#?}",mul:"\\c
 const BASE=["x","y","sq","pw","rt","fr","n7","n8","n9","lp","rp","del","n4","n5","n6","add","sub","eq","n1","n2","n3","mul","div","clr","n0","dot","lt","rt2","go"];
 let padOn=store.get("euclidia2-pad",true), active=null;
 function buildPad(){
-  const pad=$("pad"); pad.innerHTML=""; const lay=level().mixed?[...BASE,"nx"]:BASE;
+  const pad=$("pad"); pad.innerHTML=""; const lay=[...BASE,"nx"];
   lay.forEach(id=>{ const k=K[id], b=document.createElement("button"); b.type="button"; b.innerHTML=k.h; if(k.c) b.className=k.c;
     b.setAttribute("aria-label",k.lbl||b.textContent); if(k.span) b.style.gridColumn=`span ${k.span}`;
     b.addEventListener("pointerdown",e=>e.preventDefault());
@@ -913,14 +909,14 @@ function ivButtons(k){ const st=ivs[k], box=$("ivbox"+k);
     const empty=!st[a].trim(), closed=!empty&&(a==="lo"?st.loC:st.hiC);
     b.textContent=ivMode==="ineq"?(closed?"≤":"<"):(a==="lo"?(closed?"[":"("):(closed?"]":")"));
     b.disabled=empty; b.setAttribute("aria-label",empty?"Sin límite (infinito)":(closed?"Cerrado, toca para abrir":"Abierto, toca para cerrar")); }); }
-function ivFrom(k){ const st=ivs[k];
+function ivFrom(k,optional){ const st=ivs[k];
   const lo=st.lo.trim()?evalNum(st.lo):-Infinity, hi=st.hi.trim()?evalNum(st.hi):Infinity;
-  if(lo===-Infinity&&hi===Infinity) throw new Error("Escribe al menos un extremo. La casilla vacía significa que ese lado no tiene límite.");
+  if(lo===-Infinity&&hi===Infinity) if(optional) return null; else throw new Error("Escribe al menos un extremo. La casilla vacía significa que ese lado no tiene límite.");
   if(lo>=hi) throw new Error(`Está al revés: el extremo izquierdo (${fmt(lo)}) debe ser menor que el derecho (${fmt(hi)}).`);
   return {v:st.v,lo,hi}; }
 function loadLevel(i){
   idx=i; const L=level(); renderLevels();
-  $("eyebrow").textContent=L.kind; $("lvTitle").textContent=L.title; $("story").textContent=L.story;
+  $("eyebrow").textContent=L.kind; $("lvTitle").textContent=L.title; $("story").textContent=L.story; $("story").parentElement.classList.toggle("tut",!!L.tutorial);
   $("general").hidden=!L.general; $("general").textContent=L.general?"Ecuación del mapa: "+L.general:"";
   const T=$("targets"); T.innerHTML="";
   const add=(cls,txt)=>{ const li=document.createElement("li"); li.className=cls; li.innerHTML=`<span class="mk"></span>${esc(txt)}`; T.appendChild(li); };
@@ -939,11 +935,20 @@ function loadLevel(i){
     F.appendChild(h);
     md.querySelectorAll("button").forEach(b=>b.onclick=()=>{ ivMode=b.dataset.m; store.set("euclidia2-ivmode",ivMode); renderModes(); });
     renderModes(); }
-  else { const lb=document.createElement("label"); lb.textContent="Ecuación del camino (forma canónica)"; lb.htmlFor="eq0"; F.appendChild(lb); F.appendChild(makeEq(0,"Ecuación del camino")); }
+  else { ivs[0]={v:"x",lo:"",hi:"",loC:true,hiC:true};
+    const lb=document.createElement("label"); lb.textContent="Ecuación del camino (forma canónica)"; lb.htmlFor="eq0"; F.appendChild(lb); F.appendChild(makeEq(0,"Ecuación del camino"));
+    const md=document.createElement("div"); md.className="ivmode";
+    md.innerHTML=`<span>Restricción <span class="small">(opcional)</span></span><span class="seg" role="group" aria-label="Notación de la restricción"><button type="button" data-m="ineq">2 ≤ x ≤ 4</button><button type="button" data-m="brk">x ∈ [2, 4]</button></span>`;
+    F.appendChild(md); const r=document.createElement("div"); r.className="ivrow"; r.id="ivbox0"; F.appendChild(r);
+    const h=document.createElement("p"); h.className="small";
+    h.innerHTML="Úsala cuando la curva llegue a la meta por dos lados: recorta la curva y deja solo un lado. Toca <i>x</i> para cambiarla por <i>y</i>; la casilla vacía significa que ese lado no tiene límite.";
+    F.appendChild(h);
+    md.querySelectorAll("button").forEach(b=>b.onclick=()=>{ ivMode=b.dataset.m; store.set("euclidia2-ivmode",ivMode); renderModes(); });
+    renderModes(); }
   F.querySelectorAll(".eqf").forEach(el=>{ if(el.tagName==="MATH-FIELD") setupMF(el); else wireInput(el); });
   setActive($("eq0")); buildPad(); setPad(padOn); updatePretty();
   $("theory").innerHTML=THEORY; renderHints(); $("win").hidden=true;
-  g2={curves:[],prevCurves:null,path:[],prog:0,anim:false,result:null,mood:"idle",dir:1,eqs:null,choose:null,choices:[]};
+  g2={curves:[],prevCurves:null,path:[],prog:0,anim:false,result:null,mood:"idle",dir:1,eqs:null,choose:null};
   showFb("",L.mixed?"Escribe la ecuación y el intervalo de cada tramo, y pulsa Trazar.":"Escribe la ecuación y pulsa Trazar.","");
 }
 $("form").addEventListener("submit",e=>{ e.preventDefault(); doSubmit(); });
