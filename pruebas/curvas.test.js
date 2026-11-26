@@ -95,7 +95,7 @@ const TEX=[
  await p.addInitScript(()=>{ localStorage.setItem('euclidia2-role','"profesor"'); sessionStorage.setItem('euclidia2-tab','1'); });
  await p.goto('file://'+TMP); await p.waitForTimeout(500);
  const out=await p.evaluate(({C,TEX})=>{
-  const {LEVELS,loadLevel}=window.__euclidia; const {compileEq,canonicalProblem,classify,buildSegs,curveBounds,walk,parseInterval,inI,dist2,tex2plain}=window.__euclidia.t; const W=window.__euclidia.t.W();
+  const {LEVELS,loadLevel}=window.__euclidia; const {compileEq,canonicalProblem,formProblem,classify,buildSegs,curveBounds,walk,parseInterval,inI,dist2,tex2plain}=window.__euclidia.t; const W=window.__euclidia.t.W();
   const R=[]; const res=(grupo,caso,prueba,ok,det)=>R.push({grupo,caso,prueba,ok,det});
   // nivel de prueba vacío (sin monedas ni obstáculos) centrado en la cónica
   LEVELS.push({id:'prueba',tutorial:true,title:'Prueba',kind:'Prueba',story:'',targets:['x^2+y^2=1'],start:[0,0],goal:[99,99],coins:[],obstacles:[],view:{cx:0,cy:0,span:14},hints:[]});
@@ -127,7 +127,8 @@ const TEX=[
     const e=c.e; let [cx,cy]=center(e), span=Math.min(40,Math.max(10,4.5*sizeOf(e))); if(c.view) [cx,cy,span]=c.view; setView(cx,cy,span);
     let eq; try{ eq=compileEq(c.eq); }catch(err){ res(c.g,c.n,'lectura',false,'no se pudo leer: '+err.message); continue; }
     const pb=canonicalProblem(eq);
-    res(c.g,c.n,'aceptada como canónica',true,pb?('el juego la rechaza: «'+pb+'»'):'sí');
+    const fp=formProblem(eq);
+    res(c.g,c.n,'forma (informativa)',true,pb?('pide agrupar: «'+pb+'»'):fp?('pide igualar: «'+fp+'»'):'aceptada como canónica');
     // 1. clasificación
     const s=classify(eq.F); const close=(u,v)=>Math.abs(u-v)<1e-6*(1+Math.abs(v));
     let okc, det='obtuvo '+JSON.stringify(Object.fromEntries(Object.entries(s).map(([k,v])=>[k,typeof v==='number'?f3(v):v])));
@@ -172,6 +173,17 @@ const TEX=[
       for(const sg of [1,-1]){ const w=walk(eq.F,st,sg,I,L0); pts+=w.pts.length; for(const q of w.pts){ const d=near(IX,q); if(d>wd) wd=d; if(I&&!inI(I,q,1e-6)) out++; } }
       res(c.g,c.n,'recorrido de Vector',pts>10&&wd<0.01&&out===0,`${pts} pasos; mayor distancia a la curva ${f3(wd)}`+(I?`; ${out} pasos fuera de la restricción`:'')); }
   }
+  // Forma canónica: qué se acepta y qué pide corregir (true = aceptada tal cual)
+  const FORMS=[
+   ['x^2+y^2=9',true],['(x+1)^2+(y-2)^2=9',true],['9=x^2+y^2',true],['(x-1)^2/9+(y+2)^2/9=1',true],
+   ['2x^2+2y^2=18',false],['-x^2-y^2=-9',false],['x^2+y^2-9=0',false],['(x-1)^2/9+(y+2)^2/9=4',false],
+   ['(x-2)^2/9+(y+1)^2/4=1',true],['1=(x-2)^2/9+(y+1)^2/4',true],['(1/9)(x-2)^2+(1/4)(y+1)^2=1',true],
+   ['4x^2+9y^2=36',false],['4(x-2)^2+9(y+1)^2=36',false],['(x-2)^2/9+(y+1)^2/4=4',false],['-(x-2)^2/9-(y+1)^2/4=-1',false],
+   ['(x-2)^2/9=1-(y+1)^2/4',false],['(x-2)^2/9+(y+1)^2/4-1=0',false],
+   ['x^2/9-y^2/9=1',true],['x^2/9-y^2/4=1',true],['-(x-1)^2/4+(y+1)^2=1',true],
+   ['x^2-y^2=9',false],['y^2-x^2=-9',false],['4x^2-9y^2=36',false],
+   ['y=(x-1)^2/2-3',true],['2y=(x-1)^2-6',true],['(x-1)^2=4(y+3)',true]];
+  for(const [eqs,want] of FORMS){ const fp=formProblem(compileEq(eqs)); res('Forma canónica',eqs,want?'se acepta tal cual':'pide corregirla',(fp===null)===want,fp?('«'+fp+'»'):'aceptada'); }
   // Editor tipo cuaderno: LaTeX → texto → misma curva
   for(const [tex,plain] of TEX){ let ok=false, det='';
     try{ const a=compileEq(tex2plain(tex)), r=compileEq(plain); let md=0;

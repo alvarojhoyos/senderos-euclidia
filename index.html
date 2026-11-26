@@ -580,6 +580,24 @@ function canonicalProblem(eq){
   return null;
 }
 
+/* ---- ¿Ya está igualada como pide la forma canónica? ----
+   Circunferencia: (x − h)² + (y − k)² = r²  (también vale la forma con = 1).  Elipse e hipérbola: … = 1.
+   Devuelve qué corregir, o null si ya está bien escrita. Las parábolas no se revisan aquí. */
+function formProblem(e){
+  const s=classify(e.F); if(!["circunferencia","elipse","hipérbola"].includes(s.type)) return null;
+  const lv=hasVar(e.Last), rv=hasVar(e.Rast);
+  if(lv===rv) return "Deja en un lado solo los términos con x e y, y el número solo en el otro lado.";
+  const S=lv?e.L:e.R, c=lv?e.R(0,0):e.L(0,0), h=s.h, k=s.k, s0=S(h,k), one=v=>Math.abs(v-1)<1e-9;
+  if(Math.abs(s0)>1e-9*(1+Math.abs(c))) return "Pasa todos los números al otro lado: junto a x e y solo deben quedar los cuadrados.";
+  const A=(S(h+1,k)+S(h-1,k))/2-s0;
+  if(one(c)) return null;
+  if(s.type==="circunferencia"){ if(one(A)) return null;
+    if(Number.isInteger(Math.round(A*1e9)/1e9)&&Math.abs(A)>1) return A<0?`Multiplica ambos lados por −1 y divide entre ${fmt(-A)}: los cuadrados deben quedar con coeficiente 1, así (x − h)² + (y − k)² = r².`:`Divide ambos lados entre ${fmt(A)}: los cuadrados deben quedar con coeficiente 1, así (x − h)² + (y − k)² = r².`;
+    if(one(-A)) return "Multiplica ambos lados por −1: los cuadrados deben quedar con coeficiente 1, así (x − h)² + (y − k)² = r²."; }
+  if(c<0) return `El lado derecho debe ser 1: multiplica ambos lados por −1${one(-c)?"":` y divide entre ${fmt(-c)}`}.`;
+  return `El lado derecho debe ser 1: divide ambos lados entre ${fmt(c)}.`;
+}
+
 /* ---- Clasificar una cónica ---- */
 function classify(F){
   const K=F(0,0), a1=F(1,0), a2=F(-1,0), b1=F(0,1), b2=F(0,-1);
@@ -891,10 +909,17 @@ function doSubmit(){
       let e; try{ e=compileEq(eqText($("eq"+i))); }catch(err){ throw new Error(tag+err.message); }
       const pb=canonicalProblem(e); if(pb) throw new Error(tag+pb);
       let I=null; try{ I=ivFrom(i,!L.mixed); }catch(err){ throw new Error(tag+(L.mixed?"intervalo. ":"restricción. ")+err.message); }
-      eqs.push({F:e.F,L:e.L,R:e.R,I}); });
+      eqs.push({F:e.F,L:e.L,R:e.R,I,form:formProblem(e)}); });
   }catch(err){ showFb("bad","Revisa lo que escribiste.",err.message); return; }
   if(g2.curves.length) g2.prevCurves=g2.curves;
-  g2.eqs=eqs; g2.curves=eqs.map(e=>buildSegs(e.F,e.I)); $("win").hidden=true;   run();
+  g2.eqs=eqs; g2.curves=eqs.map(e=>buildSegs(e.F,e.I)); $("win").hidden=true;
+  // La curva se dibuja, pero Vector no arranca hasta que la ecuación esté igualada como pide la forma canónica
+  const fi=eqs.findIndex(e=>e.form);
+  if(fi>=0){ g2.choose=null; g2.result=null; g2.path=[]; g2.prog=0; g2.anim=false; setMood("idle");
+    const tag=L.mixed?`Tramo ${fi+1}: `:"", ok=!diagnose(classify(eqs[fi].F),classify(compileEq(L.targets[fi]).F));
+    showFb(ok?"":"bad",tag+(ok?"¡Tu ecuación es correcta! Solo falta escribirla en forma canónica.":"Antes de trazar, escribe la ecuación en forma canónica."),eqs[fi].form+(ok?" Corrígela y vuelve a trazar.":""));
+    revealResult(); return; }
+  run();
   revealResult();
 }
 // Después de Trazar: el mapa queda a la vista (en el celular está fijo arriba) y el mensaje justo debajo
@@ -1258,7 +1283,11 @@ function shSize(){ const r=$("board").getBoundingClientRect(); shDPR=Math.min(wi
 function shStroke(st){ shX.globalCompositeOperation=st.er?"destination-out":"source-over"; shX.strokeStyle=st.er?"#000":css(st.c);
   shX.lineWidth=st.w||(st.er?22:2.6); shX.lineCap="round"; shX.lineJoin="round";
   shX.beginPath(); st.p.forEach((q,i)=>i?shX.lineTo(q[0],q[1]):shX.moveTo(q[0],q[1])); if(st.p.length===1) shX.lineTo(st.p[0][0]+0.1,st.p[0][1]); shX.stroke(); shX.globalCompositeOperation="source-over"; }
-function shDraw(){ shX.setTransform(shDPR,0,0,shDPR,0,0); shX.clearRect(0,0,shC.width,shC.height);
+// La hoja tiene un tamaño fijo: con el zoom mínimo se ve completa y no se puede arrastrar más allá de sus bordes
+function shClamp(){ const r=$("board").getBoundingClientRect(); if(!r.width||!r.height) return;
+  shV.k=Math.max(SH_Z[0],Math.min(SH_Z[1],shV.k)); const SW=r.width/SH_Z[0], SHh=r.height/SH_Z[0];
+  shV.x=Math.min(0,Math.max(r.width-SW*shV.k,shV.x)); shV.y=Math.min(0,Math.max(r.height-SHh*shV.k,shV.y)); }
+function shDraw(){ shClamp(); shX.setTransform(shDPR,0,0,shDPR,0,0); shX.clearRect(0,0,shC.width,shC.height);
   shX.setTransform(shDPR*shV.k,0,0,shDPR*shV.k,shDPR*shV.x,shDPR*shV.y); shStrokes.forEach(shStroke);
   const b=$("board").style, g=22*shV.k; b.backgroundSize=`${g}px ${g}px`; b.backgroundPosition=`${shV.x}px ${shV.y}px`;
   $("shZoom").textContent=Math.round(shV.k*100)+" %"; $("shIn").disabled=shV.k>=SH_Z[1]-1e-6; $("shOut").disabled=shV.k<=SH_Z[0]+1e-6; }
@@ -1339,7 +1368,7 @@ window.__euclidia={LEVELS,loadLevel,submit:(arr)=>{ arr.forEach((v,i)=>{ if(type
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
   state:()=>({g2,prog,player}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),
   // para las pruebas automáticas (pruebas/curvas.test.js)
-  t:{compileEq,canonicalProblem,classify,buildSegs,curveBounds,baseBounds,walk,parseInterval,inI,dist2,tex2plain,W:()=>W}};
+  t:{compileEq,canonicalProblem,formProblem,classify,buildSegs,curveBounds,baseBounds,walk,parseInterval,inI,dist2,tex2plain,W:()=>W,shV:()=>shV}};
 })();
 </script>
 
