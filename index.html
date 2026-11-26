@@ -52,7 +52,6 @@ h1{font:800 clamp(22px,3.2vw,32px)/1.05 var(--f-display);margin:0;letter-spacing
 .evbox{display:grid;gap:8px;border:1px solid var(--line);border-radius:12px;padding:12px}
 .evbox h3{margin:0}
 .evgate{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;border:1.5px solid var(--accent);border-radius:12px;padding:10px 12px;margin:0 0 10px;background:var(--panel)}
-.stylebar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font:600 13px var(--f-body);margin:0 0 10px}
 .evgate p{margin:0;flex:1 1 220px;font-size:14px}
 .evgate .btn{white-space:normal}
 .evt{width:100%;border-collapse:collapse;font-size:13.5px}
@@ -215,6 +214,9 @@ summary{cursor:pointer;font-weight:700}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;max-width:420px;width:100%;display:grid;gap:12px;max-height:100%;overflow:auto}
 .card h2{margin:0;font:800 24px/1.1 var(--f-display)}
 .card input{width:100%;font:16px var(--f-body);padding:10px 12px;border-radius:10px;border:1.5px solid var(--grid-strong);background:var(--paper);color:var(--ink)}
+.lorecard{border-top:4px solid var(--accent)}
+.lorecard .lorereg{font:700 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.lorecard p{margin:0;font-size:16px;line-height:1.5}
 .card .err{color:var(--bad);font-size:13px;margin:0}
 #qrBox{display:grid;place-items:center;background:#fff;border-radius:12px;padding:12px;min-height:120px}
 #qrBox img,#qrBox canvas{max-width:100%;height:auto}
@@ -249,7 +251,6 @@ summary{cursor:pointer;font-weight:700}
     </div>
   </header>
   <div class="evgate" id="evGate" hidden><p id="evGateTxt"></p><button class="btn" type="button" id="evGo">Empezar el quiz</button></div>
-  <div class="stylebar" id="styleBar" hidden><span>Estilo del escenario (prueba):</span><span class="seg" role="group" aria-label="Estilo del escenario"><button type="button" data-s="pixel">Pixel</button><button type="button" data-s="plano">Plano</button><button type="button" data-s="cuaderno">Cuaderno</button></span></div>
   <div class="levels" id="levels"></div>
   <main class="stage-wrap">
     <section class="stage" id="stage" aria-label="Mapa del nivel">
@@ -316,6 +317,14 @@ summary{cursor:pointer;font-weight:700}
     <label for="calcIn">Calculadora</label>
     <div class="row"><input id="calcIn" placeholder="ej. 16/4 + 9 o sqrt(9/4)" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off"><output id="calcOut" for="calcIn"></output></div>
     <span class="small" id="calcMsg">Usa + − * / ^ ( ) y sqrt( ). El resultado aparece mientras escribes.</span>
+  </div>
+</div>
+<div class="modal" id="lore" hidden>
+  <div class="card lorecard" role="dialog" aria-modal="true" aria-labelledby="loreTitle">
+    <span class="lorereg" id="loreRegion"></span>
+    <h2 id="loreTitle"></h2>
+    <p id="loreText"></p>
+    <button class="btn" type="button" id="loreGo">Siguiente</button>
   </div>
 </div>
 <div class="modal" id="done" hidden>
@@ -979,99 +988,261 @@ function curvesLayer(V,C){
   // curva actual (fuera del intervalo, muy tenue)
   g2.curves.forEach(s=>{ x.strokeStyle=C.curve; x.lineWidth=1.5; x.globalAlpha=0.18; strokeSegs(s.filter(q=>!q.in),V,false,x); x.globalAlpha=0.85; x.lineWidth=2.5; strokeSegs(s,V,true,x); });
   x.globalAlpha=1; cLayer={key,cur:g2.curves,prev:g2.prevCurves,cv}; return cv; }
+/* ============ Historia (etapa 7a) ============
+   Coni es la Trazadora más joven y la más pequeña. La Niebla del Olvido borró el Gran Mapa de Euclidia;
+   cada moneda es un fragmento del mapa. El texto de la historia nunca da datos para resolver: esos van en el panel del nivel. */
+const REGIONS={taller:"Taller de los Trazadores",lago:"Lago y río",luna:"Luna y observatorio",volcan:"Volcán",pradera:"Montaña y pradera",hielo:"Hielo y glaciar",costa:"Costa y faros",desfiladero:"Desfiladero",geiser:"Campos de géiseres",cueva:"Cueva y túnel",ciudad:"Ciudad de Euclidia"};
+const SCENE_OF=(()=>{ const m={}, put=(k,ids)=>ids.split(" ").forEach(id=>m[id]=k);
+  put("taller","t0 t1 t2 t3 t4"); put("lago","C1 C2 C3 C4 E2 H2 P6 I1 X2"); put("luna","C5 C6 C7 C8 E5 H1"); put("volcan","C9 C10 C11 P4");
+  put("pradera","C12 E1 E3 P1 P3"); put("hielo","E6 E9 E10 E11 E12 P10 P11 P12"); put("costa","E4 E8 P2 P7 P8"); put("desfiladero","P5 H3 H4 H10");
+  put("geiser","H5 H6 H7 H8"); put("cueva","P9 H9 H11 H12 X3 X4"); put("ciudad","E7 I2 I3 I4 X1"); return m; })();
+const LORE={
+  t0:"Una noche, la Niebla del Olvido borró el Gran Mapa de Euclidia, y con él todos sus caminos. Los Trazadores, que cuidaban esos caminos, quedaron perdidos. Solo se salvó Coni, la Trazadora más joven y la más pequeña, porque estaba en el taller. Ella camina exactamente por la curva que le escribas. Desde hoy eres su navegante.",
+  t1:"Antes de salir, Coni repasa en el taller los caminos que usaban los Trazadores. El primero es el más sencillo: una vuelta redonda alrededor de un centro.",
+  t2:"El segundo camino del taller es una vuelta estirada. Los Trazadores lo usaban para rodear lagos y praderas alargadas.",
+  t3:"El tercer camino baja y vuelve a subir, o se abre de costado. Con él los Trazadores cruzaban valles, puentes y toboganes.",
+  t4:"El último camino del taller tiene dos ramas que nunca se tocan. Con él, Coni podrá subir por desfiladeros y chorros de vapor.",
+  C1:"La Niebla cubrió el Lago del Faro y varios Trazadores quedaron perdidos en su orilla. La luz del faro todavía brilla en el centro. Coni sale del muelle y tiene que dar toda la vuelta para encontrarlos.",
+  C2:"En la laguna vecina, la Niebla dejó a unos Trazadores sobre la orilla, sin camino para volver. Coni sale del muelle a buscarlos.",
+  C3:"Un remolino gira en medio del lago y arrastró a los Trazadores que intentaban cruzarlo a nado. Coni debe rodear su borde sin caer al agua y volver a la boya. Del remolino solo queda su ecuación en el mapa.",
+  C4:"Coni busca la salida del lago por la orilla norte. Abajo está el agua fría, y un mal paso le mojaría los circuitos. En la orilla brillan fragmentos del Gran Mapa.",
+  C5:"La Niebla subió hasta el cielo y apagó la estación espacial. Los Trazadores astrónomos flotan perdidos alrededor de la Tierra. Coni sale de la estación para recorrer la órbita.",
+  C6:"En la Luna, unos Trazadores cayeron dentro de un cráter y esperan en su borde. Coni sale desde la antena para rodearlo.",
+  C7:"La plaza del observatorio quedó a oscuras y los Trazadores astrónomos no encuentran la salida. Nadie recuerda la forma de la plaza: solo queda su ecuación grabada en el mapa.",
+  C8:"Para volver del observatorio hay que cruzar el Puente de la Luna. La Niebla borró una de sus mitades, y Coni debe ir solo por la que queda.",
+  C9:"El volcán despertó con la Niebla. Algunos Trazadores quedaron en el borde de su boca, rodeados de humo. Coni sale desde lo alto para rescatarlos.",
+  C10:"Una grieta de lava partió el cráter en dos. Los Trazadores esperan en el borde, y Coni tiene que rodearlo todo sin pisar la lava.",
+  C11:"Los Trazadores geólogos estudiaban el cráter cuando llegó la Niebla. El dibujo del cráter se borró, pero su ecuación sigue grabada en una piedra caliente.",
+  C12:"Un sendero rodea la montaña, pero de un lado hubo un derrumbe. Coni debe ir solo por el lado que sigue en pie, recogiendo los fragmentos del Gran Mapa.",
+  E1:"Más allá de las montañas está la Pradera Ovalada, donde los Trazadores jardineros cuidaban las flores doradas. La Niebla los dejó dando vueltas sin rumbo por el borde.",
+  E2:"El Lago Alargado tiene la orilla resbalosa, y varios Trazadores no se atreven a moverse. Coni sale a buscarlos uno por uno.",
+  E3:"En el fondo del Valle Elíptico, los Trazadores esperan a la sombra de los árboles. El camino del valle se borró; solo queda su ecuación tallada en una roca.",
+  E4:"En la costa, dos faros se alumbran el uno al otro desde siempre. Coni cruza entre los acantilados guiada por su luz.",
+  E5:"Un satélite con forma de huevo gira alrededor de la torre del observatorio. Los Trazadores que lo reparaban quedaron flotando en su órbita.",
+  E6:"La Niebla congeló la pista de patinaje con varios Trazadores encima. Coni sale desde la orilla y patina por el borde para rescatarlos.",
+  E7:"En el estadio de la ciudad, los Trazadores corredores entrenaban cuando cayó la Niebla. Las líneas de la pista desaparecieron, pero su ecuación quedó en el marcador.",
+  E8:"El borde del acantilado se curva sobre el mar. De un lado está el precipicio, así que Coni avanza pegada a la roca firme.",
+  E9:"En el norte, el lago se congeló con la Niebla. Los Trazadores que pescaban sobre el hielo no pueden volver a la orilla.",
+  E10:"Una grieta se abrió en el glaciar y algunos Trazadores quedaron atrapados en su borde. Coni debe rodearla con cuidado de no resbalar.",
+  E11:"La Puerta del Glaciar es un arco de hielo antiguo. Los Trazadores que la cuidaban se perdieron en la ventisca, y solo queda su ecuación tallada en el hielo.",
+  E12:"Para salir del glaciar, Coni debe cruzar el Puente de Hielo. La parte de abajo se rompió con el frío, así que solo puede pasar por arriba.",
+  P1:"En la montaña, el tobogán quedó envuelto en Niebla. Coni se lanza por él para recoger los fragmentos del Gran Mapa que quedaron en la bajada.",
+  P2:"El viento de la costa mece el puente colgante. Coni lo cruza de un acantilado al otro recogiendo los fragmentos que quedaron entre las tablas.",
+  P3:"En la Mina del Valle, los Trazadores mineros sacaban cristales del fondo de la tierra. La vía del carrito se borró y solo queda su ecuación pintada en la entrada.",
+  P4:"En las faldas del volcán, una fogata es la única luz de la noche. Coni pasa junto a ella recogiendo los fragmentos que la Niebla dejó entre las rocas.",
+  P5:"En el desfiladero, un cañón se abre de costado. Coni baja hasta el fondo y vuelve a salir por la otra pared.",
+  P6:"El río da un recodo entre las rocas. Coni camina por la orilla buscando los fragmentos que arrastró la corriente.",
+  P7:"Un faro se levanta en una curva de la costa. Su luz rebota en la orilla y sale derecha al mar. Coni debe bordear la costa sin chocar con él.",
+  P8:"Un acantilado se asoma sobre el mar. Coni lo bordea con el agua de un lado y la roca del otro.",
+  P9:"En la cueva, el techo forma una cúpula. Los fragmentos del Gran Mapa quedaron pegados arriba, y Coni camina por el techo para alcanzarlos.",
+  P10:"La ladera nevada sube hasta la cima y baja del otro lado. Coni la cruza dejando sus pequeñas huellas en la nieve.",
+  P11:"El glaciar baja empinado y vuelve a subir. La Niebla borró su forma; solo queda su ecuación tallada en un bloque de hielo.",
+  P12:"Una cornisa de hielo cuelga sobre el vacío. Coni la recorre despacio, y su forma solo se conoce por la ecuación grabada en la roca.",
+  H1:"Un cometa pasó cerca de Euclidia y dejó una rampa de luz. Coni sube por ella recogiendo el polvo de estrella.",
+  H2:"El río se encajona en una garganta estrecha. Coni sube por la pared de roca, lejos del agua que corre abajo.",
+  H3:"En el desfiladero, una grieta se abrió con la Niebla. Su forma está escrita en la roca, en una ecuación que hay que descifrar.",
+  H4:"Dos faros alumbran el desfiladero desde lejos. Coni sube por una de sus paredes guiada por su luz.",
+  H5:"En los campos de géiseres, el primero acaba de despertar. Coni sube por el chorro de vapor recogiendo los fragmentos que salieron disparados.",
+  H6:"La Torre de Vapor sopla hacia arriba sin parar. Coni sube por su borde con cuidado de no quemarse.",
+  H7:"El géiser más grande de Euclidia lanza vapor hacia el cielo. Los Trazadores midieron su chorro hace años, y la ecuación quedó escrita en una piedra caliente.",
+  H8:"Una columna de vapor sube entre dos filas de rocas guía. Coni sube por ella sin tocar las piedras calientes.",
+  H9:"La cueva está a oscuras. Coni entra por su pared izquierda, alumbrada solo por las antorchas.",
+  H10:"En el desfiladero hay un paso entre dos filas de piedras que nadie toca. Coni sube entre ellas por la pared izquierda.",
+  H11:"Un túnel se abre a un lado de la cueva. Su forma quedó escrita en la pared, y Coni necesita descifrarla para no perderse en la oscuridad.",
+  H12:"En lo más hondo de la cueva hay un abismo. Coni sube por su borde con la ecuación del mapa como única guía.",
+  I1:"En el lago aparece un arco que la Niebla no deja ver bien. Antes de cruzar, Coni necesita que decidas qué cónica es.",
+  I2:"En la ciudad, unas piedras guía marcan un camino que nadie recuerda. Coni no sabe qué forma tiene: descubrirlo es tu trabajo.",
+  I3:"En la puerta de la biblioteca hay una ecuación sin nombre. Los Trazadores dicen que quien la descifre encontrará la sala de los mapas.",
+  I4:"Detrás de la biblioteca hay una plaza que solo conocían los Trazadores más viejos. Algunos se refugiaron ahí de la Niebla y esperan a Coni.",
+  X1:"El camino hacia la ciudad cambia de forma a mitad de recorrido. Coni sabe seguir cada tramo, pero necesita que le digas dónde termina uno y empieza el otro.",
+  X2:"Coni baja al valle y luego bordea el lago. Son dos caminos distintos que se unen en un solo punto.",
+  X3:"Coni cruza un túnel por debajo de la montaña y sale por una rampa. Si no le dices dónde termina el túnel, no sabrá cuándo empezar a subir.",
+  X4:"Uno de los pasos más difíciles hacia el Gran Mapa: subir una cúpula y bajar a un abismo. Coni confía en su navegante."
+};
 /* ============ Escenarios (etapa 7) ============
    El fondo de cada nivel se dibuja con código en una capa aparte, una sola vez, y en cada cuadro solo se copia.
-   Se vuelve a pintar solo si cambia el tamaño, el zoom, el nivel, el tema o el estilo.
+   Se vuelve a pintar solo si cambia el tamaño, el zoom, el nivel o el tema. Estilo pixel, como Coni.
    Regla: el escenario evoca el lugar sin copiar la cónica (la orilla es irregular y no pasa por los puntos del nivel). */
 let sLayer=null;
-const SCENE_STYLES=["pixel","plano","cuaderno"];
-let sceneStyle=(()=>{ try{ const q=new URLSearchParams(location.search).get("estilo"); if(SCENE_STYLES.includes(q)) return q; }catch(e){} const v=store.get("euclidia2-estilo","pixel"); return SCENE_STYLES.includes(v)?v:"pixel"; })();
+const PX=3; // cada "pixel" del escenario mide 3 pixeles de pantalla, como Coni
 const reduceMotion=matchMedia("(prefers-reduced-motion: reduce)").matches;
 let liteMode=reduceMotion; // modo liviano: escenario quieto, sin brillos
 function hashStr(t){ let h=2166136261; for(const ch of String(t)) { h^=ch.codePointAt(0); h=Math.imul(h,16777619); } return h>>>0; }
 function srand(seed){ let a=seed>>>0; return ()=>{ a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
 // contorno irregular (en coordenadas del plano) alrededor de c con radio medio r
-function blob(c,r,seed,amp=0.12,n=72){ const R=srand(seed), ph=[R()*6.3,R()*6.3,R()*6.3,R()*6.3], pts=[];
+function blob(c,r,seed,amp=0.12,n=72,sy=0.92){ const R=srand(seed), ph=[R()*6.3,R()*6.3,R()*6.3,R()*6.3], pts=[];
   for(let k=0;k<n;k++){ const a=k/n*Math.PI*2, f=1+amp*(0.55*Math.sin(2*a+ph[0])+0.3*Math.sin(3*a+ph[1])+0.2*Math.sin(5*a+ph[2])+0.1*Math.sin(7*a+ph[3]));
-    pts.push([c[0]+r*f*Math.cos(a),c[1]+r*f*0.92*Math.sin(a)]); } return pts; }
-function scenePal(dark){ return dark?{water:"#1d3b49",deep:"#17323f",hi:"#3b6a80",sand:"#3a3a2b",sandEdge:"#4a4835",grass:"#2a4031",leaf:"#3f6b45",leaf2:"#33583a",trunk:"#5a4630",reed:"#4f7d52",wood:"#6b5238",white:"#c9d3d0",red:"#c4573d",roof:"#0f1a17",glow:"rgba(255,214,102,0.28)",ink:"#9fc3d6"}
-  :{water:"#cfe6f1",deep:"#b9dbeb",hi:"#f2fafd",sand:"#efe4c0",sandEdge:"#e2d4a6",grass:"#dcebd2",leaf:"#a9cf96",leaf2:"#8fbd7c",trunk:"#9a7a55",reed:"#6f9e5b",wood:"#b98d5e",white:"#ffffff",red:"#e05a3a",roof:"#1b2735",glow:"rgba(255,200,80,0.0)",ink:"#5d8fb0"}; }
-// Escenario del lago: datos en coordenadas del plano, sin dibujar todavía
-function lakeScene(L){ const v=L.view, seed=hashStr(L.id), R=srand(seed);
-  const c=[v.cx+0.06*v.span,v.cy-0.04*v.span], r=v.span*0.37;
-  const props=L.props||[];
-  const reeds=[], trees=[], waves=[], spark=[];
-  const shore=blob(c,r*1.1,seed+7,0.12);
-  for(let k=0;k<16;k++){ const p=shore[Math.floor(R()*shore.length)]; reeds.push([p[0]+(R()-0.5)*0.4,p[1]+(R()-0.5)*0.4]); }
-  for(let k=0;k<10;k++){ const a=R()*6.3, d=r*(1.35+R()*0.5); trees.push([c[0]+d*Math.cos(a),c[1]+d*0.9*Math.sin(a),0.45+R()*0.35]); }
-  for(let k=0;k<14;k++){ const a=R()*6.3, d=r*(0.15+R()*0.7); waves.push([c[0]+d*Math.cos(a),c[1]+d*0.85*Math.sin(a),0.35+R()*0.3]); }
-  for(let k=0;k<7;k++){ const a=R()*6.3, d=r*(0.2+R()*0.65); spark.push([c[0]+d*Math.cos(a),c[1]+d*0.85*Math.sin(a),R()*6.3]); }
-  return {kind:"lago",c,r,seed,shore,lake:blob(c,r,seed+7,0.12),deep:blob([c[0]-0.12*r,c[1]+0.08*r],r*0.55,seed+11,0.18),reeds,trees,waves,spark,props}; }
-function sceneOf(L){ if(L.tutorial) return null; const k=L.scene||(/lago|laguna|remolino|orilla/i.test(L.title)?"lago":null); return k==="lago"?lakeScene(L):null; }
-// Dibuja el escenario en el contexto x; P convierte un punto del plano a coordenadas de esa capa; u = tamaño de un "pixel" del dibujo
-function paintLake(x,S,P,u,pal,style,dark){
-  const poly=(pts)=>{ x.beginPath(); pts.forEach((p,i)=>{ const q=P(p); i?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1]); }); x.closePath(); };
-  const W0=x.canvas.width, H0=x.canvas.height;
-  if(style==="cuaderno"){
-    // papel con manchas de acuarela y trazos de lápiz
-    const jit=srand(S.seed+3);
-    x.globalAlpha=0.5; x.fillStyle=pal.leaf; S.trees.forEach(t=>{ const q=P(t); x.beginPath(); x.arc(q[0],q[1],t[2]*u*1.2,0,7); x.fill(); }); x.globalAlpha=1;
-    x.globalAlpha=0.55; x.fillStyle=pal.sand; poly(S.shore); x.fill();
-    for(let k=0;k<3;k++){ x.globalAlpha=0.32; x.fillStyle=k===2?pal.deep:pal.water; poly(blob([S.c[0]+(jit()-0.5)*0.4,S.c[1]+(jit()-0.5)*0.4],S.r*(1-k*0.18),S.seed+7+k,0.13)); x.fill(); }
-    x.globalAlpha=0.7; x.strokeStyle=pal.ink; x.lineWidth=1.2;
-    for(let k=0;k<2;k++){ x.beginPath(); S.lake.forEach((p,i)=>{ const q=P(p), d=(jit()-0.5)*2.2; i?x.lineTo(q[0]+d,q[1]+d):x.moveTo(q[0]+d,q[1]+d); }); x.closePath(); x.stroke(); }
-    x.lineWidth=1; S.waves.forEach(w=>{ const q=P(w), l=w[2]*u; x.beginPath(); x.moveTo(q[0]-l,q[1]); x.quadraticCurveTo(q[0]-l/2,q[1]-l*0.35,q[0],q[1]); x.quadraticCurveTo(q[0]+l/2,q[1]+l*0.35,q[0]+l,q[1]); x.stroke(); });
-    x.strokeStyle=pal.reed; S.reeds.forEach(rd=>{ const q=P(rd); for(let k=-1;k<=1;k++){ x.beginPath(); x.moveTo(q[0]+k*2,q[1]); x.lineTo(q[0]+k*4,q[1]-u*0.5); x.stroke(); } });
-    x.globalAlpha=1; return; }
-  if(style==="plano"){
-    x.fillStyle=pal.grass; x.globalAlpha=0.55; x.fillRect(0,0,W0,H0); x.globalAlpha=1;
-    S.trees.forEach(t=>{ const q=P(t), rr=t[2]*u; x.fillStyle=pal.leaf2; x.beginPath(); x.arc(q[0]+rr*0.25,q[1]+rr*0.2,rr,0,7); x.fill(); x.fillStyle=pal.leaf; x.beginPath(); x.arc(q[0],q[1],rr,0,7); x.fill(); });
-    x.fillStyle=pal.sandEdge; poly(blob(S.c,S.r*1.16,S.seed+7,0.12)); x.fill();
-    x.fillStyle=pal.sand; poly(S.shore); x.fill();
-    const q0=P(S.c), g=x.createRadialGradient(q0[0],q0[1],S.r*u*0.1,q0[0],q0[1],S.r*u*1.1); g.addColorStop(0,pal.deep); g.addColorStop(1,pal.water);
-    x.fillStyle=g; poly(S.lake); x.fill();
-    x.strokeStyle=pal.hi; x.lineCap="round"; x.lineWidth=Math.max(2,u*0.09); x.globalAlpha=0.8;
-    S.waves.forEach(w=>{ const q=P(w), l=w[2]*u; x.beginPath(); x.moveTo(q[0]-l/2,q[1]); x.lineTo(q[0]+l/2,q[1]); x.stroke(); }); x.globalAlpha=1;
-    x.strokeStyle=pal.reed; x.lineWidth=Math.max(1.5,u*0.06); S.reeds.forEach(rd=>{ const q=P(rd); for(let k=-1;k<=1;k++){ x.beginPath(); x.moveTo(q[0]+k*u*0.08,q[1]); x.lineTo(q[0]+k*u*0.18,q[1]-u*0.45); x.stroke(); } });
-    return; }
-  // pixel: se dibuja en una capa pequeña y se agranda sin suavizar, como Coni
-  x.fillStyle=pal.grass; x.globalAlpha=0.6; x.fillRect(0,0,W0,H0); x.globalAlpha=1;
-  S.trees.forEach(t=>{ const q=P(t), rr=Math.max(2,Math.round(t[2]*u)); x.fillStyle=pal.leaf2; x.fillRect(Math.round(q[0]-rr+1),Math.round(q[1]-rr+1),rr*2,rr*2); x.fillStyle=pal.leaf; x.fillRect(Math.round(q[0]-rr),Math.round(q[1]-rr),rr*2-1,rr*2-1); x.fillStyle=pal.trunk; x.fillRect(Math.round(q[0]),Math.round(q[1]+rr),1,2); });
-  x.fillStyle=pal.sandEdge; poly(blob(S.c,S.r*1.16,S.seed+7,0.12)); x.fill();
-  x.fillStyle=pal.sand; poly(S.shore); x.fill();
-  x.fillStyle=pal.water; poly(S.lake); x.fill();
-  x.fillStyle=pal.deep; poly(S.deep); x.fill();
-  x.fillStyle=pal.hi; S.waves.forEach(w=>{ const q=P(w), l=Math.max(2,Math.round(w[2]*u)); x.fillRect(Math.round(q[0]-l/2),Math.round(q[1]),l,1); x.fillRect(Math.round(q[0]-l/2+1),Math.round(q[1])-1,Math.max(1,l-2),1); });
-  x.fillStyle=pal.reed; S.reeds.forEach(rd=>{ const q=P(rd), bx=Math.round(q[0]), by=Math.round(q[1]); x.fillRect(bx-1,by-3,1,3); x.fillRect(bx+1,by-4,1,4); x.fillRect(bx,by-2,1,2); });
-}
-// Objetos fijos que la historia ya nombra (el faro en (0, 0), el muelle de la salida): nunca puntos nuevos de la cónica
-function paintProps(x,S,P,u,pal,style,dark){
-  S.props.forEach(pr=>{ const q=P(pr.at);
-    if(pr.t==="muelle"){ const d=pr.dir||[1,0], ln=pr.len||1.4, e=P([pr.at[0]+d[0]*ln,pr.at[1]+d[1]*ln]); x.strokeStyle=pal.wood; x.lineWidth=Math.max(2,u*0.32); x.lineCap=style==="pixel"?"butt":"round"; x.beginPath(); x.moveTo(q[0],q[1]); x.lineTo(e[0],e[1]); x.stroke(); }
-    if(pr.t==="faro"){ const s=style==="pixel"?Math.max(1,Math.round(u/8)):u/9;
-      x.fillStyle=pal.sand; x.beginPath(); x.ellipse(q[0],q[1]+2*s,7*s,3*s,0,0,7); x.fill();
+    pts.push([c[0]+r*f*Math.cos(a),c[1]+r*f*sy*Math.sin(a)]); } return pts; }
+// franja ondulada (río, mar, paredes): borde de a a b en x (o en y si vert), centro f(t)
+function band(B,f,w,vert,n=60){ const top=[],bot=[]; for(let k=0;k<=n;k++){ const t=(vert?B.y0:B.x0)+(k/n)*((vert?B.y1:B.x1)-(vert?B.y0:B.x0)), m=f(t);
+  if(vert){ top.push([m-w/2,t]); bot.push([m+w/2,t]); } else { top.push([t,m+w/2]); bot.push([t,m-w/2]); } } return top.concat(bot.reverse()); }
+// Cada escenario: colores (claro y oscuro), datos en coordenadas del plano (build) y dibujo en la capa pequeña (paint).
+// Regla: evoca el lugar sin copiar la cónica; nada se alinea con la respuesta.
+const SCENES={
+  lago:{ pal:d=>d?{base:"#2a4031",water:"#1d3b49",deep:"#17323f",hi:"#3b6a80",sand:"#3a3a2b",sandEdge:"#4a4835",leaf:"#3f6b45",leaf2:"#33583a",trunk:"#5a4630",reed:"#4f7d52",spark:"#cfe8f5"}
+      :{base:"#dcebd2",water:"#cfe6f1",deep:"#b9dbeb",hi:"#f2fafd",sand:"#efe4c0",sandEdge:"#e2d4a6",leaf:"#a9cf96",leaf2:"#8fbd7c",trunk:"#9a7a55",reed:"#6f9e5b",spark:"#ffffff"},
+    build(L,R,B,seed){ const esc=!L.rescue, c=[B.cx+0.1*B.span,B.cy-(esc?0.3:0.07)*B.span], r=B.span*(esc?0.36:0.4);
+      const shore=blob(c,r*1.1,seed+7,0.12), reeds=[], trees=[], waves=[], spark=[];
+      for(let k=0;k<16;k++){ const p=shore[Math.floor(R()*shore.length)]; reeds.push([p[0]+(R()-0.5)*0.4,p[1]+(R()-0.5)*0.4]); }
+      for(let k=0;k<12;k++){ const a=R()*6.3, d=r*(1.35+R()*0.6); trees.push([c[0]+d*Math.cos(a),c[1]+d*0.9*Math.sin(a),0.45+R()*0.35]); }
+      for(let k=0;k<14;k++){ const a=R()*6.3, d=r*(0.15+R()*0.7); waves.push([c[0]+d*Math.cos(a),c[1]+d*0.85*Math.sin(a),0.35+R()*0.3]); }
+      for(let k=0;k<7;k++){ const a=R()*6.3, d=r*(0.2+R()*0.65); spark.push([c[0]+d*Math.cos(a),c[1]+d*0.85*Math.sin(a),R()*6.3]); }
+      return {c,r,edge:blob(c,r*1.16,seed+7,0.12),shore,lake:blob(c,r,seed+7,0.12),deep:blob([c[0]-0.12*r,c[1]+0.08*r],r*0.55,seed+11,0.18),reeds,trees,waves,spark}; },
+    paint(x,S,D,p){ D.trees(S.trees,p); D.poly(S.edge,p.sandEdge); D.poly(S.shore,p.sand); D.poly(S.lake,p.water); D.poly(S.deep,p.deep); D.waves(S.waves,p.hi); D.reeds(S.reeds,p.reed); } },
+  rio:{ pal:d=>SCENES.lago.pal(d),
+    build(L,R,B,seed){ const yc=B.cy-0.25*B.span, A=0.05*B.span, k=6.3/B.span*(0.8+R()*0.5), ph=R()*6.3, f=t=>yc+A*Math.sin(k*t+ph), w=0.13*B.span;
+      const trees=[], waves=[], reeds=[], spark=[];
+      for(let i=0;i<14;i++){ const tx=B.x0+R()*(B.x1-B.x0), ty=f(tx)+w*(0.9+R()*3)*(R()<0.25?-1:1); trees.push([tx,ty,0.45+R()*0.35]); }
+      for(let i=0;i<12;i++){ const tx=B.x0+R()*(B.x1-B.x0); waves.push([tx,f(tx)+(R()-0.5)*w*0.6,0.35+R()*0.3]); }
+      for(let i=0;i<18;i++){ const tx=B.x0+R()*(B.x1-B.x0); reeds.push([tx,f(tx)+(R()<0.5?1:-1)*w*(0.55+R()*0.15)]); }
+      for(let i=0;i<6;i++){ const tx=B.x0+R()*(B.x1-B.x0); spark.push([tx,f(tx)+(R()-0.5)*w*0.5,R()*6.3]); }
+      return {edge:band(B,f,w*1.7),shore:band(B,f,w*1.4),lake:band(B,f,w),deep:band(B,t=>f(t)-w*0.08,w*0.4),trees,waves,reeds,spark}; },
+    paint(x,S,D,p){ SCENES.lago.paint(x,S,D,p); } },
+  luna:{ pal:d=>d?{base:"#141a2e",ground:"#262a38",crater:"#1c1f2b",rim:"#353a4c",star:"#c9c6ef",dome:"#4a5068",slit:"#141a2e",spark:"#ffffff",earth:"#3d7fb8",land:"#4f8f57"}
+      :{base:"#e7e6f3",ground:"#e1dfe6",crater:"#d1ced9",rim:"#efedf4",star:"#a9a3d1",dome:"#c9c6d6",slit:"#8e88b5",spark:"#8e88d9",earth:"#8ec3e6",land:"#9fcf8e"},
+    build(L,R,B,seed){ const gy=B.cy-0.22*B.span, A=0.03*B.span, ph=R()*6.3, f=t=>gy+A*Math.sin(t*9/B.span+ph);
+      const ground=[[B.x0,B.y0-B.span]].concat(Array.from({length:41},(_,i)=>{ const t=B.x0+i/40*(B.x1-B.x0); return [t,f(t)]; })).concat([[B.x1,B.y0-B.span]]);
+      const stars=[], craters=[], spark=[];
+      for(let i=0;i<70;i++) stars.push([B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0),R()<0.15]);
+      for(let i=0;i<7;i++){ const cx=B.x0+R()*(B.x1-B.x0), cy=B.y0+R()*(gy-B.y0-0.04*B.span); craters.push(blob([cx,cy],B.span*(0.03+R()*0.05),seed+i,0.1,24,0.45)); }
+      for(let i=0;i<9;i++) spark.push([B.x0+R()*(B.x1-B.x0),gy+R()*(B.y1-gy),R()*6.3]);
+      const dx=R()<0.5?B.x0+0.1*B.span:B.x1-0.1*B.span; return {ground,stars,craters,spark,dome:[dx,f(dx)]}; },
+    paint(x,S,D,p){ S.stars.forEach(s=>{ const q=D.P(s); D.px(q[0],q[1],1,1,p.star); if(s[2]){ D.px(q[0]-1,q[1],3,1,p.star); D.px(q[0],q[1]-1,1,3,p.star); } });
+      D.poly(S.ground,p.ground); S.craters.forEach(c=>{ D.poly(c,p.rim); x.save(); x.translate(0,1); D.poly(c,p.crater); x.restore(); });
+      const q=D.P(S.dome), s=Math.max(2,Math.round(D.u*0.35)); x.fillStyle=p.dome; x.beginPath(); x.arc(q[0],q[1],s*2,Math.PI,0); x.fill(); D.px(q[0]-s*2,q[1],s*4,s,p.dome); D.px(q[0]-1,q[1]-s*2,2,s*1.5,p.slit); } },
+  volcan:{ pal:d=>d?{base:"#2b211d",rock:"#3a2c26",rock2:"#33261f",lava:"#c8562b",core:"#ffb35c",stone:"#4a3a32",smoke:"#4b4543",spark:"#ffb35c"}
+      :{base:"#f1e5da",rock:"#e6d5c6",rock2:"#dcc7b5",lava:"#f0a07a",core:"#ffd7a8",stone:"#cdb7a5",smoke:"#e2dcd8",spark:"#f08a4b"},
+    build(L,R,B,seed){ const patches=[], cracks=[], stones=[], smoke=[], spark=[];
+      for(let i=0;i<9;i++) patches.push(blob([B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0)],B.span*(0.08+R()*0.1),seed+i,0.25));
+      for(let i=0;i<10;i++){ let px0=B.x0+R()*(B.x1-B.x0), py0=B.y0+R()*(B.y1-B.y0), a=R()*6.3; const pts=[[px0,py0]];
+        for(let k=0;k<6;k++){ a+=(R()-0.5)*1.4; px0+=Math.cos(a)*B.span*0.035; py0+=Math.sin(a)*B.span*0.035; pts.push([px0,py0]); } cracks.push(pts); if(R()<0.8) spark.push([px0,py0,R()*6.3]); }
+      for(let i=0;i<34;i++) stones.push([B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0),R()<0.3]);
+      for(let i=0;i<4;i++) smoke.push(blob([B.x0+R()*(B.x1-B.x0),B.cy+B.ey-R()*0.12*B.span],B.span*(0.04+R()*0.04),seed+40+i,0.2,24));
+      return {patches,cracks,stones,smoke,spark}; },
+    paint(x,S,D,p){ S.patches.forEach((b,i)=>D.poly(b,i%2?p.rock:p.rock2)); S.smoke.forEach(b=>D.poly(b,p.smoke));
+      S.stones.forEach(s=>{ const q=D.P(s); D.px(q[0],q[1],s[2]?3:2,2,p.stone); });
+      S.cracks.forEach(c=>{ D.line(c,p.lava,2); D.line(c,p.core,1); }); } },
+  pradera:{ pal:d=>d?{base:"#22382a",hill:"#2a4433",hill2:"#30503a",leaf:"#3f6b45",leaf2:"#33583a",trunk:"#5a4630",flower:["#d9c45a","#d9d9d9","#d98fb0"],stone:"#4a5048",spark:"#e8e3a0"}
+      :{base:"#e2efd6",hill:"#d3e6c3",hill2:"#c6dfb3",leaf:"#a9cf96",leaf2:"#8fbd7c",trunk:"#9a7a55",flower:["#f2cf4a","#ffffff","#f2a7c3"],stone:"#c9cbbf",spark:"#fff3a6"},
+    build(L,R,B,seed){ const hills=[], trees=[], flowers=[], stones=[];
+      for(let i=0;i<4;i++) hills.push(blob([B.x0+(i+0.3+R()*0.4)/4*(B.x1-B.x0),B.cy-B.ey+R()*0.1*B.span],B.span*(0.18+R()*0.1),seed+i,0.15,48,0.6));
+      for(let i=0;i<9;i++) trees.push([B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0),0.4+R()*0.35]);
+      for(let i=0;i<90;i++) flowers.push([B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0),Math.floor(R()*3)]);
+      for(let i=0;i<8;i++) stones.push([B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0)]);
+      return {hills,trees,flowers,stones,spark:[]}; },
+    paint(x,S,D,p){ S.hills.forEach((h,i)=>D.poly(h,i%2?p.hill:p.hill2)); S.stones.forEach(s=>{ const q=D.P(s); D.px(q[0]-1,q[1],4,2,p.stone); D.px(q[0],q[1]-1,2,1,p.stone); });
+      S.flowers.forEach(f=>{ const q=D.P(f); D.px(q[0],q[1],1,1,p.flower[f[2]]); D.px(q[0],q[1]+1,1,1,p.leaf2); }); D.trees(S.trees,p); } },
+  hielo:{ pal:d=>d?{base:"#1b2a33",snow:"#24363f",ice:"#22455a",crack:"#3d6a84",peak:"#2c3f4a",cap:"#c9dbe5",pine:"#2f4f45",spark:"#e6f6ff"}
+      :{base:"#eef5f9",snow:"#ffffff",ice:"#d9ecf6",crack:"#b3d4e8",peak:"#dfe8ee",cap:"#ffffff",pine:"#9bbfb0",spark:"#ffffff"},
+    build(L,R,B,seed){ const drifts=[], ice=[], cracks=[], peaks=[], pines=[], spark=[];
+      for(let i=0;i<7;i++) drifts.push(blob([B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0)],B.span*(0.1+R()*0.1),seed+i,0.2,48,0.6));
+      for(let i=0;i<3;i++){ const c=[B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0)]; ice.push(blob(c,B.span*(0.08+R()*0.06),seed+10+i,0.15,36,0.7));
+        let a=R()*6.3, q=[...c]; const pts=[[...q]]; for(let k=0;k<4;k++){ a+=(R()-0.5)*1.6; q=[q[0]+Math.cos(a)*B.span*0.03,q[1]+Math.sin(a)*B.span*0.03]; pts.push(q); } cracks.push(pts); spark.push([c[0],c[1],R()*6.3]); }
+      for(let i=0;i<5;i++){ const px0=B.x0+(i+R())/5*(B.x1-B.x0), h=B.span*(0.12+R()*0.1); peaks.push([px0,B.cy+B.ey-0.04*B.span,h]); }
+      for(let i=0;i<12;i++) pines.push([B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0)*0.85,0.5+R()*0.4]);
+      for(let i=0;i<5;i++) spark.push([B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0),R()*6.3]);
+      return {drifts,ice,cracks,peaks,pines,spark}; },
+    paint(x,S,D,p){ S.peaks.forEach(k=>{ const a=D.P([k[0]-k[2]*0.7,k[1]-k[2]*0.4]), b=D.P([k[0],k[1]+k[2]*0.6]), c=D.P([k[0]+k[2]*0.7,k[1]-k[2]*0.4]);
+        D.tri(a,b,c,p.peak); const m=(t,u)=>[t[0]+(u[0]-t[0])*0.35,t[1]+(u[1]-t[1])*0.35]; D.tri(m(b,a),b,m(b,c),p.cap); });
+      S.drifts.forEach(d=>D.poly(d,p.snow)); S.ice.forEach(i=>D.poly(i,p.ice)); S.cracks.forEach(c=>D.line(c,p.crack,1));
+      S.pines.forEach(t=>{ const q=D.P(t), h=Math.max(4,Math.round(t[2]*D.u)); for(let k=0;k<h;k++){ const w=Math.round(k*0.6)+1; D.px(q[0]-w+1,q[1]-h+k,w*2-1,1,k<2?p.cap:p.pine); } }); } },
+  costa:{ pal:d=>d?{base:"#2a3a2e",sea:"#1b3a4e",deep:"#163245",hi:"#3b6a80",sand:"#3a3a2b",cliff:"#3c3a33",grass2:"#32503a",spark:"#cfe8f5"}
+      :{base:"#e3eedb",sea:"#cbe3f2",deep:"#b7d6ea",hi:"#f2fafd",sand:"#efe4c0",cliff:"#ddd6c4",grass2:"#d2e5c4",spark:"#ffffff"},
+    build(L,R,B,seed){ const yc=B.cy-B.ey+0.14*B.span, A=0.03*B.span, ph=R()*6.3, f=t=>yc+A*Math.sin(t*8/B.span+ph)+0.4*A*Math.sin(t*19/B.span+ph*2);
+      const low=t=>[[B.x0,B.y0-B.span]].concat(Array.from({length:61},(_,i)=>{ const s=B.x0+i/60*(B.x1-B.x0); return [s,f(s)+t]; })).concat([[B.x1,B.y0-B.span]]);
+      const waves=[], spark=[], tufts=[];
+      for(let i=0;i<14;i++){ const s=B.x0+R()*(B.x1-B.x0); waves.push([s,B.y0+R()*(f(s)-B.y0-0.03*B.span),0.4+R()*0.4]); }
+      for(let i=0;i<7;i++){ const s=B.x0+R()*(B.x1-B.x0); spark.push([s,B.y0+R()*(f(s)-B.y0-0.03*B.span),R()*6.3]); }
+      for(let i=0;i<14;i++) tufts.push(blob([B.x0+R()*(B.x1-B.x0),yc+0.15*B.span+R()*(B.y1-yc)],B.span*(0.03+R()*0.04),seed+i,0.2,20,0.5));
+      return {cliff:low(0.06*B.span),sand:low(0.025*B.span),sea:low(0),deep:low(-0.08*B.span),waves,spark,tufts}; },
+    paint(x,S,D,p){ S.tufts.forEach(t=>D.poly(t,p.grass2)); D.poly(S.cliff,p.cliff); D.poly(S.sand,p.sand); D.poly(S.sea,p.sea); D.poly(S.deep,p.deep); D.waves(S.waves,p.hi); } },
+  desfiladero:{ pal:d=>d?{base:"#2a1f1d",sky:"#33231f",wall:"#4d2e25",wall2:"#5c3529",strata:"#6b4031",mesa:"#3d2722",spark:"#ffd0a0"}
+      :{base:"#f6e8dc",sky:"#f9eee4",wall:"#ebc4ac",wall2:"#e3b598",strata:"#d9a587",mesa:"#efd5c2",spark:"#fff"},
+    build(L,R,B,seed){ const w=0.14*B.span, side=(x0,dir)=>band(B,t=>x0+dir*(w*0.5+0.03*B.span*Math.sin(t*11/B.span+R()*6.3)+0.02*B.span*Math.sin(t*23/B.span)),w*2,true);
+      const strata=[]; for(let i=0;i<14;i++){ const y=B.y0+R()*(B.y1-B.y0), lft=R()<0.5; const l0=B.cx-B.ex, r0=B.cx+B.ex; strata.push(lft?[[B.x0,y],[l0+w*(0.6+R()*0.6),y+(R()-0.5)*0.3]]:[[r0-w*(0.6+R()*0.6),y],[B.x1,y+(R()-0.5)*0.3]]); }
+      const mesas=[]; for(let i=0;i<3;i++){ const c=B.x0+(i+0.5+(R()-0.5)*0.5)/3*(B.x1-B.x0), hw=B.span*(0.06+R()*0.05), h=B.span*(0.05+R()*0.04), y=B.cy+B.ey-0.1*B.span; mesas.push([[c-hw*1.3,y-h],[c-hw,y],[c+hw,y],[c+hw*1.3,y-h]]); }
+      return {left:side(B.cx-B.ex,1),right:side(B.cx+B.ex,-1),strata,mesas,spark:[]}; },
+    paint(x,S,D,p){ S.mesas.forEach(m=>D.poly(m,p.mesa)); D.poly(S.left,p.wall); D.poly(S.right,p.wall2); S.strata.forEach(s=>D.line(s,p.strata,1)); } },
+  geiser:{ pal:d=>d?{base:"#26271f",crust:"#3b3527",pool:"#24504d",rim:"#6a4a2a",vent:"#4a4840",spark:"#e8eef0"}
+      :{base:"#f1ede0",crust:"#ebdcb9",pool:"#c4e6e1",rim:"#ecc495",vent:"#d6d2c6",spark:"#ffffff"},
+    build(L,R,B,seed){ const crust=[], pools=[], vents=[], spark=[];
+      for(let i=0;i<5;i++) crust.push(blob([B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0)],B.span*(0.1+R()*0.08),seed+i,0.25,40,0.6));
+      for(let i=0;i<5;i++){ const c=[B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0)], r=B.span*(0.03+R()*0.03); pools.push([blob(c,r*1.3,seed+20+i,0.15,28,0.6),blob(c,r,seed+20+i,0.15,28,0.6)]); }
+      for(let i=0;i<5;i++){ const c=[B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0)]; vents.push(c); for(let k=0;k<3;k++) spark.push([c[0]+(R()-0.5)*0.3,c[1]+0.2+k*0.35,R()*6.3]); }
+      return {crust,pools,vents,spark}; },
+    paint(x,S,D,p){ S.crust.forEach(c=>D.poly(c,p.crust)); S.pools.forEach(([o,i])=>{ D.poly(o,p.rim); D.poly(i,p.pool); });
+      S.vents.forEach(v=>{ const q=D.P(v); D.px(q[0]-3,q[1],7,2,p.vent); D.px(q[0]-2,q[1]-1,5,1,p.vent); D.px(q[0]-1,q[1]-1,2,1,p.rim); }); } },
+  cueva:{ pal:d=>d?{base:"#1c1a19",rock:"#2a2624",rock2:"#24211f",tite:"#36302c",torch:"#6b4a2a",flame:"#ffb35c",gem:"#8f7ad9",spark:"#ffc46b"}
+      :{base:"#e6e0d8",rock:"#d9d0c5",rock2:"#d1c6b9",tite:"#c4b8aa",torch:"#9a7a55",flame:"#f6a54a",gem:"#b9a6f0",spark:"#f39a3d"},
+    build(L,R,B,seed){ const rocks=[], tites=[], mites=[], torches=[], gems=[], spark=[];
+      for(let i=0;i<6;i++) rocks.push(blob([B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0)],B.span*(0.08+R()*0.1),seed+i,0.3,36,0.7));
+      const top=B.cy+B.ey-0.02*B.span, bot=B.cy-B.ey+0.02*B.span;
+      for(let i=0;i<12;i++){ const s=B.x0+R()*(B.x1-B.x0), h=B.span*(0.04+R()*0.07); tites.push([s,top,h]); }
+      for(let i=0;i<8;i++){ const s=B.x0+R()*(B.x1-B.x0), h=B.span*(0.03+R()*0.05); mites.push([s,bot,h]); }
+      for(let i=0;i<4;i++){ const t=[B.x0+(i+0.5)/4*(B.x1-B.x0)+(R()-0.5)*0.1*B.span,B.y0+R()*(B.y1-B.y0)]; torches.push(t); spark.push([t[0],t[1]+0.35,R()*6.3]); }
+      for(let i=0;i<8;i++) gems.push([B.x0+R()*(B.x1-B.x0),B.y0+R()*(B.y1-B.y0)]);
+      return {rocks,tites,mites,torches,gems,spark}; },
+    paint(x,S,D,p){ S.rocks.forEach((r,i)=>D.poly(r,i%2?p.rock:p.rock2));
+      S.tites.forEach(t=>{ const a=D.P([t[0]-t[2]*0.25,t[1]+B_EXT*t[2]]), b=D.P([t[0],t[1]-t[2]]), c=D.P([t[0]+t[2]*0.25,t[1]+B_EXT*t[2]]); D.tri(a,b,c,p.tite); });
+      S.mites.forEach(t=>{ const a=D.P([t[0]-t[2]*0.3,t[1]-B_EXT*t[2]]), b=D.P([t[0],t[1]+t[2]]), c=D.P([t[0]+t[2]*0.3,t[1]-B_EXT*t[2]]); D.tri(a,b,c,p.tite); });
+      S.gems.forEach(g=>{ const q=D.P(g); D.px(q[0],q[1]-1,1,1,p.gem); D.px(q[0]-1,q[1],3,1,p.gem); D.px(q[0],q[1]+1,1,1,p.gem); });
+      S.torches.forEach(t=>{ const q=D.P(t); D.px(q[0],q[1],1,4,p.torch); D.px(q[0]-1,q[1]-2,3,2,p.flame); }); } },
+  ciudad:{ pal:d=>d?{base:"#25221f",stone:"#2f2b27",bld:"#36312c",bld2:"#3e3832",roof:"#5a3b30",win:"#d9b45a",col:"#4a443d",leaf:"#3f6b45",spark:"#ffd98a"}
+      :{base:"#f2ede5",stone:"#e8e1d6",bld:"#e4dace",bld2:"#ddd1c2",roof:"#e2b6a4",win:"#c9d7e0",col:"#f6f2ec",leaf:"#a9cf96",spark:"#fff"},
+    build(L,R,B,seed){ const stones=[], blds=[], trees=[], spark=[]; const base=B.cy+B.ey-0.14*B.span;
+      for(let i=0;i<70;i++) stones.push([B.x0+R()*(B.x1-B.x0),B.y0+R()*(base-B.y0)]);
+      let s=B.x0; while(s<B.x1){ const w=B.span*(0.08+R()*0.08), h=B.span*(0.14+R()*0.12); blds.push([s,base,w,h,R()<0.2]); s+=w+B.span*0.01; }
+      for(let i=0;i<6;i++) trees.push([B.x0+R()*(B.x1-B.x0),B.y0+R()*(base-B.y0),0.35+R()*0.25]);
+      return {stones,blds,trees,spark}; },
+    paint(x,S,D,p){ S.stones.forEach(s=>{ const q=D.P(s); D.px(q[0]-1,q[1],3,2,p.stone); });
+      S.blds.forEach((b,i)=>{ const a=D.P([b[0],b[1]+b[3]]), c=D.P([b[0]+b[2],b[1]]), w=c[0]-a[0], h=c[1]-a[1];
+        D.px(a[0],a[1],w,h,i%2?p.bld:p.bld2);
+        if(b[4]){ D.tri([a[0]-1,a[1]],[a[0]+w/2,a[1]-h*0.3],[a[0]+w+1,a[1]],p.roof); for(let k=2;k<w-2;k+=4) D.px(a[0]+k,a[1]+2,2,h-2,p.col); }
+        else { D.px(a[0]-1,a[1]-2,w+2,2,p.roof); for(let yy=a[1]+3;yy<c[1]-3;yy+=5) for(let xx=a[0]+2;xx<c[0]-2;xx+=4) D.px(xx,yy,2,2,p.win); } });
+      D.trees(S.trees,p); } }
+};
+const B_EXT=0.6; // las estalactitas nacen un poco por encima del borde
+const SCENE_PROPS={C5:[{t:"tierra",at:[0,0]}],E4:[{t:"faro",at:[-2,3]},{t:"faro",at:[6,3]}],H4:[{t:"faro",at:[-3,2]},{t:"faro",at:[7,2]}]};
+const RIVER=new Set(["H2","P6"]);
+const sceneCache=new Map();
+function sceneOf(L){ if(L.tutorial||L.scene==="none") return null;
+  let k=L.scene||SCENE_OF[L.id]; if(k==="lago"&&RIVER.has(L.id)) k="rio"; const def=SCENES[k]; if(!def) return null;
+  const ck=L.id+"|"+k; if(sceneCache.has(ck)) return sceneCache.get(ck);
+  const v=L.view, B={x0:v.cx-0.62*v.span,x1:v.cx+0.62*v.span,y0:v.cy-0.5*v.span,y1:v.cy+0.5*v.span,cx:v.cx,cy:v.cy,span:v.span,ex:0.5*v.span,ey:0.37*v.span}, seed=hashStr(L.id);
+  const S=Object.assign(def.build(L,srand(seed),B,seed),{kind:k,props:(L.props||[]).concat(SCENE_PROPS[L.id]||[])}); sceneCache.set(ck,S); return S; }
+// Herramientas de dibujo sobre la capa pequeña (cada unidad = un pixel del escenario)
+function sceneDraw(x,P,u){ const D={P,u,
+  px:(a,b,w,h,c)=>{ x.fillStyle=c; x.fillRect(Math.round(a),Math.round(b),Math.max(1,Math.round(w)),Math.max(1,Math.round(h))); },
+  poly:(pts,c)=>{ x.fillStyle=c; x.beginPath(); pts.forEach((p,i)=>{ const q=P(p); i?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1]); }); x.closePath(); x.fill(); },
+  tri:(a,b,c,col)=>{ x.fillStyle=col; x.beginPath(); x.moveTo(a[0],a[1]); x.lineTo(b[0],b[1]); x.lineTo(c[0],c[1]); x.closePath(); x.fill(); },
+  line:(pts,c,w)=>{ x.strokeStyle=c; x.lineWidth=w; x.lineJoin="miter"; x.lineCap="butt"; x.beginPath(); pts.forEach((p,i)=>{ const q=P(p); i?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1]); }); x.stroke(); },
+  trees:(ts,p)=>ts.forEach(t=>{ const q=P(t), rr=Math.max(2,Math.round(t[2]*u)); D.px(q[0]-rr+1,q[1]-rr+1,rr*2,rr*2,p.leaf2); D.px(q[0]-rr,q[1]-rr,rr*2-1,rr*2-1,p.leaf); D.px(q[0],q[1]+rr,1,2,p.trunk); }),
+  waves:(ws,c)=>ws.forEach(w=>{ const q=P(w), l=Math.max(2,Math.round(w[2]*u)); D.px(q[0]-l/2,q[1],l,1,c); D.px(q[0]-l/2+1,q[1]-1,Math.max(1,l-2),1,c); }),
+  reeds:(rs,c)=>rs.forEach(rd=>{ const q=P(rd), bx=Math.round(q[0]), by=Math.round(q[1]); D.px(bx-1,by-3,1,3,c); D.px(bx+1,by-4,1,4,c); D.px(bx,by-2,1,2,c); }) }; return D; }
+// Objetos fijos que la historia ya nombra (el faro, el muelle, la Tierra): nunca puntos nuevos de la cónica
+function paintProps(x,S,D,dark){ const s=Math.max(1,Math.round(D.u/8));
+  S.props.forEach(pr=>{ const q=D.P(pr.at), R=(a,b,w,h,c)=>D.px(q[0]+a*s,q[1]+b*s,w*s,h*s,c);
+    if(pr.t==="muelle"){ const d=pr.dir||[1,0], ln=pr.len||1.4, e=D.P([pr.at[0]+d[0]*ln,pr.at[1]+d[1]*ln]); x.strokeStyle=dark?"#6b5238":"#b98d5e"; x.lineWidth=Math.max(2,D.u*0.32); x.lineCap="butt"; x.beginPath(); x.moveTo(q[0],q[1]); x.lineTo(e[0],e[1]); x.stroke(); }
+    if(pr.t==="faro"){ x.fillStyle=dark?"#3a3a2b":"#efe4c0"; x.beginPath(); x.ellipse(q[0],q[1]+2*s,7*s,3*s,0,0,7); x.fill();
       if(dark){ const g=x.createRadialGradient(q[0],q[1]-13*s,0,q[0],q[1]-13*s,14*s); g.addColorStop(0,"rgba(255,214,102,0.55)"); g.addColorStop(1,"rgba(255,214,102,0)"); x.fillStyle=g; x.beginPath(); x.arc(q[0],q[1]-13*s,14*s,0,7); x.fill(); }
-      const R=(a,b,w,h,c)=>{ x.fillStyle=c; x.fillRect(Math.round(q[0]+a*s),Math.round(q[1]+b*s),Math.ceil(w*s),Math.ceil(h*s)); };
-      R(-3,-10,6,10,pal.white); R(-3,-8,6,2,pal.red); R(-3,-4,6,2,pal.red); R(-2,-13,4,3,"#ffd166"); R(-3,-15,6,2,pal.roof);
-      if(style==="cuaderno"){ x.strokeStyle=pal.ink; x.lineWidth=1; x.strokeRect(q[0]-3*s,q[1]-10*s,6*s,10*s); } } }); }
+      const wh=dark?"#c9d3d0":"#ffffff", rd=dark?"#c4573d":"#e05a3a"; R(-3,-10,6,10,wh); R(-3,-8,6,2,rd); R(-3,-4,6,2,rd); R(-2,-13,4,3,"#ffd166"); R(-3,-15,6,2,dark?"#0f1a17":"#1b2735"); }
+    if(pr.t==="tierra"){ const r=4*s; x.fillStyle=dark?"#3d7fb8":"#8ec3e6"; x.beginPath(); x.arc(q[0],q[1],r,0,7); x.fill(); R(-2,-2,2,1,dark?"#4f8f57":"#9fcf8e"); R(0,0,3,2,dark?"#4f8f57":"#9fcf8e"); R(-3,1,1,1,dark?"#4f8f57":"#9fcf8e"); } }); }
 function sceneLayer(V,C){ const L=level(), S=sceneOf(L); if(!S) return null;
-  const dark=parseInt(C.paper.slice(1,3),16)<100, key=[W,H,DPR,V.s,V.cx,V.cy,L.id,sceneStyle,dark].join("|");
+  const dark=parseInt(C.paper.slice(1,3),16)<100, key=[W,H,V.s,V.cx,V.cy,L.id,dark].join("|");
   if(sLayer&&sLayer.key===key) return sLayer.cv;
-  const pixel=sceneStyle==="pixel", PX=3, cw=pixel?Math.ceil(W/PX):Math.round(W*DPR), ch=pixel?Math.ceil(H/PX):Math.round(H*DPR);
+  const cw=Math.ceil(W/PX), ch=Math.ceil(H/PX);
   const cv=(sLayer&&sLayer.cv)||document.createElement("canvas"); cv.width=cw; cv.height=ch;
   const x=cv.getContext("2d"); x.setTransform(1,0,0,1,0,0); x.clearRect(0,0,cw,ch);
-  const k=pixel?1/PX:DPR, P=p=>{ const q=toS(p[0],p[1],V); return [q[0]*k,q[1]*k]; }, u=V.s*k, pal=scenePal(dark);
-  paintLake(x,S,P,u,pal,sceneStyle,dark); paintProps(x,S,P,u,pal,sceneStyle,dark);
-  sLayer={key,cv,S,pixel,dark}; return cv; }
-function styleUI(){ const b=$("styleBar"); b.hidden=!sceneOf(level()); b.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.s===sceneStyle))); }
-document.querySelectorAll("#styleBar button").forEach(b=>b.onclick=()=>{ sceneStyle=b.dataset.s; store.set("euclidia2-estilo",sceneStyle); sLayer=null; styleUI(); });
+  const P=p=>{ const q=toS(p[0],p[1],V); return [q[0]/PX,q[1]/PX]; }, D=sceneDraw(x,P,V.s/PX), def=SCENES[S.kind], pal=def.pal(dark);
+  x.globalAlpha=0.6; D.px(0,0,cw,ch,pal.base); x.globalAlpha=1;
+  def.paint(x,S,D,pal); paintProps(x,S,D,dark);
+  sLayer={key,cv,S,dark,spark:pal.spark}; return cv; }
 function drawScene(V,C,t){ const cv=sceneLayer(V,C); if(!cv) return;
-  x2.save(); x2.imageSmoothingEnabled=!sLayer.pixel; x2.globalAlpha=sLayer.dark?0.9:0.85; x2.drawImage(cv,0,0,W,H); x2.restore();
-  if(liteMode) return;
-  // brillos en el agua: pocos y lentos
-  const S=sLayer.S; x2.fillStyle=sLayer.dark?"#cfe8f5":"#ffffff";
-  S.spark.forEach(sp=>{ const a=Math.sin(t*1.3+sp[2]); if(a<0.6) return; const q=toS(sp[0],sp[1],V), z=sLayer.pixel?3:2; x2.globalAlpha=(a-0.6)*2.2;
-    if(sLayer.pixel){ x2.fillRect(Math.round(q[0]/3)*3,Math.round(q[1]/3)*3,3,3); } else { x2.fillRect(q[0]-z*2,q[1]-0.5,z*4,1.2); x2.fillRect(q[0]-0.5,q[1]-z*2,1.2,z*4); } });
+  x2.save(); x2.imageSmoothingEnabled=false; x2.globalAlpha=sLayer.dark?0.9:0.85; x2.drawImage(cv,0,0,cv.width*PX,cv.height*PX); x2.restore();
+  if(liteMode||!sLayer.S.spark.length) return;
+  // brillos (agua, estrellas, brasas, vapor, antorchas): pocos y lentos
+  x2.fillStyle=sLayer.spark;
+  sLayer.S.spark.forEach(sp=>{ const a=Math.sin(t*1.3+sp[2]); if(a<0.6) return; const q=toS(sp[0],sp[1],V); x2.globalAlpha=(a-0.6)*2.2; x2.fillRect(Math.round(q[0]/PX)*PX,Math.round(q[1]/PX)*PX,PX,PX); });
   x2.globalAlpha=1; }
 // Modo liviano automático: si en los primeros segundos el dibujo va a menos de ~30 cuadros por segundo, el escenario queda quieto
 let fpsProbe={n:0,t0:0,done:false};
@@ -1428,7 +1599,7 @@ function renderLevels(){
     g.items.forEach(([L,i,pos])=>{ const b=document.createElement("button"); b.type="button"; b.className="lv"; b.setAttribute("aria-current",i===idx?"true":"false");
       const n=L.tutorial?"T":String(pos||L.step||"");
       const badge=L.tutorial?(prog.best[L.id]?' <span class="done" aria-label="completado">✓</span>':""):(prog.best[L.id]!=null?` <span class="got">${prog.best[L.id]}/${L.coins.length}</span>`:"");
-      b.innerHTML=`<span class="n">${n}</span>${esc(L.title)}${badge}`; b.title=`${L.kind} · ${L.diff}`; b.onclick=()=>loadLevel(i); row.appendChild(b); });
+      b.innerHTML=`<span class="n">${n}</span>${esc(L.title)}${badge}`; b.title=`${L.kind} · ${L.diff}`; b.onclick=()=>openLevel(i); row.appendChild(b); });
     chains.appendChild(row); });
   box.appendChild(chains);
 }
@@ -1502,7 +1673,7 @@ function ivsFrom(k){ const out=[];
     out.push({v:st.v,lo,hi}); });
   return out.length?out:null; }
 function loadLevel(i){
-  idx=i; menuWorld=wOf(LEVELS[i]); delete $("hintBtn").dataset.confirm; const L=level(); renderLevels(); resetZoom(); styleUI();
+  idx=i; menuWorld=wOf(LEVELS[i]); delete $("hintBtn").dataset.confirm; const L=level(); renderLevels(); resetZoom();
   const chainLen=L.chain?LEVELS.filter(l=>l.chain===L.chain).length:0;
   $("eyebrow").textContent=L.kind+(SESSION&&!L.tutorial?` · ${L.diff}`:L.chain?` · ${L.chain} ${L.step}/${chainLen}`:""); $("lvTitle").textContent=L.title; $("story").textContent=L.story; $("story").parentElement.classList.toggle("tut",!!L.tutorial);
   const ls=$("lesson"); ls.hidden=!L.lesson;
@@ -1535,7 +1706,15 @@ function loadLevel(i){
   showFb("",L.mixed?"Escribe la ecuación y el intervalo de cada tramo, y pulsa Trazar.":"Escribe la ecuación y pulsa Trazar.","");
 }
 $("form").addEventListener("submit",e=>{ e.preventDefault(); doSubmit(); });
-$("nextBtn").onclick=()=>{ const j=nextIdx(); if(j>=0) loadLevel(j); };
+$("nextBtn").onclick=()=>{ const j=nextIdx(); if(j>=0) openLevel(j); };
+// Panel de historia: al abrir un nivel desde el menú, con "Siguiente nivel" o al empezar el quiz
+function showLore(L){ const t=LORE[L.id]; if(!t) return;
+  $("loreRegion").textContent=REGIONS[SCENE_OF[L.id]]||""; $("loreTitle").textContent=L.title; $("loreText").textContent=t;
+  $("lore").hidden=false; $("loreGo").focus({preventScroll:true}); }
+function hideLore(){ $("lore").hidden=true; }
+function openLevel(i){ const same=i===idx&&$("lore").hidden; loadLevel(i); if(!same) showLore(level()); }
+$("loreGo").onclick=hideLore;
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("lore").hidden) hideLore(); });
 $("stayBtn").onclick=()=>{ $("win").hidden=true; };
 const showXY=e=>{ const r=c2.getBoundingClientRect(); const p=toW(e.clientX-r.left,e.clientY-r.top,view()); $("hud").textContent=`x = ${fmt(Math.round(p[0]*10)/10)}, y = ${fmt(Math.round(p[1]*10)/10)}`; };
 c2.addEventListener("pointermove",showXY); c2.addEventListener("pointerdown",showXY);
@@ -1651,7 +1830,7 @@ function gateUI(){ const g=$("evGate"), on=!!SESSION&&!evStarted()&&!evEnded(); 
   const b=$("evGo"); b.textContent=b.dataset.confirm?"Toca otra vez para empezar":"Empezar el quiz"; }
 $("evGo").onclick=()=>{ const b=$("evGo");
   if(!b.dataset.confirm){ b.dataset.confirm="1"; gateUI(); setTimeout(()=>{ if(b.dataset.confirm){ delete b.dataset.confirm; gateUI(); } },4000); return; }
-  delete b.dataset.confirm; evStart(); loadLevel(firstSession()); renderScore(); tick(); window.scrollTo({top:0,behavior:"smooth"}); };
+  delete b.dataset.confirm; evStart(); openLevel(firstSession()); renderScore(); tick(); window.scrollTo({top:0,behavior:"smooth"}); };
 function evLeft(){ if(!EV||!SESSION||!EV.min) return null; const t0=store.get(evKey("start"),0); if(!t0) return EV.min*60; return Math.max(0,Math.ceil((t0+EV.min*60000-Date.now())/1000)); }
 function firstSession(){ const j=SESSION_ORDER.length?LEVELS.findIndex(l=>l.id===SESSION_ORDER[0]):-1; return j<0?0:j; }
 function tick(){ const left=evLeft(), p=$("sTime"); p.hidden=left==null; if(left==null) return;
@@ -1777,7 +1956,7 @@ if(role==="profesor") $("teacherBtn").hidden=false;
 if(!role) askRole(); else if(role==="estudiante"&&!player) askPlayer(); else if(!seen) welcomeBack();
 markSeen();
 requestAnimationFrame(frame);
-window.__euclidia={LEVELS,loadLevel,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
+window.__euclidia={LEVELS,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
     if(ivs[i]) ivs[i]=(list||[]).map(I=>({v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):"",loC:true,hiC:true})); }); renderModes(); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
   state:()=>({g2,prog,player,idx}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),
