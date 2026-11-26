@@ -1,0 +1,19 @@
+PASA  | Primeros pasos (escape) | esperada x^2+y^2=9 con 0≤y | gana, 2 de 2 monedas, 231 pasos | ¡Camino perfecto!
+PASA  | Isla Circular (escape) | esperada (x+1)^2+(y-2)^2=9 con y≥2 | gana, 2 de 2 monedas, 231 pasos | ¡Camino perfecto!
+PASA  | Isla Circular | error «sin restricción: dos lados»: (x+1)^2+(y-2)^2=9 | no gana | Tu curva llega por dos lados y Vector no sabe cuál tomar. · Agrega una restricción debajo de la ecuación para quedarte solo con el lado que quieres. P
+PASA  | Isla Circular | error «lado equivocado»: (x+1)^2+(y-2)^2=9 con y≤2 | no gana | ¡Chocaste con un obstáculo! · Tu ecuación es la correcta, pero la restricción deja a Vector del lado equivocado. Cámbiala para quedarte con la otra pa
+PASA  | Valle Elíptico (escape) | esperada (x-2)^2/9+(y+1)^2/4=1 con y≤-1 | gana, 3 de 3 monedas, 194 pasos | ¡Camino perfecto!
+PASA  | Valle Elíptico | error «lado equivocado»: (x-2)^2/9+(y+1)^2/4=1 con y≥-1 | no gana | ¡Chocaste con un obstáculo! · Tu ecuación es la correcta, pero la restricción deja a Vector del lado equivocado. Cámbiala para quedarte con la otra pa
+PASA  | Puente Parabólico (escape) | esperada y=(x-1)^2/2-3 | gana, 2 de 2 monedas, 460 pasos | ¡Camino perfecto!
+PASA  | Puente Parabólico | error «signo de k»: y=(x-1)^2/2+3 | no gana | Tu camino no pasa por la salida: Vector no tiene por dónde empezar y se cae. · Tu vértice está corrido hacia arriba.
+PASA  | Desfiladero Hiperbólico (escape) | esperada x^2/9-y^2/9=1 | gana, 3 de 3 monedas, 223 pasos | ¡Camino perfecto!
+PASA  | Desfiladero Hiperbólico | error «b equivocado»: x^2/9-y^2/16=1 | no gana | Tu camino no pasa por la salida: Vector no tiene por dónde empezar y se cae. · Las ramas se abren demasiado: revisa el valor de b.
+PASA  | Rescate en el Lago Redondo (rescate) | esperada (x-1)^2+(y-1)^2=9 | gana, 3 de 3 monedas, 467 pasos | ¡Camino perfecto!
+PASA  | Rescate en el Lago Redondo | error «centro corrido»: (x-2)^2+(y-1)^2=4 | no gana | ¡Chocaste con un obstáculo! · Tu centro está corrido a la derecha.
+PASA  | Rescate en el Lago Redondo | error «r en vez de r²»: (x-1)^2+(y-1)^2=3 | no gana | Tu camino no pasa por la salida: Vector no tiene por dónde empezar y se cae. · Tu radio es demasiado pequeño.
+PASA  | Ruta Mixta (escape) | esperada x^2+y^2=4 con y≥0 y y=(x-2)^2 con 2≤x≤4 | gana, 2 de 2 monedas, 270 pasos | ¡Camino perfecto!
+PASA  | Ruta Mixta | error «lado equivocado del primer tramo»: x^2+y^2=4 con y≤0 y y=(x-2)^2 con 2≤x≤4 | no gana | ¡Chocaste con un obstáculo! · Tu ecuación es la correcta, pero el intervalo deja a Vector del lado equivocado. Cámbialo para quedarte con la otra part
+PASA  | Rescate: Vector recorre 18.64 (circunferencia completa ≈ 18.85) y termina a 0.21 de la salida
+PASA  | Pistas: 3 gratis, la cuarta pide confirmar y cuesta 2 monedas | monedas 5 / 15 → 3 / 15 | Pedir una pista (te quedan 1 gratis) / Comprar una pista por 2 monedas / Toca otra vez para pagar 2 monedas | 5 / 15 / Ya viste todas las pistas de este nivel | 3 / 15
+
+Total: 17 pasan, 0 fallan.

@@ -334,6 +334,13 @@ PASA  | Desfiladero Hiperbólico | moneda (3.75,2.25) sobre la curva | distancia
 PASA  | Desfiladero Hiperbólico | moneda (3.75,-2.25) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
 PASA  | Desfiladero Hiperbólico | obstáculo (4,4) cerca de la curva (para que el lado equivocado choque) | distancia 0.795
 PASA  | Desfiladero Hiperbólico | obstáculo (4,-4) cerca de la curva (para que el lado equivocado choque) | distancia 0.795
+PASA  | Rescate en el Lago Redondo | salida sobre la curva | distancia 0
+PASA  | Rescate en el Lago Redondo | meta sobre la curva | distancia 0
+PASA  | Rescate en el Lago Redondo | moneda (1,4) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Rescate en el Lago Redondo | moneda (-2,1) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Rescate en el Lago Redondo | moneda (1,-2) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Rescate en el Lago Redondo | obstáculo (2,3) cerca de la curva (para que el lado equivocado choque) | distancia 0.894
+PASA  | Rescate en el Lago Redondo | obstáculo (-1,-2.5) cerca de la curva (para que el lado equivocado choque) | distancia 0.899
 PASA  | Ruta Mixta | salida sobre la curva | distancia 0
 PASA  | Ruta Mixta | meta sobre la curva | distancia 0
 PASA  | Ruta Mixta | moneda (0,2) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
@@ -341,4 +348,4 @@ PASA  | Ruta Mixta | moneda (3,1) sobre la curva | distancia 0 (Vector la recoge
 PASA  | Ruta Mixta | obstáculo (0,-2) cerca de la curva (para que el lado equivocado choque) | distancia 0
 PASA  | Ruta Mixta | obstáculo (3,0) cerca de la curva (para que el lado equivocado choque) | distancia 0.447
 
-Total: 326 pasan, 0 fallan.
+Total: 333 pasan, 0 fallan.

@@ -19,4 +19,4 @@ Estudiantes de Cálculo en varias variables (universidad). Juegan en clase, desd
 
 ## Antes de dar algo por terminado
 - Probarlo en ancho de celular.
-- Correr las pruebas de las funciones matemáticas (`node pruebas/curvas.test.js`).
+- Correr las pruebas de las funciones matemáticas (`node pruebas/curvas.test.js`) y de los niveles (`node pruebas/niveles.test.js`).

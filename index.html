@@ -408,41 +408,51 @@ function texto(t) {
 // Dirección de la aplicación web de Google Apps Script que guarda los resultados en la hoja del profesor.
 // Mientras esté vacía, los resultados se guardan en el celular y se envían cuando se configure.
 const RESULTS_URL = "";   // opcional: hoja fija para todos. Lo normal es que cada profesor la pegue en su panel.
-const TOTAL_COINS = 12, FREE_HINTS = 3;
+// Pistas: las primeras FREE_HINTS son gratis; después cada una cuesta HINT_COST monedas de la nota
+const FREE_HINTS = 3, HINT_COST = 2;
 // Si la restricción deja un trozo de curva sin salida: "exacta" = no arranca, "aviso" = llega con aviso, "libre" = se ignora
 const EXTRA_RULE = "exacta";
 // Editor tipo cuaderno (MathLive). Si la librería no carga, el juego usa casillas de texto normales.
 const ML=!!(window.MathfieldElement&&customElements.get("math-field"));
 if(ML){ try{ MathfieldElement.fontsDirectory=null; MathfieldElement.soundsDirectory=null; MathfieldElement.keypressSound=null; MathfieldElement.plonkSound=null; }catch(e){} }
 
-/* ============ Niveles ============ */
+/* ============ Niveles ============
+   Cada nivel: conic (circunferencia, elipse, parábola, hipérbola, mixto), diff (fácil, medio, difícil),
+   type ("escape": de la salida a la meta; "rescate": salida y meta en el mismo punto, hay que dar la vuelta completa),
+   answer (ecuación esperada y su restricción, para las pruebas), errors (errores típicos que deben fallar). */
 const LEVELS = [
- {id:"t0", tutorial:true, title:"Primeros pasos", kind:"Tutorial · no cuenta para la nota",
+ {id:"t0", tutorial:true, conic:"circunferencia", diff:"fácil", type:"escape", answer:[["x^2+y^2=9","0≤y"]], title:"Primeros pasos", kind:"Tutorial · no cuenta para la nota",
   story:"Vector camina por la curva que tú escribes. Tiene que ir de la salida a la meta sin tocar obstáculos y recogiendo monedas. Para practicar, escribe con el teclado x² + y² = 9: toca x, □², +, y, □², =, 9. Pero ojo: la circunferencia llega a la meta por arriba y por abajo, y abajo hay un obstáculo. Elige el lado con la ecuación: en Restricción toca x para cambiarla por y, y escribe 0 en la primera casilla. Queda 0 ≤ y, solo la mitad de arriba. Luego pulsa Trazar.",
   targets:["x^2+y^2=9"], start:[-3,0], goal:[3,0], coins:[[0,3],[-2.12,2.12]], obstacles:[[0,-3]], view:{cx:0,cy:0,span:12},
   hints:["Las pistas orientan sin darte la respuesta. En el tutorial no gastan tus 3 pistas gratis.","Una curva cerrada, como la circunferencia, llega a la meta por dos lados. La restricción (por ejemplo 0 ≤ y) recorta la curva y deja solo el lado que quieres.","Si fallas, Vector recorre tu camino igual y ves dónde se equivocó. El intento anterior queda tenue en el mapa."]},
- {id:"c1", title:"Isla Circular", kind:"Circunferencia",
+ {id:"c1", conic:"circunferencia", diff:"medio", type:"escape", answer:[["(x+1)^2+(y-2)^2=9","y≥2"]], errors:[{eq:[["(x+1)^2+(y-2)^2=9"]],why:"sin restricción: dos lados"},{eq:[["(x+1)^2+(y-2)^2=9","y≤2"]],why:"lado equivocado"}], title:"Isla Circular", kind:"Circunferencia",
   story:"El camino rodea la isla por arriba. La salida y la meta están en lados opuestos de la orilla. Escribe la circunferencia que las une.",
   targets:["(x+1)^2+(y-2)^2=9"], start:[-4,2], goal:[2,2], coins:[[-1,5],[0.8,4.4]], obstacles:[[-1,-1]], view:{cx:-1,cy:2,span:14},
   hints:["Mira la salida y la meta: el centro de la circunferencia está en el punto medio entre ellas.","Mide la distancia del centro a la salida: ese es el radio. Luego usa (x − h)² + (y − k)² = r².","Para ir por arriba, la restricción deja solo los puntos con y mayor o igual que la altura del centro."]},
- {id:"c2", title:"Valle Elíptico", kind:"Elipse · forma general",
+ {id:"c2", conic:"elipse", diff:"difícil", type:"escape", answer:[["(x-2)^2/9+(y+1)^2/4=1","y≤-1"]], errors:[{eq:[["(x-2)^2/9+(y+1)^2/4=1","y≥-1"]],why:"lado equivocado"}], title:"Valle Elíptico", kind:"Elipse · forma general",
   story:"El mapa da la ecuación del valle en forma general. Complétale los cuadrados y escríbela en forma canónica para que Vector cruce por abajo.",
   general:"4x² + 9y² − 16x + 18y − 11 = 0",
   targets:["(x-2)^2/9+(y+1)^2/4=1"], start:[-1,-1], goal:[5,-1], coins:[[2,-3],[3.8,-2.6],[0.2,-2.6]], obstacles:[[2,1],[2,2.2],[2,-4]], view:{cx:2,cy:-0.6,span:13},
   hints:["Agrupa los términos en x y los términos en y: 4(x² − 4x) + 9(y² + 2y) = 11.","Completa el cuadrado dentro de cada paréntesis y suma lo mismo al otro lado. Después divide para que quede = 1."]},
- {id:"c3", title:"Puente Parabólico", kind:"Parábola",
+ {id:"c3", conic:"parábola", diff:"medio", type:"escape", answer:[["y=(x-1)^2/2-3"]], errors:[{eq:[["y=(x-1)^2/2+3"]],why:"signo de k"}], title:"Puente Parabólico", kind:"Parábola",
   story:"Para cruzar el barranco, el puente baja hasta el fondo y vuelve a subir. Su punto más bajo está en (1, −3).",
   targets:["y=(x-1)^2/2-3"], start:[-3,5], goal:[5,5], coins:[[1,-3],[3,-1]], obstacles:[[1,1.5]], view:{cx:1,cy:1.2,span:14},
   hints:["El punto más bajo, (1, −3), es el vértice. La parábola es simétrica respecto a la recta x = 1.","Usa y = a(x − h)² + k con el vértice, y sustituye la salida para despejar a."]},
- {id:"c4", title:"Desfiladero Hiperbólico", kind:"Hipérbola",
+ {id:"c4", conic:"hipérbola", diff:"fácil", type:"escape", answer:[["x^2/9-y^2/9=1"]], errors:[{eq:[["x^2/9-y^2/16=1"]],why:"b equivocado"}], title:"Desfiladero Hiperbólico", kind:"Hipérbola",
   story:"La pared del desfiladero se abre como una rama de hipérbola. Las piedras rojas están sobre las rectas y = x e y = −x: la curva se acerca a ellas sin tocarlas.",
   targets:["x^2-y^2=9"], start:[5,-4], goal:[5,4], coins:[[3,0],[3.75,2.25],[3.75,-2.25]], obstacles:[[4,4],[4,-4]], view:{cx:2.5,cy:0,span:14},
   hints:["El vértice de la rama es (3, 0) y el centro está en el origen.","Usa x²/a² − y²/b² = 1: el vértice te da a; sustituye la meta (5, 4) para hallar b."]},
- {id:"m1", mixed:true, title:"Ruta Mixta", kind:"Nivel mixto · dos tramos",
+ {id:"r1", conic:"circunferencia", diff:"medio", type:"rescate", answer:[["(x-1)^2+(y-1)^2=9"]], errors:[{eq:[["(x-2)^2+(y-1)^2=4"]],why:"centro corrido"},{eq:[["(x-1)^2+(y-1)^2=3"]],why:"r en vez de r²"}], title:"Rescate en el Lago Redondo", kind:"Circunferencia · Rescate",
+  story:"Tres exploradores quedaron atrapados en la orilla del lago. Vector sale del muelle, da la vuelta completa al lago recogiéndolos y vuelve al mismo muelle. El centro del lago está en (1, 1).",
+  targets:["(x-1)^2+(y-1)^2=9"], start:[4,1], goal:[4,1], coins:[[1,4],[-2,1],[1,-2]], obstacles:[[2,3],[-1,-2.5]], view:{cx:1,cy:1,span:12},
+  hints:["En un nivel de Rescate la curva es cerrada: Vector sale del muelle y tiene que volver a él.","El radio es la distancia del centro (1, 1) al muelle (4, 1). Recuerda que en la ecuación va r²."]},
+ {id:"m1", conic:"mixto", diff:"medio", type:"escape", answer:[["x^2+y^2=4","y≥0"],["y=(x-2)^2","2≤x≤4"]], errors:[{eq:[["x^2+y^2=4","y≤0"],["y=(x-2)^2","2≤x≤4"]],why:"lado equivocado del primer tramo"}], mixed:true, title:"Ruta Mixta", kind:"Nivel mixto · dos tramos",
   story:"Vector necesita dos cónicas. Primero media circunferencia con centro en el origen, y luego una parábola que sube hasta la meta. Cada tramo lleva su intervalo, y el segundo debe empezar donde termina el primero.",
   targets:["x^2+y^2=4","y=(x-2)^2"], start:[-2,0], goal:[4,4], coins:[[0,2],[3,1]], obstacles:[[0,-2],[3,0]], view:{cx:1,cy:1.5,span:12},
   hints:["El primer tramo pasa por la salida (−2, 0) y por la moneda (0, 2). ¿Qué parte de la circunferencia es: la de arriba o la de abajo?","La parábola tiene su vértice donde termina el primer tramo. El intervalo del segundo tramo va en x, desde ese vértice hasta la meta."]}
 ];
+LEVELS.forEach(l=>{ l.rescue=l.type==="rescate"; });
+const TOTAL_COINS = LEVELS.filter(l=>!l.tutorial).reduce((s,l)=>s+l.coins.length,0);
 const THEORY = `<div class="tablewrap"><table>
 <tr><td>Circunferencia</td><td><code>(x−h)² + (y−k)² = r²</code></td></tr>
 <tr><td>Elipse</td><td><code>(x−h)²/a² + (y−k)²/b² = 1</code></td></tr>
@@ -658,13 +668,13 @@ const store={ get(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.pars
 /* ============ Estado del jugador ============ */
 let player=store.get("euclidia2-player",null);
 let role=store.get("euclidia2-role",null);
-let prog=store.get("euclidia2-prog",{best:{},hintsUsed:0,shown:{}});
+let prog=store.get("euclidia2-prog",{best:{},hintsUsed:0,hintsBought:0,shown:{}}); prog.hintsBought=prog.hintsBought||0;
 const saveProg=()=>store.set("euclidia2-prog",prog);
-const coinsTotal=()=>LEVELS.filter(l=>!l.tutorial).reduce((s,l)=>s+(prog.best[l.id]||0),0);
+const coinsTotal=()=>Math.max(0,LEVELS.filter(l=>!l.tutorial).reduce((s,l)=>s+(prog.best[l.id]||0),0)-HINT_COST*prog.hintsBought);
 const grade=()=>coinsTotal()*5/TOTAL_COINS;
 function renderScore(){ if($("doneBtn")) doneUI();
   $("sCoins").textContent=`${coinsTotal()} / ${TOTAL_COINS}`; $("sGrade").textContent=dec(grade());
-  $("sHints").textContent=Math.max(0,FREE_HINTS-prog.hintsUsed);
+  $("sHints").textContent=Math.max(0,FREE_HINTS-prog.hintsUsed)+(prog.hintsBought?` · compradas: ${prog.hintsBought} (−${HINT_COST*prog.hintsBought})`:"");
   $("hello").textContent=role==="profesor"?"Modo profesor · Mundo de las cónicas":player?`Hola, ${player.nombre}. Mundo de las cónicas`:"Mundo de las cónicas";
 }
 
@@ -746,7 +756,7 @@ function walk(F,start,sgn,I,L){
   let p=proj2(F,start); if(!p) return {pts:[],hit:-1,reached:false,len:0};
   const B=baseBounds(), h=0.04, pts=[p]; let g=grad2(F,p[0],p[1]), n=Math.hypot(g[0],g[1]);
   if(!(n>1e-7)) return {pts,hit:-1,reached:false,len:0};
-  let t=[-g[1]/n*sgn,g[0]/n*sgn], len=0, hit=L.obstacles.some(o=>d2(o,p)<0.35)?0:-1, reached=hit<0&&d2(p,L.goal)<0.25;
+  let t=[-g[1]/n*sgn,g[0]/n*sgn], len=0, hit=L.obstacles.some(o=>d2(o,p)<0.35)?0:-1, reached=hit<0&&!L.rescue&&d2(p,L.goal)<0.25;
   if(hit===0) return {pts,hit,reached:false,len:0};
   let clipped=false;
   for(let k=0;k<7000&&!reached;k++){
@@ -759,7 +769,8 @@ function walk(F,start,sgn,I,L){
       if(d2(a,p)>1e-6){ pts.push(a); len+=d2(a,p); } clipped=true; break; }
     pts.push(q); len+=st; p=q;
     const oi=L.obstacles.findIndex(o=>d2(o,p)<0.35); if(oi>=0){ hit=pts.length-1; break; }
-    if(d2(p,L.goal)<0.25){ reached=true; break; }
+    // en un Rescate la meta es la misma salida: solo cuenta al volver a ella después de dar la vuelta
+    if(d2(p,L.goal)<0.25&&(!L.rescue||len>2)){ reached=true; break; }
     const mx=(B.x1-B.x0)*0.03, my=(B.y1-B.y0)*0.06; if(p[0]<B.x0+mx||p[0]>B.x1-mx||p[1]<B.y0+my*0.4||p[1]>B.y1-my*1.6) break;
     if(len>1&&d2(p,pts[0])<h*1.2) break;
   }
@@ -781,7 +792,8 @@ function plan(eqs){
     const A0=walk(F,pos,1,I,L0), B0=walk(F,pos,-1,I,L0), nx=eqs[i+1];
     const good=w=>{ if(w.len<0.3) return false; if(!nx) return w.reached; return w.pts.some((e,k)=>k>3&&dist2(nx.F,e)<0.15&&inI(nx.I,e)); };
     const gA=good(A0), gB=good(B0);
-    if(gA&&gB){ res.ambiguous={piece:i,at:pos,opts:[{pts:A0.pts},{pts:B0.pts}]}; break; }
+    // en un Rescate la curva es cerrada y los dos sentidos dan la misma vuelta: no hay que elegir
+    if(gA&&gB&&!L.rescue){ res.ambiguous={piece:i,at:pos,opts:[{pts:A0.pts},{pts:B0.pts}]}; break; }
     const sgn=gA?1:gB?-1:(A0.len>=B0.len?1:-1);
     // trozo sobrante: hacia el otro lado la restricción deja un pedazo sin salida dentro del mapa
     const O=sgn===1?B0:A0;
@@ -865,12 +877,12 @@ function draw(){
     for(let k=0;k<=upto;k++){ if(P[k].hop) continue; const s=toS(P[k].x,P[k].y,V); if(k===0||(P[k-1]&&P[k-1].hop)) x2.moveTo(s[0],s[1]); else x2.lineTo(s[0],s[1]); } x2.stroke(); x2.globalAlpha=1; }
   // salida y meta
   const [hx,hy]=toS(L.start[0],L.start[1],V); x2.fillStyle=C.ink; x2.globalAlpha=0.18; x2.beginPath(); x2.ellipse(hx,hy+3,17,6,0,0,7); x2.fill(); x2.globalAlpha=1;
-  label("Salida "+fmtP(L.start),hx-14,hy+22,C);
+  label((L.rescue?"Salida y meta ":"Salida ")+fmtP(L.start),hx-14,hy+22,C);
   const [gx,gy]=toS(L.goal[0],L.goal[1],V);
   x2.strokeStyle=C.ink; x2.lineWidth=2; x2.beginPath(); x2.moveTo(gx,gy); x2.lineTo(gx,gy-28); x2.stroke();
   for(let r=0;r<2;r++) for(let c=0;c<3;c++){ x2.fillStyle=(r+c)%2?C.paper:C.ok; x2.fillRect(gx+c*5,gy-28+r*5,5,5); }
   x2.strokeStyle=C.ok; x2.lineWidth=1; x2.strokeRect(gx,gy-28,15,10);
-  label("Meta "+fmtP(L.goal),gx+18,gy-16,C);
+  if(!L.rescue) label("Meta "+fmtP(L.goal),gx+18,gy-16,C);
   // obstáculos
   L.obstacles.forEach(o=>{ const [sx,sy]=toS(o[0],o[1],V); x2.fillStyle=C.bad; x2.beginPath();
     for(let k=0;k<16;k++){ const r=k%2?5:12, a=k*Math.PI/8+t*0.4; x2.lineTo(sx+r*Math.cos(a),sy+r*Math.sin(a)); } x2.closePath(); x2.fill(); });
@@ -956,7 +968,7 @@ function finish(){
     else { prog.best[L.id]=1; saveProg(); $("winSend").textContent="El tutorial no cuenta para la nota."; }
     renderScore(); renderLevels();
     const all=coins===L.coins.length;
-    $("winTitle").textContent=all?"¡Llegaste a la meta con todas las monedas!":"¡Llegaste a la meta!";
+    $("winTitle").textContent=L.rescue?(all?"¡Diste la vuelta completa y rescataste a todos!":"¡Diste la vuelta completa!"):(all?"¡Llegaste a la meta con todas las monedas!":"¡Llegaste a la meta!");
     $("winText").textContent= L.tutorial ? "Ya sabes jugar. Este nivel no cuenta para la nota: los siguientes sí."
       : `Monedas en este nivel: ${coins} de ${L.coins.length}.`+(all?"":" Tu curva no es exactamente la pedida, por eso perdiste monedas. Puedes intentarlo otra vez: cuenta tu mejor intento.");
     $("nextBtn").hidden=idx>=LEVELS.length-1; $("win").hidden=false;
@@ -970,7 +982,7 @@ function finish(){
   else if(r.hit>=0) title="¡Chocaste con un obstáculo!";
   else if(r.offStart) title="Tu camino no pasa por la salida: Vector no tiene por dónde empezar y se cae.";
   else if(r.breakAt>0) title=`El tramo ${r.breakAt+1} no empieza donde termina el tramo ${r.breakAt}: Vector se cae en el hueco.`;
-  else title="Tu camino no llega a la meta.";
+  else title=L.rescue?"Vector no pudo dar la vuelta completa hasta volver a la salida.":"Tu camino no llega a la meta.";
   const sameCurve=!notes.length&&!r.offStart&&!(r.breakAt>0)&&!r.nocurve;
   showFb("bad",title,sameCurve?(L.mixed?"Tu ecuación es la correcta, pero el intervalo deja a Vector del lado equivocado. Cámbialo para quedarte con la otra parte de la curva.":"Tu ecuación es la correcta, pero la restricción deja a Vector del lado equivocado. Cámbiala para quedarte con la otra parte de la curva."):notes.join(" ")||(L.mixed?"Revisa los intervalos: cada tramo debe empezar donde termina el anterior.":""));
 }
@@ -980,7 +992,7 @@ function queueResult(L,coins){
   if(!player||role!=="estudiante"){ flush(); return; }
   const q=store.get("euclidia2-queue",[]);
   q.push({fecha:new Date().toISOString(),nombre:player.nombre,apellido:player.apellido,documento:player.documento,nivel:L.title,
-    monedasNivel:coins,monedasTotales:coinsTotal(),monedasPosibles:TOTAL_COINS,pistas:prog.hintsUsed,nota:Math.round(grade()*100)/100});
+    monedasNivel:coins,monedasTotales:coinsTotal(),monedasPosibles:TOTAL_COINS,pistas:prog.hintsUsed+prog.hintsBought,nota:Math.round(grade()*100)/100});
   store.set("euclidia2-queue",q); flush();
 }
 const HOJA_RE=/^https:\/\/script\.google\.com\/macros\/s\/([\w-]{20,})\/exec\/?$/;
@@ -1113,12 +1125,15 @@ function renderHints(){
   const left=FREE_HINTS-prog.hintsUsed, b=$("hintBtn");
   if(shown>=L.hints.length){ b.textContent="Ya viste todas las pistas de este nivel"; b.disabled=true; }
   else if(L.tutorial){ b.textContent="Pedir una pista (en el tutorial es gratis)"; b.disabled=false; }
-  else if(left<=0){ b.textContent="Ya usaste tus 3 pistas gratis"; b.disabled=true; }
+  else if(left<=0){ b.textContent=b.dataset.confirm?`Toca otra vez para pagar ${HINT_COST} monedas`:`Comprar una pista por ${HINT_COST} monedas`; b.disabled=false; }
   else { b.textContent=`Pedir una pista (te quedan ${left} gratis)`; b.disabled=false; }
 }
-$("hintBtn").onclick=()=>{ const L=level(); const shown=prog.shown[L.id]||0; if(shown>=L.hints.length) return;
-  if(!L.tutorial){ if(prog.hintsUsed>=FREE_HINTS) return; prog.hintsUsed++; }
-  prog.shown[L.id]=shown+1; saveProg(); renderHints(); renderScore(); };
+$("hintBtn").onclick=()=>{ const L=level(), b=$("hintBtn"); const shown=prog.shown[L.id]||0; if(shown>=L.hints.length) return;
+  if(!L.tutorial){
+    if(prog.hintsUsed<FREE_HINTS) prog.hintsUsed++;
+    else if(!b.dataset.confirm){ b.dataset.confirm="1"; renderHints(); setTimeout(()=>{ if(b.dataset.confirm){ delete b.dataset.confirm; renderHints(); } },4000); return; }
+    else prog.hintsBought++; }
+  delete b.dataset.confirm; prog.shown[L.id]=shown+1; saveProg(); renderHints(); renderScore(); };
 /* ---- Casillas: editor tipo cuaderno e intervalo con botones ---- */
 let ivMode=store.get("euclidia2-ivmode","ineq"), ivs=[];
 function makeEq(k,label){ let el;
@@ -1161,12 +1176,12 @@ function ivFrom(k,optional){ const st=ivs[k];
   if(lo>=hi) throw new Error(`Está al revés: el extremo izquierdo (${fmt(lo)}) debe ser menor que el derecho (${fmt(hi)}).`);
   return {v:st.v,lo,hi}; }
 function loadLevel(i){
-  idx=i; const L=level(); renderLevels(); resetZoom();
+  idx=i; delete $("hintBtn").dataset.confirm; const L=level(); renderLevels(); resetZoom();
   $("eyebrow").textContent=L.kind; $("lvTitle").textContent=L.title; $("story").textContent=L.story; $("story").parentElement.classList.toggle("tut",!!L.tutorial);
   $("general").hidden=!L.general; $("general").textContent=L.general?"Ecuación del mapa: "+L.general:"";
   const T=$("targets"); T.innerHTML="";
   const add=(cls,txt)=>{ const li=document.createElement("li"); li.className=cls; li.innerHTML=`<span class="mk"></span>${esc(txt)}`; T.appendChild(li); };
-  add("s","Salida "+fmtP(L.start)); add("g","Meta "+fmtP(L.goal));
+  if(L.rescue) add("g","Salida y meta "+fmtP(L.start)+": da la vuelta completa"); else { add("s","Salida "+fmtP(L.start)); add("g","Meta "+fmtP(L.goal)); }
   L.coins.forEach(c=>add("c","Moneda "+fmtP(c))); L.obstacles.forEach(o=>add("o","Obstáculo "+fmtP(o)));
   const F=$("fields"); F.innerHTML=""; ivs=[];
   if(L.mixed){
@@ -1228,7 +1243,7 @@ $("regForm").addEventListener("submit",e=>{ e.preventDefault();
   if(!n||!a||!d){ $("rErr").hidden=false; return; }
   const changed=player&&player.documento!==d;
   player={nombre:n,apellido:a,documento:d}; store.set("euclidia2-player",player);
-  if(changed){ prog={best:{},hintsUsed:0,shown:{}}; saveProg(); loadLevel(0); }
+  if(changed){ prog={best:{},hintsUsed:0,hintsBought:0,shown:{}}; saveProg(); loadLevel(0); }
   $("reg").hidden=true; renderScore(); flush(); });
 $("whoBtn").onclick=askRole;
 
@@ -1269,7 +1284,7 @@ $("doneBtn").onclick=()=>{ const c=coinsTotal();
 $("doneBack").onclick=()=>{ $("done").hidden=true; };
 $("doneGo").onclick=async()=>{ const q=store.get("euclidia2-queue",[]);
   q.push({fecha:new Date().toISOString(),nombre:player.nombre,apellido:player.apellido,documento:player.documento,nivel:"Terminó la prueba",
-    monedasNivel:"",monedasTotales:coinsTotal(),monedasPosibles:TOTAL_COINS,pistas:prog.hintsUsed,nota:Math.round(grade()*100)/100});
+    monedasNivel:"",monedasTotales:coinsTotal(),monedasPosibles:TOTAL_COINS,pistas:prog.hintsUsed+prog.hintsBought,nota:Math.round(grade()*100)/100});
   store.set("euclidia2-queue",q); $("doneTitle").textContent="Prueba terminada"; $("doneGo").hidden=true; $("doneBack").textContent="Cerrar";
   $("doneText").textContent=`Tu resultado: ${coinsTotal()} de ${TOTAL_COINS} monedas, nota ${dec(grade())}.`; await flush(); };
 
@@ -1364,9 +1379,9 @@ if(role==="profesor") $("teacherBtn").hidden=false;
 if(!role) askRole(); else if(role==="estudiante"&&!player) askPlayer(); else if(!seen) welcomeBack();
 markSeen();
 requestAnimationFrame(frame);
-window.__euclidia={LEVELS,loadLevel,submit:(arr)=>{ arr.forEach((v,i)=>{ if(typeof v==="string") $("eq"+i).value=v; else { $("eq"+i).value=v[0]; const I=parseInterval(v[1]); Object.assign(ivs[i],{v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):""}); renderIv(i); } }); updatePretty(); doSubmit(); },
+window.__euclidia={LEVELS,loadLevel,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; if(typeof v==="string"){ $("eq"+i).value=v; if(ivs[i]){ Object.assign(ivs[i],{lo:"",hi:""}); renderIv(i); } } else { $("eq"+i).value=v[0]; const I=parseInterval(v[1]); Object.assign(ivs[i],{v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):""}); renderIv(i); } }); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
-  state:()=>({g2,prog,player}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),
+  state:()=>({g2,prog,player,idx}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),
   // para las pruebas automáticas (pruebas/curvas.test.js)
   t:{compileEq,canonicalProblem,formProblem,classify,buildSegs,curveBounds,baseBounds,walk,parseInterval,inI,dist2,tex2plain,W:()=>W,shV:()=>shV}};
 })();
