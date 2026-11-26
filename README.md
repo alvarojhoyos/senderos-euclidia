@@ -15,6 +15,10 @@ El mundo Tutorial no cuenta para la nota: una lección de controles y una lecci�
 
 El banco tiene 56 niveles en siete mundos: circunferencias, elipses, parábolas e hipérbolas (12 cada uno, en 3 cadenas de 4 que suben de fácil a difícil), identificar (4) y mixtos (4), estos dos en cadenas cortas de 2. Cada nivel trae sus errores típicos con el mensaje que ve el estudiante cuando su curva coincide con uno de ellos. Para agregar niveles basta con sumarlos a `LEVELS` con su `world`, `chain` y `step`: el menú y el total de monedas se calculan solos.
 
+## Restricciones
+
+Debajo de cada ecuación (o de cada tramo en los niveles mixtos) está el botón "+ Añadir una restricción". El estudiante decide si la necesita y puede poner hasta dos, una en x y otra en y; Coni solo camina por la parte de la curva que cumple todas. El juego no exige una cónica concreta: cualquier camino que lleve a Coni de la salida a la meta recogiendo las monedas gana el nivel.
+
 ## Evaluaciones
 
 En el panel del profesor, la sección "Evaluación" arma un código QR para una evaluación. Una tabla dice cuántos niveles fáciles, medios y difíciles entran de cada mundo (el máximo de cada casilla es lo que hay en el banco), y los botones "Corta" (1 fácil, 1 medio y 1 difícil por cónica) y "Larga" (1, 2 y 1) la llenan de un toque. También se eligen el tiempo en minutos y un nombre opcional. A cada estudiante le tocan niveles al azar con esas cantidades, ordenados de fácil a difícil, y la elección depende de su documento: el mismo estudiante siempre recibe los suyos. Si una casilla está al máximo, todos reciben esos mismos niveles.
@@ -29,4 +33,6 @@ Al entrar, el estudiante ve solo el Tutorial y un aviso con el botón "Empezar e
 
 `pruebas/evaluacion.test.js` comprueba las evaluaciones: que cada estudiante reciba las cantidades de la tabla por mundo y dificultad, siempre los mismos para el mismo documento y de fácil a difícil, que el reloj no corra durante el Tutorial, el enlace del QR, el menú filtrado, el reloj, el envío al acabarse el tiempo y que sin evaluación todo siga igual.
 
-Requieren Node y Playwright con Chromium: `node pruebas/curvas.test.js`, `node pruebas/niveles.test.js` y `node pruebas/evaluacion.test.js`. Los últimos resultados están en `pruebas/salida.txt`, `pruebas/salida-niveles.txt` y `pruebas/salida-evaluacion.txt`.
+`pruebas/restricciones.test.js` comprueba las restricciones opcionales: que no aparezcan solas, que se puedan añadir hasta dos por tramo (una en x y otra en y) y quitar, y que en el juego valgan las dos a la vez.
+
+Requieren Node y Playwright con Chromium: `node pruebas/curvas.test.js`, `node pruebas/niveles.test.js`, `node pruebas/evaluacion.test.js` y `node pruebas/restricciones.test.js`. Los últimos resultados están en `pruebas/salida.txt`, `pruebas/salida-niveles.txt`, `pruebas/salida-evaluacion.txt` y `pruebas/salida-restricciones.txt`.

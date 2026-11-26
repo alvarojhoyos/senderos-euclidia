@@ -1,0 +1,11 @@
+PASA  | Con dos restricciones (x ≤ 5 y y ≥ 0) solo vale la parte que cumple las dos; sin restricción vale toda la curva
+PASA  | Al empezar no hay restricción: solo el botón «+ Añadir una restricción»
+PASA  | Se pueden añadir dos (x,y); la segunda empieza en la otra variable y ya no se ofrece una tercera
+PASA  | Con ✕ se quita una restricción y vuelve el botón para añadir
+PASA  | Mixto con dos restricciones en el tramo 2 (y ≥ 0 y x ≤ 7,5): llega con 3/3 monedas
+PASA  | Mixto sin restricción en el tramo 1: Coni no sabe por dónde ir y el juego sugiere añadir una restricción
+PASA  | Otro camino válido (una elipse en el tramo 2, con y ≥ 0) también llega a la meta: Llegaste, pero faltaron monedas.
+PASA  | Mixto con la circunferencia completa en el tramo 1 y una restricción vacía: dibuja las curvas y dice «Tramo 1: tu curva llega por dos lados y Coni no sabe cuál tomar.»
+PASA  | Tutorial: la práctica de la restricción se resuelve añadiendo 0 ≤ y
+
+Total: 9 pasan, 0 fallan.
