@@ -1,0 +1,316 @@
+
+## Circunferencia
+PASA  | centro en el origen | aceptada como canónica | sí
+PASA  | centro en el origen | clasificación | obtuvo {"type":"circunferencia","h":0,"k":0,"r":3}
+PASA  | centro en el origen | precisión del trazo | 972 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | centro en el origen | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | centro en el origen | recorrido de Vector | 944 pasos; mayor distancia a la curva 0
+PASA  | centro fuera del origen | aceptada como canónica | sí
+PASA  | centro fuera del origen | clasificación | obtuvo {"type":"circunferencia","h":3,"k":-2,"r":2}
+PASA  | centro fuera del origen | precisión del trazo | 876 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.02)
+PASA  | centro fuera del origen | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | centro fuera del origen | recorrido de Vector | 630 pasos; mayor distancia a la curva 0
+PASA  | nivel Isla Circular | aceptada como canónica | sí
+PASA  | nivel Isla Circular | clasificación | obtuvo {"type":"circunferencia","h":-1,"k":2,"r":3}
+PASA  | nivel Isla Circular | precisión del trazo | 972 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | nivel Isla Circular | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | nivel Isla Circular | recorrido de Vector | 944 pasos; mayor distancia a la curva 0
+PASA  | radio decimal | aceptada como canónica | sí
+PASA  | radio decimal | clasificación | obtuvo {"type":"circunferencia","h":0.5,"k":-1.5,"r":2.5}
+PASA  | radio decimal | precisión del trazo | 972 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.021)
+PASA  | radio decimal | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | radio decimal | recorrido de Vector | 786 pasos; mayor distancia a la curva 0
+PASA  | no normalizada: 2x²+2y²=18 | aceptada como canónica | sí
+PASA  | no normalizada: 2x²+2y²=18 | clasificación | obtuvo {"type":"circunferencia","h":0,"k":0,"r":3}
+PASA  | no normalizada: 2x²+2y²=18 | precisión del trazo | 972 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | no normalizada: 2x²+2y²=18 | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | no normalizada: 2x²+2y²=18 | recorrido de Vector | 944 pasos; mayor distancia a la curva 0
+PASA  | escrita como elipse con a = b | aceptada como canónica | sí
+PASA  | escrita como elipse con a = b | clasificación | obtuvo {"type":"circunferencia","h":1,"k":-2,"r":3}
+PASA  | escrita como elipse con a = b | precisión del trazo | 972 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | escrita como elipse con a = b | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | escrita como elipse con a = b | recorrido de Vector | 944 pasos; mayor distancia a la curva 0
+PASA  | lados invertidos: 9 = x²+y² | aceptada como canónica | sí
+PASA  | lados invertidos: 9 = x²+y² | clasificación | obtuvo {"type":"circunferencia","h":0,"k":0,"r":3}
+PASA  | lados invertidos: 9 = x²+y² | precisión del trazo | 972 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | lados invertidos: 9 = x²+y² | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | lados invertidos: 9 = x²+y² | recorrido de Vector | 944 pasos; mayor distancia a la curva 0
+PASA  | coeficientes negativos | aceptada como canónica | sí
+PASA  | coeficientes negativos | clasificación | obtuvo {"type":"circunferencia","h":0,"k":0,"r":3}
+PASA  | coeficientes negativos | precisión del trazo | 972 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | coeficientes negativos | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | coeficientes negativos | recorrido de Vector | 944 pasos; mayor distancia a la curva 0
+PASA  | radio pequeño (0,5) | aceptada como canónica | sí
+PASA  | radio pequeño (0,5) | clasificación | obtuvo {"type":"circunferencia","h":1,"k":1,"r":0.5}
+PASA  | radio pequeño (0,5) | precisión del trazo | 220 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.02)
+PASA  | radio pequeño (0,5) | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | radio pequeño (0,5) | recorrido de Vector | 158 pasos; mayor distancia a la curva 0
+PASA  | radio muy pequeño (0,1) | aceptada como canónica | sí
+PASA  | radio muy pequeño (0,1) | clasificación | obtuvo {"type":"circunferencia","h":0,"k":0,"r":0.1}
+PASA  | radio muy pequeño (0,1) | precisión del trazo | 44 trazos; mayor distancia a la curva exacta 0.001 (tolerancia 0.02)
+PASA  | radio muy pequeño (0,1) | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | radio muy pequeño (0,1) | recorrido de Vector | 66 pasos; mayor distancia a la curva 0
+PASA  | radio con raíz: r² = 2 | aceptada como canónica | sí
+PASA  | radio con raíz: r² = 2 | clasificación | obtuvo {"type":"circunferencia","h":0,"k":0,"r":1.414}
+PASA  | radio con raíz: r² = 2 | precisión del trazo | 620 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.02)
+PASA  | radio con raíz: r² = 2 | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | radio con raíz: r² = 2 | recorrido de Vector | 446 pasos; mayor distancia a la curva 0
+PASA  | más grande que el mapa | aceptada como canónica | sí
+PASA  | más grande que el mapa | clasificación | obtuvo {"type":"circunferencia","h":0,"k":0,"r":20}
+PASA  | más grande que el mapa | precisión del trazo | 2188 trazos; mayor distancia a la curva exacta 0.003 (tolerancia 0.073)
+PASA  | más grande que el mapa | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | más grande que el mapa | recorrido de Vector | la curva no pasa por la parte visible del mapa
+PASA  | se sale del mapa por un lado | aceptada como canónica | sí
+PASA  | se sale del mapa por un lado | clasificación | obtuvo {"type":"circunferencia","h":6,"k":0,"r":5}
+PASA  | se sale del mapa por un lado | precisión del trazo | 1562 trazos; mayor distancia a la curva exacta 0.001 (tolerancia 0.026)
+PASA  | se sale del mapa por un lado | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | se sale del mapa por un lado | recorrido de Vector | 322 pasos; mayor distancia a la curva 0.001
+PASA  | restringida a 0 ≤ y | aceptada como canónica | sí
+PASA  | restringida a 0 ≤ y | clasificación | obtuvo {"type":"circunferencia","h":0,"k":0,"r":3}
+PASA  | restringida a 0 ≤ y | precisión del trazo | 972 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | restringida a 0 ≤ y | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | restringida a 0 ≤ y | restricción 0≤y | 0 trazos marcados como camino fuera de la restricción; 0 dentro sin marcar
+PASA  | restringida a 0 ≤ y | recorrido de Vector | 238 pasos; mayor distancia a la curva 0; 0 pasos fuera de la restricción
+
+## Elipse
+PASA  | centro en el origen | aceptada como canónica | sí
+PASA  | centro en el origen | clasificación | obtuvo {"type":"elipse","h":0,"k":0,"a":3,"b":2}
+PASA  | centro en el origen | precisión del trazo | 812 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | centro en el origen | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | centro en el origen | recorrido de Vector | 794 pasos; mayor distancia a la curva 0
+PASA  | eje mayor vertical | aceptada como canónica | sí
+PASA  | eje mayor vertical | clasificación | obtuvo {"type":"elipse","h":0,"k":0,"a":2,"b":4}
+PASA  | eje mayor vertical | precisión del trazo | 728 trazos; mayor distancia a la curva exacta 0.001 (tolerancia 0.033)
+PASA  | eje mayor vertical | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | eje mayor vertical | recorrido de Vector | 970 pasos; mayor distancia a la curva 0.001
+PASA  | nivel Valle Elíptico | aceptada como canónica | sí
+PASA  | nivel Valle Elíptico | clasificación | obtuvo {"type":"elipse","h":2,"k":-1,"a":3,"b":2}
+PASA  | nivel Valle Elíptico | precisión del trazo | 812 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | nivel Valle Elíptico | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | nivel Valle Elíptico | recorrido de Vector | 794 pasos; mayor distancia a la curva 0
+PASA  | no normalizada: 4x²+9y²=36 | aceptada como canónica | sí
+PASA  | no normalizada: 4x²+9y²=36 | clasificación | obtuvo {"type":"elipse","h":0,"k":0,"a":3,"b":2}
+PASA  | no normalizada: 4x²+9y²=36 | precisión del trazo | 812 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | no normalizada: 4x²+9y²=36 | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | no normalizada: 4x²+9y²=36 | recorrido de Vector | 794 pasos; mayor distancia a la curva 0
+PASA  | no normalizada con centro | aceptada como canónica | sí
+PASA  | no normalizada con centro | clasificación | obtuvo {"type":"elipse","h":2,"k":-1,"a":3,"b":2}
+PASA  | no normalizada con centro | precisión del trazo | 812 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | no normalizada con centro | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | no normalizada con centro | recorrido de Vector | 794 pasos; mayor distancia a la curva 0
+PASA  | lado derecho distinto de 1 | aceptada como canónica | sí
+PASA  | lado derecho distinto de 1 | clasificación | obtuvo {"type":"elipse","h":2,"k":-1,"a":6,"b":4}
+PASA  | lado derecho distinto de 1 | precisión del trazo | 812 trazos; mayor distancia a la curva exacta 0.001 (tolerancia 0.049)
+PASA  | lado derecho distinto de 1 | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | lado derecho distinto de 1 | recorrido de Vector | 1588 pasos; mayor distancia a la curva 0.001
+PASA  | coeficientes negativos | aceptada como canónica | sí
+PASA  | coeficientes negativos | clasificación | obtuvo {"type":"elipse","h":2,"k":-1,"a":3,"b":2}
+PASA  | coeficientes negativos | precisión del trazo | 812 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | coeficientes negativos | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | coeficientes negativos | recorrido de Vector | 794 pasos; mayor distancia a la curva 0
+PASA  | denominador en decimales | aceptada como canónica | sí
+PASA  | denominador en decimales | clasificación | obtuvo {"type":"elipse","h":0,"k":0,"a":2.5,"b":0.8}
+PASA  | denominador en decimales | precisión del trazo | 640 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.021)
+PASA  | denominador en decimales | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | denominador en decimales | recorrido de Vector | 554 pasos; mayor distancia a la curva 0
+PASA  | muy aplanada (b = 0,3) | aceptada como canónica | sí
+PASA  | muy aplanada (b = 0,3) | clasificación | obtuvo {"type":"elipse","h":0,"k":0,"a":5,"b":0.3}
+PASA  | muy aplanada (b = 0,3) | precisión del trazo | 516 trazos; mayor distancia a la curva exacta 0.007 (tolerancia 0.041)
+PASA  | muy aplanada (b = 0,3) | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | muy aplanada (b = 0,3) | recorrido de Vector | 1010 pasos; mayor distancia a la curva 0.001
+PASA  | muy aplanada (b = 0,1) | aceptada como canónica | sí
+PASA  | muy aplanada (b = 0,1) | clasificación | obtuvo {"type":"elipse","h":0,"k":0,"a":5,"b":0.1}
+PASA  | muy aplanada (b = 0,1) | precisión del trazo | 496 trazos; mayor distancia a la curva exacta 0.01 (tolerancia 0.041)
+PASA  | muy aplanada (b = 0,1) | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | muy aplanada (b = 0,1) | recorrido de Vector | 252 pasos; mayor distancia a la curva 0.001
+PASA  | casi circunferencia (a = 3, b = 2,99) | aceptada como canónica | sí
+PASA  | casi circunferencia (a = 3, b = 2,99) | clasificación | obtuvo {"type":"elipse","h":0,"k":0,"a":3,"b":2.99}
+PASA  | casi circunferencia (a = 3, b = 2,99) | precisión del trazo | 972 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | casi circunferencia (a = 3, b = 2,99) | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | casi circunferencia (a = 3, b = 2,99) | recorrido de Vector | 942 pasos; mayor distancia a la curva 0
+PASA  | restringida a y ≤ −1 | aceptada como canónica | sí
+PASA  | restringida a y ≤ −1 | clasificación | obtuvo {"type":"elipse","h":2,"k":-1,"a":3,"b":2}
+PASA  | restringida a y ≤ −1 | precisión del trazo | 812 trazos; mayor distancia a la curva exacta 0 (tolerancia 0.025)
+PASA  | restringida a y ≤ −1 | cobertura (sin huecos) | 0 de 5000 puntos de la curva sin dibujar
+PASA  | restringida a y ≤ −1 | restricción y≤-1 | 0 trazos marcados como camino fuera de la restricción; 0 dentro sin marcar
+PASA  | restringida a y ≤ −1 | recorrido de Vector | 202 pasos; mayor distancia a la curva 0; 0 pasos fuera de la restricción
+
+## Parábola
+PASA  | y = x² | aceptada como canónica | sí
+PASA  | y = x² | clasificación | obtuvo {"type":"parábola","vert":true,"p":1,"h":0,"k":0}
+PASA  | y = x² | precisión del trazo | 920 trazos; mayor distancia a la curva exacta 0.002 (tolerancia 0.025)
+PASA  | y = x² | cobertura (sin huecos) | 0 de 3532 puntos de la curva sin dibujar
+PASA  | y = x² | recorrido de Vector | 240 pasos; mayor distancia a la curva 0.001
+PASA  | nivel Puente Parabólico | aceptada como canónica | sí
+PASA  | nivel Puente Parabólico | clasificación | obtuvo {"type":"parábola","vert":true,"p":0.5,"h":1,"k":-3}
+PASA  | nivel Puente Parabólico | precisión del trazo | 1019 trazos; mayor distancia a la curva exacta 0.002 (tolerancia 0.025)
+PASA  | nivel Puente Parabólico | cobertura (sin huecos) | 0 de 4113 puntos de la curva sin dibujar
+PASA  | nivel Puente Parabólico | recorrido de Vector | 264 pasos; mayor distancia a la curva 0.001
+PASA  | abre hacia abajo (a negativo) | aceptada como canónica | sí
+PASA  | abre hacia abajo (a negativo) | clasificación | obtuvo {"type":"parábola","vert":true,"p":-2,"h":-1,"k":3}
+PASA  | abre hacia abajo (a negativo) | precisión del trazo | 851 trazos; mayor distancia a la curva exacta 0.002 (tolerancia 0.025)
+PASA  | abre hacia abajo (a negativo) | cobertura (sin huecos) | 0 de 2807 puntos de la curva sin dibujar
+PASA  | abre hacia abajo (a negativo) | recorrido de Vector | 262 pasos; mayor distancia a la curva 0.001
+PASA  | horizontal, abre a la derecha | aceptada como canónica | sí
+PASA  | horizontal, abre a la derecha | clasificación | obtuvo {"type":"parábola","vert":false,"p":0.25,"k":2,"h":1}
+PASA  | horizontal, abre a la derecha | precisión del trazo | 1456 trazos; mayor distancia a la curva exacta 0.002 (tolerancia 0.025)
+PASA  | horizontal, abre a la derecha | cobertura (sin huecos) | 0 de 6380 puntos de la curva sin dibujar
+PASA  | horizontal, abre a la derecha | recorrido de Vector | 354 pasos; mayor distancia a la curva 0.001
+PASA  | horizontal, abre a la izquierda | aceptada como canónica | sí
+PASA  | horizontal, abre a la izquierda | clasificación | obtuvo {"type":"parábola","vert":false,"p":-0.5,"k":-1,"h":0}
+PASA  | horizontal, abre a la izquierda | precisión del trazo | 1296 trazos; mayor distancia a la curva exacta 0.002 (tolerancia 0.025)
+PASA  | horizontal, abre a la izquierda | cobertura (sin huecos) | 0 de 5202 puntos de la curva sin dibujar
+PASA  | horizontal, abre a la izquierda | recorrido de Vector | 382 pasos; mayor distancia a la curva 0.001
+PASA  | no normalizada: 2y = (x−1)² − 6 | aceptada como canónica | sí
+PASA  | no normalizada: 2y = (x−1)² − 6 | clasificación | obtuvo {"type":"parábola","vert":true,"p":0.5,"h":1,"k":-3}
+PASA  | no normalizada: 2y = (x−1)² − 6 | precisión del trazo | 1019 trazos; mayor distancia a la curva exacta 0.002 (tolerancia 0.025)
+PASA  | no normalizada: 2y = (x−1)² − 6 | cobertura (sin huecos) | 0 de 4113 puntos de la curva sin dibujar
+PASA  | no normalizada: 2y = (x−1)² − 6 | recorrido de Vector | 264 pasos; mayor distancia a la curva 0.001
+PASA  | forma 4p: (x−1)² = 4(y+3) | aceptada como canónica | sí
+PASA  | forma 4p: (x−1)² = 4(y+3) | clasificación | obtuvo {"type":"parábola","vert":true,"p":0.25,"h":1,"k":-3}
+PASA  | forma 4p: (x−1)² = 4(y+3) | precisión del trazo | 1156 trazos; mayor distancia a la curva exacta 0.002 (tolerancia 0.025)
+PASA  | forma 4p: (x−1)² = 4(y+3) | cobertura (sin huecos) | 0 de 4988 puntos de la curva sin dibujar
+PASA  | forma 4p: (x−1)² = 4(y+3) | recorrido de Vector | 304 pasos; mayor distancia a la curva 0.001
+PASA  | forma 4p negativa: (y−2)² = −8(x−1) | aceptada como canónica | sí
+PASA  | forma 4p negativa: (y−2)² = −8(x−1) | clasificación | obtuvo {"type":"parábola","vert":false,"p":-0.125,"k":2,"h":1}
+PASA  | forma 4p negativa: (y−2)² = −8(x−1) | precisión del trazo | 1404 trazos; mayor distancia a la curva exacta 0.001 (tolerancia 0.025)
+PASA  | forma 4p negativa: (y−2)² = −8(x−1) | cobertura (sin huecos) | 0 de 7030 puntos de la curva sin dibujar
+PASA  | forma 4p negativa: (y−2)² = −8(x−1) | recorrido de Vector | 266 pasos; mayor distancia a la curva 0.001
+PASA  | k a la izquierda: y − 3 = (x+1)² | aceptada como canónica | sí
+PASA  | k a la izquierda: y − 3 = (x+1)² | clasificación | obtuvo {"type":"parábola","vert":true,"p":1,"h":-1,"k":3}
+PASA  | k a la izquierda: y − 3 = (x+1)² | precisión del trazo | 920 trazos; mayor distancia a la curva exacta 0.002 (tolerancia 0.025)
+PASA  | k a la izquierda: y − 3 = (x+1)² | cobertura (sin huecos) | 0 de 3405 puntos de la curva sin dibujar
+PASA  | k a la izquierda: y − 3 = (x+1)² | recorrido de Vector | 240 pasos; mayor distancia a la curva 0.001
+PASA  | muy cerrada (a = 20) | aceptada como canónica | sí
+PASA  | muy cerrada (a = 20) | clasificación | obtuvo {"type":"parábola","vert":true,"p":20,"h":0,"k":0}
+PASA  | muy cerrada (a = 20) | precisión del trazo | 738 trazos; mayor distancia a la curva exacta 0.004 (tolerancia 0.025)
+PASA  | muy cerrada (a = 20) | cobertura (sin huecos) | 0 de 1366 puntos de la curva sin dibujar
+PASA  | muy cerrada (a = 20) | recorrido de Vector | 210 pasos; mayor distancia a la curva 0.003
+PASA  | muy abierta (a = 0,02) | aceptada como canónica | sí
+PASA  | muy abierta (a = 0,02) | clasificación | obtuvo {"type":"parábola","vert":true,"p":0.02,"h":0,"k":-2}
+PASA  | muy abierta (a = 0,02) | precisión del trazo | 1118 trazos; mayor distancia a la curva exacta 0.001 (tolerancia 0.025)
+PASA  | muy abierta (a = 0,02) | cobertura (sin huecos) | 0 de 6228 puntos de la curva sin dibujar
+PASA  | muy abierta (a = 0,02) | recorrido de Vector | 324 pasos; mayor distancia a la curva 0.001
+PASA  | restringida a 0 ≤ x ≤ 2 | aceptada como canónica | sí
+PASA  | restringida a 0 ≤ x ≤ 2 | clasificación | obtuvo {"type":"parábola","vert":true,"p":0.5,"h":1,"k":-3}
+PASA  | restringida a 0 ≤ x ≤ 2 | precisión del trazo | 1019 trazos; mayor distancia a la curva exacta 0.002 (tolerancia 0.025)
+PASA  | restringida a 0 ≤ x ≤ 2 | cobertura (sin huecos) | 0 de 4113 puntos de la curva sin dibujar
+PASA  | restringida a 0 ≤ x ≤ 2 | restricción 0≤x≤2 | 0 trazos marcados como camino fuera de la restricción; 0 dentro sin marcar
+PASA  | restringida a 0 ≤ x ≤ 2 | recorrido de Vector | 60 pasos; mayor distancia a la curva 0; 0 pasos fuera de la restricción
+
+## Hipérbola
+PASA  | equilátera (a = b): x² − y² = 9 | aceptada como canónica | sí
+PASA  | equilátera (a = b): x² − y² = 9 | clasificación | obtuvo {"type":"hipérbola","h":0,"k":0,"horiz":true,"a":3,"b":3}
+PASA  | equilátera (a = b): x² − y² = 9 | precisión del trazo | 2332 trazos; mayor distancia a la curva exacta 0.003 (tolerancia 0.025)
+PASA  | equilátera (a = b): x² − y² = 9 | cobertura (sin huecos) | 0 de 3696 puntos de la curva sin dibujar
+PASA  | equilátera (a = b): x² − y² = 9 | recorrido de Vector | 260 pasos; mayor distancia a la curva 0.002
+PASA  | a ≠ b, abre a los lados | aceptada como canónica | sí
+PASA  | a ≠ b, abre a los lados | clasificación | obtuvo {"type":"hipérbola","h":0,"k":0,"horiz":true,"a":3,"b":2}
+PASA  | a ≠ b, abre a los lados | precisión del trazo | 2508 trazos; mayor distancia a la curva exacta 0.003 (tolerancia 0.025)
+PASA  | a ≠ b, abre a los lados | cobertura (sin huecos) | 0 de 3877 puntos de la curva sin dibujar
+PASA  | a ≠ b, abre a los lados | recorrido de Vector | 260 pasos; mayor distancia a la curva 0.002
+PASA  | abre arriba y abajo | aceptada como canónica | sí
+PASA  | abre arriba y abajo | clasificación | obtuvo {"type":"hipérbola","h":0,"k":0,"horiz":false,"a":3,"b":2}
+PASA  | abre arriba y abajo | precisión del trazo | 2756 trazos; mayor distancia a la curva exacta 0.003 (tolerancia 0.025)
+PASA  | abre arriba y abajo | cobertura (sin huecos) | 0 de 3948 puntos de la curva sin dibujar
+PASA  | abre arriba y abajo | recorrido de Vector | 294 pasos; mayor distancia a la curva 0.002
+PASA  | centro fuera del origen, vertical | aceptada como canónica | sí
+PASA  | centro fuera del origen, vertical | clasificación | obtuvo {"type":"hipérbola","h":-2,"k":1,"horiz":false,"a":3,"b":2}
+PASA  | centro fuera del origen, vertical | precisión del trazo | 2756 trazos; mayor distancia a la curva exacta 0.003 (tolerancia 0.025)
+PASA  | centro fuera del origen, vertical | cobertura (sin huecos) | 0 de 3924 puntos de la curva sin dibujar
+PASA  | centro fuera del origen, vertical | recorrido de Vector | 294 pasos; mayor distancia a la curva 0.002
+PASA  | signo negativo: y² − x² = −9 | aceptada como canónica | sí
+PASA  | signo negativo: y² − x² = −9 | clasificación | obtuvo {"type":"hipérbola","h":0,"k":0,"horiz":true,"a":3,"b":3}
+PASA  | signo negativo: y² − x² = −9 | precisión del trazo | 2332 trazos; mayor distancia a la curva exacta 0.003 (tolerancia 0.025)
+PASA  | signo negativo: y² − x² = −9 | cobertura (sin huecos) | 0 de 3696 puntos de la curva sin dibujar
+PASA  | signo negativo: y² − x² = −9 | recorrido de Vector | 260 pasos; mayor distancia a la curva 0.002
+PASA  | no normalizada: 4x² − 9y² = 36 | aceptada como canónica | sí
+PASA  | no normalizada: 4x² − 9y² = 36 | clasificación | obtuvo {"type":"hipérbola","h":0,"k":0,"horiz":true,"a":3,"b":2}
+PASA  | no normalizada: 4x² − 9y² = 36 | precisión del trazo | 2508 trazos; mayor distancia a la curva exacta 0.003 (tolerancia 0.025)
+PASA  | no normalizada: 4x² − 9y² = 36 | cobertura (sin huecos) | 0 de 3877 puntos de la curva sin dibujar
+PASA  | no normalizada: 4x² − 9y² = 36 | recorrido de Vector | 260 pasos; mayor distancia a la curva 0.002
+PASA  | término negativo primero | aceptada como canónica | sí
+PASA  | término negativo primero | clasificación | obtuvo {"type":"hipérbola","h":1,"k":-1,"horiz":false,"a":2,"b":1}
+PASA  | término negativo primero | precisión del trazo | 2544 trazos; mayor distancia a la curva exacta 0.003 (tolerancia 0.02)
+PASA  | término negativo primero | cobertura (sin huecos) | 0 de 3673 puntos de la curva sin dibujar
+PASA  | término negativo primero | recorrido de Vector | 252 pasos; mayor distancia a la curva 0.002
+PASA  | casi sus asíntotas (a = b = 0,3) | aceptada como canónica | sí
+PASA  | casi sus asíntotas (a = b = 0,3) | clasificación | obtuvo {"type":"hipérbola","h":0,"k":0,"horiz":true,"a":0.3,"b":0.3}
+PASA  | casi sus asíntotas (a = b = 0,3) | precisión del trazo | 2672 trazos; mayor distancia a la curva exacta 0.003 (tolerancia 0.02)
+PASA  | casi sus asíntotas (a = b = 0,3) | cobertura (sin huecos) | 0 de 5332 puntos de la curva sin dibujar
+PASA  | casi sus asíntotas (a = b = 0,3) | recorrido de Vector | 227 pasos; mayor distancia a la curva 0.002
+PASA  | restringida a y ≥ 0 | aceptada como canónica | sí
+PASA  | restringida a y ≥ 0 | clasificación | obtuvo {"type":"hipérbola","h":0,"k":0,"horiz":true,"a":3,"b":3}
+PASA  | restringida a y ≥ 0 | precisión del trazo | 2332 trazos; mayor distancia a la curva exacta 0.003 (tolerancia 0.025)
+PASA  | restringida a y ≥ 0 | cobertura (sin huecos) | 0 de 3696 puntos de la curva sin dibujar
+PASA  | restringida a y ≥ 0 | restricción y≥0 | 0 trazos marcados como camino fuera de la restricción; 0 dentro sin marcar
+PASA  | restringida a y ≥ 0 | recorrido de Vector | 119 pasos; mayor distancia a la curva 0.001; 0 pasos fuera de la restricción
+
+## Degenerada
+PASA  | sin puntos: x² + y² = −4 | aceptada como canónica | sí
+PASA  | sin puntos: x² + y² = −4 | clasificación | obtuvo {"type":"vacía"}
+PASA  | sin puntos: x² + y² = −4 | dibujo | no dibuja nada (correcto)
+PASA  | un solo punto: x² + y² = 0 | aceptada como canónica | sí
+PASA  | un solo punto: x² + y² = 0 | clasificación | obtuvo {"type":"degenerada"}
+PASA  | un solo punto: x² + y² = 0 | dibujo | no dibuja nada (correcto)
+PASA  | dos rectas: x² − y² = 0 | aceptada como canónica | sí
+PASA  | dos rectas: x² − y² = 0 | clasificación | obtuvo {"type":"degenerada"}
+PASA  | dos rectas: x² − y² = 0 | precisión del trazo | 2776 trazos; mayor distancia a la curva exacta 0.004 (tolerancia 0.025)
+PASA  | dos rectas: x² − y² = 0 | cobertura (sin huecos) | 0 de 1354 puntos de la curva sin dibujar
+PASA  | dos rectas: x² − y² = 0 | recorrido de Vector | 318 pasos; mayor distancia a la curva 0.004
+
+## Editor tipo cuaderno
+PASA  | x^{2}+y^{2}=9 | LaTeX igual a x^2+y^2=9 | «x^(2)+y^(2)=9»
+PASA  | \frac{(x-2)^{2}}{9}+\frac{(y+1)^{2}}{4}=1 | LaTeX igual a (x-2)^2/9+(y+1)^2/4=1 | «(((x-2)^(2))/(9))+(((y+1)^(2))/(4))=1»
+PASA  | \frac{\left(x-2\right)^2}{9}+\frac{\left(y+1\right)^2}{4}=1 | LaTeX igual a (x-2)^2/9+(y+1)^2/4=1 | «(((x-2)^(2))/(9))+(((y+1)^(2))/(4))=1»
+PASA  | y=\frac{(x-1)^{2}}{2}-3 | LaTeX igual a y=(x-1)^2/2-3 | «y=(((x-1)^(2))/(2))-3»
+PASA  | y=\frac{1}{2}(x-1)^{2}-3 | LaTeX igual a y=(x-1)^2/2-3 | «y=((1)/(2))(x-1)^(2)-3»
+PASA  | y=-2(x+1)^{2}+3 | LaTeX igual a y=-2(x+1)^2+3 | «y=-2(x+1)^(2)+3»
+PASA  | 4(x-2)^{2}+9(y+1)^{2}=36 | LaTeX igual a 4(x-2)^2+9(y+1)^2=36 | «4(x-2)^(2)+9(y+1)^(2)=36»
+PASA  | x^{2}-y^{2}=9 | LaTeX igual a x^2-y^2=9 | «x^(2)-y^(2)=9»
+PASA  | \frac{x^{2}}{9}-\frac{y^{2}}{4}=1 | LaTeX igual a x^2/9-y^2/4=1 | «((x^(2))/(9))-((y^(2))/(4))=1»
+PASA  | x^{2}+y^{2}=\sqrt{2}^{2} | LaTeX igual a x^2+y^2=2 | «x^(2)+y^(2)=sqrt(2)^(2)»
+PASA  | (x+1)^{2}+(y-2)^{2}=3^{2} | LaTeX igual a (x+1)^2+(y-2)^2=9 | «(x+1)^(2)+(y-2)^(2)=3^(2)»
+PASA  | x^2\cdot 4+9\cdot y^2=36 | LaTeX igual a 4x^2+9y^2=36 | «x^(2)* 4+9* y^(2)=36»
+PASA  | \frac{x^2}{4}\div 2+y^2=1 | LaTeX igual a x^2/8+y^2=1 | «((x^(2))/(4))/ 2+y^(2)=1»
+
+## Niveles
+PASA  | Primeros pasos | salida sobre la curva | distancia 0
+PASA  | Primeros pasos | meta sobre la curva | distancia 0
+PASA  | Primeros pasos | moneda (0,3) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Primeros pasos | moneda (-2.12,2.12) sobre la curva | distancia 0.002 (Vector la recoge a menos de 0,22)
+PASA  | Primeros pasos | obstáculo (0,-3) cerca de la curva (para que el lado equivocado choque) | distancia 0
+PASA  | Isla Circular | salida sobre la curva | distancia 0
+PASA  | Isla Circular | meta sobre la curva | distancia 0
+PASA  | Isla Circular | moneda (-1,5) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Isla Circular | moneda (0.8,4.4) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Isla Circular | obstáculo (-1,-1) cerca de la curva (para que el lado equivocado choque) | distancia 0
+PASA  | Valle Elíptico | salida sobre la curva | distancia 0
+PASA  | Valle Elíptico | meta sobre la curva | distancia 0
+PASA  | Valle Elíptico | moneda (2,-3) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Valle Elíptico | moneda (3.8,-2.6) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Valle Elíptico | moneda (0.2,-2.6) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Valle Elíptico | obstáculo (2,1) cerca de la curva (para que el lado equivocado choque) | distancia 0
+PASA  | Valle Elíptico | obstáculo (2,2.2) cerca de la curva (para que el lado equivocado choque) | distancia 0.975
+PASA  | Valle Elíptico | obstáculo (2,-4) cerca de la curva (para que el lado equivocado choque) | distancia 0.833
+PASA  | Valle Elíptico | ecuación general equivale a la canónica | general = 36 × canónica
+PASA  | Puente Parabólico | salida sobre la curva | distancia 0
+PASA  | Puente Parabólico | meta sobre la curva | distancia 0
+PASA  | Puente Parabólico | moneda (1,-3) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Puente Parabólico | moneda (3,-1) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Puente Parabólico | obstáculo (1,1.5) cerca de la curva (para que el lado equivocado choque) | distancia 4.5
+PASA  | Desfiladero Hiperbólico | salida sobre la curva | distancia 0
+PASA  | Desfiladero Hiperbólico | meta sobre la curva | distancia 0
+PASA  | Desfiladero Hiperbólico | moneda (3,0) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Desfiladero Hiperbólico | moneda (3.75,2.25) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Desfiladero Hiperbólico | moneda (3.75,-2.25) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Desfiladero Hiperbólico | obstáculo (4,4) cerca de la curva (para que el lado equivocado choque) | distancia 0.795
+PASA  | Desfiladero Hiperbólico | obstáculo (4,-4) cerca de la curva (para que el lado equivocado choque) | distancia 0.795
+PASA  | Ruta Mixta | salida sobre la curva | distancia 0
+PASA  | Ruta Mixta | meta sobre la curva | distancia 0
+PASA  | Ruta Mixta | moneda (0,2) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Ruta Mixta | moneda (3,1) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Ruta Mixta | obstáculo (0,-2) cerca de la curva (para que el lado equivocado choque) | distancia 0
+PASA  | Ruta Mixta | obstáculo (3,0) cerca de la curva (para que el lado equivocado choque) | distancia 0.447
+
+Total: 300 pasan, 0 fallan.

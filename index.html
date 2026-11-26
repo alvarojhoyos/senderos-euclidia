@@ -683,20 +683,38 @@ function zoomUI(){ const [mn,mx]=zLimits(); $("zIn").disabled=zoom.k>=mx-1e-6; $
 function resetZoom(){ zoom={k:1,cx:null,cy:null}; zoomUI(); }
 const inI=(I,p,tol=0.02)=>!I||(()=>{ const v=I.v==="x"?p[0]:p[1]; return v>=I.lo-tol&&v<=I.hi+tol; })();
 
+// Dibuja la curva F=0 con cuadrados que marchan: una rejilla gruesa en todo el mapa y, en las celdas por
+// donde pasa o casi pasa la curva, una rejilla SUB veces más fina. Así no se pierden partes delgadas
+// (puntas de una elipse muy aplanada) y el trazo queda pegado a la curva exacta.
 function buildSegs(F,I){
-  const B=curveBounds(); const nx=Math.max(220,Math.round(W/1.6)), ny=Math.round(nx*H/W);
+  const B=curveBounds(); const nx=Math.max(220,Math.round(W/1.6)), ny=Math.round(nx*H/W), SUB=4;
   const dx=(B.x1-B.x0)/nx, dy=(B.y1-B.y0)/ny; const v=new Float64Array((nx+1)*(ny+1));
   for(let j=0;j<=ny;j++) for(let i=0;i<=nx;i++) v[j*(nx+1)+i]=F(B.x0+i*dx,B.y0+j*dy);
   const segs=[], cell=Math.max(dx,dy), ok=(x,y)=>dist2(F,[x,y])<cell*1.5;
+  const at=(i,j)=>v[j*(nx+1)+i];
+  // ¿la curva pasa cerca de este punto de la rejilla? (distancia estimada |F|/|∇F| con diferencias de la rejilla)
+  const near=new Uint8Array((nx+1)*(ny+1));
+  for(let j=0;j<=ny;j++) for(let i=0;i<=nx;i++){ const f=at(i,j); if(!isFinite(f)) continue;
+    const i0=Math.max(i-1,0), i1=Math.min(i+1,nx), j0=Math.max(j-1,0), j1=Math.min(j+1,ny);
+    const gx=(at(i1,j)-at(i0,j))/((i1-i0)*dx), gy=(at(i,j1)-at(i,j0))/((j1-j0)*dy), g=Math.hypot(gx,gy);
+    if(!isFinite(g)||g<1e-12||Math.abs(f)/g<2*cell) near[j*(nx+1)+i]=1; }
+  const march=(X,Y,ddx,ddy,a,b,c,d)=>{ const P=[];
+    if((a<0)!==(b<0)) P.push([X+ddx*a/(a-b),Y]);
+    if((b<0)!==(c<0)) P.push([X+ddx,Y+ddy*b/(b-c)]);
+    if((d<0)!==(c<0)) P.push([X+ddx*d/(d-c),Y+ddy]);
+    if((a<0)!==(d<0)) P.push([X,Y+ddy*a/(a-d)]);
+    for(let q=0;q+1<P.length;q+=2){ const m=[(P[q][0]+P[q+1][0])/2,(P[q][1]+P[q+1][1])/2]; if(ok(m[0],m[1])) segs.push({a:P[q],b:P[q+1],in:inI(I,m)}); } };
+  const sv=new Float64Array((SUB+1)*(SUB+1)), sdx=dx/SUB, sdy=dy/SUB;
   for(let j=0;j<ny;j++) for(let i=0;i<nx;i++){
-    const a=v[j*(nx+1)+i], b=v[j*(nx+1)+i+1], c=v[(j+1)*(nx+1)+i+1], d=v[(j+1)*(nx+1)+i];
+    const a=at(i,j), b=at(i+1,j), c=at(i+1,j+1), d=at(i,j+1);
     if(![a,b,c,d].every(isFinite)) continue;
-    const X=B.x0+i*dx, Y=B.y0+j*dy, P=[];
-    if((a<0)!==(b<0)) P.push([X+dx*a/(a-b),Y]);
-    if((b<0)!==(c<0)) P.push([X+dx,Y+dy*b/(b-c)]);
-    if((d<0)!==(c<0)) P.push([X+dx*d/(d-c),Y+dy]);
-    if((a<0)!==(d<0)) P.push([X,Y+dy*a/(a-d)]);
-    for(let q=0;q+1<P.length;q+=2){ const m=[(P[q][0]+P[q+1][0])/2,(P[q][1]+P[q+1][1])/2]; if(ok(m[0],m[1])) segs.push({a:P[q],b:P[q+1],in:inI(I,m)}); }
+    const X=B.x0+i*dx, Y=B.y0+j*dy, change=(a<0)!==(b<0)||(b<0)!==(c<0)||(c<0)!==(d<0);
+    const close=near[j*(nx+1)+i]||near[j*(nx+1)+i+1]||near[(j+1)*(nx+1)+i]||near[(j+1)*(nx+1)+i+1];
+    if(!close&&!change) continue;
+    if(!close){ march(X,Y,dx,dy,a,b,c,d); continue; }
+    for(let q=0;q<=SUB;q++) for(let r=0;r<=SUB;r++) sv[q*(SUB+1)+r]=(r===0&&q===0)?a:(r===SUB&&q===0)?b:(r===SUB&&q===SUB)?c:(r===0&&q===SUB)?d:F(X+r*sdx,Y+q*sdy);
+    for(let q=0;q<SUB;q++) for(let r=0;r<SUB;r++){ const A=sv[q*(SUB+1)+r], Bv=sv[q*(SUB+1)+r+1], Cv=sv[(q+1)*(SUB+1)+r+1], D=sv[(q+1)*(SUB+1)+r];
+      if(![A,Bv,Cv,D].every(isFinite)) continue; march(X+r*sdx,Y+q*sdy,sdx,sdy,A,Bv,Cv,D); }
   }
   return segs;
 }
@@ -790,7 +808,18 @@ function drawVector(sx,sy,dir,C,t){
 }
 const setMood=m=>{ g2.mood=m; g2.moodT=performance.now()/1000; };
 
-function strokeSegs(segs,V,onlyIn){ x2.beginPath(); for(const s of segs){ if(onlyIn&&!s.in) continue; const a=toS(s.a[0],s.a[1],V), b=toS(s.b[0],s.b[1],V); x2.moveTo(a[0],a[1]); x2.lineTo(b[0],b[1]); } x2.stroke(); }
+function strokeSegs(segs,V,onlyIn,x=x2){ x.beginPath(); for(const s of segs){ if(onlyIn&&!s.in) continue; const a=toS(s.a[0],s.a[1],V), b=toS(s.b[0],s.b[1],V); x.moveTo(a[0],a[1]); x.lineTo(b[0],b[1]); } x.stroke(); }
+// Capa con las curvas ya trazadas. Se rehace solo cuando cambian las curvas, el zoom, el tamaño o los colores.
+let cLayer=null;
+function curvesLayer(V,C){
+  const key=[W,H,DPR,V.s,V.cx,V.cy,C.curve,C.muted].join("|");
+  if(cLayer&&cLayer.key===key&&cLayer.cur===g2.curves&&cLayer.prev===g2.prevCurves) return cLayer.cv;
+  const cv=(cLayer&&cLayer.cv)||document.createElement("canvas"); cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+  const x=cv.getContext("2d"); x.setTransform(DPR,0,0,DPR,0,0); x.clearRect(0,0,W,H); x.lineCap="round";
+  if(g2.prevCurves){ x.strokeStyle=C.muted; x.lineWidth=2; x.globalAlpha=0.35; x.setLineDash([2,5]); g2.prevCurves.forEach(s=>strokeSegs(s,V,true,x)); x.setLineDash([]); }
+  // curva actual (fuera del intervalo, muy tenue)
+  g2.curves.forEach(s=>{ x.strokeStyle=C.curve; x.lineWidth=1.5; x.globalAlpha=0.18; strokeSegs(s.filter(q=>!q.in),V,false,x); x.globalAlpha=0.85; x.lineWidth=2.5; strokeSegs(s,V,true,x); });
+  x.globalAlpha=1; cLayer={key,cur:g2.curves,prev:g2.prevCurves,cv}; return cv; }
 function label(txt,sx,sy,C){ x2.font="600 11px "+css("--f-mono"); x2.textBaseline="bottom"; x2.textAlign="left";
   const w=x2.measureText(txt).width; const lx=Math.max(4,Math.min(W-w-4,sx)); const ly=Math.max(16,Math.min(H-4,sy));
   x2.fillStyle=C.paper; x2.globalAlpha=0.8; x2.fillRect(lx-2,ly-13,w+4,14); x2.globalAlpha=1; x2.fillStyle=C.ink; x2.fillText(txt,lx,ly); }
@@ -809,11 +838,9 @@ function draw(){
   x2.textAlign="right"; x2.textBaseline="middle";
   for(let gy=Math.ceil(B.y0); gy<=B.y1; gy++){ if(gy===0||gy%2) continue; const [,sy]=toS(0,gy,V); x2.fillText(String(gy).replace("-","−"),Math.min(Math.max(ox-5,24),W-4),sy); }
   x2.fillStyle=C.ink; x2.font="italic 600 14px "+css("--f-body"); x2.textAlign="right"; x2.fillText("x",W-8,oy-10); x2.textAlign="left"; x2.fillText("y",ox+8,12);
-  // intento anterior
-  if(g2.prevCurves){ x2.strokeStyle=C.muted; x2.lineWidth=2; x2.lineCap="round"; x2.globalAlpha=0.35; x2.setLineDash([2,5]); g2.prevCurves.forEach(s=>strokeSegs(s,V,true)); x2.setLineDash([]); x2.globalAlpha=1;
-    x2.fillStyle=C.muted; x2.font="600 11px "+css("--f-body"); x2.textAlign="right"; x2.textBaseline="bottom"; x2.fillText("- - intento anterior",W-10,H-54); }
-  // curva actual (fuera del intervalo, muy tenue)
-  g2.curves.forEach(s=>{ x2.lineCap="round"; x2.strokeStyle=C.curve; x2.lineWidth=1.5; x2.globalAlpha=0.18; strokeSegs(s.filter(q=>!q.in),V,false); x2.globalAlpha=0.85; x2.lineWidth=2.5; strokeSegs(s,V,true); x2.globalAlpha=1; });
+  // curvas (intento anterior y actual) desde la capa guardada: solo se vuelven a trazar si algo cambió
+  x2.drawImage(curvesLayer(V,C),0,0,W,H);
+  if(g2.prevCurves){ x2.fillStyle=C.muted; x2.font="600 11px "+css("--f-body"); x2.textAlign="right"; x2.textBaseline="bottom"; x2.fillText("- - intento anterior",W-10,H-54); }
   // rastro de Vector
   const P=g2.path, upto=Math.min(Math.floor(g2.prog),P.length-1);
   if(P.length>1&&upto>0){ x2.strokeStyle=C.acc; x2.lineWidth=5; x2.lineCap="round"; x2.lineJoin="round"; x2.globalAlpha=0.55; x2.beginPath();
@@ -1310,7 +1337,9 @@ markSeen();
 requestAnimationFrame(frame);
 window.__euclidia={LEVELS,loadLevel,submit:(arr)=>{ arr.forEach((v,i)=>{ if(typeof v==="string") $("eq"+i).value=v; else { $("eq"+i).value=v[0]; const I=parseInterval(v[1]); Object.assign(ivs[i],{v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):""}); renderIv(i); } }); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
-  state:()=>({g2,prog,player}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s))};
+  state:()=>({g2,prog,player}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),
+  // para las pruebas automáticas (pruebas/curvas.test.js)
+  t:{compileEq,canonicalProblem,classify,buildSegs,curveBounds,baseBounds,walk,parseInterval,inI,dist2,tex2plain,W:()=>W}};
 })();
 </script>
 
