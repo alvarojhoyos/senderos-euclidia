@@ -304,6 +304,8 @@ summary{cursor:pointer;font-weight:700}
     <p class="small">Proyecta este código en clase. Los estudiantes lo escanean con el celular y entran directamente como estudiantes, con su nombre. No pueden elegir ser profesor.</p>
     <div id="qrBox"><span class="small">Generando…</span></div>
     <div class="url" id="qrUrl"></div>
+    <button class="btn ghost" type="button" id="qrCopy">Copiar el enlace para estudiantes</button>
+    <p class="small">Para quien use computador sin cámara: pega este enlace en el grupo del curso, el correo o el aula virtual. Funciona igual que el código QR.</p>
     <p class="small" id="qrNote"></p>
     <section class="hojabox" aria-labelledby="hojaH">
       <h3 id="hojaH">Hoja de resultados</h3>
@@ -1150,6 +1152,10 @@ $("hojaTest").onclick=async()=>{ const h=resultsUrl(), m=$("hojaMsg"); if(!h){ m
   m.textContent="Enviando…";
   try{ await fetch(h,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({prueba:true})}); m.textContent="Enviada. Abre tu hoja: en la pestaña Intentos debe aparecer \"Prueba de conexión desde el juego\". Si no aparece, revisa que en el paso 3 hayas elegido \"Cualquier persona\"."; }
   catch(e){ m.innerHTML='<span class="bad">No se pudo enviar.</span> '+(/claude\.ai|claudeusercontent/.test(location.href)?"Esta vista previa no permite enviar datos: prueba desde el enlace público del juego.":"Revisa tu conexión a internet."); } };
+$("qrCopy").onclick=async()=>{ const t=$("qrUrl").textContent;
+  try{ await navigator.clipboard.writeText(t); $("qrCopy").textContent="Enlace copiado"; }
+  catch(e){ const r=document.createRange(); r.selectNodeContents($("qrUrl")); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); $("qrCopy").textContent="Enlace seleccionado: cópialo"; }
+  setTimeout(()=>$("qrCopy").textContent="Copiar el enlace para estudiantes",2500); };
 $("hojaCopy").onclick=async()=>{ const t=$("hojaCode"); try{ await navigator.clipboard.writeText(t.value); $("hojaCopy").textContent="Código copiado"; }catch(e){ t.focus(); t.select(); $("hojaCopy").textContent="Selecciónalo y cópialo"; } };
 function openTeacher(){
   $("teacher").hidden=false; const u=new URL(location.href); u.hash=""; u.search=""; u.searchParams.set("rol","estudiante");
