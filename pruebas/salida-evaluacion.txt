@@ -1,0 +1,20 @@
+PASA  | Larga con los 6 mundos: 20 niveles (el panel anuncia 20)
+PASA  | Corta con los 6 mundos: 16 niveles (el panel anuncia 16)
+PASA  | El mismo documento recibe siempre los mismos niveles (espacios aparte)
+PASA  | 40 documentos reciben 37 combinaciones distintas de cadenas
+PASA  | Una sola cadena por mundo y sus niveles en orden
+PASA  | Corta: pasos 1,2,4,1,2,4,1,2,4,1,2,4 de cada cónica (fácil, medio y el Escape o reto)
+PASA  | Monedas posibles por estudiante en la larga: entre 54 y 56; la nota se escala a 5,0 con las de cada uno
+PASA  | Códigos de evaluación válidos e inválidos
+PASA  | Enlace del QR: rol=estudiante, ev=g4me5y-CP-c-30, evn=Quiz 1
+PASA  | Resumen del panel: Cada estudiante tendrá 6 niveles y 30 minutos.
+PASA  | El menú solo muestra el Tutorial y los mundos de la evaluación: Tutorial, Circunferencias, Parábolas
+PASA  | Empieza en su primer nivel de la evaluación (C5)
+PASA  | Monedas posibles = las de sus 6 niveles: 0 / 16
+PASA  | Reloj en marcha: 30:00
+PASA  | Al llegar a 0:00 aparece «Se acabó el tiempo»
+PASA  | Fila final en la cola de envío: Se acabó el tiempo · Quiz 1 · 0/16 · nota 0
+PASA  | Después ya no se puede trazar ni volver a enviar
+PASA  | Sin evaluación: 0 / 154 monedas posibles, 7 mundos y sin reloj
+
+Total: 18 pasan, 0 fallan.
