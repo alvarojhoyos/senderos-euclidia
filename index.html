@@ -51,8 +51,17 @@ h1{font:800 clamp(22px,3.2vw,32px)/1.05 var(--f-display);margin:0;letter-spacing
 .pill.low{color:var(--bad);border-color:var(--bad)}
 .evbox{display:grid;gap:8px;border:1px solid var(--line);border-radius:12px;padding:12px}
 .evbox h3{margin:0}
-.evw{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px}
-.evw label{display:flex;gap:6px;align-items:center;font-weight:600}
+.evgate{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;border:1.5px solid var(--accent);border-radius:12px;padding:10px 12px;margin:0 0 10px;background:var(--panel)}
+.evgate p{margin:0;flex:1 1 220px;font-size:14px}
+.evgate .btn{white-space:normal}
+.evt{width:100%;border-collapse:collapse;font-size:13.5px}
+.evt th{text-align:left;font-weight:600;padding:3px 4px 3px 0}
+.evt thead th{text-align:center;font-size:12.5px;color:var(--muted)}
+.evt td{padding:3px 2px;text-align:center}
+.evt select{width:100%;min-width:46px;padding:6px 2px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);font:600 14px var(--f-body)}
+.evt .na{color:var(--muted)}
+.evpre{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px}
+.evpre .btn{padding:6px 10px;font-size:13px}
 .worlds{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px;min-width:0}
 .wt{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 13px var(--f-body);cursor:pointer;white-space:nowrap;display:flex;gap:6px;align-items:center}
 .wt[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
@@ -123,6 +132,12 @@ form{display:grid;gap:8px}
 label,.tl{font:600 13px var(--f-body)}
 .fields{display:grid;gap:8px}
 .tramo{display:grid;gap:6px;border:1px solid var(--line);border-radius:10px;padding:8px}
+.eqwrap{display:grid;gap:4px;min-width:0}
+.eqwrap .ftag{display:none;font:600 11px var(--f-mono);color:var(--muted)}
+.floating{position:fixed;z-index:6;background:var(--panel);border-radius:0 0 12px 12px;padding:4px 6px 6px;box-shadow:0 8px 14px -8px color-mix(in srgb,var(--ink) 50%,transparent)}
+.eqwrap.floating{gap:2px}
+.eqwrap.floating .ftag{display:block}
+.eqwrap.floating math-field.eqf{height:62px;font-size:21px}
 .ivmode{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font:600 13px var(--f-body)}
 .seg{display:inline-flex;border:1px solid var(--grid-strong);border-radius:9px;overflow:hidden}
 .seg button{border:0;background:transparent;color:var(--ink);font:600 13px var(--f-body);padding:7px 10px;cursor:pointer}
@@ -229,6 +244,7 @@ summary{cursor:pointer;font-weight:700}
       <span class="pill" id="sTime" hidden>Tiempo <span id="sTimeV">0:00</span></span>
     </div>
   </header>
+  <div class="evgate" id="evGate" hidden><p id="evGateTxt"></p><button class="btn" type="button" id="evGo">Empezar el quiz</button></div>
   <div class="levels" id="levels"></div>
   <main class="stage-wrap">
     <section class="stage" id="stage" aria-label="Mapa del nivel">
@@ -339,9 +355,10 @@ summary{cursor:pointer;font-weight:700}
     <h2>Código QR del juego</h2>
     <section class="evbox" aria-labelledby="evH">
       <h3 id="evH">Evaluación</h3>
-      <p class="small">Elige qué entra. Cada estudiante recibe, de cada mundo, una cadena de niveles al azar y la juega en orden. Su nota es monedas obtenidas / monedas posibles × 5,0.</p>
-      <div class="evw" id="evWorlds" role="group" aria-label="Mundos de la evaluación"></div>
-      <div class="ivmode"><span>Duración</span><span class="seg" role="group" aria-label="Duración" id="evLen"><button type="button" data-l="c">Corta: 3 por cónica</button><button type="button" data-l="l">Larga: 4 por cónica</button></span></div>
+      <p class="small">Elige cuántos niveles de cada dificultad entran por mundo. A cada estudiante le tocan niveles al azar con esas cantidades, ordenados de fácil a difícil. Su nota es monedas obtenidas / monedas posibles × 5,0.</p>
+      <div class="evpre"><span>Llenar rápido:</span><button class="btn ghost" type="button" data-p="c">Corta</button><button class="btn ghost" type="button" data-p="l">Larga</button><button class="btn ghost" type="button" data-p="0">Vaciar</button></div>
+      <table class="evt" aria-label="Niveles por mundo y dificultad"><thead><tr><th></th><th>Fácil</th><th>Medio</th><th>Difícil</th></tr></thead><tbody id="evQ"></tbody></table>
+      <p class="small" id="evMax"></p>
       <label for="evMin">Tiempo en minutos (0 = sin límite)</label><input id="evMin" inputmode="numeric" value="60">
       <label for="evName">Nombre de la evaluación (opcional, sale en tu hoja)</label><input id="evName" maxlength="60" placeholder="por ejemplo: Quiz de cónicas, grupo 2">
       <p class="small" id="evSum"></p>
@@ -1213,7 +1230,22 @@ function buildPad(){
     b.addEventListener("pointerdown",e=>e.preventDefault());
     b.addEventListener("click",()=>press(k,id)); pad.appendChild(b); });
 }
-function setActive(el){ active=el; document.querySelectorAll(".eqf,.ivf").forEach(e=>e.classList.toggle("active",e===el)); }
+function setActive(el){ active=el; document.querySelectorAll(".eqf,.ivf").forEach(e=>e.classList.toggle("active",e===el)); floatActive(); }
+/* En el celular la casilla que se está escribiendo flota debajo del mapa mientras el estudiante baja al teclado,
+   para que siempre vea lo que escribe. Se suelta cuando vuelve a su lugar o cuando el formulario sale de la pantalla. */
+let floatEl=null, floatSpacer=null;
+function unfloat(){ if(!floatEl) return; floatEl.classList.remove("floating"); Object.assign(floatEl.style,{top:"",left:"",width:""}); if(floatSpacer) floatSpacer.remove(); floatEl=floatSpacer=null; }
+function floatActive(){
+  const st=$("stage"), form=$("form"); if(!st||!form) return;
+  const box=active&&(active.closest(".eqwrap")||active.closest(".ivrow"));
+  if(!box||getComputedStyle(st).position!=="sticky"||!$("sheet").hidden){ unfloat(); return; }
+  if(floatEl&&floatEl!==box) unfloat();
+  const top=st.getBoundingClientRect().bottom, ref=(floatEl?floatSpacer:box).getBoundingClientRect(), h=floatEl?floatEl.offsetHeight:ref.height, fb=form.getBoundingClientRect().bottom;
+  const want=ref.top<top&&fb>top+h+40;
+  if(!want){ unfloat(); return; }
+  if(!floatEl){ floatSpacer=document.createElement("div"); floatSpacer.style.height=ref.height+"px"; box.before(floatSpacer); floatEl=box; box.classList.add("floating"); }
+  const r=floatSpacer.getBoundingClientRect(); Object.assign(box.style,{top:top+"px",left:(r.left-6)+"px",width:(r.width+12)+"px"}); }
+window.addEventListener("scroll",floatActive,{passive:true}); window.addEventListener("resize",floatActive);
 // La pantalla no se mueve sola mientras se escribe: durante un momento después de tocar la casilla o una tecla,
 // cualquier desplazamiento que no haga el dedo del usuario se deshace
 let holdY=0, holdUntil=0;
@@ -1260,8 +1292,11 @@ function showFb(kind,title,body){ const f=$("fb"); f.className="feedback "+(kind
 // Menú de niveles: una pestaña por mundo y, dentro, cada cadena en su orden
 const WORLD_ORDER=["Tutorial","Circunferencias","Elipses","Parábolas","Hipérbolas","Identificar","Mixtos"];
 let menuWorld=null; const wOf=L=>L.world||"Otros";
-const vis=L=>!SESSION||L.tutorial||SESSION.has(L.id);
-const nextIdx=()=>{ for(let j=idx+1;j<LEVELS.length;j++) if(vis(LEVELS[j])) return j; return -1; };
+const vis=L=>!SESSION||L.tutorial||(evStarted()&&SESSION.has(L.id));
+const nextIdx=()=>{ const L=level();
+  if(SESSION&&!L.tutorial){ const k=SESSION_ORDER.indexOf(L.id), id=SESSION_ORDER[k+1]; return id?LEVELS.findIndex(l=>l.id===id):-1; }
+  for(let j=idx+1;j<LEVELS.length;j++) if(vis(LEVELS[j])&&(!SESSION||LEVELS[j].tutorial)) return j;
+  return SESSION&&evStarted()?firstSession():-1; };
 function renderLevels(){
   const box=$("levels"); box.innerHTML=""; const cur=level();
   if(!menuWorld) menuWorld=wOf(cur);
@@ -1275,11 +1310,13 @@ function renderLevels(){
   box.appendChild(tabs);
   const sel=tabs.querySelector('[aria-selected="true"]'); if(sel) tabs.scrollLeft=Math.max(0,sel.offsetLeft-tabs.offsetLeft-(tabs.clientWidth-sel.offsetWidth)/2);
   const chains=document.createElement("div"); chains.className="chains"; const groups=[];
-  LEVELS.forEach((L,i)=>{ if(wOf(L)!==menuWorld||!vis(L)) return; const key=L.chain||L.title; let g=groups.find(x=>x.key===key); if(!g) groups.push(g={key,name:L.chain,items:[]}); g.items.push([L,i]); });
+  if(SESSION&&menuWorld!=="Tutorial") SESSION_ORDER.map(id=>LEVELS.findIndex(l=>l.id===id)).filter(i=>i>=0&&wOf(LEVELS[i])===menuWorld&&vis(LEVELS[i])).forEach((i,k)=>{ const L=LEVELS[i], d=L.diff[0].toUpperCase()+L.diff.slice(1);
+    let g=groups.find(x=>x.key===d); if(!g) groups.push(g={key:d,name:d,items:[]}); g.items.push([L,i,k+1]); });
+  else LEVELS.forEach((L,i)=>{ if(wOf(L)!==menuWorld||!vis(L)) return; const key=L.chain||L.title; let g=groups.find(x=>x.key===key); if(!g) groups.push(g={key,name:L.chain,items:[]}); g.items.push([L,i]); });
   groups.forEach(g=>{ const row=document.createElement("div"); row.className="chain";
     if(g.name){ const n=document.createElement("span"); n.className="cn"; n.textContent=g.name; row.appendChild(n); }
-    g.items.forEach(([L,i])=>{ const b=document.createElement("button"); b.type="button"; b.className="lv"; b.setAttribute("aria-current",i===idx?"true":"false");
-      const n=L.tutorial?"T":String(L.step||"");
+    g.items.forEach(([L,i,pos])=>{ const b=document.createElement("button"); b.type="button"; b.className="lv"; b.setAttribute("aria-current",i===idx?"true":"false");
+      const n=L.tutorial?"T":String(pos||L.step||"");
       const badge=L.tutorial?(prog.best[L.id]?' <span class="done" aria-label="completado">✓</span>':""):(prog.best[L.id]!=null?` <span class="got">${prog.best[L.id]}/${L.coins.length}</span>`:"");
       b.innerHTML=`<span class="n">${n}</span>${esc(L.title)}${badge}`; b.title=`${L.kind} · ${L.diff}`; b.onclick=()=>loadLevel(i); row.appendChild(b); });
     chains.appendChild(row); });
@@ -1344,7 +1381,7 @@ function ivFrom(k,optional){ const st=ivs[k];
 function loadLevel(i){
   idx=i; menuWorld=wOf(LEVELS[i]); delete $("hintBtn").dataset.confirm; const L=level(); renderLevels(); resetZoom();
   const chainLen=L.chain?LEVELS.filter(l=>l.chain===L.chain).length:0;
-  $("eyebrow").textContent=L.kind+(L.chain?` · ${L.chain} ${L.step}/${chainLen}`:""); $("lvTitle").textContent=L.title; $("story").textContent=L.story; $("story").parentElement.classList.toggle("tut",!!L.tutorial);
+  $("eyebrow").textContent=L.kind+(SESSION&&!L.tutorial?` · ${L.diff}`:L.chain?` · ${L.chain} ${L.step}/${chainLen}`:""); $("lvTitle").textContent=L.title; $("story").textContent=L.story; $("story").parentElement.classList.toggle("tut",!!L.tutorial);
   const ls=$("lesson"); ls.hidden=!L.lesson;
   ls.innerHTML=L.lesson?`<div class="fm"><span>Forma canónica</span>${esc(L.lesson.formula)}</div><ul>${L.lesson.parts.map(p=>`<li><b>${esc(p[0])}:</b> ${esc(p[1])}</li>`).join("")}</ul>`+(L.parts?`<p class="small">En el mapa, las partes están en morado.</p>`:""):"";
   $("general").hidden=!L.general; $("general").textContent=L.general?"Ecuación del mapa: "+L.general:"";
@@ -1375,8 +1412,9 @@ function loadLevel(i){
     F.appendChild(h);
     md.querySelectorAll("button").forEach(b=>b.onclick=()=>{ ivMode=b.dataset.m; store.set("euclidia2-ivmode",ivMode); renderModes(); });
     renderModes(); }
+  F.querySelectorAll(".eqf").forEach((el,k)=>{ const w=document.createElement("div"); w.className="eqwrap"; w.innerHTML=`<span class="ftag">${L.mixed?`Tramo ${k+1} · ecuación`:"Tu ecuación"}</span>`; el.before(w); w.appendChild(el); });
   F.querySelectorAll(".eqf").forEach(el=>{ if(el.tagName==="MATH-FIELD") setupMF(el); else wireInput(el); });
-  setActive($("eq0")); buildPad(); setPad(padOn); updatePretty();
+  unfloat(); setActive($("eq0")); buildPad(); setPad(padOn); updatePretty();
   $("theory").innerHTML=THEORY; renderHints(); $("win").hidden=true;
   g2={curves:[],prevCurves:null,path:[],prog:0,anim:false,result:null,mood:"idle",dir:1,eqs:null,choose:null};
   showFb("",L.mixed?"Escribe la ecuación y el intervalo de cada tramo, y pulsa Trazar.":"Escribe la ecuación y pulsa Trazar.","");
@@ -1413,7 +1451,7 @@ $("regForm").addEventListener("submit",e=>{ e.preventDefault();
   const changed=player&&player.documento!==d;
   player={nombre:n,apellido:a,documento:d}; store.set("euclidia2-player",player);
   if(changed){ prog={best:{},hintsUsed:0,hintsBought:0,shown:{}}; saveProg(); loadLevel(0); }
-  $("reg").hidden=true; applySession(); if(SESSION){ evStart(); loadLevel(firstSession()); } renderScore(); tick(); flush(); });
+  $("reg").hidden=true; applySession(); if(SESSION) loadLevel(evStarted()?firstSession():0); renderScore(); tick(); flush(); });
 $("whoBtn").onclick=askRole;
 
 /* ---- Vista del profesor: código QR ---- */
@@ -1447,7 +1485,7 @@ function openTeacher(){
 }
 
 /* ---- Terminar la prueba y enviar el resultado final ---- */
-function doneUI(){ $("doneBtn").hidden=!(role==="estudiante"&&player)||evEnded(); }
+function doneUI(){ $("doneBtn").hidden=!(role==="estudiante"&&player)||evEnded()||(!!SESSION&&!evStarted()); gateUI(); }
 $("doneBtn").onclick=()=>{ const c=coinsTotal();
   $("doneTitle").textContent="¿Terminar la prueba?"; $("doneText").textContent=`Se enviará tu resultado final: ${c} de ${TOTAL_COINS} monedas, nota ${dec(grade())}. Los niveles que no alcanzaste cuentan con 0 monedas.`;
   $("doneSend").textContent=""; $("doneGo").hidden=false; $("doneBack").textContent="Seguir jugando"; $("done").hidden=false; };
@@ -1463,43 +1501,68 @@ async function sendFinal(timeUp){ if(evEnded()||!player) return;
 
 /* ---- Evaluación: niveles de cada estudiante y tiempo ---- */
 const EV_WORLDS={C:"Circunferencias",E:"Elipses",P:"Parábolas",H:"Hipérbolas",I:"Identificar",X:"Mixtos"};
-function parseEv(code,name){ const m=/^([a-z0-9]{4,12})-([CEPHIX]{1,6})-([cl])-(\d{1,3})$/.exec(code||""); if(!m) return null;
-  return {id:m[1],worlds:[...new Set(m[2].split(""))],len:m[3],min:+m[4],name:String(name||"").slice(0,60)}; }
-const evCode=e=>`${e.id}-${e.worlds.join("")}-${e.len}-${e.min}`;
+const DIFFS=["fácil","medio","difícil"];
+// Atajos del panel: corta = 1 fácil, 1 medio y 1 difícil por cónica; larga = 1, 2 y 1. Identificar y Mixtos: 1 medio y 1 difícil.
+const EV_PRESET={c:{C:[1,1,1],E:[1,1,1],P:[1,1,1],H:[1,1,1],I:[0,1,1],X:[0,1,1]},l:{C:[1,2,1],E:[1,2,1],P:[1,2,1],H:[1,2,1],I:[0,1,1],X:[0,1,1]}};
+const evPool=(k,d)=>LEVELS.filter(l=>l.world===EV_WORLDS[k]&&!l.tutorial&&l.diff===DIFFS[d]);
+// Código de la evaluación: id-C121E010…-minutos (por mundo: cuántos fáciles, medios y difíciles). Acepta también el formato anterior id-CEPH-c|l-minutos.
+function parseEv(code,name){ let m=/^([a-z0-9]{4,12})-((?:[CEPHIX]\d{3})+)-(\d{1,3})$/.exec(code||""), q={};
+  if(m){ m[2].match(/[CEPHIX]\d{3}/g).forEach(t=>q[t[0]]=[+t[1],+t[2],+t[3]]); }
+  else { m=/^([a-z0-9]{4,12})-([CEPHIX]{1,6})-([cl])-(\d{1,3})$/.exec(code||""); if(!m) return null; [...new Set(m[2].split(""))].forEach(k=>q[k]=EV_PRESET[m[3]][k].slice()); m=[m[0],m[1],"",m[4]]; }
+  if(!Object.values(q).some(a=>a[0]+a[1]+a[2]>0)) return null;
+  return {id:m[1],q,min:+m[3],name:String(name||"").slice(0,60)}; }
+const evCode=e=>`${e.id}-${Object.keys(EV_WORLDS).filter(k=>e.q[k]&&e.q[k].some(n=>n>0)).map(k=>k+e.q[k].join("")).join("")}-${e.min}`;
 function hash32(t){ let h=2166136261; for(const ch of t){ h^=ch.codePointAt(0); h=Math.imul(h,16777619); } return h>>>0; }
 function rng(seed){ let a=seed; return ()=>{ a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
-// Una cadena al azar por mundo, en orden. Corta: los pasos 1 y 2 y el último (el Escape o el reto); larga: la cadena completa.
+// Niveles de cada estudiante: de cada mundo y dificultad, tantos como pidió el profesor, al azar y ordenados de fácil a difícil.
 // La misma evaluación y el mismo documento dan siempre los mismos niveles.
 function sessionFor(ev,doc){ const r=rng(hash32(ev.id+"|"+String(doc).trim())), ids=[];
-  ev.worlds.forEach(k=>{ const w=EV_WORLDS[k], chains=[...new Set(LEVELS.filter(l=>l.world===w&&!l.tutorial).map(l=>l.chain))]; if(!chains.length) return;
-    const ch=chains[Math.floor(r()*chains.length)], ls=LEVELS.filter(l=>l.world===w&&l.chain===ch).sort((a,b)=>a.step-b.step);
-    (ev.len==="c"&&ls.length>3?[ls[0],ls[1],ls[ls.length-1]]:ls).forEach(l=>ids.push(l.id)); });
+  Object.keys(EV_WORLDS).forEach(k=>{ const q=ev.q[k]; if(!q) return;
+    DIFFS.forEach((_,d)=>{ const pool=evPool(k,d).map(l=>l.id);
+      for(let i=pool.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+      ids.push(...pool.slice(0,q[d])); }); });
   return ids; }
-function evCount(ev){ return ev.worlds.reduce((s,k)=>s+("IX".includes(k)?2:ev.len==="c"?3:4),0); }
-function applySession(){ SESSION=EV&&role==="estudiante"&&player?new Set(sessionFor(EV,player.documento)):null; recount(); }
+function evCount(ev){ return Object.keys(EV_WORLDS).reduce((s,k)=>s+(ev.q[k]?DIFFS.reduce((t,_,d)=>t+Math.min(ev.q[k][d],evPool(k,d).length),0):0),0); }
+let SESSION_ORDER=[];
+function applySession(){ SESSION_ORDER=EV&&role==="estudiante"&&player?sessionFor(EV,player.documento):[]; SESSION=SESSION_ORDER.length?new Set(SESSION_ORDER):null; recount(); }
 const evKey=k=>`euclidia2-ev${k}-${EV.id}-${player?player.documento:""}`;
 const evEnded=()=>!!(EV&&SESSION&&store.get(evKey("end"),false));
+const evStarted=()=>!!(EV&&SESSION&&store.get(evKey("start"),0));
 function evStart(){ if(EV&&SESSION&&!store.get(evKey("start"),0)) store.set(evKey("start"),Date.now()); }
+// Antes de empezar el estudiante puede hacer el Tutorial: el reloj y los niveles del quiz esperan al botón "Empezar el quiz"
+function gateUI(){ const g=$("evGate"), on=!!SESSION&&!evStarted()&&!evEnded(); g.hidden=!on; if(!on) return;
+  const n=SESSION.size, nm=EV.name?`«${EV.name}»`:"Tu quiz";
+  $("evGateTxt").textContent=`${nm}: ${n} niveles${EV.min?` y ${EV.min} minutos`:", sin límite de tiempo"}. Si quieres, haz primero el Tutorial. El tiempo empieza cuando pulses el botón y ya no se detiene.`;
+  const b=$("evGo"); b.textContent=b.dataset.confirm?"Toca otra vez para empezar":"Empezar el quiz"; }
+$("evGo").onclick=()=>{ const b=$("evGo");
+  if(!b.dataset.confirm){ b.dataset.confirm="1"; gateUI(); setTimeout(()=>{ if(b.dataset.confirm){ delete b.dataset.confirm; gateUI(); } },4000); return; }
+  delete b.dataset.confirm; evStart(); loadLevel(firstSession()); renderScore(); tick(); window.scrollTo({top:0,behavior:"smooth"}); };
 function evLeft(){ if(!EV||!SESSION||!EV.min) return null; const t0=store.get(evKey("start"),0); if(!t0) return EV.min*60; return Math.max(0,Math.ceil((t0+EV.min*60000-Date.now())/1000)); }
-function firstSession(){ const j=LEVELS.findIndex(l=>!l.tutorial&&vis(l)); return j<0?0:j; }
+function firstSession(){ const j=SESSION_ORDER.length?LEVELS.findIndex(l=>l.id===SESSION_ORDER[0]):-1; return j<0?0:j; }
 function tick(){ const left=evLeft(), p=$("sTime"); p.hidden=left==null; if(left==null) return;
   $("sTimeV").textContent=`${Math.floor(left/60)}:${String(left%60).padStart(2,"0")}`; p.classList.toggle("low",left<=300);
   if(left===0&&!evEnded()) sendFinal(true); }
 setInterval(tick,1000);
 // Panel del profesor: arma la evaluación que va en el código QR
 let tev=store.get("euclidia2-tev",null);
-function evPanel(){ const box=$("evWorlds"); if(!box.children.length) box.innerHTML=Object.entries(EV_WORLDS).map(([k,w])=>`<label><input type="checkbox" value="${k}" checked> ${w}</label>`).join("");
-  if(tev){ box.querySelectorAll("input").forEach(i=>i.checked=tev.worlds.includes(i.value)); $("evName").value=tev.name; $("evMin").value=tev.min; evLen=tev.len; }
-  evSummary(); }
-let evLen="l";
-function evForm(){ const worlds=[...$("evWorlds").querySelectorAll("input:checked")].map(i=>i.value), min=Math.max(0,Math.min(600,Math.round(Number($("evMin").value)||0)));
-  return {worlds,len:evLen,min,name:$("evName").value.trim().slice(0,60)}; }
-function evSummary(){ document.querySelectorAll("#evLen button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.l===evLen)));
-  const f=evForm(); $("evSum").textContent=f.worlds.length?`Cada estudiante tendrá ${evCount(f)} niveles${f.min?` y ${f.min} minutos`:", sin límite de tiempo"}.`:"Elige al menos un mundo.";
+if(tev&&!tev.q){ try{ tev=parseEv(`${tev.id}-${tev.worlds.join("")}-${tev.len}-${tev.min}`,tev.name); }catch(e){ tev=null; } store.set("euclidia2-tev",tev); }
+function evPanel(){ const body=$("evQ");
+  if(!body.children.length) body.innerHTML=Object.entries(EV_WORLDS).map(([k,w])=>`<tr><th scope="row">${w}</th>`+DIFFS.map((dn,d)=>{ const mx=Math.min(9,evPool(k,d).length);
+    return `<td>${mx?`<select data-w="${k}" data-d="${d}" aria-label="${w}, ${dn}">${Array.from({length:mx+1},(_,n)=>`<option>${n}</option>`).join("")}</select>`:`<span class="na" aria-label="${w}, ${dn}: no hay niveles">—</span>`}</td>`; }).join("")+"</tr>").join("");
+  evFill(tev?tev.q:EV_PRESET.l); if(tev){ $("evName").value=tev.name; $("evMin").value=tev.min; } }
+function evFill(q){ $("evQ").querySelectorAll("select").forEach(sl=>{ const v=(q[sl.dataset.w]||[0,0,0])[+sl.dataset.d]; sl.value=String(Math.min(v,sl.options.length-1)); }); evSummary(); }
+function evForm(){ const q={}; $("evQ").querySelectorAll("select").forEach(sl=>{ (q[sl.dataset.w]=q[sl.dataset.w]||[0,0,0])[+sl.dataset.d]=+sl.value; });
+  Object.keys(EV_WORLDS).forEach(k=>{ if(!q[k]) q[k]=[0,0,0]; });
+  return {q,min:Math.max(0,Math.min(600,Math.round(Number($("evMin").value)||0))),name:$("evName").value.trim().slice(0,60)}; }
+function evSummary(){ const f=evForm(), n=evCount(f);
+  $("evSum").textContent=n?`Cada estudiante tendrá ${n} niveles${f.min?` y ${f.min} minutos`:", sin límite de tiempo"}.`:"Elige al menos un nivel.";
+  const full=[...$("evQ").querySelectorAll("select")].filter(sl=>+sl.value>0&&sl.selectedIndex===sl.options.length-1);
+  $("evMax").textContent=full.length?"En las casillas que están al máximo todos los estudiantes reciben los mismos niveles. Si pides menos, los niveles cambian de un estudiante a otro.":"";
+  $("evMake").disabled=!n;
   $("evState").innerHTML=tev?`<span class="ok">El código QR lleva la evaluación${tev.name?` «${esc(tev.name)}»`:""}:</span> ${evCount(tev)} niveles por estudiante${tev.min?`, ${tev.min} minutos`:""}.`:"Ahora el código QR abre la práctica libre, con todos los niveles."; }
-$("evWorlds").addEventListener("change",evSummary); $("evMin").addEventListener("input",evSummary);
-document.querySelectorAll("#evLen button").forEach(b=>b.onclick=()=>{ evLen=b.dataset.l; evSummary(); });
-$("evMake").onclick=()=>{ const f=evForm(); if(!f.worlds.length){ evSummary(); return; }
+$("evQ").addEventListener("change",evSummary); $("evMin").addEventListener("input",evSummary);
+document.querySelectorAll(".evpre button").forEach(b=>b.onclick=()=>evFill(b.dataset.p==="0"?{}:EV_PRESET[b.dataset.p]));
+$("evMake").onclick=()=>{ const f=evForm(); if(!evCount(f)){ evSummary(); return; }
   tev={...f,id:Math.random().toString(36).slice(2,8).padEnd(6,"0")}; store.set("euclidia2-tev",tev); openTeacher(); };
 $("evClear").onclick=()=>{ tev=null; store.set("euclidia2-tev",null); openTeacher(); };
 
@@ -1585,7 +1648,7 @@ loadLevel(0); resize(); renderScore(); flush();
 let locked=store.get("euclidia2-lock",false);
 try{ if(new URLSearchParams(location.search).get("rol")==="estudiante"||/(^|[#&])rol=estudiante/.test(location.hash)){ locked=true; store.set("euclidia2-lock",true); } }catch(e){}
 if(locked){ role="estudiante"; store.set("euclidia2-role",role); $("regBack").hidden=true; $("teacherBtn").hidden=true; $("whoBtn").textContent="Cambiar de estudiante"; $("whoBtn").onclick=askPlayer; renderScore(); }
-applySession(); if(SESSION){ evStart(); loadLevel(firstSession()); renderScore(); } tick();
+applySession(); if(SESSION){ loadLevel(evStarted()?firstSession():0); renderScore(); } tick();
 // Al volver a abrir el juego (pestaña nueva) se pregunta si sigue la misma persona
 let seen=false; try{ seen=sessionStorage.getItem("euclidia2-tab")==="1"; }catch(e){}
 const markSeen=()=>{ try{ sessionStorage.setItem("euclidia2-tab","1"); }catch(e){} };
