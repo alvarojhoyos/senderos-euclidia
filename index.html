@@ -399,6 +399,8 @@ function texto(t) {
 // Mientras esté vacía, los resultados se guardan en el celular y se envían cuando se configure.
 const RESULTS_URL = "";   // opcional: hoja fija para todos. Lo normal es que cada profesor la pegue en su panel.
 const TOTAL_COINS = 12, FREE_HINTS = 3;
+// Si la restricción deja un trozo de curva sin salida: "exacta" = no arranca, "aviso" = llega con aviso, "libre" = se ignora
+const EXTRA_RULE = "exacta";
 // Editor tipo cuaderno (MathLive). Si la librería no carga, el juego usa casillas de texto normales.
 const ML=!!(window.MathfieldElement&&customElements.get("math-field"));
 if(ML){ try{ MathfieldElement.fontsDirectory=null; MathfieldElement.soundsDirectory=null; MathfieldElement.keypressSound=null; MathfieldElement.plonkSound=null; }catch(e){} }
@@ -700,6 +702,7 @@ function walk(F,start,sgn,I,L){
   if(!(n>1e-7)) return {pts,hit:-1,reached:false,len:0};
   let t=[-g[1]/n*sgn,g[0]/n*sgn], len=0, hit=L.obstacles.some(o=>d2(o,p)<0.35)?0:-1, reached=hit<0&&d2(p,L.goal)<0.25;
   if(hit===0) return {pts,hit,reached:false,len:0};
+  let clipped=false;
   for(let k=0;k<7000&&!reached;k++){
     g=grad2(F,p[0],p[1]); n=Math.hypot(g[0],g[1]); if(!(n>1e-7)) break;
     let tn=[-g[1]/n,g[0]/n]; if(tn[0]*t[0]+tn[1]*t[1]<0) tn=[-tn[0],-tn[1]]; t=tn;
@@ -707,14 +710,14 @@ function walk(F,start,sgn,I,L){
     const st=d2(q,p); if(st>3*h||st<h*0.2) break;
     if(I&&!inI(I,q,0)){ // recortar justo en el borde del intervalo
       let a=p,b=q; for(let r=0;r<10;r++){ const m=proj2(F,[(a[0]+b[0])/2,(a[1]+b[1])/2])||a; if(inI(I,m,0)) a=m; else b=m; }
-      if(d2(a,p)>1e-6){ pts.push(a); len+=d2(a,p); } break; }
+      if(d2(a,p)>1e-6){ pts.push(a); len+=d2(a,p); } clipped=true; break; }
     pts.push(q); len+=st; p=q;
     const oi=L.obstacles.findIndex(o=>d2(o,p)<0.35); if(oi>=0){ hit=pts.length-1; break; }
     if(d2(p,L.goal)<0.25){ reached=true; break; }
     const mx=(B.x1-B.x0)*0.03, my=(B.y1-B.y0)*0.06; if(p[0]<B.x0+mx||p[0]>B.x1-mx||p[1]<B.y0+my*0.4||p[1]>B.y1-my*1.6) break;
     if(len>1&&d2(p,pts[0])<h*1.2) break;
   }
-  return {pts,hit,reached,len};
+  return {pts,hit,reached,len,clipped};
 }
 function dirLabel(w){ const n=Math.min(12,w.pts.length-1); const dx=w.pts[n][0]-w.pts[0][0], dy=w.pts[n][1]-w.pts[0][1];
   return Math.abs(dx)>Math.abs(dy)?(dx>0?"hacia la derecha":"hacia la izquierda"):(dy>0?"hacia arriba":"hacia abajo"); }
@@ -734,6 +737,9 @@ function plan(eqs){
     const gA=good(A0), gB=good(B0);
     if(gA&&gB){ res.ambiguous={piece:i,at:pos,opts:[{pts:A0.pts},{pts:B0.pts}]}; break; }
     const sgn=gA?1:gB?-1:(A0.len>=B0.len?1:-1);
+    // trozo sobrante: hacia el otro lado la restricción deja un pedazo sin salida dentro del mapa
+    const O=sgn===1?B0:A0;
+    if((gA||gB)&&EXTRA_RULE!=="libre"&&O.clipped&&O.len>0.3&&!res.extra){ res.extra={piece:i,at:pos,opts:[{pts:O.pts}]}; if(EXTRA_RULE==="exacta") break; }
     const w=walk(F,pos,sgn,I,L);
     w.pts.forEach((p,k)=>{ path.push({x:p[0],y:p[1]}); const gi=path.length-1;
       L.coins.forEach((c,ci)=>{ if(res.coinAt[ci]<0&&d2(c,p)<0.22) res.coinAt[ci]=gi; }); });
@@ -860,6 +866,11 @@ function revealResult(){ const st=$("stage"), fb=$("fb"), sticky=getComputedStyl
   const target=fb.getBoundingClientRect().top+scrollY-st.offsetHeight-8; window.scrollTo({top:Math.max(0,target),behavior:"smooth"}); }
 function run(){
   const r=plan(g2.eqs);
+  if(r.extra&&EXTRA_RULE==="exacta"){ g2.choose=r.extra; g2.result=null; g2.path=[]; g2.prog=0; g2.anim=false; setMood("sad");
+    const L=level(), tag=g2.eqs.length>1?`Tramo ${r.extra.piece+1}: tu`:"Tu";
+    showFb("bad",tag+(L.mixed?" intervalo":" restricción")+" deja un trozo de curva que sobra (marcado con ?).",
+      "Desde ahí sale un pedazo que no lleva a ninguna parte, así que Vector no sabe por dónde arrancar. Mueve el límite para que el corte quede justo en el punto donde empieza el camino.");
+    return; }
   if(r.ambiguous){ g2.choose=r.ambiguous; g2.result=null; g2.path=[]; g2.prog=0; g2.anim=false; setMood("sad");
     const L=level(), tag=g2.eqs.length>1?`Tramo ${r.ambiguous.piece+1}: tu`:"Tu";
     showFb("bad",tag+" curva llega por dos lados y Vector no sabe cuál tomar.",
@@ -887,7 +898,8 @@ function finish(){
     $("winText").textContent= L.tutorial ? "Ya sabes jugar. Este nivel no cuenta para la nota: los siguientes sí."
       : `Monedas en este nivel: ${coins} de ${L.coins.length}.`+(all?"":" Tu curva no es exactamente la pedida, por eso perdiste monedas. Puedes intentarlo otra vez: cuenta tu mejor intento.");
     $("nextBtn").hidden=idx>=LEVELS.length-1; $("win").hidden=false;
-    showFb(all?"good":"",all?"¡Camino perfecto!":"Llegaste, pero faltaron monedas.",all?"":notes.join(" ")||"Revisa los números de tu ecuación.");
+    const extra=r.extra&&EXTRA_RULE==="aviso"?" Ojo: tu "+(L.mixed?"intervalo":"restricción")+" deja un trozo de curva que sobra junto al inicio. Hay un límite exacto que lo evita.":"";
+    showFb(all?"good":"",all?"¡Camino perfecto!":"Llegaste, pero faltaron monedas.",(all?"":notes.join(" ")||"Revisa los números de tu ecuación.")+extra);
     return;
   }
   setMood(r.hit>=0?"crash":(r.offStart||r.breakAt>0||r.nocurve)?"fall":"sad");
