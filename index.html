@@ -220,6 +220,7 @@ summary{cursor:pointer;font-weight:700}
       <div class="win" id="win" hidden>
         <h3 id="winTitle">¡Llegaste a la meta!</h3>
         <p id="winText"></p>
+        <p class="small" id="winSend"></p>
         <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="nextBtn" type="button">Siguiente nivel</button><button class="btn ghost" id="stayBtn" type="button">Quedarme aquí</button></div>
       </div>
     </section>
@@ -254,6 +255,7 @@ summary{cursor:pointer;font-weight:700}
   </main>
   <div class="foot">
     <span id="sendStatus"></span>
+    <button class="btn ghost" type="button" id="doneBtn" hidden>Terminar y enviar mi resultado</button>
     <span><button class="linkbtn" type="button" id="teacherBtn" hidden>Mostrar el código QR</button> <button class="linkbtn" type="button" id="whoBtn">Cambiar de jugador</button></span>
   </div>
 </div>
@@ -274,6 +276,15 @@ summary{cursor:pointer;font-weight:700}
     <label for="calcIn">Calculadora</label>
     <div class="row"><input id="calcIn" placeholder="ej. 16/4 + 9 o sqrt(9/4)" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off"><output id="calcOut" for="calcIn"></output></div>
     <span class="small" id="calcMsg">Usa + − * / ^ ( ) y sqrt( ). El resultado aparece mientras escribes.</span>
+  </div>
+</div>
+<div class="modal" id="done" hidden>
+  <div class="card">
+    <h2 id="doneTitle">¿Terminar la prueba?</h2>
+    <p id="doneText"></p>
+    <p class="small" id="doneSend"></p>
+    <button class="btn" type="button" id="doneGo">Terminar y enviar</button>
+    <button class="btn ghost" type="button" id="doneBack">Seguir jugando</button>
   </div>
 </div>
 <div class="modal" id="back" hidden>
@@ -634,7 +645,7 @@ let prog=store.get("euclidia2-prog",{best:{},hintsUsed:0,shown:{}});
 const saveProg=()=>store.set("euclidia2-prog",prog);
 const coinsTotal=()=>LEVELS.filter(l=>!l.tutorial).reduce((s,l)=>s+(prog.best[l.id]||0),0);
 const grade=()=>coinsTotal()*5/TOTAL_COINS;
-function renderScore(){
+function renderScore(){ if($("doneBtn")) doneUI();
   $("sCoins").textContent=`${coinsTotal()} / ${TOTAL_COINS}`; $("sGrade").textContent=dec(grade());
   $("sHints").textContent=Math.max(0,FREE_HINTS-prog.hintsUsed);
   $("hello").textContent=role==="profesor"?"Modo profesor · Mundo de las cónicas":player?`Hola, ${player.nombre}. Mundo de las cónicas`:"Mundo de las cónicas";
@@ -891,7 +902,7 @@ function finish(){
   if(success){
     setMood("happy");
     if(!L.tutorial){ const before=prog.best[L.id]||0; if(coins>before||prog.best[L.id]==null){ prog.best[L.id]=Math.max(coins,before); saveProg(); } queueResult(L,coins); }
-    else { prog.best[L.id]=1; saveProg(); }
+    else { prog.best[L.id]=1; saveProg(); $("winSend").textContent="El tutorial no cuenta para la nota."; }
     renderScore(); renderLevels();
     const all=coins===L.coins.length;
     $("winTitle").textContent=all?"¡Llegaste a la meta con todas las monedas!":"¡Llegaste a la meta!";
@@ -915,7 +926,7 @@ function finish(){
 
 /* ============ Resultados (Google Sheets) ============ */
 function queueResult(L,coins){
-  if(!player||role!=="estudiante") return;
+  if(!player||role!=="estudiante"){ flush(); return; }
   const q=store.get("euclidia2-queue",[]);
   q.push({fecha:new Date().toISOString(),nombre:player.nombre,apellido:player.apellido,documento:player.documento,nivel:L.title,
     monedasNivel:coins,monedasTotales:coinsTotal(),monedasPosibles:TOTAL_COINS,pistas:prog.hintsUsed,nota:Math.round(grade()*100)/100});
@@ -923,14 +934,16 @@ function queueResult(L,coins){
 }
 const HOJA_RE=/^https:\/\/script\.google\.com\/macros\/s\/([\w-]{20,})\/exec\/?$/;
 function resultsUrl(){ return store.get("euclidia2-hoja","")||RESULTS_URL; }
+function setSend(t){ $("sendStatus").textContent=t; $("winSend").textContent=t; $("doneSend").textContent=t; }
 async function flush(){
   const q=store.get("euclidia2-queue",[]); const RESULTS_URL=resultsUrl();
-  if(!RESULTS_URL){ $("sendStatus").textContent=q.length?`Resultados guardados en este dispositivo (${q.length}). Se enviarán cuando el profesor conecte su hoja de resultados.`:"Tus resultados se guardan en este dispositivo."; return; }
+  if(role==="profesor"){ setSend("Modo profesor: tus monedas no se envían a la hoja de resultados."); return; }
+  if(!RESULTS_URL){ setSend(q.length?`Resultados guardados en este dispositivo (${q.length}). Se enviarán cuando el profesor conecte su hoja de resultados: entra de nuevo con su código QR o su enlace.`:"Tus resultados se guardan en este dispositivo."); return; }
   while(q.length){
     try{ await fetch(RESULTS_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(q[0])}); q.shift(); store.set("euclidia2-queue",q); }
-    catch(e){ $("sendStatus").textContent="Sin conexión: tus monedas quedan guardadas y se enviarán cuando vuelva la señal."; return; }
+    catch(e){ setSend("Sin conexión: tus monedas quedan guardadas y se enviarán cuando vuelva la señal."); return; }
   }
-  $("sendStatus").textContent="Resultados enviados a tu profesor.";
+  setSend("Enviado a la hoja de tu profesor ✓");
 }
 window.addEventListener("online",flush);
 document.addEventListener("selectionchange",()=>{ const el=document.activeElement; if(el&&el.classList&&(el.classList.contains("eqf")||el.classList.contains("ivf"))&&el.selectionStart!=null) el._c=[el.selectionStart,el.selectionEnd]; });
@@ -1192,6 +1205,18 @@ function openTeacher(){
   const draw=()=>{ box.innerHTML=""; try{ new window.QRCode(box,{text:url,width:240,height:240,correctLevel:window.QRCode.CorrectLevel.M}); }catch(e){ box.innerHTML='<span class="small">No se pudo generar el código. Comparte el enlace de abajo.</span>'; } };
   if(window.QRCode) draw(); else { const s=document.createElement("script"); s.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"; s.onload=draw; s.onerror=()=>{ box.innerHTML='<span class="small">No se pudo cargar el generador de códigos. Comparte el enlace de abajo.</span>'; }; document.head.appendChild(s); }
 }
+
+/* ---- Terminar la prueba y enviar el resultado final ---- */
+function doneUI(){ $("doneBtn").hidden=!(role==="estudiante"&&player); }
+$("doneBtn").onclick=()=>{ const c=coinsTotal();
+  $("doneTitle").textContent="¿Terminar la prueba?"; $("doneText").textContent=`Se enviará tu resultado final: ${c} de ${TOTAL_COINS} monedas, nota ${dec(grade())}. Los niveles que no alcanzaste cuentan con 0 monedas.`;
+  $("doneSend").textContent=""; $("doneGo").hidden=false; $("doneBack").textContent="Seguir jugando"; $("done").hidden=false; };
+$("doneBack").onclick=()=>{ $("done").hidden=true; };
+$("doneGo").onclick=async()=>{ const q=store.get("euclidia2-queue",[]);
+  q.push({fecha:new Date().toISOString(),nombre:player.nombre,apellido:player.apellido,documento:player.documento,nivel:"Terminó la prueba",
+    monedasNivel:"",monedasTotales:coinsTotal(),monedasPosibles:TOTAL_COINS,pistas:prog.hintsUsed,nota:Math.round(grade()*100)/100});
+  store.set("euclidia2-queue",q); $("doneTitle").textContent="Prueba terminada"; $("doneGo").hidden=true; $("doneBack").textContent="Cerrar";
+  $("doneText").textContent=`Tu resultado: ${coinsTotal()} de ${TOTAL_COINS} monedas, nota ${dec(grade())}.`; await flush(); };
 
 /* ---- Hoja de borrador y calculadora ---- */
 // Trazos guardados en coordenadas de la hoja; la vista (zoom k y desplazamiento o) solo cambia cómo se ven.
