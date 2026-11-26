@@ -1,4 +1,4 @@
-// Pruebas de los niveles: con la ecuación esperada Vector llega a la meta con todas las monedas,
+// Pruebas de los niveles: con la ecuación esperada Coni llega a la meta con todas las monedas,
 // y con cada error típico del nivel no gana, no recoge monedas y muestra su mensaje. En los mixtos, un error
 // del tramo 2 puede pasar por las monedas del tramo 1, pero no cuentan porque el nivel no se gana. Uso: node niveles.test.js [ruta/al/juego.html]
 const {chromium,devices}=require('playwright'); const fs=require('fs'); const path=require('path');
@@ -30,7 +30,7 @@ fs.writeFileSync(TMP,'<!doctype html><html lang="es"><head><meta charset="utf-8"
    const v=await E(()=>{ const U=window.__euclidia, s=U.state().g2, P=s.path, a=P[0], z=P[P.length-1]; let len=0; for(let k=1;k<P.length;k++) len+=Math.hypot(P[k].x-P[k-1].x,P[k].y-P[k-1].y);
      const c=U.t.classify(U.t.compileEq(U.LEVELS[U.state().idx].targets[0]).F); const a2=c.r||c.a, b2=c.r||c.b; const per=Math.PI*(3*(a2+b2)-Math.sqrt((3*a2+b2)*(a2+3*b2)));
      return {len, per, gap:Math.hypot(a.x-z.x,a.y-z.y)}; });
-   res(v.len>v.per*0.95&&v.gap<0.3,`${levels[ri].title}: Vector recorre ${v.len.toFixed(2)} (vuelta completa ≈ ${v.per.toFixed(2)}) y termina a ${v.gap.toFixed(2)} de la salida`); }
+   res(v.len>v.per*0.95&&v.gap<0.3,`${levels[ri].title}: Coni recorre ${v.len.toFixed(2)} (vuelta completa ≈ ${v.per.toFixed(2)}) y termina a ${v.gap.toFixed(2)} de la salida`); }
  // Lecciones del tutorial: cada parte dibujada en el mapa coincide con la ecuación de la práctica
  // (classify da a y b como las raíces de los denominadores de x y de y)
  const partes=await E(()=>{ const U=window.__euclidia, T=U.t, out=[];

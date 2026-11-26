@@ -5,7 +5,7 @@
 //   2. precisión: cada trazo dibujado está sobre la curva exacta
 //   3. cobertura: toda la curva exacta que cae en el mapa quedó dibujada (sin huecos ni ramas perdidas)
 //   4. restricción: solo se marca como "camino" la parte que cumple el intervalo
-//   5. recorrido: los puntos por donde camina Vector están sobre la curva y dentro de la restricción
+//   5. recorrido: los puntos por donde camina Coni están sobre la curva y dentro de la restricción
 const {chromium}=require('playwright'); const fs=require('fs'); const path=require('path');
 const SRC=process.argv[2]||[path.join(__dirname,'..','senderos-euclidia.html'),path.join(__dirname,'..','index.html')].find(f=>fs.existsSync(f));
 const TMP=path.join(require('os').tmpdir(),'euclidia-pruebas.html');
@@ -162,16 +162,16 @@ const TEX=[
     if(I){ const v=I.v==='x'?0:1; let wrong=0, missIn=0;
       for(const sg of segs){ const mm=[(sg.a[0]+sg.b[0])/2,(sg.a[1]+sg.b[1])/2]; const inside2=mm[v]>=I.lo-1e-9&&mm[v]<=I.hi+1e-9; if(sg.in&&mm[v]<I.lo-cell||sg.in&&mm[v]>I.hi+cell) wrong++; if(!sg.in&&mm[v]>I.lo+cell&&mm[v]<I.hi-cell) missIn++; }
       res(c.g,c.n,'restricción '+c.iv,wrong===0&&missIn===0,`${wrong} trazos marcados como camino fuera de la restricción; ${missIn} dentro sin marcar`); }
-    // 5. recorrido de Vector desde un punto de la curva, en los dos sentidos
+    // 5. recorrido de Coni desde un punto de la curva, en los dos sentidos
     const L0={...LEVELS[TI],obstacles:[],goal:[1e6,1e6]};
-    // salida: un punto de la curva visible en el mapa base (Vector no camina fuera de él), lejos de cruces
+    // salida: un punto de la curva visible en el mapa base (Coni no camina fuera de él), lejos de cruces
     const BB=window.__euclidia.t.baseBounds(), mx=(BB.x1-BB.x0)*0.1, my=(BB.y1-BB.y0)*0.15;
     const vis=inside.filter(q=>(!I||inI(I,q,0))&&q[0]>BB.x0+mx&&q[0]<BB.x1-mx&&q[1]>BB.y0+my&&q[1]<BB.y1-my);
     const want=e.t==='rectas'?2:0, st=vis.sort((a,b2)=>Math.abs(Math.hypot(a[0]-cx,a[1]-cy)-want)-Math.abs(Math.hypot(b2[0]-cx,b2[1]-cy)-want))[0];
-    if(!st) res(c.g,c.n,'recorrido de Vector',true,'la curva no pasa por la parte visible del mapa');
+    if(!st) res(c.g,c.n,'recorrido de Coni',true,'la curva no pasa por la parte visible del mapa');
     if(st){ let wd=0, out=0, pts=0;
       for(const sg of [1,-1]){ const w=walk(eq.F,st,sg,I,L0); pts+=w.pts.length; for(const q of w.pts){ const d=near(IX,q); if(d>wd) wd=d; if(I&&!inI(I,q,1e-6)) out++; } }
-      res(c.g,c.n,'recorrido de Vector',pts>10&&wd<0.01&&out===0,`${pts} pasos; mayor distancia a la curva ${f3(wd)}`+(I?`; ${out} pasos fuera de la restricción`:'')); }
+      res(c.g,c.n,'recorrido de Coni',pts>10&&wd<0.01&&out===0,`${pts} pasos; mayor distancia a la curva ${f3(wd)}`+(I?`; ${out} pasos fuera de la restricción`:'')); }
   }
   // Forma canónica: qué se acepta y qué pide corregir (true = aceptada tal cual)
   const FORMS=[
@@ -195,7 +195,7 @@ const TEX=[
     const onAny=q=>Math.min(...Fs.map(F=>dist2(F,q)));
     res('Niveles',Lv.title,'salida sobre la curva',dist2(Fs[0],Lv.start)<0.01,'distancia '+f3(dist2(Fs[0],Lv.start)));
     res('Niveles',Lv.title,'meta sobre la curva',dist2(Fs[Fs.length-1],Lv.goal)<0.01,'distancia '+f3(dist2(Fs[Fs.length-1],Lv.goal)));
-    Lv.coins.forEach(cn=>res('Niveles',Lv.title,`moneda (${cn}) sobre la curva`,onAny(cn)<0.05,'distancia '+f3(onAny(cn))+' (Vector la recoge a menos de 0,22)'));
+    Lv.coins.forEach(cn=>res('Niveles',Lv.title,`moneda (${cn}) sobre la curva`,onAny(cn)<0.05,'distancia '+f3(onAny(cn))+' (Coni la recoge a menos de 0,22)'));
     Lv.obstacles.forEach(o=>res('Niveles',Lv.title,`obstáculo (${o}) cerca de la curva (para que el lado equivocado choque)`,true,'distancia '+f3(onAny(o))));
     if(Lv.general){ const G=compileEq(Lv.general).F, T=Fs[0]; let ratio=null, md=0;
       for(let i=0;i<40;i++){ const x=-5+10*Math.random(), y=-5+10*Math.random(), g=G(x,y), t=T(x,y); if(Math.abs(t)<1e-6) continue; const r=g/t; if(ratio==null) ratio=r; md=Math.max(md,Math.abs(r-ratio)/Math.abs(ratio)); }
