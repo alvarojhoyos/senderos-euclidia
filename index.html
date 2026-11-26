@@ -52,6 +52,7 @@ h1{font:800 clamp(22px,3.2vw,32px)/1.05 var(--f-display);margin:0;letter-spacing
 .evbox{display:grid;gap:8px;border:1px solid var(--line);border-radius:12px;padding:12px}
 .evbox h3{margin:0}
 .evgate{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;border:1.5px solid var(--accent);border-radius:12px;padding:10px 12px;margin:0 0 10px;background:var(--panel)}
+.stylebar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font:600 13px var(--f-body);margin:0 0 10px}
 .evgate p{margin:0;flex:1 1 220px;font-size:14px}
 .evgate .btn{white-space:normal}
 .evt{width:100%;border-collapse:collapse;font-size:13.5px}
@@ -248,6 +249,7 @@ summary{cursor:pointer;font-weight:700}
     </div>
   </header>
   <div class="evgate" id="evGate" hidden><p id="evGateTxt"></p><button class="btn" type="button" id="evGo">Empezar el quiz</button></div>
+  <div class="stylebar" id="styleBar" hidden><span>Estilo del escenario (prueba):</span><span class="seg" role="group" aria-label="Estilo del escenario"><button type="button" data-s="pixel">Pixel</button><button type="button" data-s="plano">Plano</button><button type="button" data-s="cuaderno">Cuaderno</button></span></div>
   <div class="levels" id="levels"></div>
   <main class="stage-wrap">
     <section class="stage" id="stage" aria-label="Mapa del nivel">
@@ -512,7 +514,7 @@ const LEVELS = [
   answer:[["x^2/9-y^2/4=1"]], errors:[{eq:[["x^2/9-y^2/9=1"]],why:"b = a",msg:"Las ramas se abren demasiado: la pendiente de las asíntotas es b/a = 2/3, así que b = 2."},{eq:[["x^2/9+y^2/4=1"]],why:"elipse",msg:"Tu ecuación es una elipse: en la hipérbola los dos términos se restan."}],
   targets:["x^2/9-y^2/4=1"], start:[3,0], goal:[5,2.67], coins:[[3.56,1.27],[4.46,2.2]], obstacles:[], view:{cx:1.5,cy:1,span:13},
   hints:["El vértice (3, 0) da a = 3 y el rectángulo da b = 2.","La hipérbola abre hacia los lados: el término positivo es el de x."]},
- {"id":"C1","world":"Circunferencias","chain":"El Lago Redondo","step":1,"conic":"circunferencia","diff":"fácil","type":"rescate","title":"El Faro del Lago","kind":"Circunferencia · Rescate","story":"El faro está en el centro del lago, en (0, 0). Coni sale del muelle (4, 0) y debe dar la vuelta completa.","targets":["x^2+y^2=16"],"answer":[["x^2+y^2=16"]],"errors":[{"eq":[["x^2+y^2=4"]],"why":"r en lugar de r²","msg":"Tu radio es demasiado pequeño: en la ecuación va r², no r."},{"eq":[["(x-2)^2+y^2=4"]],"why":"centro en el punto medio entre el faro y el muelle","msg":"Tu centro está corrido a la derecha: el faro está en el origen."}],"start":[4,0],"goal":[4,0],"coins":[[0,4],[-2.83,-2.83]],"obstacles":[[0.82,1.62]],"view":{"cx":0,"cy":0.5,"span":15},"hints":["En un Rescate Coni da la vuelta completa y vuelve al muelle. El faro está en el centro.","El radio es la distancia del faro (0, 0) al muelle (4, 0)."]},
+ {"id":"C1","scene":"lago","props":[{"t":"faro","at":[0,0]},{"t":"muelle","at":[4,0],"dir":[1,0],"len":2.6}],"world":"Circunferencias","chain":"El Lago Redondo","step":1,"conic":"circunferencia","diff":"fácil","type":"rescate","title":"El Faro del Lago","kind":"Circunferencia · Rescate","story":"El faro está en el centro del lago, en (0, 0). Coni sale del muelle (4, 0) y debe dar la vuelta completa.","targets":["x^2+y^2=16"],"answer":[["x^2+y^2=16"]],"errors":[{"eq":[["x^2+y^2=4"]],"why":"r en lugar de r²","msg":"Tu radio es demasiado pequeño: en la ecuación va r², no r."},{"eq":[["(x-2)^2+y^2=4"]],"why":"centro en el punto medio entre el faro y el muelle","msg":"Tu centro está corrido a la derecha: el faro está en el origen."}],"start":[4,0],"goal":[4,0],"coins":[[0,4],[-2.83,-2.83]],"obstacles":[[0.82,1.62]],"view":{"cx":0,"cy":0.5,"span":15},"hints":["En un Rescate Coni da la vuelta completa y vuelve al muelle. El faro está en el centro.","El radio es la distancia del faro (0, 0) al muelle (4, 0)."]},
  {"id":"C2","world":"Circunferencias","chain":"El Lago Redondo","step":2,"conic":"circunferencia","diff":"medio","type":"rescate","title":"Rescate en la Laguna","kind":"Circunferencia · Rescate","story":"La laguna tiene centro (−2, 1). Coni sale del muelle (2, 1).","targets":["(x+2)^2+(y-1)^2=16"],"answer":[["(x+2)^2+(y-1)^2=16"]],"errors":[{"eq":[["(x-2)^2+(y+1)^2=4"]],"why":"signos de h y k cambiados","msg":"Tu centro quedó en (2, −1): revisa los signos dentro de los paréntesis."},{"eq":[["(x+2)^2+(y-1)^2=4"]],"why":"r en lugar de r²","msg":"Tu radio es demasiado pequeño: en la ecuación va r², no r."}],"start":[2,1],"goal":[2,1],"coins":[[-2,5],[-6,1],[-2,-3]],"obstacles":[[0.08,-0.43]],"view":{"cx":-2,"cy":1.5,"span":15},"hints":["El centro de la laguna es (−2, 1). Mide la distancia al muelle.","Ese número es r; en la ecuación va r²."]},
  {"id":"C3","world":"Circunferencias","chain":"El Lago Redondo","step":3,"conic":"circunferencia","diff":"difícil","type":"rescate","title":"El Remolino","kind":"Circunferencia · forma general · Rescate","story":"En medio del lago gira un remolino y su borde sigue la ecuación del mapa. Coni sale de la boya (1, −2), rescata a los nadadores y vuelve a la boya.","general":"x² + y² − 2x − 4y − 11 = 0","targets":["(x-1)^2+(y-2)^2=16"],"answer":[["(x-1)^2+(y-2)^2=16"]],"errors":[{"eq":[["(x+1)^2+(y+2)^2=4"]],"why":"signos al completar (radio con la salida)","msg":"Tu centro quedó en (−1, −2). Al completar x² − 2x el paréntesis lleva el signo del término en x."},{"eq":[["(x-1)^2+(y-2)^2=11"]],"why":"no sumó lo mismo al otro lado","msg":"Tu radio es demasiado pequeño: al completar cuadrados suma lo mismo al lado derecho."}],"start":[1,-2],"goal":[1,-2],"coins":[[5,2],[1,6],[-3,2]],"obstacles":[[-0.43,-0.08]],"view":{"cx":1,"cy":2.5,"span":15},"hints":["Agrupa: (x² − 2x) + (y² − 4y) = 11.","Completa cada paréntesis con (la mitad del coeficiente)² y suma esos números también a la derecha."]},
  {"id":"C4","world":"Circunferencias","chain":"El Lago Redondo","step":4,"conic":"circunferencia","diff":"medio","type":"escape","title":"La Orilla Norte","kind":"Circunferencia","story":"Coni sale del lago por la orilla norte, de (−3, −1) a (7, −1). Esos dos puntos son los extremos de un diámetro del lago. Abajo está el agua.","targets":["(x-2)^2+(y+1)^2=25"],"answer":[["(x-2)^2+(y+1)^2=25","y≥-1"]],"errors":[{"eq":[["(x+2)^2+(y-1)^2=5","y≥-1"]],"why":"signos de h y k cambiados (radio calculado con la salida)","msg":"Tu centro quedó en (−2, 1): en (x − h)² el signo dentro del paréntesis es el contrario de h."},{"eq":[["(x-2)^2+(y+1)^2=25","y≤-1"]],"why":"lado equivocado","msg":"Tu ecuación es la correcta, pero la restricción deja a Coni abajo, por el agua."}],"start":[-3,-1],"goal":[7,-1],"coins":[[2,4],[6,2],[-2,2]],"obstacles":[[-4.2,1.4],[-2.42,-3.34]],"view":{"cx":2,"cy":-0.5,"span":18},"hints":["El centro está en el punto medio entre la salida y la meta.","Con ese centro, el radio es la mitad de la distancia salida–meta. Luego recorta la orilla de arriba con una restricción en y."]},
@@ -977,6 +979,104 @@ function curvesLayer(V,C){
   // curva actual (fuera del intervalo, muy tenue)
   g2.curves.forEach(s=>{ x.strokeStyle=C.curve; x.lineWidth=1.5; x.globalAlpha=0.18; strokeSegs(s.filter(q=>!q.in),V,false,x); x.globalAlpha=0.85; x.lineWidth=2.5; strokeSegs(s,V,true,x); });
   x.globalAlpha=1; cLayer={key,cur:g2.curves,prev:g2.prevCurves,cv}; return cv; }
+/* ============ Escenarios (etapa 7) ============
+   El fondo de cada nivel se dibuja con código en una capa aparte, una sola vez, y en cada cuadro solo se copia.
+   Se vuelve a pintar solo si cambia el tamaño, el zoom, el nivel, el tema o el estilo.
+   Regla: el escenario evoca el lugar sin copiar la cónica (la orilla es irregular y no pasa por los puntos del nivel). */
+let sLayer=null;
+const SCENE_STYLES=["pixel","plano","cuaderno"];
+let sceneStyle=(()=>{ try{ const q=new URLSearchParams(location.search).get("estilo"); if(SCENE_STYLES.includes(q)) return q; }catch(e){} const v=store.get("euclidia2-estilo","pixel"); return SCENE_STYLES.includes(v)?v:"pixel"; })();
+const reduceMotion=matchMedia("(prefers-reduced-motion: reduce)").matches;
+let liteMode=reduceMotion; // modo liviano: escenario quieto, sin brillos
+function hashStr(t){ let h=2166136261; for(const ch of String(t)) { h^=ch.codePointAt(0); h=Math.imul(h,16777619); } return h>>>0; }
+function srand(seed){ let a=seed>>>0; return ()=>{ a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+// contorno irregular (en coordenadas del plano) alrededor de c con radio medio r
+function blob(c,r,seed,amp=0.12,n=72){ const R=srand(seed), ph=[R()*6.3,R()*6.3,R()*6.3,R()*6.3], pts=[];
+  for(let k=0;k<n;k++){ const a=k/n*Math.PI*2, f=1+amp*(0.55*Math.sin(2*a+ph[0])+0.3*Math.sin(3*a+ph[1])+0.2*Math.sin(5*a+ph[2])+0.1*Math.sin(7*a+ph[3]));
+    pts.push([c[0]+r*f*Math.cos(a),c[1]+r*f*0.92*Math.sin(a)]); } return pts; }
+function scenePal(dark){ return dark?{water:"#1d3b49",deep:"#17323f",hi:"#3b6a80",sand:"#3a3a2b",sandEdge:"#4a4835",grass:"#2a4031",leaf:"#3f6b45",leaf2:"#33583a",trunk:"#5a4630",reed:"#4f7d52",wood:"#6b5238",white:"#c9d3d0",red:"#c4573d",roof:"#0f1a17",glow:"rgba(255,214,102,0.28)",ink:"#9fc3d6"}
+  :{water:"#cfe6f1",deep:"#b9dbeb",hi:"#f2fafd",sand:"#efe4c0",sandEdge:"#e2d4a6",grass:"#dcebd2",leaf:"#a9cf96",leaf2:"#8fbd7c",trunk:"#9a7a55",reed:"#6f9e5b",wood:"#b98d5e",white:"#ffffff",red:"#e05a3a",roof:"#1b2735",glow:"rgba(255,200,80,0.0)",ink:"#5d8fb0"}; }
+// Escenario del lago: datos en coordenadas del plano, sin dibujar todavía
+function lakeScene(L){ const v=L.view, seed=hashStr(L.id), R=srand(seed);
+  const c=[v.cx+0.06*v.span,v.cy-0.04*v.span], r=v.span*0.37;
+  const props=L.props||[];
+  const reeds=[], trees=[], waves=[], spark=[];
+  const shore=blob(c,r*1.1,seed+7,0.12);
+  for(let k=0;k<16;k++){ const p=shore[Math.floor(R()*shore.length)]; reeds.push([p[0]+(R()-0.5)*0.4,p[1]+(R()-0.5)*0.4]); }
+  for(let k=0;k<10;k++){ const a=R()*6.3, d=r*(1.35+R()*0.5); trees.push([c[0]+d*Math.cos(a),c[1]+d*0.9*Math.sin(a),0.45+R()*0.35]); }
+  for(let k=0;k<14;k++){ const a=R()*6.3, d=r*(0.15+R()*0.7); waves.push([c[0]+d*Math.cos(a),c[1]+d*0.85*Math.sin(a),0.35+R()*0.3]); }
+  for(let k=0;k<7;k++){ const a=R()*6.3, d=r*(0.2+R()*0.65); spark.push([c[0]+d*Math.cos(a),c[1]+d*0.85*Math.sin(a),R()*6.3]); }
+  return {kind:"lago",c,r,seed,shore,lake:blob(c,r,seed+7,0.12),deep:blob([c[0]-0.12*r,c[1]+0.08*r],r*0.55,seed+11,0.18),reeds,trees,waves,spark,props}; }
+function sceneOf(L){ if(L.tutorial) return null; const k=L.scene||(/lago|laguna|remolino|orilla/i.test(L.title)?"lago":null); return k==="lago"?lakeScene(L):null; }
+// Dibuja el escenario en el contexto x; P convierte un punto del plano a coordenadas de esa capa; u = tamaño de un "pixel" del dibujo
+function paintLake(x,S,P,u,pal,style,dark){
+  const poly=(pts)=>{ x.beginPath(); pts.forEach((p,i)=>{ const q=P(p); i?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1]); }); x.closePath(); };
+  const W0=x.canvas.width, H0=x.canvas.height;
+  if(style==="cuaderno"){
+    // papel con manchas de acuarela y trazos de lápiz
+    const jit=srand(S.seed+3);
+    x.globalAlpha=0.5; x.fillStyle=pal.leaf; S.trees.forEach(t=>{ const q=P(t); x.beginPath(); x.arc(q[0],q[1],t[2]*u*1.2,0,7); x.fill(); }); x.globalAlpha=1;
+    x.globalAlpha=0.55; x.fillStyle=pal.sand; poly(S.shore); x.fill();
+    for(let k=0;k<3;k++){ x.globalAlpha=0.32; x.fillStyle=k===2?pal.deep:pal.water; poly(blob([S.c[0]+(jit()-0.5)*0.4,S.c[1]+(jit()-0.5)*0.4],S.r*(1-k*0.18),S.seed+7+k,0.13)); x.fill(); }
+    x.globalAlpha=0.7; x.strokeStyle=pal.ink; x.lineWidth=1.2;
+    for(let k=0;k<2;k++){ x.beginPath(); S.lake.forEach((p,i)=>{ const q=P(p), d=(jit()-0.5)*2.2; i?x.lineTo(q[0]+d,q[1]+d):x.moveTo(q[0]+d,q[1]+d); }); x.closePath(); x.stroke(); }
+    x.lineWidth=1; S.waves.forEach(w=>{ const q=P(w), l=w[2]*u; x.beginPath(); x.moveTo(q[0]-l,q[1]); x.quadraticCurveTo(q[0]-l/2,q[1]-l*0.35,q[0],q[1]); x.quadraticCurveTo(q[0]+l/2,q[1]+l*0.35,q[0]+l,q[1]); x.stroke(); });
+    x.strokeStyle=pal.reed; S.reeds.forEach(rd=>{ const q=P(rd); for(let k=-1;k<=1;k++){ x.beginPath(); x.moveTo(q[0]+k*2,q[1]); x.lineTo(q[0]+k*4,q[1]-u*0.5); x.stroke(); } });
+    x.globalAlpha=1; return; }
+  if(style==="plano"){
+    x.fillStyle=pal.grass; x.globalAlpha=0.55; x.fillRect(0,0,W0,H0); x.globalAlpha=1;
+    S.trees.forEach(t=>{ const q=P(t), rr=t[2]*u; x.fillStyle=pal.leaf2; x.beginPath(); x.arc(q[0]+rr*0.25,q[1]+rr*0.2,rr,0,7); x.fill(); x.fillStyle=pal.leaf; x.beginPath(); x.arc(q[0],q[1],rr,0,7); x.fill(); });
+    x.fillStyle=pal.sandEdge; poly(blob(S.c,S.r*1.16,S.seed+7,0.12)); x.fill();
+    x.fillStyle=pal.sand; poly(S.shore); x.fill();
+    const q0=P(S.c), g=x.createRadialGradient(q0[0],q0[1],S.r*u*0.1,q0[0],q0[1],S.r*u*1.1); g.addColorStop(0,pal.deep); g.addColorStop(1,pal.water);
+    x.fillStyle=g; poly(S.lake); x.fill();
+    x.strokeStyle=pal.hi; x.lineCap="round"; x.lineWidth=Math.max(2,u*0.09); x.globalAlpha=0.8;
+    S.waves.forEach(w=>{ const q=P(w), l=w[2]*u; x.beginPath(); x.moveTo(q[0]-l/2,q[1]); x.lineTo(q[0]+l/2,q[1]); x.stroke(); }); x.globalAlpha=1;
+    x.strokeStyle=pal.reed; x.lineWidth=Math.max(1.5,u*0.06); S.reeds.forEach(rd=>{ const q=P(rd); for(let k=-1;k<=1;k++){ x.beginPath(); x.moveTo(q[0]+k*u*0.08,q[1]); x.lineTo(q[0]+k*u*0.18,q[1]-u*0.45); x.stroke(); } });
+    return; }
+  // pixel: se dibuja en una capa pequeña y se agranda sin suavizar, como Coni
+  x.fillStyle=pal.grass; x.globalAlpha=0.6; x.fillRect(0,0,W0,H0); x.globalAlpha=1;
+  S.trees.forEach(t=>{ const q=P(t), rr=Math.max(2,Math.round(t[2]*u)); x.fillStyle=pal.leaf2; x.fillRect(Math.round(q[0]-rr+1),Math.round(q[1]-rr+1),rr*2,rr*2); x.fillStyle=pal.leaf; x.fillRect(Math.round(q[0]-rr),Math.round(q[1]-rr),rr*2-1,rr*2-1); x.fillStyle=pal.trunk; x.fillRect(Math.round(q[0]),Math.round(q[1]+rr),1,2); });
+  x.fillStyle=pal.sandEdge; poly(blob(S.c,S.r*1.16,S.seed+7,0.12)); x.fill();
+  x.fillStyle=pal.sand; poly(S.shore); x.fill();
+  x.fillStyle=pal.water; poly(S.lake); x.fill();
+  x.fillStyle=pal.deep; poly(S.deep); x.fill();
+  x.fillStyle=pal.hi; S.waves.forEach(w=>{ const q=P(w), l=Math.max(2,Math.round(w[2]*u)); x.fillRect(Math.round(q[0]-l/2),Math.round(q[1]),l,1); x.fillRect(Math.round(q[0]-l/2+1),Math.round(q[1])-1,Math.max(1,l-2),1); });
+  x.fillStyle=pal.reed; S.reeds.forEach(rd=>{ const q=P(rd), bx=Math.round(q[0]), by=Math.round(q[1]); x.fillRect(bx-1,by-3,1,3); x.fillRect(bx+1,by-4,1,4); x.fillRect(bx,by-2,1,2); });
+}
+// Objetos fijos que la historia ya nombra (el faro en (0, 0), el muelle de la salida): nunca puntos nuevos de la cónica
+function paintProps(x,S,P,u,pal,style,dark){
+  S.props.forEach(pr=>{ const q=P(pr.at);
+    if(pr.t==="muelle"){ const d=pr.dir||[1,0], ln=pr.len||1.4, e=P([pr.at[0]+d[0]*ln,pr.at[1]+d[1]*ln]); x.strokeStyle=pal.wood; x.lineWidth=Math.max(2,u*0.32); x.lineCap=style==="pixel"?"butt":"round"; x.beginPath(); x.moveTo(q[0],q[1]); x.lineTo(e[0],e[1]); x.stroke(); }
+    if(pr.t==="faro"){ const s=style==="pixel"?Math.max(1,Math.round(u/8)):u/9;
+      x.fillStyle=pal.sand; x.beginPath(); x.ellipse(q[0],q[1]+2*s,7*s,3*s,0,0,7); x.fill();
+      if(dark){ const g=x.createRadialGradient(q[0],q[1]-13*s,0,q[0],q[1]-13*s,14*s); g.addColorStop(0,"rgba(255,214,102,0.55)"); g.addColorStop(1,"rgba(255,214,102,0)"); x.fillStyle=g; x.beginPath(); x.arc(q[0],q[1]-13*s,14*s,0,7); x.fill(); }
+      const R=(a,b,w,h,c)=>{ x.fillStyle=c; x.fillRect(Math.round(q[0]+a*s),Math.round(q[1]+b*s),Math.ceil(w*s),Math.ceil(h*s)); };
+      R(-3,-10,6,10,pal.white); R(-3,-8,6,2,pal.red); R(-3,-4,6,2,pal.red); R(-2,-13,4,3,"#ffd166"); R(-3,-15,6,2,pal.roof);
+      if(style==="cuaderno"){ x.strokeStyle=pal.ink; x.lineWidth=1; x.strokeRect(q[0]-3*s,q[1]-10*s,6*s,10*s); } } }); }
+function sceneLayer(V,C){ const L=level(), S=sceneOf(L); if(!S) return null;
+  const dark=parseInt(C.paper.slice(1,3),16)<100, key=[W,H,DPR,V.s,V.cx,V.cy,L.id,sceneStyle,dark].join("|");
+  if(sLayer&&sLayer.key===key) return sLayer.cv;
+  const pixel=sceneStyle==="pixel", PX=3, cw=pixel?Math.ceil(W/PX):Math.round(W*DPR), ch=pixel?Math.ceil(H/PX):Math.round(H*DPR);
+  const cv=(sLayer&&sLayer.cv)||document.createElement("canvas"); cv.width=cw; cv.height=ch;
+  const x=cv.getContext("2d"); x.setTransform(1,0,0,1,0,0); x.clearRect(0,0,cw,ch);
+  const k=pixel?1/PX:DPR, P=p=>{ const q=toS(p[0],p[1],V); return [q[0]*k,q[1]*k]; }, u=V.s*k, pal=scenePal(dark);
+  paintLake(x,S,P,u,pal,sceneStyle,dark); paintProps(x,S,P,u,pal,sceneStyle,dark);
+  sLayer={key,cv,S,pixel,dark}; return cv; }
+function styleUI(){ const b=$("styleBar"); b.hidden=!sceneOf(level()); b.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.s===sceneStyle))); }
+document.querySelectorAll("#styleBar button").forEach(b=>b.onclick=()=>{ sceneStyle=b.dataset.s; store.set("euclidia2-estilo",sceneStyle); sLayer=null; styleUI(); });
+function drawScene(V,C,t){ const cv=sceneLayer(V,C); if(!cv) return;
+  x2.save(); x2.imageSmoothingEnabled=!sLayer.pixel; x2.globalAlpha=sLayer.dark?0.9:0.85; x2.drawImage(cv,0,0,W,H); x2.restore();
+  if(liteMode) return;
+  // brillos en el agua: pocos y lentos
+  const S=sLayer.S; x2.fillStyle=sLayer.dark?"#cfe8f5":"#ffffff";
+  S.spark.forEach(sp=>{ const a=Math.sin(t*1.3+sp[2]); if(a<0.6) return; const q=toS(sp[0],sp[1],V), z=sLayer.pixel?3:2; x2.globalAlpha=(a-0.6)*2.2;
+    if(sLayer.pixel){ x2.fillRect(Math.round(q[0]/3)*3,Math.round(q[1]/3)*3,3,3); } else { x2.fillRect(q[0]-z*2,q[1]-0.5,z*4,1.2); x2.fillRect(q[0]-0.5,q[1]-z*2,1.2,z*4); } });
+  x2.globalAlpha=1; }
+// Modo liviano automático: si en los primeros segundos el dibujo va a menos de ~30 cuadros por segundo, el escenario queda quieto
+let fpsProbe={n:0,t0:0,done:false};
+function probeFps(now){ if(fpsProbe.done) return; if(!fpsProbe.t0){ fpsProbe.t0=now; return; } fpsProbe.n++;
+  if(now-fpsProbe.t0>3000){ const fps=fpsProbe.n*1000/(now-fpsProbe.t0); fpsProbe.done=true; fpsProbe.fps=fps; if(fps<30) liteMode=true; } }
 function label(txt,sx,sy,C){ x2.font="600 11px "+css("--f-mono"); x2.textBaseline="bottom"; x2.textAlign="left";
   const w=x2.measureText(txt).width; const lx=Math.max(4,Math.min(W-w-4,sx)); const ly=Math.max(16,Math.min(H-4,sy));
   x2.fillStyle=C.paper; x2.globalAlpha=0.8; x2.fillRect(lx-2,ly-13,w+4,14); x2.globalAlpha=1; x2.fillStyle=C.ink; x2.fillText(txt,lx,ly); }
@@ -1003,6 +1103,7 @@ function draw(){
   const V=view(), L=level(), t=performance.now()/1000; x2.setTransform(DPR,0,0,DPR,0,0);
   const C={paper:css("--paper"),grid:css("--grid"),gs:css("--grid-strong"),ink:css("--ink"),muted:css("--muted"),curve:css("--curve"),acc:css("--accent"),gold:css("--gold"),bad:css("--bad"),ok:css("--ok")};
   x2.fillStyle=C.paper; x2.fillRect(0,0,W,H);
+  drawScene(V,C,t);
   const B=bounds(); x2.lineWidth=1;
   for(let gx=Math.ceil(B.x0*2)/2; gx<=B.x1; gx+=0.5){ const [sx]=toS(gx,0,V); x2.strokeStyle=Number.isInteger(gx)?C.gs:C.grid; x2.globalAlpha=0.65; x2.beginPath(); x2.moveTo(sx+.5,0); x2.lineTo(sx+.5,H); x2.stroke(); }
   for(let gy=Math.ceil(B.y0*2)/2; gy<=B.y1; gy+=0.5){ const [,sy]=toS(0,gy,V); x2.strokeStyle=Number.isInteger(gy)?C.gs:C.grid; x2.globalAlpha=0.65; x2.beginPath(); x2.moveTo(0,sy+.5); x2.lineTo(W,sy+.5); x2.stroke(); }
@@ -1401,7 +1502,7 @@ function ivsFrom(k){ const out=[];
     out.push({v:st.v,lo,hi}); });
   return out.length?out:null; }
 function loadLevel(i){
-  idx=i; menuWorld=wOf(LEVELS[i]); delete $("hintBtn").dataset.confirm; const L=level(); renderLevels(); resetZoom();
+  idx=i; menuWorld=wOf(LEVELS[i]); delete $("hintBtn").dataset.confirm; const L=level(); renderLevels(); resetZoom(); styleUI();
   const chainLen=L.chain?LEVELS.filter(l=>l.chain===L.chain).length:0;
   $("eyebrow").textContent=L.kind+(SESSION&&!L.tutorial?` · ${L.diff}`:L.chain?` · ${L.chain} ${L.step}/${chainLen}`:""); $("lvTitle").textContent=L.title; $("story").textContent=L.story; $("story").parentElement.classList.toggle("tut",!!L.tutorial);
   const ls=$("lesson"); ls.hidden=!L.lesson;
@@ -1649,7 +1750,7 @@ let lastT=performance.now();
 function frame(now){
   const dt=Math.min(0.25,(now-lastT)/1000); lastT=now;
   if(g2.anim){ g2.prog+=g2.speed*dt; if(g2.prog>=g2.path.length-1){ g2.prog=g2.path.length-1; g2.anim=false; finish(); } }
-  draw(); requestAnimationFrame(frame);
+  probeFps(now); draw(); requestAnimationFrame(frame);
 }
 // El código QR del profesor puede traer su hoja de resultados (?hoja=ID)
 try{ const hid=new URLSearchParams(location.search).get("hoja"); if(hid&&/^[\w-]{20,}$/.test(hid)) store.set("euclidia2-hoja",`https://script.google.com/macros/s/${hid}/exec`); }catch(e){}
