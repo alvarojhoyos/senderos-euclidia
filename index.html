@@ -1008,6 +1008,9 @@ const ITEM_OF={lago:"perla",rio:"perla",luna:"estrella",volcan:"lava",pradera:"s
 const TRAZ_COLORS=["#2f9c8c","#7a67d4","#3a7fd0","#c98a2e","#cc5c8a"];
 function itemOf(L){ if(L.rescue) return null; const S=sceneOf(L); return S?ITEMS[ITEM_OF[S.kind]]||null:null; }
 function coinName(L){ return L.rescue?"Trazador perdido":(itemOf(L)||{name:"Moneda"}).name; }
+// En los niveles de forma general (completar cuadrados) las monedas no se ven hasta que Coni pasa por ellas:
+// si estuvieran a la vista, la cónica se podría sacar a ojo sin usar la ecuación.
+const hiddenCoins=L=>!!L.general&&!L.tutorial;
 const spriteU=()=>Math.max(2.2,Math.min(2.8,W/260));
 function drawItem(it,sx,sy,C,t,ci,alpha){ const u=spriteU(), bob=liteMode?0:Math.round(Math.sin(t*2.4+ci)*1.2);
   const col={k:C.ink,a:it.a,b:it.b,c:it.c}; x2.globalAlpha=alpha;
@@ -1397,6 +1400,7 @@ function draw(){
   // monedas: Trazadores perdidos en los Rescates, objetos del lugar en los Escapes, monedas en el Tutorial
   const it=itemOf(L);
   L.coins.forEach((c,ci)=>{ const [sx,sy]=toS(c[0],c[1],V); const at=g2.result?g2.result.coinAt[ci]:-1, got=at>=0&&at<=g2.prog, k=got?Math.min(1,(g2.prog-at)/40):0;
+    if(!got&&hiddenCoins(L)) return;
     if(L.rescue){ drawTrazador(sx,sy,C,t,ci,got?Math.max(k,0.001):0); if(!got) label(fmtP(c),sx+22,sy-10,C); return; }
     if(got){ if(k>=1) return; if(it) drawItem(it,sx,sy-k*24,C,t,ci,1-k); else { x2.globalAlpha=1-k; x2.fillStyle=C.gold; x2.beginPath(); x2.arc(sx,sy-k*24,9,0,7); x2.fill(); x2.globalAlpha=1; } return; }
     if(it) drawItem(it,sx,sy,C,t,ci,1);
@@ -1774,7 +1778,9 @@ function loadLevel(i){
   const T=$("targets"); T.innerHTML="";
   const add=(cls,txt)=>{ const li=document.createElement("li"); li.className=cls; li.innerHTML=`<span class="mk"></span>${esc(txt)}`; T.appendChild(li); };
   if(L.rescue) add("g","Salida y meta "+fmtP(L.start)+": da la vuelta completa"); else { add("s","Salida "+fmtP(L.start)); add("g","Meta "+fmtP(L.goal)); }
-  const cn=coinName(L); L.coins.forEach(c=>add(L.rescue?"c t":"c",cn+" "+fmtP(c))); L.obstacles.forEach(o=>add("o","Obstáculo "+fmtP(o)));
+  const cn=coinName(L), nC=L.coins.length;
+  if(hiddenCoins(L)) add(L.rescue?"c t":"c",(L.rescue?`${nC} Trazadores perdidos`:`${nC} objetos`)+" escondidos en el camino: aparecen cuando Coni pasa por ellos");
+  else L.coins.forEach(c=>add(L.rescue?"c t":"c",cn+" "+fmtP(c))); L.obstacles.forEach(o=>add("o","Obstáculo "+fmtP(o)));
   const F=$("fields"); F.innerHTML=""; ivs=[];
   const mode=()=>{ const md=document.createElement("div"); md.className="ivmode"; md.hidden=true;
     md.innerHTML=`<span>Escribir la restricción como</span><span class="seg" role="group" aria-label="Notación de la restricción"><button type="button" data-m="ineq">2 ≤ x ≤ 4</button><button type="button" data-m="brk">x ∈ [2, 4]</button></span>`;
@@ -2144,7 +2150,7 @@ const startFlow=()=>{ if(!role) askRole(); else if(role==="estudiante"&&!player)
 if(!store.get("euclidia2-intro",false)) showIntro(startFlow); else startFlow();
 markSeen();
 requestAnimationFrame(frame);
-window.__euclidia={LEVELS,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
+window.__euclidia={LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
     if(ivs[i]) ivs[i]=(list||[]).map(I=>({v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):"",loC:true,hiC:true})); }); renderModes(); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
   state:()=>({g2,prog,player,idx}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),
