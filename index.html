@@ -125,6 +125,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .targets li{font:12px var(--f-mono);border:1px solid var(--line);border-radius:6px;padding:2px 7px;display:flex;gap:5px;align-items:center}
 .targets .mk{width:9px;height:9px;display:inline-block;border-radius:2px;background:var(--ink)}
 .targets .c .mk{background:var(--gold);border-radius:50%}
+.targets .c.t .mk{background:#2f9c8c;border-radius:2px}
 .targets .o .mk{background:var(--bad);border-radius:50%}
 .targets .g .mk{background:var(--ok)}
 .general{font:600 14px var(--f-mono);background:var(--paper);border:1px solid var(--grid-strong);border-radius:8px;padding:6px 10px;overflow-x:auto}
@@ -947,6 +948,53 @@ function plan(eqs){
 }
 
 /* ---- Personaje: Coni, explorador en pixel art ---- */
+/* ============ Rescatados y objetos temáticos (etapa 7b) ============
+   En los Rescates cada moneda es un Trazador perdido (más grande que Coni, que es la más pequeña):
+   cuando Coni pasa, salta de alegría y le entrega su fragmento del Gran Mapa.
+   En los Escapes la moneda toma la forma del lugar. Se cuentan y se recogen igual que antes. */
+const ITEMS={ // 9 × 9 pixeles: k = contorno, a = color, b = luz, c = sombra
+  perla:{name:"Perla",a:"#f4eefc",b:"#ffffff",c:"#cbbde6",px:["..kkkkk..",".kbbaaak.","kbbaaaaak","kbaaaaaak","kaaaaaack","kaaaaaack","kaaaaacck",".kacccck.","..kkkkk.."]},
+  estrella:{name:"Polvo de estrella",a:"#ffd84d",b:"#fff7c2",c:"#e0a92e",px:["....k....","...kak...","...kbk...","kkkkakkkk","kbaaaaack",".kaaaaak.",".kaackak.","kack.kack","kk.....kk"]},
+  lava:{name:"Gema de lava",a:"#f26b3a",b:"#ffd08a",c:"#b8401f",px:["...kkk...","..kbbak..",".kbbaaak.","kbaaaaaak","kaaaaaack",".kaaaack.","..kaack..","...kck...","....k...."]},
+  semilla:{name:"Semilla dorada",a:"#ffcf3f",b:"#fff2b0",c:"#e39b1f",px:["..k...k..",".kbk.kbk.","kbaakaabk",".kaacaak.","..kccck..",".kaacaak.","kaackaack",".kak.kak.","..k...k.."]},
+  hielo:{name:"Cristal de hielo",a:"#bfe7fb",b:"#ffffff",c:"#7fbfe0",px:["....k....","...kbk...","..kbaak..",".kbaaaak.","kbaaaaack",".kaaaack.","..kaack..","...kck...","....k...."]},
+  concha:{name:"Concha",a:"#ffc9b3",b:"#ffe9df",c:"#e8947a",px:["...kkk...",".kkbabkk.","kbacacabk","kacacacak","kacacacak",".kacacak.","..kcack..","...kkk...","....k...."]},
+  piedra:{name:"Piedra rojiza",a:"#d9734e",b:"#f2a988",c:"#9e4a2f",px:[".........","..kkkk...",".kbbaakk.","kbaaaaaak","kaaaaaack","kaaaaacck",".kaaccck.","..kkkkk..","........."]},
+  vapor:{name:"Gota de vapor",a:"#d8f1f5",b:"#ffffff",c:"#9fd3dd",px:["....k....","...kak...","...kak...","..kbaak..",".kbaaaak.",".kbaaaak.",".kaaaack.","..kaack..","...kkk..."]},
+  cueva:{name:"Cristal de cueva",a:"#b18cf2",b:"#e6d9ff",c:"#7a55c7",px:["..k...k..",".kbk.kbk.",".kak.kak.",".kakkkak.","kbakbakak","kaakaakck","kaacaacck",".kccccck.","..kkkkk.."]},
+  moneda:{name:"Moneda de Euclidia",a:"#f2b632",b:"#ffe28a",c:"#c98a12",px:["..kkkkk..",".kbbaaak.","kbakkkaak","kbakaaack","kaakkkack","kaakaaack","kaakkkcck",".kaaccck.","..kkkkk.."]}
+};
+const ITEM_OF={lago:"perla",rio:"perla",luna:"estrella",volcan:"lava",pradera:"semilla",hielo:"hielo",costa:"concha",desfiladero:"piedra",geiser:"vapor",cueva:"cueva",ciudad:"moneda"};
+const TRAZ_COLORS=["#2f9c8c","#7a67d4","#3a7fd0","#c98a2e","#cc5c8a"];
+function itemOf(L){ if(L.rescue) return null; const S=sceneOf(L); return S?ITEMS[ITEM_OF[S.kind]]||null:null; }
+function coinName(L){ return L.rescue?"Trazador perdido":(itemOf(L)||{name:"Moneda"}).name; }
+const spriteU=()=>Math.max(2.2,Math.min(2.8,W/260));
+function drawItem(it,sx,sy,C,t,ci,alpha){ const u=spriteU(), bob=liteMode?0:Math.round(Math.sin(t*2.4+ci)*1.2);
+  const col={k:C.ink,a:it.a,b:it.b,c:it.c}; x2.globalAlpha=alpha;
+  it.px.forEach((row,j)=>{ for(let i=0;i<row.length;i++){ const f=col[row[i]]; if(!f) continue; x2.fillStyle=f; x2.fillRect(Math.round(sx+(i-4.5)*u),Math.round(sy+(j-4.5+bob)*u),Math.ceil(u),Math.ceil(u)); } });
+  x2.globalAlpha=1; }
+// Un Trazador: de la misma familia que Coni, pero más grande. k = 0 esperando; 0 < k < 1 rescatándose; k = 1 rescatado
+function drawTrazador(sx,sy,C,t,ci,k){ const u=spriteU(), body=TRAZ_COLORS[ci%TRAZ_COLORS.length], ink=C.ink, eye=C.paper;
+  const saved=k>0, jump=saved&&k<1?Math.sin(Math.PI*k)*16:0, bob=!saved&&!liteMode?Math.round(Math.abs(Math.sin(t*1.7+ci))*1):0;
+  x2.fillStyle=ink; x2.globalAlpha=0.15; x2.beginPath(); x2.ellipse(sx,sy+2,8*u*0.9,2.4*u*0.9,0,0,7); x2.fill(); x2.globalAlpha=1;
+  x2.save(); x2.translate(sx,sy-jump); const px=(a,b,w,h,c)=>{ x2.fillStyle=c; x2.fillRect(Math.round(a*u),Math.round((b-bob)*u),Math.ceil(w*u),Math.ceil(h*u)); };
+  px(-4,-2,3,2,ink); px(1,-2,3,2,ink); // piernas
+  px(-7,-14,14,12,ink); px(-6,-13,12,10,body); px(-5,-12,10,5,ink); // cuerpo y pantalla
+  if(saved){ [[-3,-9],[-2,-10],[-1,-9],[1,-9],[2,-10],[3,-9]].forEach(([a,b])=>px(a,b,1,1,eye)); px(-1,-6,2,1,ink); }
+  else { const bl=(t+ci*0.7)%3<0.12; px(-3,bl?-9:-10,2,bl?1:2,eye); px(1,bl?-9:-10,2,bl?1:2,eye); px(-3,-11,2,1,eye); px(2,-11,2,1,eye); }
+  // brazo: saluda pidiendo ayuda, o los dos arriba al ser rescatado
+  const wave=!saved&&!liteMode&&Math.sin(t*3+ci)>0.2; px(-9,saved?-17:-10,2,saved?5:4,ink); px(7,saved||wave?-17:-10,2,saved||wave?5:4,ink);
+  px(-1,-17,1,3,ink); px(1,-17,1,3,ink); px(-2,-19,5,2,body); // antena doble
+  x2.restore();
+  if(saved&&k<1){ // el fragmento del Gran Mapa sube y se va al marcador
+    const f=Math.min(1,k*1.4); x2.globalAlpha=1-f*0.9; const fx=Math.min(W-30,sx+14), fy=Math.max(12,sy-20*u*0.9-f*26)+(sy-20*u*0.9-f*26<12?f*10:0);
+    x2.fillStyle=C.gold; x2.fillRect(Math.round(fx-7),Math.round(fy-5),14,10); x2.strokeStyle=C.ink; x2.lineWidth=1.5; x2.strokeRect(Math.round(fx-7)+0.5,Math.round(fy-5)+0.5,14,10);
+    x2.fillStyle=C.ink; x2.fillRect(Math.round(fx-4),Math.round(fy-2),8,1); x2.fillRect(Math.round(fx-4),Math.round(fy+1),5,1);
+    x2.font="800 12px "+css("--f-body"); x2.textAlign="left"; x2.textBaseline="middle"; x2.fillText("+1",Math.round(fx+10),Math.round(fy)); x2.globalAlpha=1; } }
+// Coni celebra al llegar: unos cuadritos de colores que saltan y caen
+function drawConfetti(sx,sy,mt,C){ if(reduceMotion||mt>1.6) return; const cols=[C.gold,C.acc,C.ok,"#7a67d4","#3a7fd0"];
+  for(let i=0;i<14;i++){ const a=-Math.PI/2+(i/13-0.5)*2.4, v=120+(i*37%60), x=sx+Math.cos(a)*v*mt, y=sy-30+Math.sin(a)*v*mt+260*mt*mt;
+    x2.globalAlpha=Math.max(0,1-mt/1.6); x2.fillStyle=cols[i%cols.length]; x2.fillRect(Math.round(x),Math.round(y),5,5); } x2.globalAlpha=1; }
 function drawConi(sx,sy,dir,C,t){
   const mood=g2.mood||"idle", mt=t-(g2.moodT||0), u=Math.max(2.2,Math.min(2.8,W/260));
   let ox=0,oy=0,rot=0;
@@ -1306,12 +1354,14 @@ function draw(){
   // obstáculos
   L.obstacles.forEach(o=>{ const [sx,sy]=toS(o[0],o[1],V); x2.fillStyle=C.bad; x2.beginPath();
     for(let k=0;k<16;k++){ const r=k%2?5:12, a=k*Math.PI/8+t*0.4; x2.lineTo(sx+r*Math.cos(a),sy+r*Math.sin(a)); } x2.closePath(); x2.fill(); });
-  // monedas
-  L.coins.forEach((c,ci)=>{ const [sx,sy]=toS(c[0],c[1],V); const got=g2.result&&g2.result.coinAt[ci]>=0&&g2.result.coinAt[ci]<=g2.prog;
-    if(got){ const k=Math.min(1,(g2.prog-g2.result.coinAt[ci])/40); x2.globalAlpha=1-k; x2.fillStyle=C.gold; x2.beginPath(); x2.arc(sx,sy-k*24,9,0,7); x2.fill(); x2.globalAlpha=1; return; }
-    const sq=Math.abs(Math.cos(t*2.2+ci)); x2.fillStyle=C.gold; x2.strokeStyle=C.ink; x2.lineWidth=1.5;
-    x2.beginPath(); x2.ellipse(sx,sy,9*Math.max(0.25,sq),9,0,0,7); x2.fill(); x2.stroke();
-    label(fmtP(c),sx+11,sy-7,C); });
+  // monedas: Trazadores perdidos en los Rescates, objetos del lugar en los Escapes, monedas en el Tutorial
+  const it=itemOf(L);
+  L.coins.forEach((c,ci)=>{ const [sx,sy]=toS(c[0],c[1],V); const at=g2.result?g2.result.coinAt[ci]:-1, got=at>=0&&at<=g2.prog, k=got?Math.min(1,(g2.prog-at)/40):0;
+    if(L.rescue){ drawTrazador(sx,sy,C,t,ci,got?Math.max(k,0.001):0); if(!got) label(fmtP(c),sx+22,sy-10,C); return; }
+    if(got){ if(k>=1) return; if(it) drawItem(it,sx,sy-k*24,C,t,ci,1-k); else { x2.globalAlpha=1-k; x2.fillStyle=C.gold; x2.beginPath(); x2.arc(sx,sy-k*24,9,0,7); x2.fill(); x2.globalAlpha=1; } return; }
+    if(it) drawItem(it,sx,sy,C,t,ci,1);
+    else { const sq=Math.abs(Math.cos(t*2.2+ci)); x2.fillStyle=C.gold; x2.strokeStyle=C.ink; x2.lineWidth=1.5; x2.beginPath(); x2.ellipse(sx,sy,9*Math.max(0.25,sq),9,0,0,7); x2.fill(); x2.stroke(); }
+    label(fmtP(c),sx+13,sy-7,C); });
   // dos caminos posibles: el estudiante debe recortar la curva con una restricción
   if(g2.choose){ const o=g2.choose; o.opts.forEach((op,k)=>{ const n=Math.min(25,op.pts.length-1); const a=toS(o.at[0],o.at[1],V), b=toS(op.pts[n][0],op.pts[n][1],V);
       const dx=b[0]-a[0], dy=b[1]-a[1], l=Math.hypot(dx,dy)||1, ux=dx/l, uy=dy/l, tip=[a[0]+ux*58,a[1]+uy*58]; op.tip=tip;
@@ -1331,6 +1381,7 @@ function draw(){
   else if(P.length){ const q=P[Math.max(upto,0)], q2=P[Math.min(upto+1,P.length-1)]; vx=q.x; vy=q.y;
     if(Math.abs(q2.x-q.x)>1e-6) dir=q2.x>q.x?1:-1; g2.dir=dir; if(q.hop) lift=Math.sin(Math.PI*q.hs)*Math.min(40,10+60*q.hs); }
   const [vsx,vsy]=toS(vx,vy,V); drawConi(vsx,vsy-lift,dir,C,t);
+  if(g2.mood==="happy") drawConfetti(vsx,vsy,t-(g2.moodT||0),C);
 }
 
 /* ============ Jugar un nivel ============ */
@@ -1682,7 +1733,7 @@ function loadLevel(i){
   const T=$("targets"); T.innerHTML="";
   const add=(cls,txt)=>{ const li=document.createElement("li"); li.className=cls; li.innerHTML=`<span class="mk"></span>${esc(txt)}`; T.appendChild(li); };
   if(L.rescue) add("g","Salida y meta "+fmtP(L.start)+": da la vuelta completa"); else { add("s","Salida "+fmtP(L.start)); add("g","Meta "+fmtP(L.goal)); }
-  L.coins.forEach(c=>add("c","Moneda "+fmtP(c))); L.obstacles.forEach(o=>add("o","Obstáculo "+fmtP(o)));
+  const cn=coinName(L); L.coins.forEach(c=>add(L.rescue?"c t":"c",cn+" "+fmtP(c))); L.obstacles.forEach(o=>add("o","Obstáculo "+fmtP(o)));
   const F=$("fields"); F.innerHTML=""; ivs=[];
   const mode=()=>{ const md=document.createElement("div"); md.className="ivmode"; md.hidden=true;
     md.innerHTML=`<span>Escribir la restricción como</span><span class="seg" role="group" aria-label="Notación de la restricción"><button type="button" data-m="ineq">2 ≤ x ≤ 4</button><button type="button" data-m="brk">x ∈ [2, 4]</button></span>`;
@@ -1956,7 +2007,7 @@ if(role==="profesor") $("teacherBtn").hidden=false;
 if(!role) askRole(); else if(role==="estudiante"&&!player) askPlayer(); else if(!seen) welcomeBack();
 markSeen();
 requestAnimationFrame(frame);
-window.__euclidia={LEVELS,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
+window.__euclidia={LEVELS,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
     if(ivs[i]) ivs[i]=(list||[]).map(I=>({v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):"",loC:true,hiC:true})); }); renderModes(); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
   state:()=>({g2,prog,player,idx}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),

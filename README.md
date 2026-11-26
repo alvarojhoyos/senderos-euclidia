@@ -33,6 +33,8 @@ Al abrir un nivel desde el menú, con «Siguiente nivel» o al empezar el quiz, 
 
 Cada nivel tiene un escenario en pixel art según su lugar (lago y río, luna, volcán, pradera, glaciar, costa, desfiladero, géiseres, cueva y ciudad). Se dibuja con código en una capa aparte una sola vez y en cada cuadro solo se copia, así que no pesa ni hace más lento el juego. Las animaciones (brillos, brasas, vapor) se apagan si el sistema pide reducir movimiento o si el celular va lento. El escenario evoca el lugar sin copiar la cónica, para no dar la respuesta.
 
+En los Rescates, cada moneda es un Trazador perdido (más grande que Coni, que es la más pequeña): cuando Coni pasa, salta de alegría y le entrega su fragmento del Gran Mapa (+1). En los Escapes la moneda toma la forma del lugar: perla, polvo de estrella, gema de lava, semilla dorada, cristal de hielo, concha, piedra rojiza, gota de vapor, cristal de cueva o moneda de Euclidia. Se recogen y se cuentan igual que antes. Al llegar a la meta, Coni celebra con confeti (salvo si el sistema pide reducir movimiento).
+
 ## Pruebas automáticas
 
 `pruebas/curvas.test.js` comprueba que lo que el juego dibuja coincide con la ecuación que escribe el jugador: tipo de cónica y parámetros, que cada trazo esté sobre la curva exacta, que no falten partes de la curva, la restricción y el recorrido de Coni. Incluye casos límite (a = b, coeficientes negativos, ecuaciones no normalizadas, elipses muy aplanadas, casos degenerados), las ecuaciones del editor tipo cuaderno y los datos de cada nivel.
@@ -43,6 +45,6 @@ Cada nivel tiene un escenario en pixel art según su lugar (lago y río, luna, v
 
 `pruebas/restricciones.test.js` comprueba las restricciones opcionales: que no aparezcan solas, que se puedan añadir hasta dos por tramo (una en x y otra en y) y quitar, y que en el juego valgan las dos a la vez.
 
-`pruebas/historia.test.js` comprueba que los 61 niveles tengan historia sin números ni ecuaciones, que el panel se abra al elegir un nivel o con «Siguiente nivel», que quepa en un celular pequeño y que «Siguiente» lo cierre.
+`pruebas/historia.test.js` comprueba que los 61 niveles tengan historia sin números ni ecuaciones, que el panel se abra al elegir un nivel o con «Siguiente nivel», que quepa en un celular pequeño y que «Siguiente» lo cierre. También que cada Escape tenga su objeto del lugar y que en los Rescates las monedas sean Trazadores perdidos.
 
 Requieren Node y Playwright con Chromium: `node pruebas/curvas.test.js`, `node pruebas/niveles.test.js`, `node pruebas/evaluacion.test.js`, `node pruebas/restricciones.test.js` y `node pruebas/historia.test.js`. Los últimos resultados están en `pruebas/salida.txt`, `pruebas/salida-niveles.txt`, `pruebas/salida-evaluacion.txt`, `pruebas/salida-restricciones.txt` y `pruebas/salida-historia.txt`.

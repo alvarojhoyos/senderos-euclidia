@@ -19,6 +19,15 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
  res(largas.length===0,'Todas las historias son cortas (70 palabras o menos)'+(largas.length?`; largas: ${largas.join(', ')}`:''));
  const el=d.filter(x=>/Coni (está )?(listo|solo|pequeño|perdido)\b|\bél\b/.test(x.lore)).map(x=>x.id);
  res(el.length===0,'Coni es «ella» en todas las historias'+(el.length?`; revisar: ${el.join(', ')}`:''));
+ // 1b. Etapa 7b: en los Rescates las monedas son Trazadores perdidos; en los Escapes, un objeto del lugar
+ const it=await p.evaluate(()=>{ const U=window.__euclidia, Ls=U.LEVELS.filter(L=>!L.tutorial);
+   return {sinObj:Ls.filter(L=>!L.rescue&&!U.itemOf(L)).map(L=>L.id), resc:Ls.filter(L=>L.rescue).map(L=>U.coinName(L)), names:[...new Set(Ls.filter(L=>!L.rescue).map(L=>U.coinName(L)))]}; });
+ res(it.sinObj.length===0&&it.names.length===10,`Cada Escape tiene un objeto del lugar (${it.names.join(', ')})`+(it.sinObj.length?`; faltan: ${it.sinObj.join(', ')}`:''));
+ res(it.resc.length>0&&it.resc.every(n=>n==='Trazador perdido'),`En los ${it.resc.length} Rescates cada moneda es un Trazador perdido`);
+ await p.evaluate(()=>{ const U=window.__euclidia; U.loadLevel(U.LEVELS.findIndex(l=>l.id==='C1')); });
+ const li=await p.evaluate(()=>[...document.querySelectorAll('#targets li.c')].map(l=>l.textContent));
+ res(li.length===2&&li.every(t=>/^Trazador perdido \(/.test(t)),`En la lista del nivel aparecen como «${li[0]}»`);
+ await p.evaluate(()=>{ const U=window.__euclidia; U.loadLevel(U.LEVELS.findIndex(l=>l.id==='t0')); });
  // 2. Al abrir el juego no aparece el panel encima de todo
  res(await p.locator('#lore').isHidden(),'Al cargar el juego no se abre el panel de historia');
  // 3. Desde el menú se abre el panel con el título y la historia; «Siguiente» lleva al nivel
