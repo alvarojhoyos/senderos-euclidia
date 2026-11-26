@@ -15,6 +15,8 @@ El mundo Tutorial no cuenta para la nota: una lección de controles y una lecci�
 
 El banco tiene 56 niveles en siete mundos: circunferencias, elipses, parábolas e hipérbolas (12 cada uno, en 3 cadenas de 4 que suben de fácil a difícil), identificar (4) y mixtos (4), estos dos en cadenas cortas de 2. Cada nivel trae sus errores típicos con el mensaje que ve el estudiante cuando su curva coincide con uno de ellos. Para agregar niveles basta con sumarlos a `LEVELS` con su `world`, `chain` y `step`: el menú y el total de monedas se calculan solos.
 
+En los niveles de forma general (los que piden completar cuadrados) los Trazadores y objetos no se ven ni se dan sus coordenadas hasta que Coni pasa por ellos. Así la cónica no se puede sacar a ojo uniendo los puntos: hay que llegar a ella con la ecuación.
+
 ## Restricciones
 
 Debajo de cada ecuación (o de cada tramo en los niveles mixtos) está el botón "+ Añadir una restricción". El estudiante decide si la necesita y puede poner hasta dos, una en x y otra en y; Coni solo camina por la parte de la curva que cumple todas. El juego no exige una cónica concreta: cualquier camino que lleve a Coni de la salida a la meta recogiendo las monedas gana el nivel.
@@ -56,4 +58,6 @@ En los Rescates, cada moneda es un Trazador perdido (más grande que Coni, que e
 
 `pruebas/toques.test.js` comprueba las viñetas de la historia (primera vez, saltar, volver a ver), el sonido apagado por defecto, las medallas, el Gran Mapa y el aviso al recuperar una región.
 
-Requieren Node y Playwright con Chromium: `node pruebas/curvas.test.js`, `node pruebas/niveles.test.js`, `node pruebas/evaluacion.test.js`, `node pruebas/restricciones.test.js` `node pruebas/historia.test.js` y `node pruebas/toques.test.js`. Los últimos resultados están en `pruebas/salida.txt`, `pruebas/salida-niveles.txt`, `pruebas/salida-evaluacion.txt`, `pruebas/salida-restricciones.txt`, `pruebas/salida-historia.txt` y `pruebas/salida-toques.txt`.
+`pruebas/ocultos.test.js` comprueba que en los 18 niveles de forma general las monedas no se dibujan ni se listan con coordenadas antes de jugar, que un error no las revela y que la ecuación correcta las recoge todas.
+
+Requieren Node y Playwright con Chromium: `node pruebas/curvas.test.js`, `node pruebas/niveles.test.js`, `node pruebas/evaluacion.test.js`, `node pruebas/restricciones.test.js`, `node pruebas/historia.test.js`, `node pruebas/toques.test.js` y `node pruebas/ocultos.test.js`. Los últimos resultados están en `pruebas/salida.txt`, `pruebas/salida-niveles.txt`, `pruebas/salida-evaluacion.txt`, `pruebas/salida-restricciones.txt`, `pruebas/salida-historia.txt`, `pruebas/salida-toques.txt` y `pruebas/salida-ocultos.txt`.
