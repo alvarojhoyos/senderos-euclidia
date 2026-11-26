@@ -8,7 +8,7 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
 (async()=>{
  const b=await chromium.launch(); const errs=[];
  const page=async(init,query='')=>{ const ctx=await b.newContext({...devices['Pixel 7'],deviceScaleFactor:1}); const p=await ctx.newPage(); p.on('pageerror',e=>errs.push(e.message));
-   await p.route(/^https?:\/\//,r=>r.abort()); if(init) await p.addInitScript(init); await p.goto('file://'+TMP+query); await p.waitForTimeout(400); return p; };
+   await p.route(/^https?:\/\//,r=>r.abort()); await p.addInitScript(()=>localStorage.setItem('euclidia2-intro','true')); if(init) await p.addInitScript(init); await p.goto('file://'+TMP+query); await p.waitForTimeout(400); return p; };
  // 1. Reparto de niveles
  const p0=await page(()=>{ localStorage.setItem('euclidia2-role','"profesor"'); sessionStorage.setItem('euclidia2-tab','1'); });
  const r=await p0.evaluate(()=>{ const U=window.__euclidia, T=U.t, L=U.LEVELS, byId=Object.fromEntries(L.map(l=>[l.id,l]));

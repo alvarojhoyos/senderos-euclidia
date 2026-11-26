@@ -10,7 +10,7 @@ PASA  | Monedas posibles por estudiante en la larga: entre 55 y 56; la nota se e
 PASA  | Códigos de evaluación válidos e inválidos (sin niveles no vale)
 PASA  | La tabla ofrece lo que hay en el banco: circunferencias hasta 3,5,4 (fácil, medio, difícil); mixtos sin fáciles
 PASA  | Atajos: «Larga» llena 20 niveles y «Vaciar» deja el botón del QR desactivado
-PASA  | Enlace del QR: rol=estudiante, ev=tzaj6x-C111P111-30, evn=Quiz 1
+PASA  | Enlace del QR: rol=estudiante, ev=wlal1w-C111P111-30, evn=Quiz 1
 PASA  | Resumen del panel: Cada estudiante tendrá 6 niveles y 30 minutos.
 PASA  | Antes de empezar: está en el Tutorial, el menú solo muestra Tutorial y se ve el aviso ««Quiz 1»: 6 niveles y 30 minutos. Si quieres, haz primero el Tutorial. El tiempo empieza cuando pulses el botón y ya no se detiene.»
 PASA  | El reloj no corre mientras hace el Tutorial (30:00 → 30:00 tras 2 s) y aún no puede terminar
@@ -21,7 +21,7 @@ PASA  | El menú de cada mundo agrupa sus niveles por dificultad: Fácil,Medio,D
 PASA  | Monedas posibles = las de sus 6 niveles: 0 / 16
 PASA  | Al empezar el quiz el reloj corre: 29:59
 PASA  | Al llegar a 0:00 aparece «Se acabó el tiempo»
-PASA  | Fila final en la cola de envío: Se acabó el tiempo · Quiz 1 · 0/16 · nota 0
+PASA  | Fila final en la cola de envío: Se acabó el tiempo · Quiz 1 · 2/16 · nota 0.63
 PASA  | Después ya no se puede trazar ni volver a enviar
 PASA  | Sin evaluación: 0 / 154 monedas posibles, 7 mundos y sin reloj
 PASA  | Celular: al bajar al teclado, la casilla del tramo 2 queda flotando justo debajo del mapa (y=273) y al subir vuelve a su lugar

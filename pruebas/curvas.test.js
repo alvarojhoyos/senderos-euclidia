@@ -92,7 +92,7 @@ const TEX=[
  const b=await chromium.launch(); const ctx=await b.newContext({viewport:{width:412,height:860},deviceScaleFactor:1,isMobile:true,hasTouch:true});
  const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
  await p.route(/^https?:\/\//,r=>r.abort());   // sin red: el juego usa sus casillas de texto
- await p.addInitScript(()=>{ localStorage.setItem('euclidia2-role','"profesor"'); sessionStorage.setItem('euclidia2-tab','1'); });
+ await p.addInitScript(()=>{ localStorage.setItem('euclidia2-role','"profesor"'); localStorage.setItem('euclidia2-intro','true'); sessionStorage.setItem('euclidia2-tab','1'); });
  await p.goto('file://'+TMP); await p.waitForTimeout(500);
  const out=await p.evaluate(({C,TEX})=>{
   const {LEVELS,loadLevel}=window.__euclidia; const {compileEq,canonicalProblem,formProblem,classify,buildSegs,curveBounds,walk,parseInterval,inI,dist2,tex2plain}=window.__euclidia.t; const W=window.__euclidia.t.W();

@@ -48,6 +48,8 @@ h1{font:800 clamp(22px,3.2vw,32px)/1.05 var(--f-display);margin:0;letter-spacing
 .pill{display:flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font:600 13.5px var(--f-body);font-variant-numeric:tabular-nums}
 .coin{width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--gold) 60%,#000 40%);display:inline-block;flex:none}
 .levels{display:grid;gap:8px;min-width:0}
+.sndbtn{cursor:pointer;color:var(--muted)}
+.sndbtn[aria-pressed="true"]{color:var(--ink);border-color:var(--accent)}
 .pill.low{color:var(--bad);border-color:var(--bad)}
 .evbox{display:grid;gap:8px;border:1px solid var(--line);border-radius:12px;padding:12px}
 .evbox h3{margin:0}
@@ -215,6 +217,21 @@ summary{cursor:pointer;font-weight:700}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;max-width:420px;width:100%;display:grid;gap:12px;max-height:100%;overflow:auto}
 .card h2{margin:0;font:800 24px/1.1 var(--f-display)}
 .card input{width:100%;font:16px var(--f-body);padding:10px 12px;border-radius:10px;border:1.5px solid var(--grid-strong);background:var(--paper);color:var(--ink)}
+.introcard{border-top:4px solid var(--accent)}
+.introcard canvas{width:100%;aspect-ratio:5/3;image-rendering:pixelated;border-radius:10px;border:2px solid var(--line);display:block}
+.introcard p{margin:0;font-size:16px;line-height:1.5}
+.introbar{display:flex;justify-content:space-between;align-items:center;color:var(--accent);font-size:12px;letter-spacing:.2em}
+.mapcard{max-width:460px}
+.mapcard h3{margin:0;font:800 16px var(--f-display)}
+.mapcard canvas{width:100%;aspect-ratio:8/5;image-rendering:pixelated;border-radius:10px;border:2px solid var(--line);display:block}
+.mapreg{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.mapreg li{font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--muted)}
+.mapreg li.ok{color:var(--ok);border-color:var(--ok)}
+.medals{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.medals li{display:flex;gap:10px;align-items:center;font-size:14px}
+.medal{width:26px;height:26px;border-radius:50%;flex:none;border:2px solid var(--ink);box-shadow:inset -3px -3px 0 rgb(0 0 0 / .18)}
+.medal.oro{background:#f2b632}.medal.plata{background:#c9d1d9}.medal.bronce{background:#c98a5a}.medal.none{background:transparent;border-style:dashed;border-color:var(--grid-strong);box-shadow:none}
+.mapbtn{margin:0 0 8px}
 .lorecard{border-top:4px solid var(--accent)}
 .lorecard .lorereg{font:700 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
 .lorecard p{margin:0;font-size:16px;line-height:1.5}
@@ -249,9 +266,11 @@ summary{cursor:pointer;font-weight:700}
       <span class="pill">Nota <span id="sGrade">0,0</span></span>
       <span class="pill">Pistas gratis: <span id="sHints">3</span></span>
       <span class="pill" id="sTime" hidden>Tiempo <span id="sTimeV">0:00</span></span>
+      <button class="pill sndbtn" type="button" id="sndBtn" aria-pressed="false">♪ Sin sonido</button>
     </div>
   </header>
   <div class="evgate" id="evGate" hidden><p id="evGateTxt"></p><button class="btn" type="button" id="evGo">Empezar el quiz</button></div>
+  <button class="btn ghost mapbtn" type="button" id="mapBtn">Ver el Gran Mapa y las medallas</button>
   <div class="levels" id="levels"></div>
   <main class="stage-wrap">
     <section class="stage" id="stage" aria-label="Mapa del nivel">
@@ -298,7 +317,7 @@ summary{cursor:pointer;font-weight:700}
   <div class="foot">
     <span id="sendStatus"></span>
     <button class="btn ghost" type="button" id="doneBtn" hidden>Terminar y enviar mi resultado</button>
-    <span><button class="linkbtn" type="button" id="teacherBtn" hidden>Mostrar el código QR</button> <button class="linkbtn" type="button" id="whoBtn">Cambiar de jugador</button></span>
+    <span><button class="linkbtn" type="button" id="teacherBtn" hidden>Mostrar el código QR</button> <button class="linkbtn" type="button" id="whoBtn">Cambiar de jugador</button> <button class="linkbtn" type="button" id="storyBtn">Ver la historia</button></span>
   </div>
 </div>
 
@@ -318,6 +337,27 @@ summary{cursor:pointer;font-weight:700}
     <label for="calcIn">Calculadora</label>
     <div class="row"><input id="calcIn" placeholder="ej. 16/4 + 9 o sqrt(9/4)" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off"><output id="calcOut" for="calcIn"></output></div>
     <span class="small" id="calcMsg">Usa + − * / ^ ( ) y sqrt( ). El resultado aparece mientras escribes.</span>
+  </div>
+</div>
+<div class="modal" id="intro" hidden>
+  <div class="card introcard" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+    <canvas id="introArt" width="120" height="72" aria-hidden="true"></canvas>
+    <h2 id="introTitle"></h2>
+    <p id="introText"></p>
+    <div class="introbar"><span id="introDots" aria-hidden="true"></span><button class="linkbtn" type="button" id="introSkip">Saltar la historia</button></div>
+    <button class="btn" type="button" id="introGo">Siguiente</button>
+  </div>
+</div>
+<div class="modal" id="mapa" hidden>
+  <div class="card mapcard" role="dialog" aria-modal="true" aria-labelledby="mapTitle">
+    <h2 id="mapTitle">El Gran Mapa de Euclidia</h2>
+    <canvas id="mapArt" width="160" height="100" role="img" aria-label="Mapa de Euclidia con sus regiones"></canvas>
+    <p class="small" id="mapSum"></p>
+    <ul class="mapreg" id="mapRegions"></ul>
+    <h3>Medallas por mundo</h3>
+    <ul class="medals" id="mapMedals"></ul>
+    <p class="small">Bronce: completas todos los niveles del mundo. Plata: además juntas el 80 % de sus monedas. Oro: todas sus monedas.</p>
+    <button class="btn" type="button" id="mapClose">Volver al juego</button>
   </div>
 </div>
 <div class="modal" id="lore" hidden>
@@ -1453,7 +1493,7 @@ function finish(){
   const coins=r.coinAt.filter(v=>v>=0).length;
   const success=r.reached&&r.hit<0&&!r.offStart&&r.breakAt<0&&!r.nocurve;
   if(success){
-    setMood("happy");
+    setMood("happy"); sfx("win"); const reg=SCENE_OF[L.id], regDone=()=>{ const s=regionStats()[reg]; return !!s&&s.done===s.all; }, wasDone=!L.tutorial&&!SESSION&&regDone();
     if(!L.tutorial){ const before=prog.best[L.id]||0; if(coins>before||prog.best[L.id]==null){ prog.best[L.id]=Math.max(coins,before); saveProg(); } queueResult(L,coins); }
     else { prog.best[L.id]=1; saveProg(); $("winSend").textContent="El tutorial no cuenta para la nota."; }
     renderScore(); renderLevels();
@@ -1461,12 +1501,13 @@ function finish(){
     $("winTitle").textContent=L.rescue?(all?"¡Diste la vuelta completa y rescataste a todos!":"¡Diste la vuelta completa!"):(all?"¡Llegaste a la meta con todas las monedas!":"¡Llegaste a la meta!");
     $("winText").textContent= L.tutorial ? "Ya sabes jugar. Este nivel no cuenta para la nota: los siguientes sí."
       : `Monedas en este nivel: ${coins} de ${L.coins.length}.`+(all?"":" Tu curva no es exactamente la pedida, por eso perdiste monedas. Puedes intentarlo otra vez: cuenta tu mejor intento.");
+    if(!L.tutorial&&!SESSION&&!wasDone&&regDone()) $("winText").textContent+=` ¡${REGIONS[reg]} salió de la niebla! Mírala en el Gran Mapa.`;
     $("nextBtn").hidden=nextIdx()<0; $("win").hidden=false;
     const extra=r.extra&&EXTRA_RULE==="aviso"?" Ojo: tu restricción deja un trozo de curva que sobra junto al inicio. Hay un límite exacto que lo evita.":"";
     showFb(all?"good":"",all?"¡Camino perfecto!":"Llegaste, pero faltaron monedas.",(all?"":notes.join(" ")||"Revisa los números de tu ecuación.")+extra);
     return;
   }
-  setMood(r.hit>=0?"crash":(r.offStart||r.breakAt>0||r.nocurve)?"fall":"sad");
+  setMood(r.hit>=0?"crash":(r.offStart||r.breakAt>0||r.nocurve)?"fall":"sad"); if(r.hit>=0) sfx("crash"); else if(r.offStart||r.breakAt>0) sfx("fall");
   let title;
   if(r.nocurve) title=L.mixed&&r.badPiece>0?`El tramo ${r.badPiece+1} no dibuja nada dentro de su intervalo.`:"Tu ecuación no dibuja ningún camino en este mapa.";
   else if(r.hit>=0) title="¡Chocaste con un obstáculo!";
@@ -1630,7 +1671,7 @@ const nextIdx=()=>{ const L=level();
   for(let j=idx+1;j<LEVELS.length;j++) if(vis(LEVELS[j])&&(!SESSION||LEVELS[j].tutorial)) return j;
   return SESSION&&evStarted()?firstSession():-1; };
 function renderLevels(){
-  const box=$("levels"); box.innerHTML=""; const cur=level();
+  $("mapBtn").hidden=!!SESSION; const box=$("levels"); box.innerHTML=""; const cur=level();
   if(!menuWorld) menuWorld=wOf(cur);
   const worlds=WORLD_ORDER.filter(w=>LEVELS.some(l=>wOf(l)===w&&vis(l))).concat([...new Set(LEVELS.filter(vis).map(wOf))].filter(w=>!WORLD_ORDER.includes(w)));
   const tabs=document.createElement("div"); tabs.className="worlds"; tabs.setAttribute("role","tablist"); tabs.setAttribute("aria-label","Mundos");
@@ -1977,9 +2018,22 @@ $("calcIn").addEventListener("input",()=>{ const v=$("calcIn").value.trim(); $("
 /* ---- Bucle ---- */
 new ResizeObserver(()=>{ resize(); }).observe($("stage"));
 let lastT=performance.now();
+/* ============ Sonidos (etapa 7c) ============
+   Cortos, sintetizados en el momento (sin archivos) y apagados por defecto: en clase los activa cada estudiante. */
+let soundOn=store.get("euclidia2-sonido",false)===true, actx=null;
+const SFX={coin:[[880,0,.08],[1320,.07,.12]], rescue:[[660,0,.08],[880,.08,.08],[1175,.16,.16]],
+  win:[[523,0,.1],[659,.1,.1],[784,.2,.1],[1047,.3,.28]], crash:[[160,0,.2,"square",90]], fall:[[620,0,.45,"triangle",160]], tap:[[740,0,.05]]};
+function sfx(kind){ if(!soundOn) return; try{ actx=actx||new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==="suspended") actx.resume();
+  (SFX[kind]||[]).forEach(([f,t0,d,type="square",f2])=>{ const o=actx.createOscillator(), g=actx.createGain(), t=actx.currentTime+t0;
+    o.type=type; o.frequency.setValueAtTime(f,t); if(f2) o.frequency.exponentialRampToValueAtTime(f2,t+d);
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.06,t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+    o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t+d+0.03); }); }catch(e){} }
+function soundUI(){ const b=$("sndBtn"); b.setAttribute("aria-pressed",String(soundOn)); b.textContent=soundOn?"♪ Con sonido":"♪ Sin sonido"; }
+$("sndBtn").onclick=()=>{ soundOn=!soundOn; store.set("euclidia2-sonido",soundOn); soundUI(); sfx("tap"); };
+soundUI();
 function frame(now){
   const dt=Math.min(0.25,(now-lastT)/1000); lastT=now;
-  if(g2.anim){ g2.prog+=g2.speed*dt; if(g2.prog>=g2.path.length-1){ g2.prog=g2.path.length-1; g2.anim=false; finish(); } }
+  if(g2.anim){ const p0=g2.prog; g2.prog+=g2.speed*dt; if(soundOn&&g2.result) g2.result.coinAt.forEach(a=>{ if(a>=0&&p0<a&&g2.prog>=a) sfx(level().rescue?"rescue":"coin"); }); if(g2.prog>=g2.path.length-1){ g2.prog=g2.path.length-1; g2.anim=false; finish(); } }
   probeFps(now); draw(); requestAnimationFrame(frame);
 }
 // El código QR del profesor puede traer su hoja de resultados (?hoja=ID)
@@ -2004,10 +2058,93 @@ function welcomeBack(){ const c=coinsTotal();
 $("backGo").onclick=()=>{ $("back").hidden=true; markSeen(); };
 $("backNew").onclick=()=>{ $("back").hidden=true; markSeen(); if(locked) askPlayer(true); else askRole(); };
 if(role==="profesor") $("teacherBtn").hidden=false;
-if(!role) askRole(); else if(role==="estudiante"&&!player) askPlayer(); else if(!seen) welcomeBack();
+/* ============ Mapa de Euclidia y medallas (etapa 7c) ============
+   Cada región del mapa sale de la niebla a medida que se completan sus niveles. Medallas por mundo:
+   bronce = todos sus niveles completados; plata = 80 % de sus monedas o más; oro = todas sus monedas. */
+const MAP_SPOTS={lago:[52,44],pradera:[64,66],volcan:[112,30],luna:[142,14],hielo:[34,20],costa:[92,84],desfiladero:[122,62],geiser:[136,44],cueva:[26,68],ciudad:[84,46]};
+function regionStats(){ const st={}; Object.keys(MAP_SPOTS).forEach(k=>st[k]={done:0,all:0});
+  LEVELS.forEach(L=>{ const k=SCENE_OF[L.id]; if(!st[k]) return; st[k].all++; if(prog.best[L.id]!=null) st[k].done++; }); return st; }
+function medalOf(world){ const ls=LEVELS.filter(L=>!L.tutorial&&wOf(L)===world); if(!ls.length) return null;
+  const done=ls.filter(L=>prog.best[L.id]!=null).length, got=ls.reduce((s,L)=>s+(prog.best[L.id]||0),0), all=ls.reduce((s,L)=>s+L.coins.length,0);
+  const m=done<ls.length?null:got>=all?"oro":got>=0.8*all?"plata":"bronce"; return {m,done,n:ls.length,got,all}; }
+function paintMap(){ const cv=$("mapArt"), x=cv.getContext("2d"), st=regionStats(); x.clearRect(0,0,cv.width,cv.height);
+  const r=(a,b,w,h,c)=>{ x.fillStyle=c; x.fillRect(Math.round(a),Math.round(b),Math.round(w),Math.round(h)); };
+  r(0,0,160,100,"#bfe0ef"); x.fillStyle="#d8eef7"; for(let i=0;i<22;i++){ const R=srand(i+5); x.fillRect(Math.round(R()*156),Math.round(R()*96),4,1); }
+  const isl=blob([80,52],56,7,0.12,72,0.72); x.fillStyle="#efe4c0"; x.beginPath(); isl.forEach(([a,b],i)=>i?x.lineTo(a,b):x.moveTo(a,b)); x.fill();
+  const in2=blob([80,52],52,7,0.12,72,0.72); x.fillStyle="#cfe6b8"; x.beginPath(); in2.forEach(([a,b],i)=>i?x.lineTo(a,b):x.moveTo(a,b)); x.fill();
+  const I={ lago:(a,b)=>{ r(a-8,b-4,16,8,"#9fcbe3"); r(a-6,b-6,12,12,"#9fcbe3"); r(a-3,b-1,5,1,"#e8f6fc"); x.fillStyle="#7fb2d1"; for(let s=0;s<22;s++) x.fillRect(a+6+s,b+4+Math.round(Math.sin(s/3)*2)+s,2,2); },
+    pradera:(a,b)=>{ r(a-9,b-3,18,6,"#a9d391"); r(a-5,b-6,4,4,"#6f9e5b"); r(a+3,b-5,4,4,"#6f9e5b"); r(a-1,b,1,1,"#f2cf4a"); r(a+6,b+1,1,1,"#f2a7c3"); },
+    volcan:(a,b)=>{ x.fillStyle="#8c6a58"; x.beginPath(); x.moveTo(a-11,b+7); x.lineTo(a+11,b+7); x.lineTo(a+3,b-7); x.lineTo(a-3,b-7); x.fill(); r(a-3,b-8,6,2,"#f26b3a"); r(a-1,b-12,3,3,"#c8c8c8"); },
+    luna:(a,b)=>{ r(a-6,b-6,12,12,"#f4f1d0"); r(a-6,b-6,5,5,"#bfe0ef"); r(a+1,b+1,2,2,"#d9d4a8"); },
+    hielo:(a,b)=>{ x.fillStyle="#e8f2f8"; x.beginPath(); x.moveTo(a-12,b+6); x.lineTo(a,b-9); x.lineTo(a+12,b+6); x.fill(); r(a-3,b-6,6,3,"#ffffff"); r(a+8,b+2,3,4,"#7fa99a"); },
+    costa:(a,b)=>{ r(a-5,b-8,3,9,"#ffffff"); r(a-5,b-6,3,2,"#e05a3a"); r(a-6,b-10,5,2,"#1b2735"); r(a-4,b-12,1,2,"#ffd166"); },
+    desfiladero:(a,b)=>{ r(a-10,b-6,6,12,"#d9906f"); r(a+4,b-6,6,12,"#c97f60"); r(a-10,b-2,6,1,"#b86c4f"); },
+    geiser:(a,b)=>{ r(a-4,b+2,8,3,"#9fd3dd"); r(a-1,b-8,2,10,"#ffffff"); r(a-3,b-10,6,3,"#ffffff"); },
+    cueva:(a,b)=>{ r(a-8,b-5,16,10,"#8f857a"); r(a-4,b-2,8,7,"#2d2724"); r(a+5,b-3,1,3,"#f6a54a"); },
+    ciudad:(a,b)=>{ r(a-9,b-4,6,8,"#e4dace"); r(a-2,b-8,6,12,"#ddd1c2"); r(a+5,b-3,5,7,"#e4dace"); x.fillStyle="#e2b6a4"; x.beginPath(); x.moveTo(a-3,b-8); x.lineTo(a+1,b-12); x.lineTo(a+5,b-8); x.fill(); } };
+  Object.entries(MAP_SPOTS).forEach(([k,[a,b]])=>I[k](a,b));
+  // la niebla tapa lo que falta por recorrer en cada región
+  Object.entries(MAP_SPOTS).forEach(([k,[a,b]])=>{ const s=st[k], f=s.all?1-s.done/s.all:0; if(f<=0) return; x.fillStyle=`rgba(176,176,192,${(0.25+0.65*f).toFixed(2)})`;
+    [[0,0,13],[-7,4,9],[8,3,9],[3,-6,8]].forEach(([dx,dy,rr])=>{ x.beginPath(); x.ellipse(a+dx,b+dy,rr,rr*0.7,0,0,7); x.fill(); }); });
+  return st; }
+function openMap(){ const st=paintMap(); const ok=Object.values(st).filter(s=>s.all&&s.done===s.all).length;
+  $("mapSum").textContent=`Regiones recuperadas: ${ok} de ${Object.keys(st).length}. Cada nivel que terminas le quita niebla a su región.`;
+  $("mapRegions").innerHTML=Object.keys(MAP_SPOTS).map(k=>`<li${st[k].done===st[k].all?' class="ok"':""}>${esc(REGIONS[k])} <b>${st[k].done}/${st[k].all}</b></li>`).join("");
+  $("mapMedals").innerHTML=WORLD_ORDER.filter(w=>w!=="Tutorial").map(w=>{ const M=medalOf(w); if(!M) return "";
+    const txt=M.m?`Medalla de ${M.m} · ${M.got} de ${M.all} monedas`:`${M.done} de ${M.n} niveles completados`;
+    return `<li><span class="medal ${M.m||"none"}" aria-hidden="true"></span><span><b>${esc(w)}</b><br><span class="small">${txt}</span></span></li>`; }).join("");
+  $("mapa").hidden=false; $("mapClose").focus({preventScroll:true}); }
+$("mapBtn").onclick=openMap; $("mapClose").onclick=()=>{ $("mapa").hidden=true; };
+/* ============ Viñetas de la historia (etapa 7c) ============
+   Se muestran la primera vez que se abre el juego en el dispositivo; se pueden saltar y volver a ver desde el pie de página. */
+const INTRO=[
+  {t:"La Niebla del Olvido",x:"En Euclidia los caminos están hechos de ecuaciones. Una noche, la Niebla del Olvido borró el Gran Mapa, y los Trazadores que cuidaban los caminos quedaron perdidos."},
+  {t:"Coni",x:"Solo se salvó Coni, la Trazadora más joven y la más pequeña, porque esa noche estaba en el taller. Ahora le toca a ella encontrar a los demás."},
+  {t:"Tú eres su navegante",x:"Coni camina exactamente por la curva que le escribas, ni un paso más ni uno menos. Escribe bien cada ecuación y juntos recogerán los fragmentos del Gran Mapa."}];
+let introK=0, introRAF=0, introThen=null;
+function miniConi(x,X,Y,blink,happy){ const r=(a,b,w,h,c)=>{ x.fillStyle=c; x.fillRect(X+a,Y+b,w,h); };
+  r(-3,-2,2,2,"#1b2735"); r(1,-2,2,2,"#1b2735"); r(-6,-11,12,9,"#1b2735"); r(-5,-10,10,7,"#e8572a"); r(-4,-9,8,4,"#1b2735");
+  if(happy){ r(-3,-7,1,1,"#fff"); r(-2,-8,1,1,"#fff"); r(-1,-7,1,1,"#fff"); r(1,-7,1,1,"#fff"); r(2,-8,1,1,"#fff"); r(3,-7,1,1,"#fff"); }
+  else { r(-3,blink?-7:-8,2,blink?1:2,"#fff"); r(1,blink?-7:-8,2,blink?1:2,"#fff"); }
+  r(0,-14,1,3,"#1b2735"); r(-1,-16,3,2,"#f2b632"); }
+function paintIntro(t){ const cv=$("introArt"), x=cv.getContext("2d"), Wc=cv.width, Hc=cv.height, k=introK, still=reduceMotion;
+  const r=(a,b,w,h,c)=>{ x.fillStyle=c; x.fillRect(Math.round(a),Math.round(b),Math.round(w),Math.round(h)); };
+  x.clearRect(0,0,Wc,Hc); const blink=(t%3.2)<0.15;
+  if(k===0){ r(0,0,Wc,Hc,"#efe2bd"); r(2,2,Wc-4,Hc-4,"#f6ecd0");
+    // el Gran Mapa: caminos punteados, un lago, un volcán y un pino
+    x.fillStyle="#8a6a3a"; for(let a=0;a<6.28;a+=0.2){ x.fillRect(Math.round(34+16*Math.cos(a)),Math.round(36+11*Math.sin(a)),1,1); }
+    for(let s=-14;s<=14;s+=1.4){ x.fillRect(Math.round(84+s),Math.round(52-s*s/9),1,1); }
+    r(28,32,12,7,"#a9d3e6"); r(30,31,8,9,"#a9d3e6");
+    x.fillStyle="#b9805a"; x.beginPath(); x.moveTo(98,24); x.lineTo(108,24); x.lineTo(103,14); x.fill(); r(102,13,2,2,"#e8572a");
+    r(14,14,5,6,"#6f9e5b"); r(16,20,1,2,"#7a5a3a");
+    // la niebla avanza y tapa el mapa
+    const dx=still?0:Math.sin(t*0.6)*4; x.fillStyle="rgba(176,176,192,0.9)";
+    [[52,24,20],[70,34,16],[40,50,14],[110,44,18],[88,62,15],[20,58,12],[60,8,12]].forEach(([cx,cy,rr],i)=>{ x.beginPath(); x.ellipse(cx+dx*(i%2?1:-1),cy,rr,rr*0.6,0,0,7); x.fill(); }); }
+  if(k===1){ r(0,0,Wc,Hc,"#3b3345"); r(0,54,Wc,Hc-54,"#5a4a3a"); for(let i=0;i<Wc;i+=12) r(i,54,1,Hc-54,"#4c3e30");
+    r(88,12,22,18,"#2a2433"); r(90,14,18,14,"#b0b0c0"); r(98,14,1,14,"#2a2433"); r(90,20,18,1,"#2a2433"); // ventana con niebla
+    r(14,14,3,10,"#8c8c9c"); r(22,12,8,3,"#8c8c9c"); r(34,16,2,9,"#8c8c9c"); // herramientas
+    r(30,40,52,4,"#9a7a55"); r(34,44,3,10,"#7a5a3a"); r(75,44,3,10,"#7a5a3a"); // mesa
+    const glow=x.createRadialGradient(56,8,0,56,8,40); glow.addColorStop(0,"rgba(255,214,102,0.45)"); glow.addColorStop(1,"rgba(255,214,102,0)"); x.fillStyle=glow; x.fillRect(0,0,Wc,Hc);
+    r(55,0,1,6,"#1b2735"); r(52,6,7,3,"#f2b632");
+    miniConi(x,56,40,blink,false); }
+  if(k===2){ r(0,0,Wc,Hc,"#dff0f7"); r(0,50,Wc,Hc-50,"#cfe6b8"); r(10,8,14,4,"#ffffff"); r(14,6,8,2,"#ffffff"); r(84,12,18,4,"#ffffff");
+    // el camino que escribe el navegante: una curva por la que Coni avanza
+    const f=s=>58-((s-60)*(s-60))/58; x.fillStyle="#3b6fd6"; for(let s=14;s<=106;s+=0.5){ x.fillRect(Math.round(s),Math.round(f(s)),2,2); }
+    const s0=still?60:22+((t*14)%84); r(100,f(100)-12,8,6,"#f2b632"); r(101,f(100)-11,6,1,"#1b2735");
+    miniConi(x,Math.round(s0),Math.round(f(s0)),blink,s0>96); } }
+function introLoop(){ paintIntro(performance.now()/1000); introRAF=$("intro").hidden?0:requestAnimationFrame(introLoop); }
+function introUI(){ const v=INTRO[introK]; $("introTitle").textContent=v.t; $("introText").textContent=v.x;
+  $("introDots").textContent=INTRO.map((_,i)=>i===introK?"●":"○").join(" "); $("introGo").textContent=introK<INTRO.length-1?"Siguiente":"¡Vamos!"; }
+function showIntro(then){ introThen=then||null; introK=0; introUI(); $("intro").hidden=false; $("introGo").focus({preventScroll:true}); if(!introRAF) introLoop(); }
+function closeIntro(){ $("intro").hidden=true; store.set("euclidia2-intro",true); const f=introThen; introThen=null; if(f) f(); }
+$("introGo").onclick=()=>{ if(introK<INTRO.length-1){ introK++; introUI(); } else closeIntro(); };
+$("introSkip").onclick=closeIntro;
+$("storyBtn").onclick=()=>showIntro();
+const startFlow=()=>{ if(!role) askRole(); else if(role==="estudiante"&&!player) askPlayer(); else if(!seen) welcomeBack(); };
+if(!store.get("euclidia2-intro",false)) showIntro(startFlow); else startFlow();
 markSeen();
 requestAnimationFrame(frame);
-window.__euclidia={LEVELS,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
+window.__euclidia={LEVELS,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
     if(ivs[i]) ivs[i]=(list||[]).map(I=>({v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):"",loC:true,hiC:true})); }); renderModes(); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
   state:()=>({g2,prog,player,idx}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),
