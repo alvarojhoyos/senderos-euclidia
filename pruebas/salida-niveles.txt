@@ -1,4 +1,16 @@
 PASA  | Primeros pasos (escape) | esperada x^2+y^2=9 con 0≤y | gana, 2 de 2 monedas, 231 pasos | ¡Camino perfecto!
+PASA  | Lección 1: la circunferencia (rescate) | esperada (x+1)^2+(y-1)^2=9 | gana, 3 de 3 monedas, 467 pasos | ¡Camino perfecto!
+PASA  | Lección 1: la circunferencia | error «signos de h y k»: (x-1)^2+(y+1)^2=9 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Vector no tiene por dónde empezar y se cae. · Tu centro quedó en (1, −1): dentro de cada paréntesis va el signo contr
+PASA  | Lección 1: la circunferencia | error «r en vez de r²»: (x+1)^2+(y-1)^2=3 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Vector no tiene por dónde empezar y se cae. · Tu radio es demasiado pequeño: en la ecuación va r² = 9, no r = 3.
+PASA  | Lección 2: la elipse (rescate) | esperada x^2/16+y^2/4=1 | gana, 3 de 3 monedas, 480 pasos | ¡Camino perfecto!
+PASA  | Lección 2: la elipse | error «a y b intercambiados»: x^2/4+y^2/16=1 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Vector no tiene por dónde empezar y se cae. · Intercambiaste los semiejes: bajo x va el semieje horizontal, a² = 16.
+PASA  | Lección 2: la elipse | error «a en vez de a²»: x^2/4+y^2/2=1 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Vector no tiene por dónde empezar y se cae. · Tu elipse es demasiado pequeña: bajo x e y van a² y b², no a y b.
+PASA  | Lección 3: la parábola (escape) | esperada x^2=8y | gana, 2 de 2 monedas, 225 pasos | ¡Camino perfecto!
+PASA  | Lección 3: la parábola | error «usó p en vez de 4p»: x^2=2y | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Vector no tiene por dónde empezar y se cae. · Tu parábola es demasiado cerrada: en (x − h)² = 4p(y − k) el número es 
+PASA  | Lección 3: la parábola | error «y al cuadrado»: y^2=8x | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Vector no tiene por dónde empezar y se cae. · Pusiste al cuadrado la y: la directriz es horizontal, así que la parábo
+PASA  | Lección 4: la hipérbola (escape) | esperada x^2/9-y^2/4=1 | gana, 2 de 2 monedas, 81 pasos | ¡Camino perfecto!
+PASA  | Lección 4: la hipérbola | error «b = a»: x^2/9-y^2/9=1 | no gana, 0 monedas | muestra su mensaje | Tu camino no llega a la meta. · Las ramas se abren demasiado: la pendiente de las asíntotas es b/a = 2/3, así que b = 2.
+PASA  | Lección 4: la hipérbola | error «elipse»: x^2/9+y^2/4=1 | no gana, 0 monedas | muestra su mensaje | Tu camino no llega a la meta. · Tu ecuación es una elipse: en la hipérbola los dos términos se restan.
 PASA  | El Faro del Lago (rescate) | esperada x^2+y^2=16 | gana, 2 de 2 monedas, 624 pasos | ¡Camino perfecto!
 PASA  | El Faro del Lago | error «r en lugar de r²»: x^2+y^2=4 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Vector no tiene por dónde empezar y se cae. · Tu radio es demasiado pequeño: en la ecuación va r², no r.
 PASA  | El Faro del Lago | error «centro en el punto medio entre el faro y el muelle»: (x-2)^2+y^2=4 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu centro está corrido a la derecha: el faro está en el origen.
@@ -167,6 +179,8 @@ PASA  | Del Valle al Lago | error «signo de h en la parábola»: y=(x-3)^2-4 co
 PASA  | El Túnel y la Rampa (escape) | esperada x^2/9+y^2/4=1 con y≤0 y x=y^2/2+3 con 0≤y≤3 | gana, 3 de 3 monedas, 337 pasos | ¡Camino perfecto!
 PASA  | El Túnel y la Rampa | error «lado equivocado de la elipse»: x^2/9+y^2/4=1 con y≥0 y x=y^2/2+3 con 0≤y≤3 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · El primer tramo es correcto, pero su restricción deja a Vector arriba.
 PASA  | El Túnel y la Rampa | error «parábola vertical en vez de horizontal»: x^2/9+y^2/4=1 con y≤0 y y=x^2/2+3 con 0≤y≤3 | no gana, 2 monedas | muestra su mensaje | El tramo 2 no empieza donde termina el tramo 1: Vector se cae en el hueco. · Tramo 2: tu parábola abre hacia arriba; la rampa abre hacia la derecha, a
+PASA  | Lección 1: la circunferencia: Vector recorre 18.64 (vuelta completa ≈ 18.85) y termina a 0.21 de la salida
+PASA  | Lección 2: la elipse: Vector recorre 19.16 (vuelta completa ≈ 19.38) y termina a 0.22 de la salida
 PASA  | El Faro del Lago: Vector recorre 24.92 (vuelta completa ≈ 25.13) y termina a 0.21 de la salida
 PASA  | Rescate en la Laguna: Vector recorre 24.92 (vuelta completa ≈ 25.13) y termina a 0.21 de la salida
 PASA  | El Remolino: Vector recorre 24.92 (vuelta completa ≈ 25.13) y termina a 0.21 de la salida
@@ -186,6 +200,24 @@ PASA  | El Lago Congelado: Vector recorre 25.28 (vuelta completa ≈ 25.53) y te
 PASA  | La Grieta Helada: Vector recorre 22.80 (vuelta completa ≈ 23.01) y termina a 0.21 de la salida
 PASA  | La Puerta del Glaciar: Vector recorre 28.12 (vuelta completa ≈ 28.36) y termina a 0.24 de la salida
 PASA  | La Plaza Escondida: Vector recorre 18.64 (vuelta completa ≈ 18.85) y termina a 0.21 de la salida
+PASA  | Parte dibujada: Lección 1: la circunferencia | centro «Centro (−1, 1)» | centro (-1, 1)
+PASA  | Parte dibujada: Lección 1: la circunferencia | radio «r = 3» | r = 3, flecha 2.998
+PASA  | Parte dibujada: Lección 2: la elipse | centro «Centro (0, 0)» | centro (0, 0)
+PASA  | Parte dibujada: Lección 2: la elipse | semieje «a = 4» | flecha 4.000, a = 4, b = 2
+PASA  | Parte dibujada: Lección 2: la elipse | semieje «b = 2» | flecha 2.000, a = 4, b = 2
+PASA  | Parte dibujada: Lección 2: la elipse | foco «Foco (−√12, 0)» | focos (-3.464, 0.000) y (3.464, 0.000)
+PASA  | Parte dibujada: Lección 2: la elipse | foco | focos (-3.464, 0.000) y (3.464, 0.000)
+PASA  | Parte dibujada: Lección 3: la parábola | vértice «Vértice (0, 0)» | sobre la curva
+PASA  | Parte dibujada: Lección 3: la parábola | foco «Foco (0, 2)» | focos (0.000, 2.000)
+PASA  | Parte dibujada: Lección 3: la parábola | p «p = 2» | p = 2
+PASA  | Parte dibujada: Lección 3: la parábola | directriz «Directriz y = −2» | directriz y = -2
+PASA  | Parte dibujada: Lección 4: la hipérbola | rect | rectángulo 5.999999999999999 × 4
+PASA  | Parte dibujada: Lección 4: la hipérbola | asíntota «y = 2x/3» | pendiente ±0.667
+PASA  | Parte dibujada: Lección 4: la hipérbola | asíntota «y = −2x/3» | pendiente ±0.667
+PASA  | Parte dibujada: Lección 4: la hipérbola | centro «Centro» | centro (0, 0)
+PASA  | Parte dibujada: Lección 4: la hipérbola | vértice «Vértice» | sobre la curva
+PASA  | Parte dibujada: Lección 4: la hipérbola | semieje «b = 2» | flecha 2.000, a = 2.9999999999999996, b = 2
+PASA  | Parte dibujada: Lección 4: la hipérbola | foco «Foco (√13, 0)» | focos (-3.606, 0.000) y (3.606, 0.000)
 PASA  | Pistas: 3 gratis, la cuarta pide confirmar y cuesta 2 monedas | monedas 5 / 154 → 3 / 154 | Ya viste todas las pistas de este nivel / Comprar una pista por 2 monedas / Toca otra vez para pagar 2 monedas | 5 / 154 / Ya viste todas las pistas de este nivel | 3 / 154
 
-Total: 189 pasan, 0 fallan.
+Total: 221 pasan, 0 fallan.

@@ -308,6 +308,24 @@ PASA  | Primeros pasos | meta sobre la curva | distancia 0
 PASA  | Primeros pasos | moneda (0,3) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
 PASA  | Primeros pasos | moneda (-2.12,2.12) sobre la curva | distancia 0.002 (Vector la recoge a menos de 0,22)
 PASA  | Primeros pasos | obstáculo (0,-3) cerca de la curva (para que el lado equivocado choque) | distancia 0
+PASA  | Lección 1: la circunferencia | salida sobre la curva | distancia 0
+PASA  | Lección 1: la circunferencia | meta sobre la curva | distancia 0
+PASA  | Lección 1: la circunferencia | moneda (-1,4) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Lección 1: la circunferencia | moneda (-4,1) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Lección 1: la circunferencia | moneda (-1,-2) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Lección 2: la elipse | salida sobre la curva | distancia 0
+PASA  | Lección 2: la elipse | meta sobre la curva | distancia 0
+PASA  | Lección 2: la elipse | moneda (0,2) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Lección 2: la elipse | moneda (-4,0) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Lección 2: la elipse | moneda (0,-2) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Lección 3: la parábola | salida sobre la curva | distancia 0
+PASA  | Lección 3: la parábola | meta sobre la curva | distancia 0
+PASA  | Lección 3: la parábola | moneda (0,0) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Lección 3: la parábola | moneda (2,0.5) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
+PASA  | Lección 4: la hipérbola | salida sobre la curva | distancia 0
+PASA  | Lección 4: la hipérbola | meta sobre la curva | distancia 0.003
+PASA  | Lección 4: la hipérbola | moneda (3.56,1.27) sobre la curva | distancia 0.005 (Vector la recoge a menos de 0,22)
+PASA  | Lección 4: la hipérbola | moneda (4.46,2.2) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
 PASA  | El Faro del Lago | salida sobre la curva | distancia 0
 PASA  | El Faro del Lago | meta sobre la curva | distancia 0
 PASA  | El Faro del Lago | moneda (0,4) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
@@ -675,4 +693,4 @@ PASA  | El Túnel y la Rampa | moneda (1.5,-1.73) sobre la curva | distancia 0.0
 PASA  | El Túnel y la Rampa | moneda (5,2) sobre la curva | distancia 0 (Vector la recoge a menos de 0,22)
 PASA  | El Túnel y la Rampa | obstáculo (-1.49,1.73) cerca de la curva (para que el lado equivocado choque) | distancia 0.006
 
-Total: 660 pasan, 0 fallan.
+Total: 678 pasan, 0 fallan.
