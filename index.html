@@ -64,13 +64,16 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .zoom button{width:38px;height:38px;border-radius:10px;border:1px solid var(--grid-strong);background:var(--panel);color:var(--ink);font:700 20px var(--f-body);cursor:pointer;display:grid;place-items:center;padding:0;touch-action:manipulation}
 .zoom button:disabled{color:var(--grid-strong);cursor:default}
 .zoom .zr{font-size:15px}
-.sheet{position:fixed;inset:0;z-index:30;background:var(--paper);display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;
+.sheet{position:fixed;inset:0;z-index:30;background:var(--paper);display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr) auto;
   padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));gap:8px}
 .sheet .sh-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sheet .sh-top>div{min-width:0}
 .sheet h2{font:800 18px var(--f-display);margin:0}
-.sheet .sh-eq{font:600 13px var(--f-mono);color:var(--muted);overflow-x:auto;white-space:nowrap}
+.sheet .sh-eq{font:600 13px var(--f-mono);color:var(--muted)}
 .sheet .tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .sheet .tools button{min-width:44px;height:40px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:600 14px var(--f-body);cursor:pointer;padding:0 10px}
+.sheet .zgrp{display:inline-flex;gap:4px;margin-left:auto}
+.sheet .tools button:disabled{color:var(--grid-strong)}
 .sheet .tools button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1.5px var(--accent)}
 .sheet .sw{width:22px;height:22px;border-radius:50%;display:inline-block;vertical-align:middle}
 .sheet .board{position:relative;border:1px solid var(--grid-strong);border-radius:12px;overflow:hidden;
@@ -264,6 +267,7 @@ summary{cursor:pointer;font-weight:700}
     <button type="button" data-tool="eraser">Borrador</button>
     <button type="button" id="shUndo">Deshacer</button>
     <button type="button" id="shClear">Borrar todo</button>
+    <span class="zgrp"><button type="button" id="shOut" aria-label="Alejar la hoja">−</button><button type="button" id="shZoom" aria-label="Volver al tamaño normal">100 %</button><button type="button" id="shIn" aria-label="Acercar la hoja">+</button></span>
   </div>
   <div class="board" id="board"><canvas id="shCanvas" aria-label="Hoja para escribir con el dedo"></canvas></div>
   <div class="calc">
@@ -1175,25 +1179,58 @@ function openTeacher(){
 }
 
 /* ---- Hoja de borrador y calculadora ---- */
-const shC=$("shCanvas"), shX=shC.getContext("2d"); let shTool={t:"pen",c:"--ink"}, shStrokes=[], shCur=null, shDPR=1;
+// Trazos guardados en coordenadas de la hoja; la vista (zoom k y desplazamiento o) solo cambia cómo se ven.
+// Un dedo escribe; dos dedos acercan, alejan y mueven la hoja (sin dejar rayas).
+const shC=$("shCanvas"), shX=shC.getContext("2d"); let shTool={t:"pen",c:"--ink"}, shStrokes=[], shCur=null, shDPR=1, shV={k:1,x:0,y:0};
+const SH_Z=[0.5,3];
 const shKey=()=>"euclidia2-sheet-"+level().id;
 function shSize(){ const r=$("board").getBoundingClientRect(); shDPR=Math.min(window.devicePixelRatio||1,2); shC.width=Math.round(r.width*shDPR); shC.height=Math.round(r.height*shDPR); shDraw(); }
-function shStroke(st){ shX.globalCompositeOperation=st.er?"destination-out":"source-over"; shX.strokeStyle=st.er?"#000":css(st.c); shX.lineWidth=st.er?22:2.6; shX.lineCap="round"; shX.lineJoin="round";
+function shStroke(st){ shX.globalCompositeOperation=st.er?"destination-out":"source-over"; shX.strokeStyle=st.er?"#000":css(st.c);
+  shX.lineWidth=st.w||(st.er?22:2.6); shX.lineCap="round"; shX.lineJoin="round";
   shX.beginPath(); st.p.forEach((q,i)=>i?shX.lineTo(q[0],q[1]):shX.moveTo(q[0],q[1])); if(st.p.length===1) shX.lineTo(st.p[0][0]+0.1,st.p[0][1]); shX.stroke(); shX.globalCompositeOperation="source-over"; }
-function shDraw(){ shX.setTransform(shDPR,0,0,shDPR,0,0); shX.clearRect(0,0,shC.width,shC.height); shStrokes.forEach(shStroke); }
-function shSave(){ store.set(shKey(),shStrokes); }
+function shDraw(){ shX.setTransform(shDPR,0,0,shDPR,0,0); shX.clearRect(0,0,shC.width,shC.height);
+  shX.setTransform(shDPR*shV.k,0,0,shDPR*shV.k,shDPR*shV.x,shDPR*shV.y); shStrokes.forEach(shStroke);
+  const b=$("board").style, g=22*shV.k; b.backgroundSize=`${g}px ${g}px`; b.backgroundPosition=`${shV.x}px ${shV.y}px`;
+  $("shZoom").textContent=Math.round(shV.k*100)+" %"; $("shIn").disabled=shV.k>=SH_Z[1]-1e-6; $("shOut").disabled=shV.k<=SH_Z[0]+1e-6; }
+const shW=(sx,sy)=>[(sx-shV.x)/shV.k,(sy-shV.y)/shV.k];
+function shZoomAt(k,sx,sy){ k=Math.max(SH_Z[0],Math.min(SH_Z[1],k)); const w=shW(sx,sy); shV.k=k; shV.x=sx-w[0]*k; shV.y=sy-w[1]*k; shDraw(); }
+function shSave(){ store.set(shKey(),{v:2,strokes:shStrokes,view:shV}); }
 function shTools(){ document.querySelectorAll("#sheet [data-tool]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.tool===shTool.t&&(shTool.t==="eraser"||b.dataset.c===shTool.c)))); }
 function openSheet(){ const L=level(); $("shTitle").textContent="Hoja de borrador · "+L.title; $("shEq").textContent=L.general?"Ecuación del mapa: "+L.general:"";
-  shStrokes=store.get(shKey(),[]); $("sheet").hidden=false; document.body.style.overflow="hidden"; shTools(); requestAnimationFrame(shSize); }
+  const d=store.get(shKey(),null); if(Array.isArray(d)){ shStrokes=d; shV={k:1,x:0,y:0}; } else if(d&&d.strokes){ shStrokes=d.strokes; shV=d.view||{k:1,x:0,y:0}; } else { shStrokes=[]; shV={k:1,x:0,y:0}; }
+  $("sheet").hidden=false; document.body.style.overflow="hidden"; shTools(); requestAnimationFrame(shSize); }
 function closeSheet(){ $("sheet").hidden=true; document.body.style.overflow=""; }
 $("sheetBtn").onclick=openSheet; $("shClose").onclick=closeSheet;
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("sheet").hidden) closeSheet(); });
 document.querySelectorAll("#sheet [data-tool]").forEach(b=>b.onclick=()=>{ shTool={t:b.dataset.tool,c:b.dataset.c||shTool.c}; shTools(); });
 $("shUndo").onclick=()=>{ shStrokes.pop(); shDraw(); shSave(); };
 $("shClear").onclick=()=>{ if(!shStrokes.length) return; shStrokes=[]; shDraw(); shSave(); };
-shC.addEventListener("pointerdown",e=>{ shC.setPointerCapture(e.pointerId); shCur={c:shTool.c,er:shTool.t==="eraser",p:[[Math.round(e.offsetX*10)/10,Math.round(e.offsetY*10)/10]]}; shStrokes.push(shCur); shDraw(); });
-shC.addEventListener("pointermove",e=>{ if(!shCur) return; const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e]; evs.forEach(q=>shCur.p.push([Math.round(q.offsetX*10)/10,Math.round(q.offsetY*10)/10])); shDraw(); });
-const shEnd=()=>{ if(shCur){ shCur=null; shSave(); } }; ["pointerup","pointercancel"].forEach(ev=>shC.addEventListener(ev,shEnd));
+const shMid=()=>{ const r=shC.getBoundingClientRect(); return [r.width/2,r.height/2]; };
+$("shIn").onclick=()=>{ const m=shMid(); shZoomAt(shV.k*1.25,m[0],m[1]); shSave(); };
+$("shOut").onclick=()=>{ const m=shMid(); shZoomAt(shV.k/1.25,m[0],m[1]); shSave(); };
+$("shZoom").onclick=()=>{ shV={k:1,x:0,y:0}; shDraw(); shSave(); };
+const shPts=new Map(); let shPinch=null, shGesture=false;
+const shPos=e=>{ const r=shC.getBoundingClientRect(); return [e.clientX-r.left,e.clientY-r.top]; };
+shC.addEventListener("pointerdown",e=>{ try{ shC.setPointerCapture(e.pointerId); }catch(_){} shPts.set(e.pointerId,shPos(e));
+  if(shPts.size>=2){ // segundo dedo: es un gesto, no un trazo
+    if(shCur){ const i=shStrokes.indexOf(shCur); if(i>=0) shStrokes.splice(i,1); shCur=null; }
+    shGesture=true; const [a,b]=[...shPts.values()]; const mid=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+    shPinch={d:Math.max(10,Math.hypot(a[0]-b[0],a[1]-b[1])),k:shV.k,w:shW(mid[0],mid[1])}; shDraw(); return; }
+  if(shGesture) return;
+  const w=shW(...shPts.get(e.pointerId)), er=shTool.t==="eraser";
+  shCur={c:shTool.c,er,w:Math.round((er?22:2.6)/shV.k*100)/100,p:[w.map(v=>Math.round(v*10)/10)]}; shStrokes.push(shCur); shDraw(); });
+shC.addEventListener("pointermove",e=>{ if(!shPts.has(e.pointerId)) return; shPts.set(e.pointerId,shPos(e));
+  if(shPinch&&shPts.size>=2){ const [a,b]=[...shPts.values()]; const mid=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+    const k=Math.max(SH_Z[0],Math.min(SH_Z[1],shPinch.k*Math.hypot(a[0]-b[0],a[1]-b[1])/shPinch.d));
+    shV.k=k; shV.x=mid[0]-shPinch.w[0]*k; shV.y=mid[1]-shPinch.w[1]*k; shDraw(); return; }
+  if(!shCur) return; const r=shC.getBoundingClientRect(); let evs=e.getCoalescedEvents?e.getCoalescedEvents():[]; if(!evs.length) evs=[e];
+  evs.forEach(q=>{ const w=shW(q.clientX-r.left,q.clientY-r.top); shCur.p.push(w.map(v=>Math.round(v*10)/10)); }); shDraw(); });
+const shEnd=e=>{ shPts.delete(e.pointerId); if(shPts.size<2&&shPinch){ shPinch=null; shSave(); }
+  if(shCur){ shCur=null; shSave(); } if(shPts.size===0) shGesture=false; };
+["pointerup","pointercancel"].forEach(ev=>shC.addEventListener(ev,shEnd));
+// computador: Ctrl + rueda (o pellizco del touchpad) acerca; la rueda sola mueve la hoja
+shC.addEventListener("wheel",e=>{ e.preventDefault(); const p=shPos(e);
+  if(e.ctrlKey) shZoomAt(shV.k*Math.exp(-e.deltaY*0.01),p[0],p[1]); else { shV.x-=e.deltaX; shV.y-=e.deltaY; shDraw(); } shSave(); },{passive:false});
 new ResizeObserver(()=>{ if(!$("sheet").hidden) shSize(); }).observe($("board"));
 $("calcIn").addEventListener("input",()=>{ const v=$("calcIn").value.trim(); $("calcMsg").className="small";
   if(!v){ $("calcOut").textContent=""; $("calcMsg").textContent="Usa + − * / ^ ( ) y sqrt( ). El resultado aparece mientras escribes."; return; }
