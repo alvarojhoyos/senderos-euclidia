@@ -147,6 +147,9 @@ label,.tl{font:600 13px var(--f-body)}
 .ivrow .ivlbl{font:600 12px var(--f-body);color:var(--muted);margin-right:2px}
 .ivt{flex:0 0 auto;min-width:40px;height:40px;border-radius:9px;border:1px solid var(--line);background:var(--grid);color:var(--ink);font:600 20px var(--f-body);cursor:pointer;padding:0 6px;touch-action:manipulation}
 .ivt.var{font-style:italic;color:var(--curve);font-weight:700}
+.ivlist{display:grid;gap:6px}
+.ivt.ivdel{min-width:36px;font-size:15px;color:var(--muted);background:transparent}
+.ivadd{justify-self:start;font-size:14px;padding:4px 0}
 .ivt:disabled{opacity:.45;cursor:default}
 .ivrow .sym{flex:0 0 auto}
 math-field.eqf{display:block;width:100%;min-width:0;font-size:24px;padding:6px 10px;height:88px;border-radius:10px;border:1.5px solid var(--grid-strong);background:var(--paper);color:var(--ink);
@@ -478,7 +481,7 @@ if(ML){ try{ MathfieldElement.fontsDirectory=null; MathfieldElement.soundsDirect
    Los datos salen del banco verificado (banco/build-bank.js en los archivos del proyecto). */
 const LEVELS = [
  {id:"t0", tutorial:true, world:"Tutorial", conic:"circunferencia", diff:"fácil", type:"escape", answer:[["x^2+y^2=9","0≤y"]], title:"Primeros pasos", kind:"Tutorial · no cuenta para la nota",
-  story:"Coni camina por la curva que tú escribes. Tiene que ir de la salida a la meta sin tocar obstáculos y recogiendo monedas. Para practicar, escribe con el teclado x² + y² = 9: toca x, □², +, y, □², =, 9. Pero ojo: la circunferencia llega a la meta por arriba y por abajo, y abajo hay un obstáculo. Elige el lado con la ecuación: en Restricción toca x para cambiarla por y, y escribe 0 en la primera casilla. Queda 0 ≤ y, solo la mitad de arriba. Luego pulsa Trazar.",
+  story:"Coni camina por la curva que tú escribes. Tiene que ir de la salida a la meta sin tocar obstáculos y recogiendo monedas. Para practicar, escribe con el teclado x² + y² = 9: toca x, □², +, y, □², =, 9. Pero ojo: la circunferencia llega a la meta por arriba y por abajo, y abajo hay un obstáculo. Elige el lado con una restricción: toca «+ Añadir una restricción», luego toca x para cambiarla por y, y escribe 0 en la primera casilla. Queda 0 ≤ y, solo la mitad de arriba. Luego pulsa Trazar.",
   targets:["x^2+y^2=9"], start:[-3,0], goal:[3,0], coins:[[0,3],[-2.12,2.12]], obstacles:[[0,-3]], view:{cx:0,cy:0,span:12},
   hints:["Las pistas orientan sin darte la respuesta. En el tutorial no gastan tus 3 pistas gratis.","Una curva cerrada, como la circunferencia, llega a la meta por dos lados. La restricción (por ejemplo 0 ≤ y) recorta la curva y deja solo el lado que quieres.","Si fallas, Coni recorre tu camino igual y ves dónde se equivocó. El intento anterior queda tenue en el mapa."]},
  {id:"t1", tutorial:true, world:"Tutorial", conic:"circunferencia", diff:"fácil", type:"rescate", title:"Lección 1: la circunferencia", kind:"Tutorial · Circunferencia",
@@ -829,7 +832,11 @@ function clampPan(){ const v=level().view, half=v.span/2, halfY=half*H/W;
 function zoomUI(){ const [mn,mx]=zLimits(); $("zIn").disabled=zoom.k>=mx-1e-6; $("zOut").disabled=zoom.k<=mn+1e-6;
   $("zReset").disabled=Math.abs(zoom.k-1)<1e-6&&(zoom.cx==null||(Math.abs(zoom.cx-level().view.cx)<1e-6&&Math.abs(zoom.cy-level().view.cy)<1e-6)); }
 function resetZoom(){ zoom={k:1,cx:null,cy:null}; zoomUI(); }
-const inI=(I,p,tol=0.02)=>!I||(()=>{ const v=I.v==="x"?p[0]:p[1]; return v>=I.lo-tol&&v<=I.hi+tol; })();
+const inI1=(c,p,tol)=>{ const v=c.v==="x"?p[0]:p[1]; return v>=c.lo-tol&&v<=c.hi+tol; };
+// I: null (sin restricción), una restricción {v,lo,hi} o una lista de ellas (por ejemplo una en x y otra en y)
+const inI=(I,p,tol=0.02)=>!I||(Array.isArray(I)?I.every(c=>inI1(c,p,tol)):inI1(I,p,tol));
+// Texto de los niveles: varias restricciones separadas por «;» (por ejemplo "y≥0; x≤5")
+const parseIvList=src=>{ const l=String(src||"").split(";").map(t=>t.trim()).filter(Boolean).map(parseInterval); return l.length?l:null; };
 
 // Dibuja la curva F=0 con cuadrados que marchan: una rejilla gruesa en todo el mapa y, en las celdas por
 // donde pasa o casi pasa la curva, una rejilla SUB veces más fina. Así no se pierden partes delgadas
@@ -1062,7 +1069,7 @@ function doSubmit(){
     L.targets.forEach((_,i)=>{ const tag=L.mixed?`Tramo ${i+1}: `:"";
       let e; try{ e=compileEq(eqText($("eq"+i))); }catch(err){ throw new Error(tag+err.message); }
       const pb=canonicalProblem(e); if(pb) throw new Error(tag+pb);
-      let I=null; try{ I=ivFrom(i,!L.mixed); }catch(err){ throw new Error(tag+(L.mixed?"intervalo. ":"restricción. ")+err.message); }
+      let I=null; try{ I=ivsFrom(i); }catch(err){ throw new Error(tag+"restricción. "+err.message); }
       eqs.push({F:e.F,L:e.L,R:e.R,I,form:formProblem(e)}); });
   }catch(err){ showFb("bad","Revisa lo que escribiste.",err.message); return; }
   if(g2.curves.length) g2.prevCurves=g2.curves;
@@ -1090,7 +1097,7 @@ function run(){
   if(r.ambiguous){ g2.choose=r.ambiguous; g2.result=null; g2.path=[]; g2.prog=0; g2.anim=false; setMood("sad");
     const L=level(), tag=g2.eqs.length>1?`Tramo ${r.ambiguous.piece+1}: tu`:"Tu";
     showFb("bad",tag+" curva llega por dos lados y Coni no sabe cuál tomar.",
-      knownError()?.msg||(L.mixed?"Ajusta el intervalo de este tramo":"Agrega una restricción debajo de la ecuación")+" para quedarte solo con el lado que quieres. Por ejemplo, 0 ≤ y deja la parte de arriba del eje x, y x ≤ 2 deja la parte a la izquierda de x = 2.");
+      knownError()?.msg||(L.mixed?"Añade o ajusta una restricción en este tramo":"Toca «+ Añadir una restricción»")+" para quedarte solo con el lado que quieres. Por ejemplo, 0 ≤ y deja la parte de arriba del eje x, y x ≤ 2 deja la parte a la izquierda de x = 2.");
     return; }
   g2.choose=null; g2.result=r; g2.path=r.path; g2.prog=0; g2.anim=r.path.length>1; g2.speed=Math.max(110,r.path.length/6);
   if(!g2.anim){ finish(); } else { setMood("walk"); showFb("","Coni está recorriendo tu camino…",""); }
@@ -1098,14 +1105,16 @@ function run(){
 // Errores típicos del nivel: si lo que escribió el estudiante coincide con uno, se muestra su mensaje.
 // Si el error tiene la curva correcta (por ejemplo, el lado equivocado), también debe coincidir la restricción.
 function sameCurve(F,G){ const s=classify(F), t=classify(G); return s.type===t.type&&!diagnose(s,t); }
-function sameIv(a,b){ if(!a||!b) return !a&&!b; const n=(u,v)=>u===v||Math.abs(u-v)<0.05; return a.v===b.v&&n(a.lo,b.lo)&&n(a.hi,b.hi); }
+function sameIv(a,b){ const A=a?[].concat(a):[], B=b?[].concat(b):[]; if(A.length!==B.length) return false;
+  const n=(u,v)=>u===v||Math.abs(u-v)<0.05, eq=(c,d)=>c.v===d.v&&n(c.lo,d.lo)&&n(c.hi,d.hi);
+  return A.every(c=>B.some(d=>eq(c,d)))&&B.every(d=>A.some(c=>eq(c,d))); }
 function knownError(){
   const L=level(), eqs=g2.eqs; if(!L.errors||!eqs) return null;
   for(const e of L.errors){ if(!e.msg||e.eq.length!==eqs.length) continue;
     try{
       const ok=e.eq.every((p,i)=>{ const G=compileEq(p[0]).F; if(!sameCurve(eqs[i].F,G)) return false;
         const A=L.answer[i]; if(!sameCurve(compileEq(A[0]).F,G)) return true;
-        return sameIv(eqs[i].I,p[1]?parseInterval(p[1]):null); });
+        return sameIv(eqs[i].I,parseIvList(p[1])); });
       if(ok) return e;
     }catch(err){}
   }
@@ -1130,7 +1139,7 @@ function finish(){
     $("winText").textContent= L.tutorial ? "Ya sabes jugar. Este nivel no cuenta para la nota: los siguientes sí."
       : `Monedas en este nivel: ${coins} de ${L.coins.length}.`+(all?"":" Tu curva no es exactamente la pedida, por eso perdiste monedas. Puedes intentarlo otra vez: cuenta tu mejor intento.");
     $("nextBtn").hidden=nextIdx()<0; $("win").hidden=false;
-    const extra=r.extra&&EXTRA_RULE==="aviso"?" Ojo: tu "+(L.mixed?"intervalo":"restricción")+" deja un trozo de curva que sobra junto al inicio. Hay un límite exacto que lo evita.":"";
+    const extra=r.extra&&EXTRA_RULE==="aviso"?" Ojo: tu restricción deja un trozo de curva que sobra junto al inicio. Hay un límite exacto que lo evita.":"";
     showFb(all?"good":"",all?"¡Camino perfecto!":"Llegaste, pero faltaron monedas.",(all?"":notes.join(" ")||"Revisa los números de tu ecuación.")+extra);
     return;
   }
@@ -1144,7 +1153,7 @@ function finish(){
   const known=knownError();
   if(known){ showFb("bad",title,known.msg); return; }
   const rightCurve=!notes.length&&!r.offStart&&!(r.breakAt>0)&&!r.nocurve;
-  showFb("bad",title,rightCurve?(L.mixed?"Tu ecuación es la correcta, pero el intervalo deja a Coni del lado equivocado. Cámbialo para quedarte con la otra parte de la curva.":"Tu ecuación es la correcta, pero la restricción deja a Coni del lado equivocado. Cámbiala para quedarte con la otra parte de la curva."):notes.join(" ")||(L.mixed?"Revisa los intervalos: cada tramo debe empezar donde termina el anterior.":""));
+  showFb("bad",title,rightCurve?(L.mixed?"Tu ecuación es la correcta, pero la restricción deja a Coni del lado equivocado. Cámbiala para quedarte con la otra parte de la curva.":"Tu ecuación es la correcta, pero la restricción deja a Coni del lado equivocado. Cámbiala para quedarte con la otra parte de la curva."):notes.join(" ")||(L.mixed?"Revisa las restricciones: cada tramo debe terminar justo donde empieza el siguiente. Sin restricción, Coni sigue de largo por la curva.":""));
 }
 
 /* ============ Resultados (Google Sheets) ============ */
@@ -1356,28 +1365,41 @@ function wireInput(inp){ const keep=()=>{ if(inp.selectionStart!=null) inp._c=[i
   if(!coarse) inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); doSubmit(); } });
   if(padOn) inp.setAttribute("inputmode","none"); }
 function renderModes(){ document.querySelectorAll(".ivmode button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.m===ivMode)));
-  const wasIv=active&&active.classList.contains("ivf"); ivs.forEach((_,k)=>renderIv(k)); if(wasIv||(active&&!document.contains(active))) setActive($("eq0")); }
-function renderIv(k){ const st=ivs[k], box=$("ivbox"+k);
-  const num=(w,ph,lbl)=>`<input class="ivf ivn" id="iv${w}${k}" aria-label="${lbl} del tramo ${k+1}" placeholder="${ph}" value="${esc(st[w])}" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off">`;
+  const any=ivs.some(r=>r.length); document.querySelectorAll(".ivmode,.ivhelp").forEach(el=>el.hidden=!any);
+  const wasIv=active&&active.classList.contains("ivf"); ivs.forEach((_,k)=>renderIvs(k)); if(wasIv||(active&&!document.contains(active))) setActive($("eq0")); }
+// Restricciones de un tramo: ninguna al empezar; el estudiante añade hasta dos (una en x y otra en y)
+function renderIvs(k){ const box=$("ivbox"+k); if(!box) return; box.innerHTML="";
+  ivs[k].forEach((st,r)=>{ const row=document.createElement("div"); row.className="ivrow"; row.id=`ivrow${k}_${r}`; box.appendChild(row); renderIv(k,r); });
+  if(ivs[k].length<2){ const add=document.createElement("button"); add.type="button"; add.className="linkbtn ivadd";
+    add.textContent=ivs[k].length?"+ Añadir otra restricción":"+ Añadir una restricción"; add.setAttribute("aria-label",add.textContent+(level().mixed?` al tramo ${k+1}`:""));
+    add.onclick=()=>{ const used=ivs[k].map(x=>x.v); ivs[k].push({v:used.includes("x")?"y":"x",lo:"",hi:"",loC:true,hiC:true}); renderModes(); const r=ivs[k].length-1; setActive($(`ivlo${k}_${r}`)); };
+    box.appendChild(add); } }
+function renderIv(k,r){ const st=ivs[k][r], box=$(`ivrow${k}_${r}`), id=`${k}_${r}`;
+  const num=(w,ph,lbl)=>`<input class="ivf ivn" id="iv${w}${id}" aria-label="${lbl} de la restricción ${r+1}" placeholder="${ph}" value="${esc(st[w])}" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off">`;
   const lo=num("lo","−∞","Extremo izquierdo"), hi=num("hi","∞","Extremo derecho");
-  const vb=`<button type="button" class="ivt var" data-a="v" aria-label="Variable del intervalo, toca para cambiarla">${st.v}</button>`;
+  const vb=`<button type="button" class="ivt var" data-a="v" aria-label="Variable de la restricción, toca para cambiarla">${st.v}</button>`;
   const tb=w=>`<button type="button" class="ivt" data-a="${w}"></button>`;
-  box.innerHTML=ivMode==="ineq"?`${lo}${tb("lo")}${vb}${tb("hi")}${hi}`:`${vb}<span class="sym">∈</span>${tb("lo")}${lo}<span class="sym">,</span>${hi}${tb("hi")}`;
-  box.querySelectorAll("input").forEach(inp=>{ wireInput(inp); inp.addEventListener("input",()=>{ st[inp.id.startsWith("ivlo")?"lo":"hi"]=inp.value; ivButtons(k); }); });
+  const del=`<button type="button" class="ivt ivdel" data-a="del" aria-label="Quitar esta restricción">✕</button>`;
+  box.innerHTML=(ivMode==="ineq"?`${lo}${tb("lo")}${vb}${tb("hi")}${hi}`:`${vb}<span class="sym">∈</span>${tb("lo")}${lo}<span class="sym">,</span>${hi}${tb("hi")}`)+del;
+  box.querySelectorAll("input").forEach(inp=>{ wireInput(inp); inp.addEventListener("input",()=>{ st[inp.id.startsWith("ivlo")?"lo":"hi"]=inp.value; ivButtons(k,r); }); });
   box.querySelectorAll("button").forEach(b=>b.addEventListener("pointerdown",e=>e.preventDefault()));
-  box.querySelectorAll("button").forEach(b=>b.onclick=()=>{ const a=b.dataset.a; if(a==="v") st.v=st.v==="x"?"y":"x"; else if(a==="lo") st.loC=!st.loC; else st.hiC=!st.hiC; ivButtons(k); });
-  ivButtons(k); }
-function ivButtons(k){ const st=ivs[k], box=$("ivbox"+k);
+  box.querySelectorAll("button").forEach(b=>b.onclick=()=>{ const a=b.dataset.a;
+    if(a==="del"){ ivs[k].splice(r,1); renderModes(); setActive($("eq"+k)); return; }
+    if(a==="v") st.v=st.v==="x"?"y":"x"; else if(a==="lo") st.loC=!st.loC; else st.hiC=!st.hiC; ivButtons(k,r); });
+  ivButtons(k,r); }
+function ivButtons(k,r){ const st=ivs[k][r], box=$(`ivrow${k}_${r}`);
   box.querySelectorAll("button").forEach(b=>{ const a=b.dataset.a;
+    if(a==="del") return;
     if(a==="v"){ b.textContent=st.v; return; }
     const empty=!st[a].trim(), closed=!empty&&(a==="lo"?st.loC:st.hiC);
     b.textContent=ivMode==="ineq"?(closed?"≤":"<"):(a==="lo"?(closed?"[":"("):(closed?"]":")"));
     b.disabled=empty; b.setAttribute("aria-label",empty?"Sin límite (infinito)":(closed?"Cerrado, toca para abrir":"Abierto, toca para cerrar")); }); }
-function ivFrom(k,optional){ const st=ivs[k];
-  const lo=st.lo.trim()?evalNum(st.lo):-Infinity, hi=st.hi.trim()?evalNum(st.hi):Infinity;
-  if(lo===-Infinity&&hi===Infinity) if(optional) return null; else throw new Error("Escribe al menos un extremo. La casilla vacía significa que ese lado no tiene límite.");
-  if(lo>=hi) throw new Error(`Está al revés: el extremo izquierdo (${fmt(lo)}) debe ser menor que el derecho (${fmt(hi)}).`);
-  return {v:st.v,lo,hi}; }
+function ivsFrom(k){ const out=[];
+  ivs[k].forEach(st=>{ const lo=st.lo.trim()?evalNum(st.lo):-Infinity, hi=st.hi.trim()?evalNum(st.hi):Infinity;
+    if(lo===-Infinity&&hi===Infinity) throw new Error("Escribe al menos un extremo, o quita esa restricción con ✕. La casilla vacía significa que ese lado no tiene límite.");
+    if(lo>=hi) throw new Error(`Está al revés: el extremo izquierdo (${fmt(lo)}) debe ser menor que el derecho (${fmt(hi)}).`);
+    out.push({v:st.v,lo,hi}); });
+  return out.length?out:null; }
 function loadLevel(i){
   idx=i; menuWorld=wOf(LEVELS[i]); delete $("hintBtn").dataset.confirm; const L=level(); renderLevels(); resetZoom();
   const chainLen=L.chain?LEVELS.filter(l=>l.chain===L.chain).length:0;
@@ -1390,28 +1412,20 @@ function loadLevel(i){
   if(L.rescue) add("g","Salida y meta "+fmtP(L.start)+": da la vuelta completa"); else { add("s","Salida "+fmtP(L.start)); add("g","Meta "+fmtP(L.goal)); }
   L.coins.forEach(c=>add("c","Moneda "+fmtP(c))); L.obstacles.forEach(o=>add("o","Obstáculo "+fmtP(o)));
   const F=$("fields"); F.innerHTML=""; ivs=[];
+  const mode=()=>{ const md=document.createElement("div"); md.className="ivmode"; md.hidden=true;
+    md.innerHTML=`<span>Escribir la restricción como</span><span class="seg" role="group" aria-label="Notación de la restricción"><button type="button" data-m="ineq">2 ≤ x ≤ 4</button><button type="button" data-m="brk">x ∈ [2, 4]</button></span>`;
+    md.querySelectorAll("button").forEach(b=>b.onclick=()=>{ ivMode=b.dataset.m; store.set("euclidia2-ivmode",ivMode); renderModes(); }); return md; };
+  const help=()=>{ const h=document.createElement("p"); h.className="small ivhelp"; h.hidden=true;
+    h.innerHTML="Toca <i>x</i> para cambiarla por <i>y</i>. Toca el signo o el corchete para pasar de cerrado a abierto. Si un lado no tiene límite, deja la casilla vacía (es ∞). Con ✕ quitas la restricción."; return h; };
   if(L.mixed){
-    const md=document.createElement("div"); md.className="ivmode";
-    md.innerHTML=`<span>Escribir el intervalo como</span><span class="seg" role="group" aria-label="Notación del intervalo"><button type="button" data-m="ineq">2 ≤ x ≤ 4</button><button type="button" data-m="brk">x ∈ [2, 4]</button></span>`;
-    F.appendChild(md);
-    L.targets.forEach((_,k)=>{ ivs[k]={v:"x",lo:"",hi:"",loC:true,hiC:true};
+    L.targets.forEach((_,k)=>{ ivs[k]=[];
       const d=document.createElement("div"); d.className="tramo"; d.innerHTML=`<span class="tl">Tramo ${k+1}</span>`;
-      d.appendChild(makeEq(k,`Ecuación del tramo ${k+1}`)); const r=document.createElement("div"); r.className="ivrow"; r.id="ivbox"+k; d.appendChild(r); F.appendChild(d); });
-    const h=document.createElement("p"); h.className="small";
-    h.innerHTML="<b>El intervalo:</b> toca <i>x</i> para cambiarla por <i>y</i>. Toca el signo o el corchete para pasar de cerrado a abierto. Si ese lado no tiene límite, deja la casilla vacía (es ∞).";
-    F.appendChild(h);
-    md.querySelectorAll("button").forEach(b=>b.onclick=()=>{ ivMode=b.dataset.m; store.set("euclidia2-ivmode",ivMode); renderModes(); });
-    renderModes(); }
-  else { ivs[0]={v:"x",lo:"",hi:"",loC:true,hiC:true};
+      d.appendChild(makeEq(k,`Ecuación del tramo ${k+1}`)); const r=document.createElement("div"); r.className="ivlist"; r.id="ivbox"+k; d.appendChild(r); F.appendChild(d); });
+    F.appendChild(mode()); F.appendChild(help()); }
+  else { ivs[0]=[];
     const lb=document.createElement("label"); lb.textContent="Ecuación del camino (forma canónica)"; lb.htmlFor="eq0"; F.appendChild(lb); F.appendChild(makeEq(0,"Ecuación del camino"));
-    const md=document.createElement("div"); md.className="ivmode";
-    md.innerHTML=`<span>Restricción <span class="small">(opcional)</span></span><span class="seg" role="group" aria-label="Notación de la restricción"><button type="button" data-m="ineq">2 ≤ x ≤ 4</button><button type="button" data-m="brk">x ∈ [2, 4]</button></span>`;
-    F.appendChild(md); const r=document.createElement("div"); r.className="ivrow"; r.id="ivbox0"; F.appendChild(r);
-    const h=document.createElement("p"); h.className="small";
-    h.innerHTML="Recorta la curva si llega a la meta por dos lados. Toca <i>x</i> para cambiarla por <i>y</i>. Vacío = sin límite.";
-    F.appendChild(h);
-    md.querySelectorAll("button").forEach(b=>b.onclick=()=>{ ivMode=b.dataset.m; store.set("euclidia2-ivmode",ivMode); renderModes(); });
-    renderModes(); }
+    const r=document.createElement("div"); r.className="ivlist"; r.id="ivbox0"; F.appendChild(r); F.appendChild(mode()); F.appendChild(help()); }
+  renderModes();
   F.querySelectorAll(".eqf").forEach((el,k)=>{ const w=document.createElement("div"); w.className="eqwrap"; w.innerHTML=`<span class="ftag">${L.mixed?`Tramo ${k+1} · ecuación`:"Tu ecuación"}</span>`; el.before(w); w.appendChild(el); });
   F.querySelectorAll(".eqf").forEach(el=>{ if(el.tagName==="MATH-FIELD") setupMF(el); else wireInput(el); });
   unfloat(); setActive($("eq0")); buildPad(); setPad(padOn); updatePretty();
@@ -1662,7 +1676,8 @@ if(role==="profesor") $("teacherBtn").hidden=false;
 if(!role) askRole(); else if(role==="estudiante"&&!player) askPlayer(); else if(!seen) welcomeBack();
 markSeen();
 requestAnimationFrame(frame);
-window.__euclidia={LEVELS,loadLevel,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; if(typeof v==="string"){ $("eq"+i).value=v; if(ivs[i]){ Object.assign(ivs[i],{lo:"",hi:""}); renderIv(i); } } else { $("eq"+i).value=v[0]; const I=parseInterval(v[1]); Object.assign(ivs[i],{v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):""}); renderIv(i); } }); updatePretty(); doSubmit(); },
+window.__euclidia={LEVELS,loadLevel,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
+    if(ivs[i]) ivs[i]=(list||[]).map(I=>({v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):"",loC:true,hiC:true})); }); renderModes(); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
   state:()=>({g2,prog,player,idx}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),
   // para las pruebas automáticas (pruebas/curvas.test.js)
