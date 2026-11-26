@@ -35,6 +35,13 @@ Cada nivel tiene un escenario en pixel art según su lugar (lago y río, luna, v
 
 En los Rescates, cada moneda es un Trazador perdido (más grande que Coni, que es la más pequeña): cuando Coni pasa, salta de alegría y le entrega su fragmento del Gran Mapa (+1). En los Escapes la moneda toma la forma del lugar: perla, polvo de estrella, gema de lava, semilla dorada, cristal de hielo, concha, piedra rojiza, gota de vapor, cristal de cueva o moneda de Euclidia. Se recogen y se cuentan igual que antes. Al llegar a la meta, Coni celebra con confeti (salvo si el sistema pide reducir movimiento).
 
+## Toques finales
+
+- **Historia al empezar:** la primera vez que se abre el juego en un dispositivo aparecen 3 viñetas (la Niebla del Olvido, Coni en el taller y «tú eres su navegante»), con un botón para saltarlas. Se pueden volver a ver con «Ver la historia», al pie de la página.
+- **Sonidos:** cortos y hechos en el momento (sin archivos): al recoger una moneda, al rescatar a un Trazador, al llegar, al chocar y al caer. Empiezan apagados; cada estudiante los activa con el botón «♪ Sin sonido» y el dispositivo lo recuerda.
+- **El Gran Mapa:** muestra las 10 regiones de Euclidia. Cada nivel terminado le quita niebla a su región, y al completarla el juego avisa que salió de la niebla.
+- **Medallas por mundo:** bronce al completar todos sus niveles, plata con el 80 % de sus monedas o más, oro con todas. En un quiz el mapa y las medallas no aparecen, porque cada estudiante tiene solo sus niveles.
+
 ## Pruebas automáticas
 
 `pruebas/curvas.test.js` comprueba que lo que el juego dibuja coincide con la ecuación que escribe el jugador: tipo de cónica y parámetros, que cada trazo esté sobre la curva exacta, que no falten partes de la curva, la restricción y el recorrido de Coni. Incluye casos límite (a = b, coeficientes negativos, ecuaciones no normalizadas, elipses muy aplanadas, casos degenerados), las ecuaciones del editor tipo cuaderno y los datos de cada nivel.
@@ -47,4 +54,6 @@ En los Rescates, cada moneda es un Trazador perdido (más grande que Coni, que e
 
 `pruebas/historia.test.js` comprueba que los 61 niveles tengan historia sin números ni ecuaciones, que el panel se abra al elegir un nivel o con «Siguiente nivel», que quepa en un celular pequeño y que «Siguiente» lo cierre. También que cada Escape tenga su objeto del lugar y que en los Rescates las monedas sean Trazadores perdidos.
 
-Requieren Node y Playwright con Chromium: `node pruebas/curvas.test.js`, `node pruebas/niveles.test.js`, `node pruebas/evaluacion.test.js`, `node pruebas/restricciones.test.js` y `node pruebas/historia.test.js`. Los últimos resultados están en `pruebas/salida.txt`, `pruebas/salida-niveles.txt`, `pruebas/salida-evaluacion.txt`, `pruebas/salida-restricciones.txt` y `pruebas/salida-historia.txt`.
+`pruebas/toques.test.js` comprueba las viñetas de la historia (primera vez, saltar, volver a ver), el sonido apagado por defecto, las medallas, el Gran Mapa y el aviso al recuperar una región.
+
+Requieren Node y Playwright con Chromium: `node pruebas/curvas.test.js`, `node pruebas/niveles.test.js`, `node pruebas/evaluacion.test.js`, `node pruebas/restricciones.test.js` `node pruebas/historia.test.js` y `node pruebas/toques.test.js`. Los últimos resultados están en `pruebas/salida.txt`, `pruebas/salida-niveles.txt`, `pruebas/salida-evaluacion.txt`, `pruebas/salida-restricciones.txt`, `pruebas/salida-historia.txt` y `pruebas/salida-toques.txt`.

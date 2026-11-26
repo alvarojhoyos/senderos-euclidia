@@ -7,7 +7,7 @@ fs.writeFileSync(TMP,'<!doctype html><html lang="es"><head><meta charset="utf-8"
 const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.push((ok?'PASA ':'FALLA')+' | '+txt); };
 (async()=>{
  const b=await chromium.launch(); const errs=[]; const ctx=await b.newContext({...devices['iPhone SE'],deviceScaleFactor:1}); const p=await ctx.newPage(); p.on('pageerror',e=>errs.push(e.message));
- await p.route(/^https?:\/\//,r=>r.abort()); await p.addInitScript(()=>{ localStorage.setItem('euclidia2-role','"profesor"'); sessionStorage.setItem('euclidia2-tab','1'); });
+ await p.route(/^https?:\/\//,r=>r.abort()); await p.addInitScript(()=>{ localStorage.setItem('euclidia2-role','"profesor"'); localStorage.setItem('euclidia2-intro','true'); sessionStorage.setItem('euclidia2-tab','1'); });
  await p.goto('file://'+TMP); await p.waitForTimeout(500);
  // 1. Datos: cada nivel tiene historia y región; la historia no da datos para resolver
  const d=await p.evaluate(()=>{ const U=window.__euclidia; return U.LEVELS.map(L=>({id:L.id,lore:U.LORE[L.id]||'',reg:U.REGIONS[U.SCENE_OF[L.id]]||''})); });

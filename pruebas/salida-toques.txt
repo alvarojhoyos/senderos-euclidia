@@ -1,0 +1,15 @@
+PASA  | La primera vez se abre la historia (3 viñetas) antes de elegir rol
+PASA  | Las viñetas caben en un celular pequeño (320×568)
+PASA  | Con «Siguiente» se pasan las 3 viñetas y al final («¡Vamos!») se pide el rol
+PASA  | Al volver a abrir el juego la historia no se repite
+PASA  | «Saltar la historia» la cierra de una vez
+PASA  | «Ver la historia» (pie de página) la vuelve a abrir
+PASA  | El sonido empieza apagado; el botón lo enciende y el dispositivo lo recuerda
+PASA  | Con sonido se juega un nivel completo sin errores
+PASA  | Medallas: sin terminar no hay; todas las monedas = oro; 80 % o más = plata; solo terminar = bronce
+PASA  | El Gran Mapa muestra 10 regiones y 6 mundos con su medalla («Regiones recuperadas: 0 de 10»)
+PASA  | «Volver al juego» cierra el mapa
+PASA  | Al terminar el último nivel de una región: «Lago y río salió de la niebla! Mírala en el Gran Mapa.»
+PASA  | En un quiz no se muestra el Gran Mapa
+
+Total: 13 pasan, 0 fallan.
