@@ -2,8 +2,11 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
 <title>Senderos de Euclidia</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -170,7 +173,6 @@ summary{cursor:pointer;font-weight:700}
 .pad .frk{display:inline-flex;flex-direction:column;align-items:center;gap:2px}
 .pad .frk i{display:block;width:16px;border-top:1.5px solid currentColor}
 .pad .frk .box{width:.75em;height:.7em}
-.go-main{width:100%;font-size:17px;padding:13px 14px}
 .padbar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px}
 .linkbtn{background:none;border:0;color:var(--accent);font:600 13px var(--f-body);cursor:pointer;padding:4px 0;text-decoration:underline;text-underline-offset:3px}
 .foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;color:var(--muted);font-size:12.5px}
@@ -196,8 +198,6 @@ summary{cursor:pointer;font-weight:700}
 }
 </style>
 
-</head>
-<body>
 <div class="app">
   <header class="top">
     <div class="brand">
@@ -235,9 +235,9 @@ summary{cursor:pointer;font-weight:700}
       <form id="form" autocomplete="off">
         <div class="fields" id="fields"></div>
         <div class="pretty" id="pretty" aria-live="polite"></div>
-        <button class="btn go-main" type="submit" id="go">Trazar</button>
         <div class="pad" id="pad" role="group" aria-label="Teclado de ecuaciones"></div>
         <div class="padbar">
+          <button class="btn" type="submit" id="go">Trazar</button>
           <button class="btn ghost" type="button" id="sheetBtn">Hoja de borrador y calculadora</button>
           <button class="linkbtn" type="button" id="padToggle">Prefiero el teclado del sistema</button>
         </div>
@@ -988,7 +988,7 @@ const K={
   lp:{h:"(",ins:"("}, rp:{h:")",ins:")"},
   add:{h:"+",ins:"+"}, sub:{h:"−",ins:"-",lbl:"menos"}, mul:{h:"×",ins:"*",lbl:"por"}, div:{h:"÷",ins:"/",lbl:"dividido"}, eq:{h:"=",ins:"="},
   dot:{h:".",ins:".",lbl:"punto decimal"},
-  nx:{h:"Siguiente ⇥",c:"k-nx",act:"nx",lbl:"siguiente casilla",span:2},
+  nx:{h:"Siguiente casilla ⇥",c:"k-nx",act:"nx",lbl:"siguiente casilla",span:6},
   del:{h:"⌫",c:"k-act",act:"del",lbl:"borrar"}, clr:{h:"C",c:"k-act",act:"clr",lbl:"borrar todo"},
   lt:{h:"◀",c:"k-act",act:"lt",lbl:"mover a la izquierda"}, rt2:{h:"▶",c:"k-act",act:"rt",lbl:"mover a la derecha"},
   go:{h:"Trazar",c:"k-go",act:"go",span:2}
@@ -996,10 +996,10 @@ const K={
 for(let d=0;d<=9;d++) K["n"+d]={h:String(d),ins:String(d)};
 // Lo que inserta cada tecla en el editor tipo cuaderno: #@ toma lo que hay antes del cursor, #? es una casilla vacía
 const TEX={sq:"#@^{2}",pw:"#@^{#?}",rt:"\\sqrt{#0}",fr:"\\frac{#@}{#?}",mul:"\\cdot",div:"\\div"};
-const BASE=["x","y","sq","pw","rt","fr","n7","n8","n9","lp","rp","del","n4","n5","n6","add","sub","eq","n1","n2","n3","mul","div","clr","n0","dot","lt","rt2","nx"];
+const BASE=["x","y","sq","pw","rt","fr","n7","n8","n9","lp","rp","del","n4","n5","n6","add","sub","eq","n1","n2","n3","mul","div","clr","n0","dot","lt","rt2","go"];
 let padOn=store.get("euclidia2-pad",true), active=null;
 function buildPad(){
-  const pad=$("pad"); pad.innerHTML=""; const lay=BASE;
+  const pad=$("pad"); pad.innerHTML=""; const lay=[...BASE,"nx"];
   lay.forEach(id=>{ const k=K[id], b=document.createElement("button"); b.type="button"; b.innerHTML=k.h; if(k.c) b.className=k.c;
     b.setAttribute("aria-label",k.lbl||b.textContent); if(k.span) b.style.gridColumn=`span ${k.span}`;
     b.addEventListener("pointerdown",e=>e.preventDefault());
@@ -1040,7 +1040,7 @@ function setPad(on){ if(ML&&coarse) on=true; padOn=on; $("pad").hidden=!on;
   // En el celular el editor tipo cuaderno solo se usa con el teclado del juego
   $("padToggle").hidden=ML&&coarse;
   $("padToggle").textContent=on?(ML?"Prefiero escribir con el teclado del computador":"Prefiero el teclado del sistema"):"Mostrar el teclado de ecuaciones";
-  store.set("euclidia2-pad",on); }
+  $("go").hidden=on&&coarse; store.set("euclidia2-pad",on); }
 $("padToggle").onclick=()=>{ setPad(!padOn); if(!padOn&&active) active.focus(); };
 
 /* ============ Interfaz ============ */
