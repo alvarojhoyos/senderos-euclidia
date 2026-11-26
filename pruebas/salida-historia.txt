@@ -1,0 +1,13 @@
+PASA  | Los 61 niveles tienen historia y región
+PASA  | Ninguna historia trae números ni ecuaciones (los datos para resolver van en el panel del nivel)
+PASA  | Todas las historias son cortas (70 palabras o menos)
+PASA  | Coni es «ella» en todas las historias
+PASA  | Al cargar el juego no se abre el panel de historia
+PASA  | Al tocar un nivel en el menú se abre su historia (región, título y texto) y el botón «Siguiente» queda listo
+PASA  | En un celular pequeño (320×568) el panel cabe completo en la pantalla
+PASA  | «Siguiente» cierra el panel y deja el nivel listo para jugar
+PASA  | Tocar en el menú el nivel que ya está abierto no repite la historia
+PASA  | «Siguiente nivel» abre la historia del nivel que sigue (Rescate en la Laguna)
+PASA  | La tecla Esc también cierra el panel
+
+Total: 11 pasan, 0 fallan.

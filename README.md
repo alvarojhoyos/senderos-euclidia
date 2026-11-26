@@ -25,6 +25,14 @@ En el panel del profesor, la sección "Evaluación" arma un código QR para una 
 
 Al entrar, el estudiante ve solo el Tutorial y un aviso con el botón "Empezar el quiz": puede hacer el Tutorial sin que corra el tiempo, y el reloj arranca cuando pulsa el botón (con un segundo toque para confirmar). Durante la evaluación el menú solo muestra el Tutorial y esos niveles, arriba corre el reloj y la nota es monedas obtenidas / monedas posibles × 5,0. Cuando el estudiante pulsa "Terminar" o se acaba el tiempo, el juego envía la fila final a la hoja del profesor y ya no deja trazar. La hoja guarda el nombre de la evaluación en la columna "Evaluación", y el Resumen lleva una fila por estudiante y evaluación. Si la hoja se conectó con una versión anterior del código de Apps Script, hay que pegar el código nuevo y publicar una nueva versión (Implementar > Gestionar implementaciones > Editar > Nueva versión).
 
+## Historia y escenarios
+
+En Euclidia los caminos están hechos de ecuaciones. La Niebla del Olvido borró el Gran Mapa y los Trazadores, robots que cuidan los caminos, quedaron perdidos. Coni, la Trazadora más joven y la más pequeña, camina exactamente por la curva que escribe su navegante: el estudiante. Cada moneda es un fragmento del Gran Mapa.
+
+Al abrir un nivel desde el menú, con «Siguiente nivel» o al empezar el quiz, un panel cuenta en dos o tres frases qué pasa ahí, y «Siguiente» lleva al nivel. La historia nunca trae números ni ecuaciones: los datos para resolver siguen en el panel del nivel. Los textos están en `LORE` y la región de cada nivel en `SCENE_OF` (dentro de `index.html`).
+
+Cada nivel tiene un escenario en pixel art según su lugar (lago y río, luna, volcán, pradera, glaciar, costa, desfiladero, géiseres, cueva y ciudad). Se dibuja con código en una capa aparte una sola vez y en cada cuadro solo se copia, así que no pesa ni hace más lento el juego. Las animaciones (brillos, brasas, vapor) se apagan si el sistema pide reducir movimiento o si el celular va lento. El escenario evoca el lugar sin copiar la cónica, para no dar la respuesta.
+
 ## Pruebas automáticas
 
 `pruebas/curvas.test.js` comprueba que lo que el juego dibuja coincide con la ecuación que escribe el jugador: tipo de cónica y parámetros, que cada trazo esté sobre la curva exacta, que no falten partes de la curva, la restricción y el recorrido de Coni. Incluye casos límite (a = b, coeficientes negativos, ecuaciones no normalizadas, elipses muy aplanadas, casos degenerados), las ecuaciones del editor tipo cuaderno y los datos de cada nivel.
@@ -35,4 +43,6 @@ Al entrar, el estudiante ve solo el Tutorial y un aviso con el botón "Empezar e
 
 `pruebas/restricciones.test.js` comprueba las restricciones opcionales: que no aparezcan solas, que se puedan añadir hasta dos por tramo (una en x y otra en y) y quitar, y que en el juego valgan las dos a la vez.
 
-Requieren Node y Playwright con Chromium: `node pruebas/curvas.test.js`, `node pruebas/niveles.test.js`, `node pruebas/evaluacion.test.js` y `node pruebas/restricciones.test.js`. Los últimos resultados están en `pruebas/salida.txt`, `pruebas/salida-niveles.txt`, `pruebas/salida-evaluacion.txt` y `pruebas/salida-restricciones.txt`.
+`pruebas/historia.test.js` comprueba que los 61 niveles tengan historia sin números ni ecuaciones, que el panel se abra al elegir un nivel o con «Siguiente nivel», que quepa en un celular pequeño y que «Siguiente» lo cierre.
+
+Requieren Node y Playwright con Chromium: `node pruebas/curvas.test.js`, `node pruebas/niveles.test.js`, `node pruebas/evaluacion.test.js`, `node pruebas/restricciones.test.js` y `node pruebas/historia.test.js`. Los últimos resultados están en `pruebas/salida.txt`, `pruebas/salida-niveles.txt`, `pruebas/salida-evaluacion.txt`, `pruebas/salida-restricciones.txt` y `pruebas/salida-historia.txt`.
