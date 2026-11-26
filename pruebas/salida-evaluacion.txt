@@ -10,7 +10,7 @@ PASA  | Monedas posibles por estudiante en la larga: entre 55 y 56; la nota se e
 PASA  | Códigos de evaluación válidos e inválidos (sin niveles no vale)
 PASA  | La tabla ofrece lo que hay en el banco: circunferencias hasta 3,5,4 (fácil, medio, difícil); mixtos sin fáciles
 PASA  | Atajos: «Larga» llena 20 niveles y «Vaciar» deja el botón del QR desactivado
-PASA  | Enlace del QR: rol=estudiante, ev=akom3p-C111P111-30, evn=Quiz 1
+PASA  | Enlace del QR: rol=estudiante, ev=tzaj6x-C111P111-30, evn=Quiz 1
 PASA  | Resumen del panel: Cada estudiante tendrá 6 niveles y 30 minutos.
 PASA  | Antes de empezar: está en el Tutorial, el menú solo muestra Tutorial y se ve el aviso ««Quiz 1»: 6 niveles y 30 minutos. Si quieres, haz primero el Tutorial. El tiempo empieza cuando pulses el botón y ya no se detiene.»
 PASA  | El reloj no corre mientras hace el Tutorial (30:00 → 30:00 tras 2 s) y aún no puede terminar
