@@ -263,6 +263,14 @@ summary{cursor:pointer;font-weight:700}
     <span class="small" id="calcMsg">Usa + − * / ^ ( ) y sqrt( ). El resultado aparece mientras escribes.</span>
   </div>
 </div>
+<div class="modal" id="back" hidden>
+  <div class="card">
+    <h2 id="backTitle">Hola de nuevo</h2>
+    <p class="small" id="backText"></p>
+    <button class="btn" type="button" id="backGo">Continuar</button>
+    <button class="btn ghost" type="button" id="backNew">No soy yo</button>
+  </div>
+</div>
 <div class="modal" id="role" hidden>
   <div class="card">
     <h2>¿Quién va a jugar?</h2>
@@ -1033,12 +1041,12 @@ $("zIn").onclick=()=>setZoom(zoom.k*1.5); $("zOut").onclick=()=>setZoom(zoom.k/1
 
 /* ---- Rol: estudiante o profesor ---- */
 function askRole(){ ["reg","teacher"].forEach(id=>$(id).hidden=true); $("role").hidden=false; }
-$("roleStudent").onclick=()=>{ role="estudiante"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=true; askPlayer(); };
+$("roleStudent").onclick=()=>{ role="estudiante"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=true; askPlayer(true); };
 $("roleTeacher").onclick=()=>{ role="profesor"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=false; openTeacher(); };
 $("regBack").onclick=askRole; $("teacherBack").onclick=askRole;
 $("teacherPlay").onclick=()=>{ $("teacher").hidden=true; renderScore(); };
 /* ---- Registro del estudiante ---- */
-function askPlayer(){ $("reg").hidden=false; $("rErr").hidden=true; if(player){ $("rName").value=player.nombre; $("rLast").value=player.apellido; $("rDoc").value=player.documento; } setTimeout(()=>$("rName").focus(),50); }
+function askPlayer(fresh){ $("reg").hidden=false; $("rErr").hidden=true; if(fresh===true){ ["rName","rLast","rDoc"].forEach(id=>$(id).value=""); } else if(player){ $("rName").value=player.nombre; $("rLast").value=player.apellido; $("rDoc").value=player.documento; } setTimeout(()=>$("rName").focus(),50); }
 $("regForm").addEventListener("submit",e=>{ e.preventDefault();
   const n=$("rName").value.trim(), a=$("rLast").value.trim(), d=$("rDoc").value.trim();
   if(!n||!a||!d){ $("rErr").hidden=false; return; }
@@ -1098,7 +1106,18 @@ loadLevel(0); resize(); renderScore(); flush();
 let locked=store.get("euclidia2-lock",false);
 try{ if(new URLSearchParams(location.search).get("rol")==="estudiante"||/(^|[#&])rol=estudiante/.test(location.hash)){ locked=true; store.set("euclidia2-lock",true); } }catch(e){}
 if(locked){ role="estudiante"; store.set("euclidia2-role",role); $("regBack").hidden=true; $("teacherBtn").hidden=true; $("whoBtn").textContent="Cambiar de estudiante"; $("whoBtn").onclick=askPlayer; renderScore(); }
-if(!role) askRole(); else if(role==="estudiante"&&!player) askPlayer(); else if(role==="profesor") $("teacherBtn").hidden=false;
+// Al volver a abrir el juego (pestaña nueva) se pregunta si sigue la misma persona
+let seen=false; try{ seen=sessionStorage.getItem("euclidia2-tab")==="1"; }catch(e){}
+const markSeen=()=>{ try{ sessionStorage.setItem("euclidia2-tab","1"); }catch(e){} };
+function welcomeBack(){ const c=coinsTotal();
+  if(role==="profesor"){ $("backTitle").textContent="Hola de nuevo, profesor"; $("backText").textContent="La última vez entraste como profesor en este dispositivo."; $("backGo").textContent="Continuar como profesor"; $("backNew").textContent="Cambiar de rol"; }
+  else { $("backTitle").textContent=`Hola de nuevo, ${player.nombre}`; $("backText").textContent=`${player.nombre} ${player.apellido} tiene ${c} ${c===1?"moneda guardada":"monedas guardadas"} en este dispositivo.`; $("backGo").textContent=`Continuar como ${player.nombre}`; $("backNew").textContent=`No soy ${player.nombre}`; }
+  $("back").hidden=false; }
+$("backGo").onclick=()=>{ $("back").hidden=true; markSeen(); };
+$("backNew").onclick=()=>{ $("back").hidden=true; markSeen(); if(locked) askPlayer(true); else askRole(); };
+if(role==="profesor") $("teacherBtn").hidden=false;
+if(!role) askRole(); else if(role==="estudiante"&&!player) askPlayer(); else if(!seen) welcomeBack();
+markSeen();
 requestAnimationFrame(frame);
 window.__euclidia={LEVELS,loadLevel,submit:(arr)=>{ arr.forEach((v,i)=>{ if(typeof v==="string") $("eq"+i).value=v; else { $("eq"+i).value=v[0]; const I=parseInterval(v[1]); Object.assign(ivs[i],{v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):""}); renderIv(i); } }); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
