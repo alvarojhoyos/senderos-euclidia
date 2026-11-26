@@ -1396,7 +1396,7 @@ function ivButtons(k,r){ const st=ivs[k][r], box=$(`ivrow${k}_${r}`);
     b.disabled=empty; b.setAttribute("aria-label",empty?"Sin límite (infinito)":(closed?"Cerrado, toca para abrir":"Abierto, toca para cerrar")); }); }
 function ivsFrom(k){ const out=[];
   ivs[k].forEach(st=>{ const lo=st.lo.trim()?evalNum(st.lo):-Infinity, hi=st.hi.trim()?evalNum(st.hi):Infinity;
-    if(lo===-Infinity&&hi===Infinity) throw new Error("Escribe al menos un extremo, o quita esa restricción con ✕. La casilla vacía significa que ese lado no tiene límite.");
+    if(lo===-Infinity&&hi===Infinity) return; // sin extremos no limita nada: es como no tener restricción
     if(lo>=hi) throw new Error(`Está al revés: el extremo izquierdo (${fmt(lo)}) debe ser menor que el derecho (${fmt(hi)}).`);
     out.push({v:st.v,lo,hi}); });
   return out.length?out:null; }

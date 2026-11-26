@@ -33,6 +33,11 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
  res(!n.reached&&/restricción/.test(n.fb),'Mixto sin restricción en el tramo 1: Coni no sabe por dónde ir y el juego sugiere añadir una restricción');
  const e=await run('X3',[['x^2/9+y^2/4=1','y≤0'],['(x-7.5)^2/20.25+y^2/9=1','y≥0']]);
  res(e.reached,`Otro camino válido (una elipse en el tramo 2, con y ≥ 0) también llega a la meta: ${e.fb.split(' · ')[0]}`);
+ // Una restricción añadida pero vacía no limita nada: el juego traza y explica que Coni no sabe por dónde ir
+ const v=await p.evaluate(async()=>{ const U=window.__euclidia; U.loadLevel(U.LEVELS.findIndex(l=>l.id==='X1')); await new Promise(r=>setTimeout(r,150));
+   document.querySelector('#ivbox0 .ivadd').click(); const rows=document.querySelectorAll('#ivbox0 .ivrow').length; document.getElementById('eq0').value='x^2+y^2=4'; document.getElementById('eq1').value='y=x^2'; document.getElementById('go').click(); await new Promise(r=>setTimeout(r,300));
+   return {rows,fb:document.getElementById('fb').innerText.replace(/\n/g,' · '),drawn:window.__euclidia.state().g2.curves.length,choose:!!window.__euclidia.state().g2.choose}; });
+ res(v.rows===1&&!/al menos un extremo/.test(v.fb)&&v.drawn===2&&v.choose&&/no sabe cuál tomar/.test(v.fb),`Mixto con la circunferencia completa en el tramo 1 y una restricción vacía: dibuja las curvas y dice «${v.fb.split(' · ')[0]}»`);
  const t=await run('t0',[['x^2+y^2=9','0≤y']]);
  res(t.reached&&t.coins===t.of,'Tutorial: la práctica de la restricción se resuelve añadiendo 0 ≤ y');
  await b.close();

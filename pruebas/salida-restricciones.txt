@@ -5,6 +5,7 @@ PASA  | Con ✕ se quita una restricción y vuelve el botón para añadir
 PASA  | Mixto con dos restricciones en el tramo 2 (y ≥ 0 y x ≤ 7,5): llega con 3/3 monedas
 PASA  | Mixto sin restricción en el tramo 1: Coni no sabe por dónde ir y el juego sugiere añadir una restricción
 PASA  | Otro camino válido (una elipse en el tramo 2, con y ≥ 0) también llega a la meta: Llegaste, pero faltaron monedas.
+PASA  | Mixto con la circunferencia completa en el tramo 1 y una restricción vacía: dibuja las curvas y dice «Tramo 1: tu curva llega por dos lados y Coni no sabe cuál tomar.»
 PASA  | Tutorial: la práctica de la restricción se resuelve añadiendo 0 ≤ y
 
-Total: 8 pasan, 0 fallan.
+Total: 9 pasan, 0 fallan.
