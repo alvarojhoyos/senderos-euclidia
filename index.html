@@ -116,7 +116,7 @@ label,.tl{font:600 13px var(--f-body)}
 .ivt.var{font-style:italic;color:var(--curve);font-weight:700}
 .ivt:disabled{opacity:.45;cursor:default}
 .ivrow .sym{flex:0 0 auto}
-math-field.eqf{display:block;width:100%;min-width:0;font-size:24px;padding:6px 10px;min-height:52px;border-radius:10px;border:1.5px solid var(--grid-strong);background:var(--paper);color:var(--ink);
+math-field.eqf{display:block;width:100%;min-width:0;font-size:24px;padding:6px 10px;min-height:84px;border-radius:10px;border:1.5px solid var(--grid-strong);background:var(--paper);color:var(--ink);
   --caret-color:var(--accent);--primary-color:var(--accent);--selection-background-color:color-mix(in srgb,var(--accent) 25%,transparent);--selection-color:var(--ink);
   --contains-highlight-background-color:color-mix(in srgb,var(--curve) 10%,transparent);--placeholder-color:var(--muted);--smart-fence-color:var(--muted);outline:none}
 math-field.eqf.active{border-color:var(--accent)}
@@ -982,12 +982,15 @@ function buildPad(){
 }
 function setActive(el){ active=el; document.querySelectorAll(".eqf,.ivf").forEach(e=>e.classList.toggle("active",e===el)); }
 function mlPress(mf,k,id){
+  // la pantalla no se mueve sola: se guarda dónde estaba y se devuelve ahí después de escribir
+  const sy=window.scrollY, back=()=>{ if(Math.abs(window.scrollY-sy)>1) window.scrollTo({top:sy,behavior:"instant"}); };
+  requestAnimationFrame(()=>{ back(); requestAnimationFrame(back); }); setTimeout(back,80);
   if(!(mf.hasFocus&&mf.hasFocus())){ try{ mf.focus({preventScroll:true}); }catch(e){ mf.focus(); } }
   if(k.act==="del") mf.executeCommand("deleteBackward");
   else if(k.act==="clr") mf.value="";
   else if(k.act==="lt") mf.executeCommand("moveToPreviousChar");
   else if(k.act==="rt") mf.executeCommand("moveToNextChar");
-  else mf.executeCommand(["insert",TEX[id]||k.ins,{format:"latex",selectionMode:"placeholder",scrollIntoView:true}]);
+  else mf.executeCommand(["insert",TEX[id]||k.ins,{format:"latex",selectionMode:"placeholder",scrollIntoView:false}]);
 }
 function press(k,id){
   const inp=(active&&document.contains(active))?active:$("eq0");
