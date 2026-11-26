@@ -20,7 +20,7 @@
 :root{
   --paper:#f2f6ef; --panel:#ffffff; --grid:#d9e6d5; --grid-strong:#a9c2a6;
   --ink:#1b2735; --muted:#566a6a; --line:#cfdccb;
-  --accent:#d9480f; --curve:#1f5fbf; --gold:#d69a00; --ok:#2b8a3e; --bad:#c92a2a;
+  --accent:#d9480f; --curve:#1f5fbf; --part:#7b2cbf; --gold:#d69a00; --ok:#2b8a3e; --bad:#c92a2a;
   --f-display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
   --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
   --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -28,11 +28,11 @@
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
   --paper:#17231f; --panel:#1f2f2a; --grid:#263833; --grid-strong:#3c5750;
   --ink:#e7efe9; --muted:#9fb5ad; --line:#2f4640;
-  --accent:#ff8a4c; --curve:#7cc4ff; --gold:#ffd166; --ok:#69db7c; --bad:#ff6b6b; color-scheme:dark }}
+  --accent:#ff8a4c; --curve:#7cc4ff; --part:#c99bff; --gold:#ffd166; --ok:#69db7c; --bad:#ff6b6b; color-scheme:dark }}
 :root[data-theme="dark"]{
   --paper:#17231f; --panel:#1f2f2a; --grid:#263833; --grid-strong:#3c5750;
   --ink:#e7efe9; --muted:#9fb5ad; --line:#2f4640;
-  --accent:#ff8a4c; --curve:#7cc4ff; --gold:#ffd166; --ok:#69db7c; --bad:#ff6b6b; color-scheme:dark }
+  --accent:#ff8a4c; --curve:#7cc4ff; --part:#c99bff; --gold:#ffd166; --ok:#69db7c; --bad:#ff6b6b; color-scheme:dark }
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -101,6 +101,12 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .eyebrow{font:600 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
 .panel h2{margin:2px 0 0;font:700 23px/1.1 var(--f-display);text-wrap:balance}
 .story{margin:0}
+.lesson{border:1px solid var(--line);border-left:4px solid var(--part);border-radius:10px;padding:10px 12px;display:grid;gap:8px;background:color-mix(in srgb,var(--part) 6%,var(--panel))}
+.lesson .fm{font:600 15px var(--f-mono);overflow-x:auto;white-space:nowrap}
+.lesson .fm span{display:block;font:600 11px var(--f-body);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.lesson ul{margin:0;padding:0;list-style:none;display:grid;gap:5px;font-size:13.5px}
+.lesson li b{color:var(--part)}
+.lesson p{margin:0;font-size:13.5px}
 .targets{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
 .targets li{font:12px var(--f-mono);border:1px solid var(--line);border-radius:6px;padding:2px 7px;display:flex;gap:5px;align-items:center}
 .targets .mk{width:9px;height:9px;display:inline-block;border-radius:2px;background:var(--ink)}
@@ -198,7 +204,7 @@ summary{cursor:pointer;font-weight:700}
 .hojabox .ok{color:var(--ok)} .hojabox .bad{color:var(--bad)}
 @media (max-width:860px){
   .stage{position:sticky;top:0;z-index:5;box-shadow:0 6px 14px -10px color-mix(in srgb,var(--ink) 45%,transparent)}
-  .panel>.head{order:1} #fb{order:2} #form{order:3} .story{order:4} .panel.tut .story{order:1} .general{order:4} .targets{order:5} .hints{order:6} details{order:7}
+  .panel>.head{order:1} #fb{order:2} #form{order:3} .story{order:4} .panel.tut .story{order:1} .panel.tut .lesson{order:1} .general{order:4} .targets{order:5} .hints{order:6} details{order:7}
 }
 </style>
 
@@ -236,6 +242,7 @@ summary{cursor:pointer;font-weight:700}
         <h2 id="lvTitle">Primeros pasos</h2>
       </div>
       <p class="story" id="story"></p>
+      <div class="lesson" id="lesson" hidden></div>
       <div class="general" id="general" hidden></div>
       <ul class="targets" id="targets"></ul>
       <form id="form" autocomplete="off">
@@ -435,6 +442,34 @@ const LEVELS = [
   story:"Vector camina por la curva que tú escribes. Tiene que ir de la salida a la meta sin tocar obstáculos y recogiendo monedas. Para practicar, escribe con el teclado x² + y² = 9: toca x, □², +, y, □², =, 9. Pero ojo: la circunferencia llega a la meta por arriba y por abajo, y abajo hay un obstáculo. Elige el lado con la ecuación: en Restricción toca x para cambiarla por y, y escribe 0 en la primera casilla. Queda 0 ≤ y, solo la mitad de arriba. Luego pulsa Trazar.",
   targets:["x^2+y^2=9"], start:[-3,0], goal:[3,0], coins:[[0,3],[-2.12,2.12]], obstacles:[[0,-3]], view:{cx:0,cy:0,span:12},
   hints:["Las pistas orientan sin darte la respuesta. En el tutorial no gastan tus 3 pistas gratis.","Una curva cerrada, como la circunferencia, llega a la meta por dos lados. La restricción (por ejemplo 0 ≤ y) recorta la curva y deja solo el lado que quieres.","Si fallas, Vector recorre tu camino igual y ves dónde se equivocó. El intento anterior queda tenue en el mapa."]},
+ {id:"t1", tutorial:true, world:"Tutorial", conic:"circunferencia", diff:"fácil", type:"rescate", title:"Lección 1: la circunferencia", kind:"Tutorial · Circunferencia",
+  story:"Una circunferencia es el conjunto de puntos que están a la misma distancia r de un centro. En el mapa ves sus partes en morado. Escribe la circunferencia y Vector dará la vuelta completa: sale del muelle (2, 1) y vuelve a él.",
+  lesson:{formula:"(x − h)² + (y − k)² = r²", parts:[["Centro (h, k)","el punto del medio. En la ecuación sus coordenadas van con el signo contrario: centro (−1, 1) da (x + 1)² y (y − 1)²."],["Radio r","la distancia del centro a cualquier punto de la curva. En la ecuación va r², no r."]]},
+  parts:[{r:"centro",at:[-1,1],txt:"Centro (−1, 1)",side:"left"},{r:"radio",a:[-1,1],b:[1.12,3.12],txt:"r = 3"}],
+  answer:[["(x+1)^2+(y-1)^2=9"]], errors:[{eq:[["(x-1)^2+(y+1)^2=9"]],why:"signos de h y k",msg:"Tu centro quedó en (1, −1): dentro de cada paréntesis va el signo contrario al de la coordenada del centro."},{eq:[["(x+1)^2+(y-1)^2=3"]],why:"r en vez de r²",msg:"Tu radio es demasiado pequeño: en la ecuación va r² = 9, no r = 3."}],
+  targets:["(x+1)^2+(y-1)^2=9"], start:[2,1], goal:[2,1], coins:[[-1,4],[-4,1],[-1,-2]], obstacles:[], view:{cx:-1,cy:1,span:12},
+  hints:["El centro y el radio están dibujados en el mapa.","Con centro (−1, 1) y r = 3 queda (x − (−1))² + (y − 1)² = 3²."]},
+ {id:"t2", tutorial:true, world:"Tutorial", conic:"elipse", diff:"fácil", type:"rescate", title:"Lección 2: la elipse", kind:"Tutorial · Elipse",
+  story:"Una elipse es el conjunto de puntos cuya suma de distancias a dos focos es constante. Es como una circunferencia estirada: tiene un semieje horizontal y uno vertical. Escribe la elipse y Vector dará la vuelta completa desde (4, 0).",
+  lesson:{formula:"(x − h)²/a² + (y − k)²/b² = 1", parts:[["Centro (h, k)","el punto medio de la elipse."],["Semiejes a y b","a es la distancia del centro al borde en horizontal y va bajo x; b es la vertical y va bajo y. En la ecuación van al cuadrado."],["Focos","están sobre el eje mayor, a una distancia c del centro, con c² = a² − b²."]]},
+  parts:[{r:"centro",at:[0,0],txt:"Centro (0, 0)"},{r:"semieje",a:[0,0],b:[4,0],txt:"a = 4"},{r:"semieje",a:[0,0],b:[0,2],txt:"b = 2"},{r:"foco",at:[-3.46,0],txt:"Foco (−√12, 0)",dy:16},{r:"foco",at:[3.46,0]}],
+  answer:[["x^2/16+y^2/4=1"]], errors:[{eq:[["x^2/4+y^2/16=1"]],why:"a y b intercambiados",msg:"Intercambiaste los semiejes: bajo x va el semieje horizontal, a² = 16."},{eq:[["x^2/4+y^2/2=1"]],why:"a en vez de a²",msg:"Tu elipse es demasiado pequeña: bajo x e y van a² y b², no a y b."}],
+  targets:["x^2/16+y^2/4=1"], start:[4,0], goal:[4,0], coins:[[0,2],[-4,0],[0,-2]], obstacles:[], view:{cx:0,cy:0.5,span:12},
+  hints:["Mira las flechas: a va del centro hacia el lado y b hacia arriba.","Con a = 4 y b = 2 los denominadores son 4² y 2²."]},
+ {id:"t3", tutorial:true, world:"Tutorial", conic:"parábola", diff:"fácil", type:"escape", title:"Lección 3: la parábola", kind:"Tutorial · Parábola",
+  story:"Una parábola es el conjunto de puntos que están a la misma distancia de un foco y de una recta, la directriz. Vector va de (−4, 2) a (4, 2): esos puntos están a la altura del foco.",
+  lesson:{formula:"(x − h)² = 4p(y − k)   o   y = a(x − h)² + k", parts:[["Vértice (h, k)","el punto donde la parábola da la vuelta."],["Foco y directriz","el foco está a una distancia p del vértice y la directriz a la misma distancia p, del otro lado."],["p y a","si el foco está arriba del vértice, p es positivo y abre hacia arriba. Las dos formas se relacionan con a = 1/(4p)."]]},
+  parts:[{r:"vértice",at:[0,0],txt:"Vértice (0, 0)"},{r:"foco",at:[0,2],txt:"Foco (0, 2)"},{r:"p",a:[0,0],b:[0,2],txt:"p = 2"},{r:"directriz",y:-2,txt:"Directriz y = −2"}],
+  answer:[["x^2=8y"]], errors:[{eq:[["x^2=2y"]],why:"usó p en vez de 4p",msg:"Tu parábola es demasiado cerrada: en (x − h)² = 4p(y − k) el número es 4p = 8, no p."},{eq:[["y^2=8x"]],why:"y al cuadrado",msg:"Pusiste al cuadrado la y: la directriz es horizontal, así que la parábola abre hacia arriba o hacia abajo y la x va al cuadrado."}],
+  targets:["x^2=8y"], start:[-4,2], goal:[4,2], coins:[[0,0],[2,0.5]], obstacles:[], view:{cx:0,cy:1,span:12},
+  hints:["El vértice es (0, 0) y el foco está 2 unidades arriba: p = 2.","Con vértice en el origen queda x² = 4py."]},
+ {id:"t4", tutorial:true, world:"Tutorial", conic:"hipérbola", diff:"fácil", type:"escape", title:"Lección 4: la hipérbola", kind:"Tutorial · Hipérbola",
+  story:"Una hipérbola es el conjunto de puntos cuya diferencia de distancias a dos focos es constante. Tiene dos ramas que se acercan a sus asíntotas sin tocarlas. Vector sale del vértice (3, 0) y sube por la rama derecha hasta la meta (5, 8/3).",
+  lesson:{formula:"(x − h)²/a² − (y − k)²/b² = 1", parts:[["Centro y vértices","los vértices están a una distancia a del centro, sobre el eje que cruza la curva."],["Rectángulo y asíntotas","el rectángulo mide 2a de ancho y 2b de alto; sus diagonales son las asíntotas, con pendiente ±b/a."],["Focos","más afuera que los vértices, a una distancia c del centro, con c² = a² + b²."]]},
+  parts:[{r:"rect",a:[-3,-2],b:[3,2]},{r:"asíntota",at:[0,0],m:2/3,txt:"y = 2x/3"},{r:"asíntota",at:[0,0],m:-2/3,txt:"y = −2x/3"},{r:"centro",at:[0,0],txt:"Centro",dy:12},{r:"vértice",at:[3,0],txt:"Vértice",side:"left",dy:-11},{r:"semieje",a:[0,0],b:[0,2],txt:"b = 2"},{r:"foco",at:[3.61,0],txt:"Foco (√13, 0)",dy:40}],
+  answer:[["x^2/9-y^2/4=1"]], errors:[{eq:[["x^2/9-y^2/9=1"]],why:"b = a",msg:"Las ramas se abren demasiado: la pendiente de las asíntotas es b/a = 2/3, así que b = 2."},{eq:[["x^2/9+y^2/4=1"]],why:"elipse",msg:"Tu ecuación es una elipse: en la hipérbola los dos términos se restan."}],
+  targets:["x^2/9-y^2/4=1"], start:[3,0], goal:[5,2.67], coins:[[3.56,1.27],[4.46,2.2]], obstacles:[], view:{cx:1.5,cy:1,span:13},
+  hints:["El vértice (3, 0) da a = 3 y el rectángulo da b = 2.","La hipérbola abre hacia los lados: el término positivo es el de x."]},
  {"id":"C1","world":"Circunferencias","chain":"El Lago Redondo","step":1,"conic":"circunferencia","diff":"fácil","type":"rescate","title":"El Faro del Lago","kind":"Circunferencia · Rescate","story":"El faro está en el centro del lago, en (0, 0). Vector sale del muelle (4, 0) y debe dar la vuelta completa.","targets":["x^2+y^2=16"],"answer":[["x^2+y^2=16"]],"errors":[{"eq":[["x^2+y^2=4"]],"why":"r en lugar de r²","msg":"Tu radio es demasiado pequeño: en la ecuación va r², no r."},{"eq":[["(x-2)^2+y^2=4"]],"why":"centro en el punto medio entre el faro y el muelle","msg":"Tu centro está corrido a la derecha: el faro está en el origen."}],"start":[4,0],"goal":[4,0],"coins":[[0,4],[-2.83,-2.83]],"obstacles":[[0.82,1.62]],"view":{"cx":0,"cy":0.5,"span":15},"hints":["En un Rescate Vector da la vuelta completa y vuelve al muelle. El faro está en el centro.","El radio es la distancia del faro (0, 0) al muelle (4, 0)."]},
  {"id":"C2","world":"Circunferencias","chain":"El Lago Redondo","step":2,"conic":"circunferencia","diff":"medio","type":"rescate","title":"Rescate en la Laguna","kind":"Circunferencia · Rescate","story":"La laguna tiene centro (−2, 1). Vector sale del muelle (2, 1).","targets":["(x+2)^2+(y-1)^2=16"],"answer":[["(x+2)^2+(y-1)^2=16"]],"errors":[{"eq":[["(x-2)^2+(y+1)^2=4"]],"why":"signos de h y k cambiados","msg":"Tu centro quedó en (2, −1): revisa los signos dentro de los paréntesis."},{"eq":[["(x+2)^2+(y-1)^2=4"]],"why":"r en lugar de r²","msg":"Tu radio es demasiado pequeño: en la ecuación va r², no r."}],"start":[2,1],"goal":[2,1],"coins":[[-2,5],[-6,1],[-2,-3]],"obstacles":[[0.08,-0.43]],"view":{"cx":-2,"cy":1.5,"span":15},"hints":["El centro de la laguna es (−2, 1). Mide la distancia al muelle.","Ese número es r; en la ecuación va r²."]},
  {"id":"C3","world":"Circunferencias","chain":"El Lago Redondo","step":3,"conic":"circunferencia","diff":"difícil","type":"rescate","title":"El Remolino","kind":"Circunferencia · forma general · Rescate","story":"En medio del lago gira un remolino y su borde sigue la ecuación del mapa. Vector sale de la boya (1, −2), rescata a los nadadores y vuelve a la boya.","general":"x² + y² − 2x − 4y − 11 = 0","targets":["(x-1)^2+(y-2)^2=16"],"answer":[["(x-1)^2+(y-2)^2=16"]],"errors":[{"eq":[["(x+1)^2+(y+2)^2=4"]],"why":"signos al completar (radio con la salida)","msg":"Tu centro quedó en (−1, −2). Al completar x² − 2x el paréntesis lleva el signo del término en x."},{"eq":[["(x-1)^2+(y-2)^2=11"]],"why":"no sumó lo mismo al otro lado","msg":"Tu radio es demasiado pequeño: al completar cuadrados suma lo mismo al lado derecho."}],"start":[1,-2],"goal":[1,-2],"coins":[[5,2],[1,6],[-3,2]],"obstacles":[[-0.43,-0.08]],"view":{"cx":1,"cy":2.5,"span":15},"hints":["Agrupa: (x² − 2x) + (y² − 4y) = 11.","Completa cada paréntesis con (la mitad del coeficiente)² y suma esos números también a la derecha."]},
@@ -894,6 +929,25 @@ function curvesLayer(V,C){
 function label(txt,sx,sy,C){ x2.font="600 11px "+css("--f-mono"); x2.textBaseline="bottom"; x2.textAlign="left";
   const w=x2.measureText(txt).width; const lx=Math.max(4,Math.min(W-w-4,sx)); const ly=Math.max(16,Math.min(H-4,sy));
   x2.fillStyle=C.paper; x2.globalAlpha=0.8; x2.fillRect(lx-2,ly-13,w+4,14); x2.globalAlpha=1; x2.fillStyle=C.ink; x2.fillText(txt,lx,ly); }
+function partLabel(txt,sx,sy,col,C,align){ x2.font="700 11.5px "+css("--f-body"); x2.textBaseline="middle"; x2.textAlign="left";
+  const w=x2.measureText(txt).width; let lx=align==="left"?sx-w-8:sx+8; lx=Math.max(4,Math.min(W-w-4,lx)); const ly=Math.max(10,Math.min(H-10,sy));
+  x2.fillStyle=C.paper; x2.globalAlpha=0.85; x2.fillRect(lx-3,ly-8,w+6,16); x2.globalAlpha=1; x2.fillStyle=col; x2.fillText(txt,lx,ly); }
+function drawParts(parts,V,col,C){ const B=bounds(V); x2.save(); x2.strokeStyle=col; x2.fillStyle=col; x2.lineCap="round";
+  for(const p of parts){
+    if(p.r==="rect"){ const a=toS(p.a[0],p.a[1],V), b=toS(p.b[0],p.b[1],V); x2.lineWidth=1.5; x2.setLineDash([5,5]); x2.globalAlpha=0.7; x2.strokeRect(Math.min(a[0],b[0]),Math.min(a[1],b[1]),Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1])); x2.globalAlpha=1; x2.setLineDash([]); }
+    else if(p.r==="directriz"||p.r==="asíntota"){ let A,Bp;
+      if(p.r==="directriz") [A,Bp]=p.y!=null?[[B.x0,p.y],[B.x1,p.y]]:[[p.x,B.y0],[p.x,B.y1]];
+      else { A=[B.x0,p.at[1]+p.m*(B.x0-p.at[0])]; Bp=[B.x1,p.at[1]+p.m*(B.x1-p.at[0])]; }
+      const a=toS(A[0],A[1],V), b=toS(Bp[0],Bp[1],V); x2.lineWidth=2; x2.setLineDash([8,6]); x2.beginPath(); x2.moveTo(a[0],a[1]); x2.lineTo(b[0],b[1]); x2.stroke(); x2.setLineDash([]);
+      if(p.txt){ let q; if(p.r==="directriz") q=p.y!=null?[B.x0+0.3*(B.x1-B.x0),p.y]:[p.x,B.y0+0.3*(B.y1-B.y0)];
+        else { const xx=p.at[0]+0.7*(B.x0-p.at[0]); q=[xx,p.at[1]+p.m*(xx-p.at[0])]; }
+        const s=toS(q[0],q[1],V); partLabel(p.txt,s[0],s[1]-(p.r==="directriz"?10:0),col,C); } }
+    else if(p.r==="radio"||p.r==="semieje"||p.r==="p"){ const a=toS(p.a[0],p.a[1],V), b=toS(p.b[0],p.b[1],V); x2.lineWidth=2.5; x2.beginPath(); x2.moveTo(a[0],a[1]); x2.lineTo(b[0],b[1]); x2.stroke();
+      const ang=Math.atan2(b[1]-a[1],b[0]-a[0]); x2.beginPath(); x2.moveTo(b[0],b[1]); x2.lineTo(b[0]-9*Math.cos(ang-0.45),b[1]-9*Math.sin(ang-0.45)); x2.lineTo(b[0]-9*Math.cos(ang+0.45),b[1]-9*Math.sin(ang+0.45)); x2.closePath(); x2.fill();
+      if(p.txt){ const vert=Math.abs(b[0]-a[0])<Math.abs(b[1]-a[1]); partLabel(p.txt,(a[0]+b[0])/2,(a[1]+b[1])/2+(vert?0:-11),col,C,vert?"left":null); } }
+    else { const s=toS(p.at[0],p.at[1],V); x2.beginPath(); if(p.r==="foco"){ for(let k=0;k<8;k++){ const r=k%2?2.5:6.5, an=k*Math.PI/4; x2.lineTo(s[0]+r*Math.cos(an),s[1]+r*Math.sin(an)); } x2.closePath(); } else x2.arc(s[0],s[1],4.5,0,7); x2.fill();
+      if(p.txt) partLabel(p.txt,s[0],s[1]+(p.dy??14),col,C,p.side); } }
+  x2.restore(); }
 function draw(){
   const V=view(), L=level(), t=performance.now()/1000; x2.setTransform(DPR,0,0,DPR,0,0);
   const C={paper:css("--paper"),grid:css("--grid"),gs:css("--grid-strong"),ink:css("--ink"),muted:css("--muted"),curve:css("--curve"),acc:css("--accent"),gold:css("--gold"),bad:css("--bad"),ok:css("--ok")};
@@ -909,6 +963,8 @@ function draw(){
   x2.textAlign="right"; x2.textBaseline="middle";
   for(let gy=Math.ceil(B.y0); gy<=B.y1; gy++){ if(gy===0||gy%2) continue; const [,sy]=toS(0,gy,V); x2.fillText(String(gy).replace("-","−"),Math.min(Math.max(ox-5,24),W-4),sy); }
   x2.fillStyle=C.ink; x2.font="italic 600 14px "+css("--f-body"); x2.textAlign="right"; x2.fillText("x",W-8,oy-10); x2.textAlign="left"; x2.fillText("y",ox+8,12);
+  // partes de la cónica en las lecciones del tutorial (centro, radio, semiejes, focos, directriz, asíntotas)
+  if(L.parts) drawParts(L.parts,V,css("--part"),C);
   // curvas (intento anterior y actual) desde la capa guardada: solo se vuelven a trazar si algo cambió
   x2.drawImage(curvesLayer(V,C),0,0,W,H);
   if(g2.prevCurves){ x2.fillStyle=C.muted; x2.font="600 11px "+css("--f-body"); x2.textAlign="right"; x2.textBaseline="bottom"; x2.fillText("- - intento anterior",W-10,H-54); }
@@ -1181,7 +1237,8 @@ function renderLevels(){
   const tabs=document.createElement("div"); tabs.className="worlds"; tabs.setAttribute("role","tablist"); tabs.setAttribute("aria-label","Mundos");
   worlds.forEach(w=>{ const ls=LEVELS.filter(l=>wOf(l)===w), t=document.createElement("button"); t.type="button"; t.className="wt"; t.setAttribute("role","tab"); t.setAttribute("aria-selected",String(w===menuWorld));
     const got=ls.reduce((s,l)=>s+(prog.best[l.id]||0),0), all=ls.reduce((s,l)=>s+l.coins.length,0);
-    t.innerHTML=esc(w)+(ls[0].tutorial?(prog.best[ls[0].id]?' <span class="got">✓</span>':""):` <span class="got">${got}/${all}</span>`);
+    const tut=ls.every(l=>l.tutorial), done=ls.filter(l=>prog.best[l.id]).length;
+    t.innerHTML=esc(w)+(tut?` <span class="got">${done===ls.length?"✓":done+"/"+ls.length}</span>`:` <span class="got">${got}/${all}</span>`);
     t.onclick=()=>{ menuWorld=w; renderLevels(); }; tabs.appendChild(t); });
   box.appendChild(tabs);
   const sel=tabs.querySelector('[aria-selected="true"]'); if(sel) tabs.scrollLeft=Math.max(0,sel.offsetLeft-tabs.offsetLeft-(tabs.clientWidth-sel.offsetWidth)/2);
@@ -1256,6 +1313,8 @@ function loadLevel(i){
   idx=i; menuWorld=wOf(LEVELS[i]); delete $("hintBtn").dataset.confirm; const L=level(); renderLevels(); resetZoom();
   const chainLen=L.chain?LEVELS.filter(l=>l.chain===L.chain).length:0;
   $("eyebrow").textContent=L.kind+(L.chain?` · ${L.chain} ${L.step}/${chainLen}`:""); $("lvTitle").textContent=L.title; $("story").textContent=L.story; $("story").parentElement.classList.toggle("tut",!!L.tutorial);
+  const ls=$("lesson"); ls.hidden=!L.lesson;
+  ls.innerHTML=L.lesson?`<div class="fm"><span>Forma canónica</span>${esc(L.lesson.formula)}</div><ul>${L.lesson.parts.map(p=>`<li><b>${esc(p[0])}:</b> ${esc(p[1])}</li>`).join("")}</ul>`+(L.parts?`<p class="small">En el mapa, las partes están en morado.</p>`:""):"";
   $("general").hidden=!L.general; $("general").textContent=L.general?"Ecuación del mapa: "+L.general:"";
   const T=$("targets"); T.innerHTML="";
   const add=(cls,txt)=>{ const li=document.createElement("li"); li.className=cls; li.innerHTML=`<span class="mk"></span>${esc(txt)}`; T.appendChild(li); };
