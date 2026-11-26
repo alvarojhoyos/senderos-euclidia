@@ -1,5 +1,7 @@
 # Senderos de Euclidia
 
+## ▶ [Jugar: alvarojhoyos.github.io/senderos-euclidia](https://alvarojhoyos.github.io/senderos-euclidia/)
+
 Juego para aprender cónicas en Cálculo en varias variables. El estudiante escribe la ecuación canónica y el robot Vector recorre la curva de la salida a la meta.
 
 - `index.html`: el juego completo.
