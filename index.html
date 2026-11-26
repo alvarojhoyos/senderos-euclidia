@@ -179,6 +179,13 @@ summary{cursor:pointer;font-weight:700}
 #qrBox{display:grid;place-items:center;background:#fff;border-radius:12px;padding:12px;min-height:120px}
 #qrBox img,#qrBox canvas{max-width:100%;height:auto}
 .url{font:12px var(--f-mono);word-break:break-all;background:var(--paper);border-radius:8px;padding:6px 8px}
+.hojabox{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.hojabox h3{margin:0;font:800 16px var(--f-display)}
+.hojabox input{width:100%;font:13px var(--f-mono);padding:9px 10px;border-radius:9px;border:1.5px solid var(--grid-strong);background:var(--paper);color:var(--ink)}
+.hojabox .row{display:flex;flex-wrap:wrap;gap:6px}
+.hojabox ol{margin:6px 0;padding-left:20px;display:grid;gap:6px;font-size:14px}
+.hojabox textarea{width:100%;font:11px/1.4 var(--f-mono);border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:6px}
+.hojabox .ok{color:var(--ok)} .hojabox .bad{color:var(--bad)}
 @media (max-width:860px){
   .panel>.head{order:1} #form{order:2} #fb{order:3} .story{order:4} .panel.tut .story{order:1} .general{order:4} .targets{order:5} .hints{order:6} details{order:7}
 }
@@ -298,6 +305,78 @@ summary{cursor:pointer;font-weight:700}
     <div id="qrBox"><span class="small">Generando…</span></div>
     <div class="url" id="qrUrl"></div>
     <p class="small" id="qrNote"></p>
+    <section class="hojabox" aria-labelledby="hojaH">
+      <h3 id="hojaH">Hoja de resultados</h3>
+      <p class="small" id="hojaState"></p>
+      <label for="hojaIn">Enlace de tu hoja (el que termina en /exec)</label>
+      <input id="hojaIn" placeholder="https://script.google.com/macros/s/…/exec" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off">
+      <div class="row"><button class="btn" type="button" id="hojaSave">Guardar enlace</button><button class="btn ghost" type="button" id="hojaTest">Enviar una fila de prueba</button></div>
+      <p class="small" id="hojaMsg" aria-live="polite"></p>
+      <details>
+        <summary>Cómo crear tu hoja (una sola vez, unos 5 minutos)</summary>
+        <ol>
+          <li>Abre <a href="https://sheets.new" target="_blank" rel="noopener">sheets.new</a> con tu cuenta de Google. Se crea una hoja vacía y privada.</li>
+          <li>En la hoja, ve a <b>Extensiones → Apps Script</b>. Borra lo que haya, pega el código de abajo y guarda.</li>
+          <li>Pulsa <b>Implementar → Nueva implementación</b>. En el engranaje elige <b>Aplicación web</b>. En "Ejecutar como" deja <b>Yo</b>, y en "Quién tiene acceso" elige <b>Cualquier persona</b>. Pulsa Implementar y autoriza con tu cuenta.</li>
+          <li>Copia la <b>URL de la aplicación web</b> (termina en /exec), pégala arriba y pulsa Guardar enlace.</li>
+          <li>Pulsa "Enviar una fila de prueba" y mira tu hoja: debe aparecer la pestaña Intentos con una fila.</li>
+        </ol>
+        <p class="small">Los estudiantes no ven la hoja. Solo pueden agregarle filas desde el juego. En la pestaña <b>Resumen</b> verás una fila por estudiante, con su mejor puntaje y su nota.</p>
+        <textarea id="hojaCode" readonly rows="7" aria-label="Código para Apps Script">/**
+ * Senderos de Euclidia: recibe los resultados del juego y los guarda en esta hoja.
+ * Crea dos pestañas: &quot;Resumen&quot; (una fila por estudiante, con su mejor puntaje) e &quot;Intentos&quot; (cada nivel superado).
+ * Pasos: Extensiones &gt; Apps Script, pega este código y guarda. Luego Implementar &gt; Nueva implementación &gt;
+ * Aplicación web (Ejecutar como: yo; Quién tiene acceso: cualquier persona). Copia la URL que termina en /exec
+ * y pégala en el juego, en el panel del profesor.
+ */
+function doPost(e) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    const libro = SpreadsheetApp.getActiveSpreadsheet();
+    const d = JSON.parse(e.postData.contents);
+    const intentos = hojaCon(libro, &quot;Intentos&quot;, [&quot;Fecha&quot;, &quot;Nombre&quot;, &quot;Apellido&quot;, &quot;Documento&quot;, &quot;Nivel&quot;,
+      &quot;Monedas del nivel&quot;, &quot;Monedas totales&quot;, &quot;Monedas posibles&quot;, &quot;Pistas usadas&quot;, &quot;Nota&quot;]);
+    if (d.prueba) {
+      intentos.appendRow([new Date(), &quot;Prueba de conexión desde el juego&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;]);
+      return texto(&quot;ok&quot;);
+    }
+    intentos.appendRow([new Date(d.fecha), d.nombre, d.apellido, String(d.documento), d.nivel, d.monedasNivel,
+      d.monedasTotales, d.monedasPosibles, d.pistas, d.nota]);
+    const resumen = hojaCon(libro, &quot;Resumen&quot;, [&quot;Nombre&quot;, &quot;Apellido&quot;, &quot;Documento&quot;, &quot;Monedas&quot;, &quot;Monedas posibles&quot;,
+      &quot;Nota&quot;, &quot;Última actualización&quot;]);
+    const n = resumen.getLastRow() - 1;
+    const docs = n &gt; 0 ? resumen.getRange(2, 3, n, 1).getValues().map(function (r) { return String(r[0]); }) : [];
+    const i = docs.indexOf(String(d.documento));
+    const fila = [d.nombre, d.apellido, String(d.documento), d.monedasTotales, d.monedasPosibles, d.nota, new Date()];
+    if (i &lt; 0) resumen.appendRow(fila);
+    else if (Number(resumen.getRange(i + 2, 4).getValue()) &lt;= Number(d.monedasTotales))
+      resumen.getRange(i + 2, 1, 1, fila.length).setValues([fila]);
+    return texto(&quot;ok&quot;);
+  } finally {
+    lock.releaseLock();
+  }
+}
+function doGet() {
+  return texto(&quot;La hoja de Senderos de Euclidia está lista para recibir resultados.&quot;);
+}
+function hojaCon(libro, nombre, encabezado) {
+  let h = libro.getSheetByName(nombre);
+  if (!h) {
+    h = libro.insertSheet(nombre);
+    h.appendRow(encabezado);
+    h.setFrozenRows(1);
+    h.getRange(1, 1, 1, encabezado.length).setFontWeight(&quot;bold&quot;);
+  }
+  return h;
+}
+function texto(t) {
+  return ContentService.createTextOutput(t);
+}
+</textarea>
+        <div class="row"><button class="btn ghost" type="button" id="hojaCopy">Copiar el código</button></div>
+      </details>
+    </section>
     <button class="btn" type="button" id="teacherPlay">Probar el juego como profesor</button>
     <p class="small">Como profesor puedes jugar todos los niveles; tus monedas no se envían a la hoja de resultados.</p>
     <button class="linkbtn" type="button" id="teacherBack">Volver: no soy profesor</button>
@@ -310,7 +389,7 @@ summary{cursor:pointer;font-weight:700}
 /* ============ Configuración ============ */
 // Dirección de la aplicación web de Google Apps Script que guarda los resultados en la hoja del profesor.
 // Mientras esté vacía, los resultados se guardan en el celular y se envían cuando se configure.
-const RESULTS_URL = "";
+const RESULTS_URL = "";   // opcional: hoja fija para todos. Lo normal es que cada profesor la pegue en su panel.
 const TOTAL_COINS = 12, FREE_HINTS = 3;
 // Editor tipo cuaderno (MathLive). Si la librería no carga, el juego usa casillas de texto normales.
 const ML=!!(window.MathfieldElement&&customElements.get("math-field"));
@@ -818,8 +897,10 @@ function queueResult(L,coins){
     monedasNivel:coins,monedasTotales:coinsTotal(),monedasPosibles:TOTAL_COINS,pistas:prog.hintsUsed,nota:Math.round(grade()*100)/100});
   store.set("euclidia2-queue",q); flush();
 }
+const HOJA_RE=/^https:\/\/script\.google\.com\/macros\/s\/([\w-]{20,})\/exec\/?$/;
+function resultsUrl(){ return store.get("euclidia2-hoja","")||RESULTS_URL; }
 async function flush(){
-  const q=store.get("euclidia2-queue",[]);
+  const q=store.get("euclidia2-queue",[]); const RESULTS_URL=resultsUrl();
   if(!RESULTS_URL){ $("sendStatus").textContent=q.length?`Resultados guardados en este dispositivo (${q.length}). Se enviarán cuando el profesor conecte su hoja de resultados.`:"Tus resultados se guardan en este dispositivo."; return; }
   while(q.length){
     try{ await fetch(RESULTS_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(q[0])}); q.shift(); store.set("euclidia2-queue",q); }
@@ -1058,10 +1139,24 @@ $("whoBtn").onclick=askRole;
 
 /* ---- Vista del profesor: código QR ---- */
 $("teacherBtn").onclick=()=>openTeacher();
+function hojaUI(){ const h=resultsUrl(); $("hojaIn").value=h;
+  $("hojaState").innerHTML=h?'<span class="ok">Conectada.</span> Los resultados de quienes entren por el código QR llegan a tu hoja.':'<span class="bad">Sin hoja todavía.</span> Sin ella, los resultados quedan guardados solo en cada celular y se envían cuando la conectes.'; }
+$("hojaSave").onclick=()=>{ const v=$("hojaIn").value.trim(); const m=$("hojaMsg");
+  if(!v){ store.set("euclidia2-hoja",""); m.textContent="Quitaste la hoja. El código QR ya no la lleva."; hojaUI(); openTeacher(); return; }
+  if(/docs\.google\.com\/spreadsheets/.test(v)){ m.innerHTML='<span class="bad">Ese es el enlace de la hoja misma.</span> Hace falta el de la aplicación web, que empieza con script.google.com y termina en /exec (paso 4).'; return; }
+  if(!HOJA_RE.test(v)){ m.innerHTML='<span class="bad">Ese enlace no parece de una aplicación web de Apps Script.</span> Debe empezar con https://script.google.com/macros/s/ y terminar en /exec.'; return; }
+  store.set("euclidia2-hoja",v.replace(/\/$/,"")); m.textContent="Guardado. El código QR ya incluye tu hoja: proyéctalo de nuevo si lo habías mostrado."; hojaUI(); openTeacher(); };
+$("hojaTest").onclick=async()=>{ const h=resultsUrl(), m=$("hojaMsg"); if(!h){ m.textContent="Primero guarda el enlace de tu hoja."; return; }
+  m.textContent="Enviando…";
+  try{ await fetch(h,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({prueba:true})}); m.textContent="Enviada. Abre tu hoja: en la pestaña Intentos debe aparecer \"Prueba de conexión desde el juego\". Si no aparece, revisa que en el paso 3 hayas elegido \"Cualquier persona\"."; }
+  catch(e){ m.innerHTML='<span class="bad">No se pudo enviar.</span> '+(/claude\.ai|claudeusercontent/.test(location.href)?"Esta vista previa no permite enviar datos: prueba desde el enlace público del juego.":"Revisa tu conexión a internet."); } };
+$("hojaCopy").onclick=async()=>{ const t=$("hojaCode"); try{ await navigator.clipboard.writeText(t.value); $("hojaCopy").textContent="Código copiado"; }catch(e){ t.focus(); t.select(); $("hojaCopy").textContent="Selecciónalo y cópialo"; } };
 function openTeacher(){
-  $("teacher").hidden=false; const u=new URL(location.href); u.hash=""; u.searchParams.set("rol","estudiante"); const url=u.toString(); $("qrUrl").textContent=url;
+  $("teacher").hidden=false; const u=new URL(location.href); u.hash=""; u.search=""; u.searchParams.set("rol","estudiante");
+  const hm=HOJA_RE.exec(resultsUrl()||""); if(hm) u.searchParams.set("hoja",hm[1]);
+  const url=u.toString(); $("qrUrl").textContent=url; hojaUI();
   const local=/claude\.ai|claudeusercontent|^file:|localhost/.test(url);
-  $("qrNote").textContent=local?"Esta es una vista previa privada: el código servirá cuando el juego esté publicado en GitHub Pages con un enlace público.":"";
+  $("qrNote").textContent=local?"Esta es una vista previa privada: el código servirá cuando el juego esté publicado en GitHub Pages con un enlace público.":(hm?"":"Todavía no conectaste tu hoja de resultados (abajo).");
   const box=$("qrBox"); box.innerHTML='<span class="small">Generando…</span>';
   const draw=()=>{ box.innerHTML=""; try{ new window.QRCode(box,{text:url,width:240,height:240,correctLevel:window.QRCode.CorrectLevel.M}); }catch(e){ box.innerHTML='<span class="small">No se pudo generar el código. Comparte el enlace de abajo.</span>'; } };
   if(window.QRCode) draw(); else { const s=document.createElement("script"); s.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"; s.onload=draw; s.onerror=()=>{ box.innerHTML='<span class="small">No se pudo cargar el generador de códigos. Comparte el enlace de abajo.</span>'; }; document.head.appendChild(s); }
@@ -1101,6 +1196,8 @@ function frame(now){
   if(g2.anim){ g2.prog+=g2.speed*dt; if(g2.prog>=g2.path.length-1){ g2.prog=g2.path.length-1; g2.anim=false; finish(); } }
   draw(); requestAnimationFrame(frame);
 }
+// El código QR del profesor puede traer su hoja de resultados (?hoja=ID)
+try{ const hid=new URLSearchParams(location.search).get("hoja"); if(hid&&/^[\w-]{20,}$/.test(hid)) store.set("euclidia2-hoja",`https://script.google.com/macros/s/${hid}/exec`); }catch(e){}
 loadLevel(0); resize(); renderScore(); flush();
 // Quien entra por el QR del profesor queda fijo como estudiante en ese dispositivo: no puede elegir ser profesor
 let locked=store.get("euclidia2-lock",false);
