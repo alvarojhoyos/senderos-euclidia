@@ -116,7 +116,7 @@ label,.tl{font:600 13px var(--f-body)}
 .ivt.var{font-style:italic;color:var(--curve);font-weight:700}
 .ivt:disabled{opacity:.45;cursor:default}
 .ivrow .sym{flex:0 0 auto}
-math-field.eqf{display:block;width:100%;min-width:0;font-size:24px;padding:6px 10px;min-height:84px;border-radius:10px;border:1.5px solid var(--grid-strong);background:var(--paper);color:var(--ink);
+math-field.eqf{display:block;width:100%;min-width:0;font-size:24px;padding:6px 10px;height:88px;border-radius:10px;border:1.5px solid var(--grid-strong);background:var(--paper);color:var(--ink);
   --caret-color:var(--accent);--primary-color:var(--accent);--selection-background-color:color-mix(in srgb,var(--accent) 25%,transparent);--selection-color:var(--ink);
   --contains-highlight-background-color:color-mix(in srgb,var(--curve) 10%,transparent);--placeholder-color:var(--muted);--smart-fence-color:var(--muted);outline:none}
 math-field.eqf.active{border-color:var(--accent)}
@@ -871,7 +871,7 @@ function doSubmit(){
   revealResult();
 }
 // Después de Trazar: el mapa queda a la vista (en el celular está fijo arriba) y el mensaje justo debajo
-function revealResult(){ const st=$("stage"), fb=$("fb"), sticky=getComputedStyle(st).position==="sticky";
+function revealResult(){ holdUntil=0; const st=$("stage"), fb=$("fb"), sticky=getComputedStyle(st).position==="sticky";
   if(!sticky){ if(st.getBoundingClientRect().top<0) st.scrollIntoView({behavior:"smooth",block:"start"}); return; }
   const target=fb.getBoundingClientRect().top+scrollY-st.offsetHeight-8; window.scrollTo({top:Math.max(0,target),behavior:"smooth"}); }
 function run(){
@@ -1005,10 +1005,14 @@ function buildPad(){
     b.addEventListener("click",()=>press(k,id)); pad.appendChild(b); });
 }
 function setActive(el){ active=el; document.querySelectorAll(".eqf,.ivf").forEach(e=>e.classList.toggle("active",e===el)); }
+// La pantalla no se mueve sola mientras se escribe: durante un momento después de tocar la casilla o una tecla,
+// cualquier desplazamiento que no haga el dedo del usuario se deshace
+let holdY=0, holdUntil=0;
+function holdScroll(ms=700){ if(performance.now()>holdUntil) holdY=window.scrollY; holdUntil=performance.now()+ms; }
+window.addEventListener("scroll",()=>{ if(performance.now()<holdUntil&&Math.abs(window.scrollY-holdY)>1) window.scrollTo({top:holdY,behavior:"instant"}); },{passive:true});
+["touchmove","wheel"].forEach(ev=>window.addEventListener(ev,()=>{ holdUntil=0; },{passive:true}));
 function mlPress(mf,k,id){
-  // la pantalla no se mueve sola: se guarda dónde estaba y se devuelve ahí después de escribir
-  const sy=window.scrollY, back=()=>{ if(Math.abs(window.scrollY-sy)>1) window.scrollTo({top:sy,behavior:"instant"}); };
-  requestAnimationFrame(()=>{ back(); requestAnimationFrame(back); }); setTimeout(back,80);
+  holdScroll();
   if(!(mf.hasFocus&&mf.hasFocus())){ try{ mf.focus({preventScroll:true}); }catch(e){ mf.focus(); } }
   if(k.act==="del") mf.executeCommand("deleteBackward");
   else if(k.act==="clr") mf.value="";
@@ -1070,10 +1074,10 @@ function makeEq(k,label){ let el;
   else { el=document.createElement("input"); el.placeholder="por ejemplo: x^2 + y^2 = 1"; el.spellcheck=false; el.setAttribute("autocapitalize","off"); el.setAttribute("autocorrect","off"); }
   el.className="eqf"; el.id="eq"+k; el.setAttribute("aria-label",label); return el; }
 function setupMF(mf){
-  try{ mf.smartFence=false; mf.smartSuperscript=true; mf.mathVirtualKeyboardPolicy="manual"; mf.menuItems=[]; mf.popoverPolicy="off"; }catch(e){}
+  try{ mf.smartFence=false; mf.smartSuperscript=true; mf.mathVirtualKeyboardPolicy="manual"; mf.menuItems=[]; mf.popoverPolicy="off"; mf.onScrollIntoView=()=>{}; }catch(e){}
   // La librería a veces lanza "focus" sin que la casilla quede enfocada: solo se cambia si de verdad lo está
   const take=()=>setTimeout(()=>{ if(document.activeElement===mf) setActive(mf); },0);
-  mf.addEventListener("focusin",take); mf.addEventListener("pointerdown",()=>setActive(mf));
+  mf.addEventListener("focusin",take); mf.addEventListener("pointerdown",()=>{ holdScroll(); setActive(mf); });
   mf.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); doSubmit(); } });
 }
 function wireInput(inp){ const keep=()=>{ if(inp.selectionStart!=null) inp._c=[inp.selectionStart,inp.selectionEnd]; };
