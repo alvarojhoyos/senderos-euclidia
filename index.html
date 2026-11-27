@@ -234,6 +234,23 @@ summary{cursor:pointer;font-weight:700}
 .mapbtn{margin:0 0 8px}
 .mapbtns{display:flex;flex-wrap:wrap;gap:8px}
 @media (max-width:480px){ .mapbtns{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px} .mapbtns .btn{padding:9px 8px;font-size:13px;white-space:normal} }
+/* Perfiles de jugador */
+.pflist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.pfrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:stretch}
+.pfrow.edit{grid-template-columns:minmax(0,1fr);border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--paper);gap:8px}
+.pfpick{display:flex;gap:12px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:14px;padding:10px 12px;font:inherit;width:100%;min-height:56px;cursor:pointer;min-width:0}
+.pfpick:hover,.pfpick:focus-visible{border-color:var(--accent)}
+.pfav{width:38px;height:38px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font:800 18px var(--f-display)}
+.pftxt{display:grid;gap:2px;min-width:0}
+.pftxt b{font:800 16px/1.2 var(--f-display);overflow-wrap:anywhere}
+.pftxt .d{font-size:12.5px;color:var(--muted)}
+.pfed{border:1px solid var(--line);background:var(--paper);color:var(--muted);border-radius:14px;min-width:48px;font:600 18px var(--f-body);cursor:pointer}
+.pfed:hover,.pfed:focus-visible{border-color:var(--accent);color:var(--accent)}
+.pfbtns{display:flex;flex-wrap:wrap;gap:8px}
+.pfask{margin:0;font-size:14px;line-height:1.45}
+.pfrow label{font-size:13px;font-weight:600}
+.btn.danger{background:var(--bad);color:var(--panel)}
+.pffoot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
 /* Menú principal y modo aventura */
 .menucard{max-width:640px;border-top:4px solid var(--accent);gap:14px}
 .menuhead{display:flex;gap:12px;align-items:center}
@@ -572,6 +589,16 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
     <p class="small" id="backText"></p>
     <button class="btn" type="button" id="backGo">Continuar</button>
     <button class="btn ghost" type="button" id="backNew">No soy yo</button>
+  </div>
+</div>
+<div class="modal" id="perfiles" hidden>
+  <div class="card pfcard" role="dialog" aria-modal="true" aria-labelledby="pfTitle">
+    <h2 id="pfTitle">¿Quién va a jugar?</h2>
+    <p class="small" id="pfNote">Cada jugador tiene su propio avance en este aparato.</p>
+    <ul class="pflist" id="pfList"></ul>
+    <button class="btn" type="button" id="pfNew">+ Soy un jugador nuevo</button>
+    <p class="small" id="pfFull" hidden></p>
+    <div class="pffoot"><button class="linkbtn" type="button" id="pfBack" hidden>Volver</button><button class="linkbtn" type="button" id="pfRole">Soy el profesor</button></div>
   </div>
 </div>
 <div class="modal" id="role" hidden>
@@ -1118,11 +1145,60 @@ const $=id=>document.getElementById(id);
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const store={ get(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
 
+/* ============ Perfiles de jugador (varios en el mismo aparato) ============
+   Dos o más personas pueden compartir un celular: cada perfil guarda su propio avance (aventura, lecciones, Taller,
+   práctica, hojas de borrador). Sin cuentas ni servidor. El perfil activo usa las claves de siempre (euclidia2-player,
+   euclidia2-prog, ...); los demás quedan empacados en euclidia2-perfil-<id>. Cambiar de perfil empaca el activo y
+   desempaca el elegido. Lo del aparato (rol, evaluación, hoja de resultados, cola de envíos, sonido) es común.
+   El avance de una evaluación va aparte (euclidia2-prog-ev, de la evaluación euclidia2-progev): presentar una prueba
+   ya no borra lo que el jugador llevaba en la aventura. */
+const PF_KEYS=["euclidia2-player","euclidia2-prog","euclidia2-prog-ev","euclidia2-progev","euclidia2-ultimo","euclidia2-lecciones","euclidia2-practica","euclidia2-retos"], PF_PRE=["euclidia2-sheet-"], PF_MAX=10;
+const pfMine=k=>PF_KEYS.includes(k)||PF_PRE.some(p=>k.startsWith(p));
+const pfLive=()=>{ const r=[]; try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&pfMine(k)) r.push(k); } }catch(e){} return r; };
+let PF=store.get("euclidia2-perfiles",null);
+const pfSave=()=>store.set("euclidia2-perfiles",PF);
+// Migración: el avance que ya había en el aparato queda como el primer perfil (no se pierde nada)
+if(!PF||!Array.isArray(PF.list)){ const pl=store.get("euclidia2-player",null); PF={act:null,n:0,list:[]};
+  if(pl&&pl.nombre){ PF.n=1; PF.act="p1"; PF.list.push({id:"p1",nombre:pl.nombre,apellido:pl.apellido||"",documento:pl.documento||""});
+    // si estaba a mitad de una evaluación, su avance de esa evaluación se conserva
+    const ev=store.get("euclidia2-ev",null); if(ev&&ev.id&&store.get("euclidia2-progev",null)==null){ store.set("euclidia2-progev",ev.id); store.set("euclidia2-prog-ev",store.get("euclidia2-prog",null)); } }
+  pfSave(); }
+const pfGet=id=>PF.list.find(p=>p.id===id)||null;
+function pfPack(){ if(!PF.act) return; const o={}; pfLive().forEach(k=>{ try{ o[k]=localStorage.getItem(k); }catch(e){} });
+  try{ localStorage.setItem("euclidia2-perfil-"+PF.act,JSON.stringify(o)); }catch(e){} }
+function pfClearLive(){ pfLive().forEach(k=>{ try{ localStorage.removeItem(k); }catch(e){} }); }
+function pfPacked(id){ try{ return JSON.parse(localStorage.getItem("euclidia2-perfil-"+id)||"{}")||{}; }catch(e){ return {}; } }
+function pfUnpack(id){ const o=pfPacked(id); Object.keys(o).forEach(k=>{ if(pfMine(k)&&o[k]!=null) try{ localStorage.setItem(k,o[k]); }catch(e){} });
+  try{ localStorage.removeItem("euclidia2-perfil-"+id); }catch(e){} }
+// Avance de un perfil (el activo está en memoria; los demás, en su paquete)
+function pfProgOf(id){ if(id===PF.act) return prog; try{ return JSON.parse(pfPacked(id)[progKey()]||"null")||{best:{}}; }catch(e){ return {best:{}}; } }
+const progKey=()=>EV?"euclidia2-prog-ev":"euclidia2-prog";
+const freshProg=()=>({best:{},hintsUsed:0,hintsBought:0,shown:{}});
+const pfName=p=>[p.nombre,p.apellido].filter(Boolean).join(" ").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/\s+/g," ").trim();
+function pfCreate(n,a,d){ if(PF.act){ pfPack(); pfClearLive(); }
+  let k=(PF.n||PF.list.length)+1; while(pfGet("p"+k)) k++; PF.n=k; const id="p"+k;
+  PF.list.push({id,nombre:n,apellido:a||"",documento:d||""}); PF.act=id; pfSave(); return id; }
+// El registro de perfiles copia el nombre del jugador activo (para mostrar la lista sin desempacar)
+function pfSync(){ const r=pfGet(PF.act); if(!r||!player) return; r.nombre=player.nombre; r.apellido=player.apellido||""; r.documento=player.documento||""; pfSave(); }
+// Una evaluación nueva empieza de cero para cada perfil (como antes para el aparato)
+function pfEvCheck(){ if(EV&&store.get("euclidia2-progev",null)!==EV.id){ prog=freshProg(); saveProg(); store.set("euclidia2-progev",EV.id); } }
+function loadProg(){ prog=store.get(progKey(),null)||freshProg(); prog.best=prog.best||{}; prog.shown=prog.shown||{}; prog.hintsUsed=prog.hintsUsed||0; prog.hintsBought=prog.hintsBought||0; }
+// Cambiar al perfil id: empaca el activo, desempaca el elegido y recarga el estado del juego
+function pfUse(id){ const r=pfGet(id); if(!r) return false;
+  if(id!==PF.act){ pfPack(); pfClearLive(); pfUnpack(id); PF.act=id; pfSave(); }
+  player=store.get("euclidia2-player",null)||{nombre:r.nombre,apellido:r.apellido,documento:r.documento}; store.set("euclidia2-player",player);
+  loadProg(); pfEvCheck(); applySession(); renderLevels();
+  const j=SESSION?(evStarted()?firstSession():0):advResume(); loadLevel(j>=0?j:0); renderScore(); tick(); return true; }
+function pfDelete(id){ if(!pfGet(id)) return;
+  if(id===PF.act){ pfClearLive(); PF.act=null; player=null; prog=freshProg(); applySession(); renderLevels(); loadLevel(0); renderScore(); }
+  else { try{ localStorage.removeItem("euclidia2-perfil-"+id); }catch(e){} }
+  PF.list=PF.list.filter(p=>p.id!==id); pfSave(); }
+
 /* ============ Estado del jugador ============ */
 let player=store.get("euclidia2-player",null);
 let role=store.get("euclidia2-role",null);
 let prog=store.get("euclidia2-prog",{best:{},hintsUsed:0,hintsBought:0,shown:{}}); prog.hintsBought=prog.hintsBought||0;
-const saveProg=()=>store.set("euclidia2-prog",prog);
+const saveProg=()=>store.set(progKey(),prog);
 const coinsTotal=()=>Math.max(0,gradedLevels().reduce((s,l)=>s+(prog.best[l.id]||0),0)-HINT_COST*prog.hintsBought);
 const grade=()=>coinsTotal()*5/TOTAL_COINS;
 function renderScore(){ if($("doneBtn")) doneUI();
@@ -2215,26 +2291,40 @@ c2.addEventListener("wheel",e=>{ if(!e.ctrlKey) return; e.preventDefault(); setZ
 $("zIn").onclick=()=>setZoom(zoom.k*1.5); $("zOut").onclick=()=>setZoom(zoom.k/1.5); $("zReset").onclick=resetZoom;
 
 /* ---- Rol: estudiante o profesor ---- */
-function askRole(){ ["reg","teacher"].forEach(id=>$(id).hidden=true); $("role").hidden=false; }
-$("roleStudent").onclick=()=>{ role="estudiante"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=true; askPlayer(true); };
+function askRole(){ ["reg","teacher","perfiles"].forEach(id=>$(id).hidden=true); $("role").hidden=false; }
+$("roleStudent").onclick=()=>{ role="estudiante"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=true; if(PF.list.length) openProfiles(); else askPlayer(true); };
 $("roleTeacher").onclick=()=>{ role="profesor"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=false; applySession(); renderLevels(); renderScore(); tick(); markSeen(); openMenu(); };
-$("regBack").onclick=askRole; $("teacherBack").onclick=askRole;
+$("regBack").onclick=()=>{ if(PF.list.length) openProfiles(); else askRole(); }; $("teacherBack").onclick=askRole;
 $("teacherPlay").onclick=()=>{ $("teacher").hidden=true; renderScore(); };
 /* ---- Registro del estudiante ---- */
 // El documento solo hace falta cuando se entra con el enlace o el QR del profesor (evaluación u hoja de resultados).
 // Quien juega por su cuenta (historia, Taller, práctica) solo da su nombre.
 function needDoc(){ return !STUDY&&(locked||!!EV||!!resultsUrl()); }
-function askPlayer(fresh){ const doc=needDoc(); $("reg").hidden=false; $("rErr").hidden=true; $("rDocBox").hidden=!doc;
+// askPlayer(true) crea un perfil nuevo; askPlayer() completa los datos del perfil activo (p. ej. el documento para una prueba)
+let regNew=false;
+function askPlayer(fresh){ const doc=needDoc(); regNew=fresh===true; $("reg").hidden=false; $("rErr").hidden=true; $("rDocBox").hidden=!doc;
+  const toList=PF.list.length>0; $("regBack").textContent=toList?"Volver a la lista de jugadores":"Volver: no soy estudiante"; $("regBack").hidden=locked&&!toList;
   $("rTitle").textContent=doc?"Antes de empezar":"¿Cómo te llamas?";
   $("rNote").textContent=doc?"Tus datos solo los ve tu profesor, junto con tus monedas. Nadie más en la clase puede verlos.":"Así Coni sabe cómo llamarte. Para jugar por tu cuenta no hace falta tu documento: tu avance se guarda solo en este aparato.";
   $("rErr").textContent=doc?"Completa los tres campos.":"Escribe tu nombre."; if(fresh===true){ ["rName","rLast","rDoc"].forEach(id=>$(id).value=""); } else if(player){ $("rName").value=player.nombre; $("rLast").value=player.apellido; $("rDoc").value=player.documento; } setTimeout(()=>$("rName").focus(),50); }
 $("regForm").addEventListener("submit",e=>{ e.preventDefault();
   const n=$("rName").value.trim(), a=$("rLast").value.trim(), d=$("rDoc").value.trim();
   if(!n||(needDoc()&&(!a||!d))){ $("rErr").hidden=false; return; }
-  const changed=player&&player.documento&&d&&player.documento!==d;
-  player={nombre:n,apellido:a,documento:d}; store.set("euclidia2-player",player);
-  if(changed){ prog={best:{},hintsUsed:0,hintsBought:0,shown:{}}; saveProg(); loadLevel(0); }
-  $("reg").hidden=true; applySession(); if(SESSION) loadLevel(evStarted()?firstSession():0); renderScore(); tick(); flush(); markSeen(); openMenu(); });
+  let created=false;
+  if(regNew&&PF.act){
+    // Mismo documento que un perfil que ya existe: es esa persona, sigue con su avance
+    const same=d?PF.list.find(p=>p.documento&&p.documento===d):null;
+    if(same){ pfUse(same.id); }
+    else { const twin=PF.list.find(p=>pfName(p)===pfName({nombre:n,apellido:a}));
+      if(twin){ $("rErr").textContent=`Ya hay un jugador llamado ${[twin.nombre,twin.apellido].filter(Boolean).join(" ")} en este aparato. Si eres tú, vuelve a la lista y elígelo; si no, escribe tu nombre de otra forma (por ejemplo, con la inicial de tu apellido).`; $("rErr").hidden=false; return; }
+      if(PF.list.length>=PF_MAX){ $("rErr").textContent=`Ya hay ${PF_MAX} jugadores en este aparato. Vuelve a la lista y borra uno que ya no se use.`; $("rErr").hidden=false; return; }
+      pfCreate(n,a,d); prog=freshProg(); saveProg(); created=true; } }
+  else if(!PF.act){ pfCreate(n,a,d); }   // el primer perfil se queda con lo que ya había en el aparato
+  const changed=!created&&player&&player.documento&&d&&player.documento!==d;
+  player={nombre:n,apellido:a,documento:d}; store.set("euclidia2-player",player); pfSync();
+  if(changed){ prog=freshProg(); saveProg(); loadLevel(0); }
+  pfEvCheck(); if(created) loadLevel(0);
+  $("reg").hidden=true; applySession(); renderLevels(); if(SESSION) loadLevel(evStarted()?firstSession():0); renderScore(); tick(); flush(); markSeen(); openMenu(); });
 $("whoBtn").onclick=askRole;
 
 /* ---- Vista del profesor: código QR ---- */
@@ -2509,8 +2599,9 @@ function frame(now){
 try{ const hid=new URLSearchParams(location.search).get("hoja"); if(hid&&/^[\w-]{20,}$/.test(hid)) store.set("euclidia2-hoja",`https://script.google.com/macros/s/${hid}/exec`); }catch(e){}
 // El enlace de una evaluación (?ev=...) la guarda en el dispositivo; una evaluación nueva empieza de cero
 if(!STUDY) try{ const sp=new URLSearchParams(location.search), e=parseEv(sp.get("ev"),sp.get("evn"));
-  if(e){ const old=store.get("euclidia2-ev",null); if(!old||old.id!==e.id){ store.set("euclidia2-ev",e); prog={best:{},hintsUsed:0,hintsBought:0,shown:{}}; saveProg(); } } }catch(e){}
+  if(e){ const old=store.get("euclidia2-ev",null); if(!old||old.id!==e.id) store.set("euclidia2-ev",e); } }catch(e){}
 EV=STUDY?null:store.get("euclidia2-ev",null);
+if(EV) loadProg(); pfEvCheck();
 loadLevel(0); resize(); renderScore(); flush();
 // Quien entra por el QR del profesor queda fijo como estudiante en ese dispositivo: no puede elegir ser profesor
 let locked=store.get("euclidia2-lock",false);
@@ -2526,7 +2617,50 @@ function welcomeBack(){ const c=coinsTotal();
   $("back").hidden=false; }
 $("backGo").onclick=()=>{ $("back").hidden=true; markSeen(); openMenu(); };
 // Un jugador nuevo en el mismo aparato también ve la historia antes de registrarse
-$("backNew").onclick=()=>{ $("back").hidden=true; markSeen(); showIntro(()=>{ if(locked) askPlayer(true); else askRole(); }); };
+$("backNew").onclick=()=>{ $("back").hidden=true; markSeen(); if(role==="profesor") showIntro(()=>askRole()); else openProfiles(true); };
+/* ---- Lista de jugadores del aparato (¿Quién va a jugar?) ---- */
+const PF_COL=["#3b6fd6","#d0643b","#2f9e6e","#9b59b6","#b8860b","#d6457a","#1f8a9e","#7a6a3a","#5a62c9","#c0392b"];
+let pfEdit=null, pfDel=null, pfFresh=false;
+function openProfiles(fresh){ ["back","role","reg","menu","mapa","howto","teacher"].forEach(id=>$(id).hidden=true);
+  pfFresh=fresh===true; pfEdit=null; pfDel=null; pfRender(); $("perfiles").hidden=false;
+  const f=$("pfList").querySelector(".pfpick"); if(f) f.focus({preventScroll:true}); }
+function pfRender(){ const ul=$("pfList"); ul.innerHTML="";
+  $("pfTitle").textContent=EV?"¿Quién va a presentar la prueba?":"¿Quién va a jugar?";
+  $("pfNote").textContent=EV?"Elige tu nombre o entra como jugador nuevo. Cada uno presenta su propia prueba, con su documento."
+    :"Cada jugador tiene su propio avance en este aparato: la aventura, las lecciones, el Taller y la práctica.";
+  const mk=(tag,cls,txt)=>{ const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; };
+  PF.list.forEach((p,i)=>{ const li=mk("li","pfrow"), full=[p.nombre,p.apellido].filter(Boolean).join(" ");
+    if(pfEdit===p.id){ li.classList.add("edit");
+      if(pfDel===p.id){ li.append(mk("p","pfask",`¿Borrar a ${full} y todo su avance en este aparato? No se puede deshacer.`));
+        const yes=mk("button","btn danger","Sí, borrar"), no=mk("button","btn ghost","No, dejarlo"); yes.type=no.type="button";
+        yes.onclick=()=>{ pfDelete(p.id); pfEdit=pfDel=null; if(!PF.list.length){ $("perfiles").hidden=true; askPlayer(true); } else pfRender(); };
+        no.onclick=()=>{ pfDel=null; pfEdit=null; pfRender(); }; const r=mk("div","pfbtns"); r.append(yes,no); li.append(r); }
+      else { const lab=mk("label",null,"Nombre"), inp=mk("input"); lab.htmlFor=inp.id="pfName"; inp.value=p.nombre; inp.maxLength=40; inp.autocomplete="off";
+        const err=mk("p","err"); err.hidden=true;
+        const save=mk("button","btn","Guardar"), del=mk("button","btn ghost","Borrar jugador"), back=mk("button","linkbtn","Cancelar"); save.type=del.type=back.type="button";
+        const doSave=()=>{ const v=inp.value.trim(); if(!v){ err.textContent="Escribe un nombre."; err.hidden=false; return; }
+          if(PF.list.some(q=>q.id!==p.id&&pfName(q)===pfName({nombre:v,apellido:p.apellido}))){ err.textContent="Ya hay otro jugador con ese nombre en este aparato."; err.hidden=false; return; }
+          p.nombre=v; if(p.id===PF.act&&player){ player.nombre=v; store.set("euclidia2-player",player); renderScore(); }
+          else { const o=pfPacked(p.id); try{ const pl=JSON.parse(o["euclidia2-player"]||"null"); if(pl){ pl.nombre=v; o["euclidia2-player"]=JSON.stringify(pl); localStorage.setItem("euclidia2-perfil-"+p.id,JSON.stringify(o)); } }catch(e){} }
+          pfSave(); pfEdit=null; pfRender(); };
+        save.onclick=doSave; inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); doSave(); } });
+        del.onclick=()=>{ pfDel=p.id; pfRender(); }; back.onclick=()=>{ pfEdit=null; pfRender(); };
+        const r=mk("div","pfbtns"); r.append(save,del); li.append(lab,inp,err,r,back); setTimeout(()=>inp.focus({preventScroll:true}),30); } }
+    else { const pr=pfProgOf(p.id), done=LEVELS.filter(L=>pr.best&&pr.best[L.id]!=null).length;
+      const b=mk("button","pfpick"); b.type="button"; const av=mk("span","pfav",(p.nombre.trim()[0]||"?").toUpperCase()); av.style.background=PF_COL[i%PF_COL.length]; av.setAttribute("aria-hidden","true");
+      const t=mk("span","pftxt"); t.append(mk("b",null,full),mk("span","d",(done?`${done} ${done===1?"nivel superado":"niveles superados"}`:"Aún no ha jugado")+(p.id===PF.act&&player?" · el último que jugó":"")));
+      b.append(av,t); b.onclick=()=>pfPick(p.id);
+      const ed=mk("button","pfed","✎"); ed.type="button"; ed.title=`Cambiar el nombre o borrar a ${p.nombre}`; ed.setAttribute("aria-label",ed.title); ed.onclick=()=>{ pfEdit=p.id; pfDel=null; pfRender(); };
+      li.append(b,ed); }
+    ul.append(li); });
+  $("pfNew").hidden=PF.list.length>=PF_MAX; $("pfFull").hidden=PF.list.length<PF_MAX; $("pfFull").textContent=`Ya hay ${PF_MAX} jugadores en este aparato: borra uno que ya no se use para agregar otro.`;
+  $("pfRole").hidden=locked||STUDY; $("pfBack").hidden=!(player&&PF.act&&pfGet(PF.act)); if(player) $("pfBack").textContent=`Volver: sigo siendo ${player.nombre}`; }
+function pfPick(id){ pfUse(id); $("perfiles").hidden=true; markSeen(); flush();
+  if(needDoc()&&!player.documento) askPlayer(); else openMenu(); }
+// Jugador nuevo: ve la historia (si no la acaba de ver al abrir el juego) y escribe su nombre
+$("pfNew").onclick=()=>{ $("perfiles").hidden=true; if(pfFresh) askPlayer(true); else showIntro(()=>askPlayer(true)); };
+$("pfRole").onclick=()=>{ $("perfiles").hidden=true; askRole(); };
+$("pfBack").onclick=()=>{ $("perfiles").hidden=true; markSeen(); if(needDoc()&&!player.documento) askPlayer(); else openMenu(); };
 if(role==="profesor") $("teacherBtn").hidden=false;
 /* ============ Mapa de Euclidia y medallas (etapa 7c) ============
    Cada región del mapa sale de la niebla a medida que se completan sus niveles. Medallas por mundo:
@@ -2637,7 +2771,9 @@ $("introSkip").onclick=closeIntro;
 $("storyBtn").onclick=()=>showIntro();
 // «euclidia2-pruebas» solo lo ponen las pruebas automáticas: entran directo al nivel, sin historia ni menú.
 const TEST_ENTRY=store.get("euclidia2-pruebas",false);
-const startFlow=()=>{ if(!role) askRole(); else if(role==="estudiante"&&(!player||(needDoc()&&!player.documento))) askPlayer(); else if(!seen) welcomeBack(); else if(!TEST_ENTRY) openMenu(); };
+const startFlow=()=>{ if(!role) askRole();
+  else if(role==="estudiante"&&(PF.list.length>1&&!seen||!player&&PF.list.length)) openProfiles(true);   // varios jugadores en el aparato: ¿quién juega?
+  else if(role==="estudiante"&&(!player||(needDoc()&&!player.documento))) askPlayer(); else if(!seen) welcomeBack(); else if(!TEST_ENTRY) openMenu(); };
 // ?modo=taller abre el Taller de Coni (modo estudio) antes que todo; al cerrarlo sigue el juego normal
 const wantTaller=(()=>{ try{ return ["taller","practica"].includes(new URLSearchParams(location.search).get("modo"))&&!SESSION; }catch(e){ return false; } })();
 // Al entrar (cada vez que se abre el juego) se presenta la historia; después vienen el rol, el registro o «Hola de nuevo» y el menú.
@@ -2656,7 +2792,7 @@ function paintMenuArt(){ const cv=$("menuArt"), x=cv.getContext("2d"), r=(a,b,w,
   r(92,10,18,14,"#2a2433"); r(94,12,14,10,"#b0b0c0"); r(100,12,1,10,"#2a2433");
   const g=x.createRadialGradient(64,4,0,64,4,36); g.addColorStop(0,"rgba(255,214,102,0.4)"); g.addColorStop(1,"rgba(255,214,102,0)"); x.fillStyle=g; x.fillRect(0,0,120,56);
   miniApolonio(x,56,46,false,false); miniConi(x,80,46,false,true); }
-function openMenu(){ if(SESSION) return false; ["back","role","reg","teacher","mapa","howto"].forEach(id=>$(id).hidden=true);
+function openMenu(){ if(SESSION) return false; ["back","role","reg","teacher","mapa","howto","perfiles"].forEach(id=>$(id).hidden=true);
   const prof=role==="profesor";
   $("menuHello").textContent=prof?"Hola, profesor. Elige qué quieres hacer.":player?`Hola, ${player.nombre}. Elige qué quieres hacer.`:"Elige qué quieres hacer.";
   const done=LEVELS.filter(isDone).length, c=coinsTotal(), j=advResume();
@@ -2679,7 +2815,8 @@ $("mPrac").onclick=()=>{ closeMenu(); tAfter=openMenu; openTaller(); tPracSet(tr
 $("mTeach").onclick=()=>{ closeMenu(); openTeacher("home"); };
 $("mWho").onclick=()=>{ closeMenu(); $("whoBtn").onclick(); };
 // «Cambiar de jugador» (en el juego o en el menú): primero la historia, luego quién juega
-{ const who=$("whoBtn").onclick; $("whoBtn").onclick=()=>showIntro(()=>who()); }
+// El profesor ve la historia y cambia de rol; un estudiante va a la lista de jugadores (el jugador nuevo ve la historia)
+$("whoBtn").onclick=()=>{ if(role==="profesor") showIntro(()=>askRole()); else openProfiles(); };
 $("mPlay").onclick=closeMenu;
 document.addEventListener("keydown",e=>{ if(e.key!=="Escape") return; if(!$("howto").hidden){ $("howto").hidden=true; openMenu(); } else if(!$("menu").hidden) closeMenu(); });
 if(!wantTaller) beginGame();
@@ -3298,7 +3435,7 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("leccion").hidd
   const _renderHints=renderHints; renderHints=function(){ _renderHints(); hp.hidden=!(prog.shown[level().id]>0); }; renderHints();
   const _loadLevel=loadLevel; loadLevel=function(i){ _loadLevel(i); const ls=$("lesson"); if(!ls.hidden&&!ls.querySelector(".apo-say")) ls.prepend(apoTag("lessonApo","El maestro Apolonio te explica:")); };
   const ls=$("lesson"); if(!ls.hidden&&!ls.querySelector(".apo-say")) ls.prepend(apoTag("lessonApo","El maestro Apolonio te explica:")); }
-window.__euclidia={lecciones:{all:LECCIONES,show:showLesson,need:needLesson,close:closeLesson},adv:{state:advState,next:advNext,resume:advResume,chains:chainsOf,menu:openMenu},practica:{gen:pracGen,check:pracCheck,stats:prStats,model:tModelOf,set:tPracSet,ex:()=>tPx,next:tPracNew,target:prTarget,force:X=>{ tPx=X; tPracShow(); }},taller:{model:tModel,general:tGeneral,state:()=>TS,set:(st)=>tSetConic(st.c,{...st}),open:openTaller,close:closeTaller,retos:RETOS,flip:tFlip},LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
+window.__euclidia={perfiles:{reg:()=>PF,use:pfUse,open:openProfiles,del:pfDelete},lecciones:{all:LECCIONES,show:showLesson,need:needLesson,close:closeLesson},adv:{state:advState,next:advNext,resume:advResume,chains:chainsOf,menu:openMenu},practica:{gen:pracGen,check:pracCheck,stats:prStats,model:tModelOf,set:tPracSet,ex:()=>tPx,next:tPracNew,target:prTarget,force:X=>{ tPx=X; tPracShow(); }},taller:{model:tModel,general:tGeneral,state:()=>TS,set:(st)=>tSetConic(st.c,{...st}),open:openTaller,close:closeTaller,retos:RETOS,flip:tFlip},LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
     if(ivs[i]) ivs[i]=(list||[]).map(I=>({v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):"",loC:true,hiC:true})); }); renderModes(); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
   state:()=>({g2,prog,player,idx}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),

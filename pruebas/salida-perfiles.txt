@@ -1,0 +1,49 @@
+PASA  | [celular 320 px] migración: el jugador que ya estaba queda como primer perfil ({"act":"p1","n":1,"list":[{"id":"p1","nombre":"Ana","apellido":"","documento":""}]})
+PASA  | [celular 320 px] migración: conserva sus niveles superados
+PASA  | [celular 320 px] con un solo jugador sigue saliendo «Hola de nuevo, Ana»
+PASA  | [celular 320 px] «Continuar como Ana» → menú
+PASA  | [celular 320 px] «Cambiar de jugador» abre la lista: ["Ana"]
+PASA  | [celular 320 px] la lista de jugadores cabe en la pantalla, sin desplazamiento horizontal
+PASA  | [celular 320 px] el jugador nuevo ve primero la historia
+PASA  | [celular 320 px] después pide el nombre (casilla vacía)
+PASA  | [celular 320 px] no deja crear otro jugador con el mismo nombre (avisa que ya existe)
+PASA  | [celular 320 px] Luis llega al menú
+PASA  | [celular 320 px] Luis empieza de cero: sin niveles, lecciones, práctica ni hojas de Ana (0 de 113 niveles · 0 monedas · Sigue en: Primeros pasos)
+PASA  | [laptop] migración: el jugador que ya estaba queda como primer perfil ({"act":"p1","n":1,"list":[{"id":"p1","nombre":"Ana","apellido":"","documento":""}]})
+PASA  | [laptop] migración: conserva sus niveles superados
+PASA  | [laptop] con un solo jugador sigue saliendo «Hola de nuevo, Ana»
+PASA  | [laptop] «Continuar como Ana» → menú
+PASA  | [laptop] «Cambiar de jugador» abre la lista: ["Ana"]
+PASA  | [laptop] la lista de jugadores cabe en la pantalla, sin desplazamiento horizontal
+PASA  | [laptop] el jugador nuevo ve primero la historia
+PASA  | [laptop] después pide el nombre (casilla vacía)
+PASA  | [laptop] no deja crear otro jugador con el mismo nombre (avisa que ya existe)
+PASA  | [laptop] Luis llega al menú
+PASA  | [laptop] Luis empieza de cero: sin niveles, lecciones, práctica ni hojas de Ana (0 de 113 niveles · 0 monedas · Sigue en: Primeros pasos)
+PASA  | «No soy Ana» abre la lista de jugadores
+PASA  | si acaba de ver la historia al abrir, el jugador nuevo no la ve dos veces
+PASA  | Otro día: primero la historia
+PASA  | con dos jugadores, después de la historia pregunta «¿Quién va a jugar?»
+PASA  | cada jugador muestra su propio avance: ["AAna3 niveles superados","LLuis1 nivel superado · el último que jugó"]
+PASA  | al elegir a Ana vuelve todo lo suyo (niveles y práctica) y llega al menú: 5 aciertos en la práctica · mejor racha 3
+PASA  | al cambiar a Luis: su nivel, sin la práctica de Ana, y el juego lo saluda: {"pl":"Luis","n":["t0"],"pr":null,"hello":"Hola, Luis. Mundo de las cónicas"}
+PASA  | lo que Ana hizo antes de cambiar quedó guardado en su perfil
+PASA  | la lista tiene «Volver: sigo siendo Ana»
+PASA  | «Volver» regresa al menú sin cambiar de jugador
+PASA  | renombrar: Luis ahora se llama Lucho
+PASA  | el nombre nuevo llega también a sus datos y conserva su avance
+PASA  | borrar pide confirmación dentro del juego
+PASA  | «No, dejarlo» no borra nada
+PASA  | al borrar a Ana se borra su avance y Lucho sigue igual: {"n":["Lucho"],"packs":[],"pl":"Lucho"}
+PASA  | con el enlace de una prueba: historia → «¿Quién va a presentar la prueba?»
+PASA  | el nombre del perfil se usa para la prueba: solo falta apellido y documento
+PASA  | Ana entra a su prueba (sin menú) y la prueba empieza de cero: {"gate":true,"menu":false,"best":0,"doc":"111"}
+PASA  | presentar la prueba no borra lo que Ana llevaba en la aventura
+PASA  | Luis elige su nombre y completa sus datos
+PASA  | Luis tiene su propia prueba (sin lo que hizo Ana): {"gate":true,"best":0,"doc":"222"}
+PASA  | al volver a Ana sigue su prueba donde iba, sin volver a pedir datos: {"reg":false,"b":1,"doc":"111"}
+PASA  | «jugador nuevo» con el documento de Ana vuelve a su perfil (no crea otro)
+PASA  | con el QR de solo estudio se ve la aventura de Ana, no su prueba
+PASA  | sin errores de JavaScript
+
+47 pasan, 0 fallan
