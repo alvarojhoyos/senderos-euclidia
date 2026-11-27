@@ -23,6 +23,8 @@ En los niveles de forma general (los que piden completar cuadrados) los Trazador
 
 Debajo de cada ecuación (o de cada tramo en los niveles mixtos) está el botón "+ Añadir una restricción". El estudiante decide si la necesita y puede poner hasta dos, una en x y otra en y; Coni solo camina por la parte de la curva que cumple todas. El juego no exige una cónica concreta: cualquier camino que lleve a Coni de la salida a la meta recogiendo las monedas gana el nivel.
 
+Coni nunca elige sola hacia dónde ir. Si la curva llega a la meta por dos lados, o si sigue más allá de la salida (las parábolas y las hipérbolas, que salen de un vértice o de un punto intermedio), Coni no arranca hasta que el estudiante la recorte con una restricción justo en la salida. Si la restricción corta antes y deja un trozo que sobra, tampoco arranca. Los Rescates no la necesitan porque la curva cerrada da la vuelta completa.
+
 ## Evaluaciones
 
 En el panel del profesor, la sección "Evaluación" arma un código QR para una evaluación. Una tabla dice cuántos niveles fáciles, medios y difíciles entran de cada mundo (el máximo de cada casilla es lo que hay en el banco), y los botones "Corta" (1 fácil, 1 medio y 1 difícil por cónica) y "Larga" (1, 2 y 1) la llenan de un toque. También se eligen el tiempo en minutos y un nombre opcional. A cada estudiante le tocan niveles al azar con esas cantidades, ordenados de fácil a difícil, y la elección depende de su documento: el mismo estudiante siempre recibe los suyos. Si una casilla está al máximo, todos reciben esos mismos niveles.
