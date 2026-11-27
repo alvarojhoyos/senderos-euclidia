@@ -8,7 +8,7 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
 (async()=>{
  const b=await chromium.launch(); const errs=[];
  const page=async(init,query='')=>{ const ctx=await b.newContext({...devices['Pixel 7'],deviceScaleFactor:1}); const p=await ctx.newPage(); p.on('pageerror',e=>errs.push(e.message));
-   await p.route(/^https?:\/\//,r=>r.abort()); await p.addInitScript(()=>localStorage.setItem('euclidia2-intro','true')); if(init) await p.addInitScript(init); await p.goto('file://'+TMP+query); await p.waitForTimeout(400); return p; };
+   await p.route(/^https?:\/\//,r=>r.abort()); await p.addInitScript(()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-pruebas','true'); }); if(init) await p.addInitScript(init); await p.goto('file://'+TMP+query); await p.waitForTimeout(400); return p; };
  // 1. Reparto de niveles
  const p0=await page(()=>{ localStorage.setItem('euclidia2-role','"profesor"'); sessionStorage.setItem('euclidia2-tab','1'); });
  const r=await p0.evaluate(()=>{ const U=window.__euclidia, T=U.t, L=U.LEVELS, byId=Object.fromEntries(L.map(l=>[l.id,l]));
@@ -22,7 +22,7 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
        const ord=ls.every((l,i)=>i===0||D.indexOf(l.diff)>=D.indexOf(ls[i-1].diff));
        return ord&&D.every((d,j)=>ls.filter(l=>l.diff===d).length===q[j]); })&&new Set(ss).size===ss.length; };
    const libre=T.parseEv('k3f9a2-C021E200-15'), sl=T.sessionFor(libre,'42');
-   const vieja=T.parseEv('abc123-CEPHIX-l-60'), maxi=T.parseEv('zz99zz-C300-10'), fac=new Set(docs.map(d=>T.sessionFor(maxi,d).sort().join()));
+   const vieja=T.parseEv('abc123-CEPHIX-l-60'), maxi=T.parseEv('zz99zz-C800-10'), fac=new Set(docs.map(d=>T.sessionFor(maxi,d).sort().join()));
    return {n1:s1.length,n2:s2.length,c1:T.evCount(larga),c2:T.evCount(corta),same:s1.join()===s1b.join(),distintos:sets.size,
      fit:fits(larga,s1)&&fits(corta,s2)&&docs.every(d=>fits(larga,T.sessionFor(larga,d))),libre:sl.map(id=>byId[id].world[0]+byId[id].diff[0]).join(','),fitLibre:fits(libre,sl),
      vieja:vieja&&JSON.stringify(vieja.q)===JSON.stringify(larga.q),fac:fac.size,
@@ -33,21 +33,21 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
  res(r.distintos>=30,`40 documentos reciben ${r.distintos} combinaciones distintas de niveles`);
  res(r.fit,'Cada estudiante recibe exactamente las cantidades de cada mundo y dificultad, sin repetir, de fácil a difícil');
  res(r.fitLibre&&r.libre==='Cm,Cm,Cd,Ef,Ef',`Tabla a mano (circunferencias 0·2·1, elipses 2·0·0): ${r.libre}`);
- res(r.fac===1,'Si una casilla está al máximo (los 3 fáciles de circunferencias), todos reciben esos mismos niveles');
+ res(r.fac===1,'Si una casilla está al máximo (los 8 fáciles de circunferencias), todos reciben esos mismos niveles');
  res(r.vieja,'Los códigos QR del formato anterior (corta o larga) siguen funcionando');
  res(r.coinsMin>0,`Monedas posibles por estudiante en la larga: entre ${r.coinsMin} y ${r.coinsMax}; la nota se escala a 5,0 con las de cada uno`);
  res(r.mal===null&&r.cero===null&&r.evOk&&r.evOk.min===0&&Object.keys(r.evOk.q).join()==='C,H','Códigos de evaluación válidos e inválidos (sin niveles no vale)');
  // 2. El profesor arma la evaluación en la tabla y el QR la lleva
  const q=await p0.evaluate(async()=>{ document.getElementById('teacherBtn').click(); await new Promise(r=>setTimeout(r,100));
    const sel=(w,d)=>document.querySelector(`#evQ select[data-w="${w}"][data-d="${d}"]`);
-   const maxC=[0,1,2].map(d=>sel('C',d).options.length-1).join(','), noX=!sel('X',0);
+   const maxC=[0,1,2].map(d=>sel('C',d).options.length-1).join(','), hasX=!!sel('X',0);
    document.querySelector('.evpre [data-p="l"]').click(); const larga=document.getElementById('evSum').textContent;
    document.querySelector('.evpre [data-p="0"]').click(); const vacio=document.getElementById('evSum').textContent, dis=document.getElementById('evMake').disabled;
    [['C',0],['C',1],['C',2],['P',0],['P',1],['P',2]].forEach(([w,d])=>{ sel(w,d).value='1'; }); sel('C',0).dispatchEvent(new Event('change',{bubbles:true}));
    document.getElementById('evMin').value='30'; document.getElementById('evName').value='Quiz 1'; document.getElementById('evMin').dispatchEvent(new Event('input'));
    const sum=document.getElementById('evSum').textContent; document.getElementById('evMake').click(); await new Promise(r=>setTimeout(r,100));
-   const u=new URL(document.getElementById('qrUrl').textContent); return {maxC,noX,larga,vacio,dis,sum,ev:u.searchParams.get('ev'),evn:u.searchParams.get('evn'),rol:u.searchParams.get('rol')}; });
- res(q.maxC==='3,5,4'&&q.noX,`La tabla ofrece lo que hay en el banco: circunferencias hasta ${q.maxC} (fácil, medio, difícil); mixtos sin fáciles`);
+   const u=new URL(document.getElementById('qrUrl').textContent); return {maxC,hasX,larga,vacio,dis,sum,ev:u.searchParams.get('ev'),evn:u.searchParams.get('evn'),rol:u.searchParams.get('rol')}; });
+ res(q.maxC==='8,8,8'&&q.hasX,`La tabla ofrece lo que hay en el banco: circunferencias hasta ${q.maxC} (fácil, medio, difícil); mixtos con fáciles`);
  res(/20 niveles/.test(q.larga)&&/al menos un nivel/.test(q.vacio)&&q.dis,'Atajos: «Larga» llena 20 niveles y «Vaciar» deja el botón del QR desactivado');
  res(/^[a-z0-9]{6}-C111P111-30$/.test(q.ev)&&q.evn==='Quiz 1'&&q.rol==='estudiante',`Enlace del QR: rol=${q.rol}, ev=${q.ev}, evn=${q.evn}`);
  res(/6 niveles y 30 minutos/.test(q.sum),'Resumen del panel: '+q.sum);
@@ -88,7 +88,7 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
  const p2=await page(null,'?rol=estudiante');
  const f=await p2.evaluate(async()=>{ const g=id=>document.getElementById(id); g('rName').value='Luis'; g('rLast').value='Gil'; g('rDoc').value='1'; g('regForm').requestSubmit(); await new Promise(r=>setTimeout(r,200));
    return {coins:g('sCoins').textContent,tabs:document.querySelectorAll('.wt').length,time:g('sTime').hidden}; });
- res(f.coins==='0 / 154'&&f.tabs===7&&f.time,`Sin evaluación: ${f.coins} monedas posibles, ${f.tabs} mundos y sin reloj`);
+ res(f.coins==='0 / 294'&&f.tabs===7&&f.time,`Sin evaluación: ${f.coins} monedas posibles, ${f.tabs} mundos y sin reloj`);
  // 6. En el celular la casilla que se escribe flota debajo del mapa al bajar al teclado, y vuelve a su lugar al subir
  const p3=await page(()=>{ localStorage.setItem('euclidia2-role','"profesor"'); sessionStorage.setItem('euclidia2-tab','1'); });
  const fl=await p3.evaluate(async()=>{ const U=window.__euclidia, i=U.LEVELS.findIndex(l=>l.mixed); U.loadLevel(i); await new Promise(r=>setTimeout(r,300));

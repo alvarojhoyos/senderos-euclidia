@@ -19,9 +19,9 @@ const hid=(p,id)=>p.evaluate(id=>document.getElementById(id).hidden,id);
  await p.click('#introGo'); await p.click('#introGo'); await p.click('#introGo'); const last=await p.evaluate(()=>document.getElementById('introGo').textContent); await p.click('#introGo');
  res(last==='¡Vamos!'&&(await hid(p,'intro'))&&!(await hid(p,'role')),'Con «Siguiente» se pasan las 4 viñetas y al final («¡Vamos!») se pide el rol');
  await p.reload(); await p.waitForTimeout(400);
- res(await hid(p,'intro'),'Al volver a abrir el juego la historia no se repite');
+ res(!(await hid(p,'intro')),'Al volver a abrir el juego la historia se presenta otra vez (pedido de Alvaro: al entrar sale la historia)'); await p.click('#introSkip');
  // 2. «Saltar la historia» y «Ver la historia»
- await p.evaluate(()=>{ localStorage.clear(); localStorage.setItem('euclidia2-role','"profesor"'); sessionStorage.setItem('euclidia2-tab','1'); }); await p.reload(); await p.waitForTimeout(400);
+ await p.evaluate(()=>{ localStorage.clear(); localStorage.setItem('euclidia2-role','"profesor"'); localStorage.setItem('euclidia2-pruebas','true'); sessionStorage.setItem('euclidia2-tab','1'); }); await p.reload(); await p.waitForTimeout(400);
  await p.click('#introSkip'); res(await hid(p,'intro'),'«Saltar la historia» la cierra de una vez');
  await p.evaluate(()=>document.getElementById('storyBtn').click()); res(!(await hid(p,'intro')),'«Ver la historia» (pie de página) la vuelve a abrir'); await p.click('#introSkip');
  // 3. Sonido: apagado por defecto, se enciende con el botón y se recuerda
@@ -56,7 +56,7 @@ const hid=(p,id)=>p.evaluate(id=>document.getElementById(id).hidden,id);
  res(rg.ok&&/Lago y río salió de la niebla/.test(rg.txt),`Al terminar el último nivel de una región: «${rg.txt.split('¡').pop()}»`);
  // 7. En un quiz el mapa no aparece (cada estudiante tiene solo sus niveles)
  const qz=await b.newContext({...devices['iPhone SE'],deviceScaleFactor:1}); const q=await qz.newPage(); q.on('pageerror',e=>errs.push(e.message)); await q.route(/^https?:\/\//,r=>r.abort());
- await q.addInitScript(()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-role','"estudiante"'); localStorage.setItem('euclidia2-player',JSON.stringify({nombre:'Ana',apellido:'Ruiz',documento:'123'})); sessionStorage.setItem('euclidia2-tab','1'); });
+ await q.addInitScript(()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-pruebas','true'); localStorage.setItem('euclidia2-role','"estudiante"'); localStorage.setItem('euclidia2-player',JSON.stringify({nombre:'Ana',apellido:'Ruiz',documento:'123'})); sessionStorage.setItem('euclidia2-tab','1'); });
  await q.goto('file://'+TMP+'?ev=quiz1-C111-30&evn=Quiz'); await q.waitForTimeout(500);
  res(await q.evaluate(()=>document.getElementById('mapBtn').hidden),'En un quiz no se muestra el Gran Mapa');
  await b.close();

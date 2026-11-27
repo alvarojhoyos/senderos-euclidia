@@ -1,0 +1,28 @@
+PASA  | Estudiante nuevo: historia → rol → nombre → menú
+PASA  | El menú tiene «Modo aventura» e «Instrucciones y tutorial»; la historia no es un apartado (sale al entrar)
+PASA  | Aventura: solo el tutorial abierto, 30 valles con candado
+PASA  | Tocar un valle cerrado explica qué hay que terminar para abrirlo
+PASA  | «☰ Menú» del Gran Mapa vuelve al menú (sin panel del profesor para el estudiante)
+PASA  | El menú y sus apartados caben en el ancho del celular
+PASA  | «Instrucciones y tutorial» explica cómo se juega (7 puntos: canónica, restricción, pistas a 2 monedas)
+PASA  | «Jugar el tutorial» abre el primer paso del tutorial
+PASA  | Sin hacer nada, el segundo paso del tutorial y los mundos están cerrados
+PASA  | Al terminar el tutorial se abre el primer nivel de cada cónica (no el segundo, ni Identificar)
+PASA  | Superar el primer nivel de un valle abre el segundo, pero el valle siguiente sigue cerrado
+PASA  | Terminar el primer valle de circunferencias abre el primer nivel del segundo (no más)
+PASA  | Terminar el primer valle de las cuatro cónicas abre Identificar y Mixtos
+PASA  | Sin candados (profesor o evaluación): todos los niveles abiertos
+PASA  | En la barra de niveles los cerrados llevan candado; tocarlo explica por qué (««Lección 1: la circunferencia» sigue cubierto por la Niebla.…»)
+PASA  | El botón «Menú» está en la pantalla del juego
+PASA  | Con el tutorial hecho, «Continuar la aventura» abre el primer nivel de circunferencias
+PASA  | Al entrar se presenta la historia (aunque ya se haya visto antes)
+PASA  | Profesor: después de la historia y el rol se abre el menú
+PASA  | Profesor: el menú tiene «Panel del profesor»
+PASA  | «Panel del profesor» abre el código QR y la evaluación
+PASA  | Al volver otro día: historia → «Continuar como Ana» → menú
+PASA  | «Explorar» abre el Taller de Coni
+PASA  | Al cerrar el Taller se vuelve al menú
+PASA  | Con el enlace de un quiz: la historia y luego directo a «Empezar el quiz», sin menú
+PASA  | En laptop el menú se ve completo sin bajar (640×591 px)
+
+Total: 26 pasan, 0 fallan.
