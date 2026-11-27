@@ -49,7 +49,7 @@ const hid=(p,id)=>p.evaluate(id=>document.getElementById(id).hidden,id);
  res(mp.vis&&mp.reg===10&&mp.med===6,`El Gran Mapa muestra 10 regiones y 6 mundos con su medalla («${mp.sum.split('.')[0]}»)`);
  await p.click('#mapClose'); res(await hid(p,'mapa'),'«Volver al juego» cierra el mapa');
  // 6. Al completar todos los niveles de una región, el juego avisa que salió de la niebla
- const rg=await p.evaluate(async()=>{ const U=window.__euclidia, P=U.state().prog; ['C1','C2','C3','C4','E2','H2','P6','I1'].forEach(id=>P.best[id]=1); delete P.best.X2;
+ const rg=await p.evaluate(async()=>{ const U=window.__euclidia, P=U.state().prog; U.LEVELS.filter(l=>U.SCENE_OF[l.id]==='lago'&&l.id!=='X2').forEach(l=>P.best[l.id]=1); delete P.best.X2;
    const i=U.LEVELS.findIndex(l=>l.id==='X2'); U.loadLevel(i); U.submit(U.LEVELS[i].answer.map(a=>[...a]));
    await new Promise(r=>{ const w=()=>window.__euclidia.state().g2.anim?setTimeout(w,100):r(); w(); });
    return {ok:!!window.__euclidia.state().g2.result.reached,txt:document.getElementById('winText').textContent}; });

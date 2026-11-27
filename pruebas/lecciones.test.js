@@ -44,7 +44,7 @@ const STUDENT=()=>{ localStorage.setItem('euclidia2-pruebas','true'); localStora
    ['t0','t1','t2','t3','t4'].forEach(id=>P.best[id]=1); const go=id=>U.openLevel(U.LEVELS.findIndex(l=>l.id===id)), vis=id=>!document.getElementById(id).hidden, r={};
    go('C1'); r.lec=vis('leccion'); r.lore=vis('lore'); r.title=document.getElementById('lecTitle').textContent; r.fig=vis('lecFig'); r.go=document.getElementById('lecGo').textContent;
    document.getElementById('lecGo').click(); r.lore2=vis('lore'); r.lec2=vis('leccion'); document.getElementById('lore').hidden=true;
-   go('C5'); r.again=vis('leccion'); go('C2'); r.other=vis('leccion'); document.getElementById('lecGo').click(); document.getElementById('lore').hidden=true;
+   go('C5'); r.again=vis('leccion'); go('C6'); r.other=vis('leccion'); document.getElementById('lecGo').click(); document.getElementById('lore').hidden=true;
    r.seen=JSON.parse(localStorage.getItem('euclidia2-lecciones')||'{}'); return r; });
  res(f.lec&&!f.lore&&f.fig&&/Centro en el origen/.test(f.title)&&f.go==='¡A jugar!','Al entrar por primera vez a un valle, Apolonio da su lección (con dibujo) antes del nivel');
  res(f.lore2&&!f.lec2,'Al pulsar «¡A jugar!» sigue la historia del nivel');

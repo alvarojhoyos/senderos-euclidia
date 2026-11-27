@@ -24,6 +24,14 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
    return {sinObj:Ls.filter(L=>!L.rescue&&!U.itemOf(L)).map(L=>L.id), resc:Ls.filter(L=>L.rescue).map(L=>U.coinName(L)), names:[...new Set(Ls.filter(L=>!L.rescue).map(L=>U.coinName(L)))]}; });
  res(it.sinObj.length===0&&it.names.length===10,`Cada Escape tiene un objeto del lugar (${it.names.join(', ')})`+(it.sinObj.length?`; faltan: ${it.sinObj.join(', ')}`:''));
  res(it.resc.length>0&&it.resc.every(n=>n==='Trazador perdido'),`En los ${it.resc.length} Rescates cada moneda es un Trazador perdido`);
+ // 1c. Cada valle está en un solo lugar: sus niveles se dibujan con el mismo escenario y cuentan en la misma región
+ const vc=await p.evaluate(()=>{ const U=window.__euclidia, by={}, bad=[], tit={};
+   U.LEVELS.filter(L=>!L.tutorial).forEach(L=>{ const r=U.SCENE_OF[L.id]; (by[L.chain]=by[L.chain]||new Set()).add(r); if(L.scene&&L.scene!==r) bad.push(L.id+' dibuja '+L.scene+' pero cuenta en '+r); (tit[L.title]=tit[L.title]||[]).push(L.id); });
+   Object.entries(by).forEach(([c,s])=>{ if(s.size!==1) bad.push(c+': '+[...s].join(', ')); });
+   const dup=Object.entries(tit).filter(([,ids])=>ids.length>1).map(([t,ids])=>t+' ('+ids.join(', ')+')');
+   return {n:Object.keys(by).length,bad,dup}; });
+ res(vc.bad.length===0,`Los ${vc.n} valles tienen un solo lugar cada uno`+(vc.bad.length?': '+vc.bad.join('; '):''));
+ res(vc.dup.length===0,'No hay dos niveles con el mismo título'+(vc.dup.length?': '+vc.dup.join('; '):''));
  await p.evaluate(()=>{ const U=window.__euclidia; U.loadLevel(U.LEVELS.findIndex(l=>l.id==='C1')); });
  const li=await p.evaluate(()=>[...document.querySelectorAll('#targets li.c')].map(l=>l.textContent));
  res(li.length===2&&li.every(t=>/^Trazador perdido \(/.test(t)),`En la lista del nivel aparecen como «${li[0]}»`);
