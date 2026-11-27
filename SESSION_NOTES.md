@@ -89,7 +89,7 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 - Sin acceso a profesor con enlace de estudiante (Alvaro, 2026-11-27): con `?modo=estudio` la pantalla del nombre mostraba «Volver: no soy estudiante», que llevaba a elegir rol y a ser profesor (le pasaba a cualquier estudiante, no solo dentro de Claude). Ahora `noTeacher()` (= `STUDY||locked`) oculta ese botón y «Soy el profesor», y `askRole()` no muestra la elección de rol: lleva a la lista de jugadores o al registro. El enlace de una prueba ya traía `rol=estudiante` y no tenía el problema. `perfiles.test.js` lo revisa en 3 casos.
 - Ojo, prueba inestable (también antes de los perfiles): `registro.test.js` falla a veces si la máquina está muy cargada (otras pruebas corriendo a la vez), porque el `localStorage` que la prueba escribe justo antes de cambiar de página a veces no llega a la página nueva. Corrida sola pasa siempre.
 - El profesor no tiene perfil propio: si juega, usa el perfil activo (caso raro en un aparato compartido).
-- PR #21. Enlace privado de prueba republicado (versión 18) y verificado descargando la página publicada y corriendo `perfiles.test.js` sobre ella (55/55).
+- PR #21. Enlace privado de prueba republicado (versión 19) y verificado descargando la página publicada y corriendo `perfiles.test.js` sobre ella (55/55).
 - Pruebas: `pruebas/perfiles.test.js` (55: migración, crear, elegir, renombrar, borrar, que no se mezcle el avance, prueba en aparato compartido, volver al juego tras la prueba, modo estudio; celular 320 px y laptop). `menu.test.js` ajustada: «Cambiar de jugador» abre la lista.
 
 ## Qué hay en la etapa 6 (cierre, rama `claude/project-thread-77azem`)
