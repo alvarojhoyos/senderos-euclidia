@@ -43,8 +43,15 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 - Pruebas: `pruebas/lecciones.test.js` (19). Revisa que ningún ejemplo sea la respuesta de un nivel: al agregar niveles puede fallar; cambiar el `ex` de la lección (y su texto si lo menciona).
 - La rama del #15 no traía los últimos commits del #14 (36 niveles): el hilo del #15 ya los trajo (39c8930) y esta rama está al día con el #15.
 
+## Panel del profesor reorganizado (pedido de Alvaro, 2026-11-27 03:06 Bogotá; PR apilado sobre el #16, rama `claude/project-thread-tkb1kn`)
+- El panel (`#teacher`) tiene tres vistas: `#tHome` pregunta «Generar una prueba» (`#tGoEv`) o «Compartir con estudiantes (solo estudio)» (`#tGoEst`); `#tEv` (1. largo, tiempo y nombre; 2. hoja de resultados; 3. crear el QR, que solo aparece después de crear la prueba, `#qrWrap`); `#tEst` (un solo QR y enlace `?modo=estudio`). `openTeacher(v)` con v = "home" | "ev" | "est" (sin argumento conserva la vista; la variable es `pView`, porque `tView` ya es del Taller). `drawQR(box,url,size,fail)` dibuja cualquier QR.
+- Largos (`EV_PRESET`, `EV_MIN`, `EV_LEN`): corta 6 niveles (uno medio por mundo, 20 min), media 12 (por cónica fácil + medio; Identificar y Mixtos medio + difícil, 40 min), larga 20 (como antes, 60 min). Por defecto la media. Elegir un largo pone el tiempo sugerido; la tabla queda en «Elegir los niveles a mano» y si se cambia dice «Personalizada». Los QR viejos `id-CEPH-c|l-min` usan `EV_LEGACY` (la corta vieja = 16) para no cambiar de significado.
+- `?modo=estudio` = `STUDY` (declarado junto a `EV`): entra como estudiante normal (historia → nombre → menú completo), sin documento (`needDoc`), sin evaluación aunque haya una guardada (`EV=null` solo en esa visita), sin «Terminar y enviar» (`doneUI`) y sin enviar nada (`queueResult` no encola, `flush` avisa «Modo estudio…»). Si el aparato estaba como profesor, en esa visita entra como estudiante sin guardar el cambio. Se quitó el salto directo al Gran Mapa y la lista de tres enlaces (estudio, taller, práctica); `?modo=taller|practica` siguen funcionando si alguien los tiene.
+- Pruebas: `pruebas/panel.test.js` (21). Se ajustaron `evaluacion.test.js` (entra por «Generar una prueba», `#evZero`) y `lecciones.test.js` (estudio → menú; un solo enlace).
+- Publicado en el enlace privado de prueba (versión 10). La extensión de Chrome no estaba conectada, así que la verificación fue descargando la página publicada y corriendo `panel.test.js` sobre ella (21/21, iPhone SE y laptop).
+
 ## Para la etapa 5 (evaluación como una sola saga)
-- El profesor ya elige cuántos niveles por dificultad (tabla del panel). Falta que el quiz se presente como una historia seguida de Coni: orden de valles con narración entre niveles (`LORE`) y quizá una lección corta de Apolonio desactivada (en evaluación no hay lecciones a propósito).
+- El profesor ya elige el largo (corta 6, media 12, larga 20) o cuántos niveles por dificultad (tabla del panel). Falta que el quiz se presente como una historia seguida de Coni: orden de valles con narración entre niveles (`LORE`) y quizá una lección corta de Apolonio desactivada (en evaluación no hay lecciones a propósito).
 - Con N niveles de una dificultad debe salir una sola saga: revisar que el banco alcance (por cónica hay 2 cadenas por dificultad = 8 niveles).
 - El PR #11 sigue abierto; los niveles nuevos ya funcionan con su regla.
 
@@ -60,7 +67,7 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 
 ## Pendiente / preguntas abiertas
 - Etapa 3 aprobada (2026-11-27). Doc del banco v2: https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX
-- Etapa 4 (PR #16): falta la revisión de Alvaro en el enlace privado de prueba.
+- Etapa 4 (PR #16) y menú (PR #15): aprobados por Alvaro el 2026-11-27. Panel del profesor reorganizado: falta su revisión.
 - Pedido de Alvaro (coordinador): captura de uso para comparar gasto cuando haya unas 3 etapas con la nueva modalidad.
 
 ## Ahorro (pedido de Alvaro, 2026-11-26)

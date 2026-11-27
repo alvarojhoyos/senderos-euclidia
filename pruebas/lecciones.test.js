@@ -1,5 +1,5 @@
 // Pruebas del modo historia (etapa 4 del modo estudio): lecciones del maestro Apolonio antes de cada valle,
-// repaso desde el Gran Mapa, enlace ?modo=estudio, enlaces del panel del profesor y Apolonio en pistas y tutorial.
+// repaso desde el Gran Mapa, enlace ?modo=estudio, QR de estudio del panel del profesor y Apolonio en pistas y tutorial.
 // Uso: node pruebas/lecciones.test.js [ruta/al/juego.html]
 const {chromium,devices}=require('playwright'); const fs=require('fs'); const path=require('path');
 const SRC=process.argv[2]||path.join(__dirname,'..','index.html');
@@ -70,20 +70,20 @@ const STUDENT=()=>{ localStorage.setItem('euclidia2-pruebas','true'); localStora
  p=await page('?ev=abcd-C111-0&evn=Quiz',STUDENT);
  const ev=await p.evaluate(()=>{ const U=window.__euclidia; return U.LEVELS.filter(l=>!l.tutorial).some(l=>U.lecciones.need(l)); });
  res(!ev,'En una evaluación no aparece ninguna lección');
- // 7. ?modo=estudio: estudiante nuevo, sin elegir rol ni dar documento, después de la historia llega al Gran Mapa; «☰ Menú» lleva al menú
+ // 7. ?modo=estudio: estudiante nuevo, sin elegir rol ni dar documento; después de la historia llega al menú normal (como si entrara por su cuenta)
  p=await page('?modo=estudio',()=>localStorage.setItem('euclidia2-intro','true'));
  if(!(await hid(p,'intro'))) await p.click('#introSkip');
  const s0={role:await hid(p,'role'),reg:!(await hid(p,'reg')),doc:await p.evaluate(()=>{ const d=document.getElementById('rDoc'); return !d||d.offsetParent===null||!d.required; })};
  await p.fill('#rName','Luis'); await p.click('#regForm button[type=submit]'); await p.waitForTimeout(150);
- const s1={map:!(await hid(p,'mapa')),menu:await hid(p,'menu'),back:!(await hid(p,'mapMenu'))};
- await p.click('#mapMenu'); const s2=!(await hid(p,'menu'));
+ const s1={menu:!(await hid(p,'menu')),map:await hid(p,'mapa'),adv:!(await hid(p,'mAdv')),lab:!(await hid(p,'mLab')),teach:await hid(p,'mTeach')};
+ await p.click('#mAdv'); const s2=!(await hid(p,'mapa'))&&!!(await p.$('#lecRepaso'));
  res(s0.role&&s0.reg&&s0.doc,'Con el enlace del modo estudio no se pregunta el rol ni el documento: solo el nombre');
- res(s1.map&&s1.menu&&s1.back&&s2,'Después del registro se abre el Gran Mapa (modo aventura) y de ahí se puede ir al menú');
- // 8. Panel del profesor: enlaces del modo estudio
+ res(s1.menu&&s1.map&&s1.adv&&s1.lab&&s1.teach&&s2,'Después del registro sale el menú de estudiante (aventura, Taller…, sin panel del profesor); la aventura trae las lecciones de Apolonio');
+ // 8. Panel del profesor: un solo QR de estudio
  p=await page('',()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-role','"profesor"'); });
- if(!(await hid(p,'intro'))) await p.click('#introSkip'); await p.click('#backGo'); await p.click('#mTeach'); await p.waitForTimeout(100);
- const T=await p.evaluate(()=>[...document.querySelectorAll('#estLinks .url')].map(e=>new URL(e.textContent).searchParams.get('modo')));
- res(T.join()==='estudio,taller,practica','El panel del profesor trae los enlaces del modo estudio: aventura con lecciones, Taller y práctica');
+ if(!(await hid(p,'intro'))) await p.click('#introSkip'); await p.click('#backGo'); await p.click('#mTeach'); await p.waitForTimeout(100); await p.click('#tGoEst'); await p.waitForTimeout(100);
+ const T=await p.evaluate(()=>{ const u=new URL(document.getElementById('estUrl').textContent); return [...u.searchParams.keys()].join()+'='+u.searchParams.get('modo'); });
+ res(T==='modo=estudio','El panel del profesor da un solo enlace de estudio (solo ?modo=estudio): '+T);
  // 9. Apolonio dice las pistas y las lecciones del tutorial
  p=await page('',STUDENT);
  const ap=await p.evaluate(()=>{ document.querySelectorAll('.modal').forEach(m=>m.hidden=true); const U=window.__euclidia; U.loadLevel(U.LEVELS.findIndex(l=>l.lesson));

@@ -345,11 +345,22 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
 .leclist button{font-size:13px}
 .apo-say{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;color:var(--part)}
 .apo-say canvas{width:24px;height:30px;image-rendering:pixelated;flex:none}
-.estl{display:grid;gap:8px}
-.estl .er{display:grid;gap:4px;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
-.estl .er .url{word-break:break-all}
-.estl .er .row{gap:6px}
-#estQr{justify-self:center}
+.tgrid{display:grid;gap:10px}
+.tview{display:grid;gap:12px;grid-template-columns:minmax(0,1fr);min-width:0}
+.tview>*,.evbox>*{min-width:0}
+.tview h3{margin:0;font:800 16px var(--f-display)}
+.tback{justify-self:start}
+.evlen{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.evlen button{display:grid;gap:2px;justify-items:center;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:12px;padding:9px 4px;font:inherit;cursor:pointer}
+.evlen button b{font:800 15px var(--f-display)} .evlen button span{font:600 12px var(--f-mono);color:var(--muted)}
+.evlen button[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--paper))}
+.evbox details summary{cursor:pointer;font-weight:600;font-size:14px}
+.evbox details[open] summary{margin-bottom:8px}
+#qrWrap,#estBox{display:grid;gap:8px}
+.tview .row{display:flex;flex-wrap:wrap;gap:6px} .tview .btn{white-space:normal}
+#qrBox,#estQr{min-width:0;overflow:hidden}
+#estQr{display:grid;place-items:center;background:#fff;border-radius:12px;padding:12px;min-height:120px}
+#estQr img,#estQr canvas{max-width:100%;height:auto}
 </style>
 
 </head>
@@ -472,7 +483,7 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
       <button class="mtile big" type="button" id="mAdv"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg></span><b>Modo aventura</b><span class="d">Recorre el Gran Mapa con Coni. Cada nivel que superas abre el siguiente y le quita niebla a su región.</span><span class="st" id="mAdvSt"></span></button>
       <button class="mtile" type="button" id="mHow"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><path d="M12 17.2v.1"/></svg></span><b>Instrucciones y tutorial</b><span class="d">Cómo se juega: la ecuación, recortar la curva, monedas, pistas y nota. Desde aquí juegas el tutorial guiado.</span><span class="st" id="mHowSt"></span></button>
       <div class="mtile"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg></span><b>El Taller de Coni</b><span class="d">El laboratorio del maestro Apolonio: mueve la curva y mira sus partes, o practica «te dan, halla» sin fin. No cuenta para la nota.</span><span class="row2"><button class="btn" type="button" id="mLab">Explorar</button><button class="btn ghost" type="button" id="mPrac">Practicar sin fin</button></span><span class="st" id="mPracSt"></span></div>
-      <button class="mtile wide" type="button" id="mTeach" hidden><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM21 14v2M14 21h3M20 18v3"/></svg></span><b>Panel del profesor</b><span class="d">Código QR para la clase, evaluaciones (quiz) y hoja de resultados.</span></button>
+      <button class="mtile wide" type="button" id="mTeach" hidden><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM21 14v2M14 21h3M20 18v3"/></svg></span><b>Panel del profesor</b><span class="d">Generar una prueba con su código QR y tu hoja de resultados, o compartir el juego solo para estudiar.</span></button>
     </div>
     <div class="menufoot"><button class="linkbtn" type="button" id="mWho">Cambiar de jugador</button><button class="linkbtn" type="button" id="mPlay">Ir al nivel donde estaba</button></div>
   </div>
@@ -577,34 +588,38 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
 </div>
 <div class="modal" id="teacher" hidden>
   <div class="card">
-    <h2>Código QR del juego</h2>
+    <div class="tview" id="tHome">
+      <h2>Panel del profesor</h2>
+      <p class="small">¿Qué vas a hacer?</p>
+      <div class="tgrid">
+        <button class="mtile" type="button" id="tGoEv"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span><b>Generar una prueba</b><span class="d">Eliges el largo, el tiempo y tu hoja de resultados. Los estudiantes entran con su documento y su nota llega a tu hoja.</span></button>
+        <button class="mtile" type="button" id="tGoEst"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l9-3 9 3-9 3z"/><path d="M7 8v5c0 1.7 2.2 3 5 3s5-1.3 5-3V8"/><path d="M21 6v6"/></svg></span><b>Compartir con estudiantes (solo estudio)</b><span class="d">Un código QR para que exploren todo el juego como estudiantes: historia, aventura, tutorial y Taller. No hay nota y no se envía nada.</span></button>
+      </div>
+      <button class="btn" type="button" id="teacherPlay">Probar el juego como profesor</button>
+      <p class="small">Como profesor puedes jugar todos los niveles; tus monedas no se envían a la hoja de resultados.</p>
+      <button class="linkbtn" type="button" id="teacherBack">Volver: no soy profesor</button>
+    </div>
+    <div class="tview" id="tEv" hidden>
+      <button class="linkbtn tback" type="button" data-tback>← Volver al panel</button>
+      <h2>Generar una prueba</h2>
     <section class="evbox" aria-labelledby="evH">
-      <h3 id="evH">Evaluación</h3>
-      <p class="small">Elige cuántos niveles de cada dificultad entran por mundo. A cada estudiante le tocan niveles al azar con esas cantidades, ordenados de fácil a difícil. Su nota es monedas obtenidas / monedas posibles × 5,0.</p>
-      <div class="evpre"><span>Llenar rápido:</span><button class="btn ghost" type="button" data-p="c">Corta</button><button class="btn ghost" type="button" data-p="l">Larga</button><button class="btn ghost" type="button" data-p="0">Vaciar</button></div>
-      <table class="evt" aria-label="Niveles por mundo y dificultad"><thead><tr><th></th><th>Fácil</th><th>Medio</th><th>Difícil</th></tr></thead><tbody id="evQ"></tbody></table>
-      <p class="small" id="evMax"></p>
-      <label for="evMin">Tiempo en minutos (0 = sin límite)</label><input id="evMin" inputmode="numeric" value="60">
-      <label for="evName">Nombre de la evaluación (opcional, sale en tu hoja)</label><input id="evName" maxlength="60" placeholder="por ejemplo: Quiz de cónicas, grupo 2">
+      <h3 id="evH">1. Largo de la prueba</h3>
+      <div class="evlen" role="group" aria-label="Largo de la prueba"><button type="button" data-p="c" aria-pressed="false"><b>Corta</b><span>6 niveles</span></button><button type="button" data-p="m" aria-pressed="false"><b>Media</b><span>12 niveles</span></button><button type="button" data-p="l" aria-pressed="false"><b>Larga</b><span>20 niveles</span></button></div>
+      <p class="small" id="evLenTxt"></p>
+      <details id="evMore">
+        <summary>Elegir los niveles a mano</summary>
+        <p class="small">Cuántos niveles de cada dificultad entran por mundo. A cada estudiante le tocan niveles al azar con esas cantidades, ordenados de fácil a difícil.</p>
+        <table class="evt" aria-label="Niveles por mundo y dificultad"><thead><tr><th></th><th>Fácil</th><th>Medio</th><th>Difícil</th></tr></thead><tbody id="evQ"></tbody></table>
+        <p class="small" id="evMax"></p>
+        <div class="row"><button class="btn ghost" type="button" data-p="0" id="evZero">Vaciar la tabla</button></div>
+      </details>
+      <label for="evMin">Tiempo en minutos (0 = sin límite)</label><input id="evMin" inputmode="numeric" value="40">
+      <label for="evName">Nombre de la prueba (opcional, sale en tu hoja)</label><input id="evName" maxlength="60" placeholder="por ejemplo: Quiz de cónicas, grupo 2">
       <p class="small" id="evSum"></p>
-      <div class="row"><button class="btn" type="button" id="evMake">Crear el código QR de esta evaluación</button><button class="btn ghost" type="button" id="evClear">Quitar la evaluación</button></div>
-      <p class="small" id="evState" aria-live="polite"></p>
-    </section>
-    <p class="small">Proyecta este código en clase. Los estudiantes lo escanean con el celular y entran directamente como estudiantes, con su nombre. No pueden elegir ser profesor.</p>
-    <div id="qrBox"><span class="small">Generando…</span></div>
-    <div class="url" id="qrUrl"></div>
-    <button class="btn ghost" type="button" id="qrCopy">Copiar el enlace para estudiantes</button>
-    <p class="small">Para quien use computador sin cámara: pega este enlace en el grupo del curso, el correo o el aula virtual. Funciona igual que el código QR.</p>
-    <p class="small" id="qrNote"></p>
-    <section class="evbox" aria-labelledby="estH">
-      <h3 id="estH">Modo estudio (sin nota)</h3>
-      <p class="small">Para repasar en casa o antes de un quiz. Nada se envía a tu hoja y no se pide documento.</p>
-      <div class="estl" id="estLinks"></div>
-      <div id="estQr" hidden></div>
-      <p class="small" id="estMsg" aria-live="polite"></p>
+      <p class="small">La nota es monedas obtenidas / monedas posibles × 5,0.</p>
     </section>
     <section class="hojabox" aria-labelledby="hojaH">
-      <h3 id="hojaH">Hoja de resultados</h3>
+      <h3 id="hojaH">2. Hoja de resultados</h3>
       <p class="small" id="hojaState"></p>
       <label for="hojaIn">Enlace de tu hoja (el que termina en /exec)</label>
       <input id="hojaIn" placeholder="https://script.google.com/macros/s/…/exec" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off">
@@ -680,9 +695,31 @@ function texto(t) {
         <div class="row"><button class="btn ghost" type="button" id="hojaCopy">Copiar el código</button></div>
       </details>
     </section>
-    <button class="btn" type="button" id="teacherPlay">Probar el juego como profesor</button>
-    <p class="small">Como profesor puedes jugar todos los niveles; tus monedas no se envían a la hoja de resultados.</p>
-    <button class="linkbtn" type="button" id="teacherBack">Volver: no soy profesor</button>
+    <section class="evbox" aria-labelledby="qrH">
+      <h3 id="qrH">3. Código QR de la prueba</h3>
+      <div class="row"><button class="btn" type="button" id="evMake">Crear el código QR de esta prueba</button><button class="btn ghost" type="button" id="evClear">Quitar la prueba</button></div>
+      <p class="small" id="evState" aria-live="polite"></p>
+      <div id="qrWrap" hidden>
+        <p class="small">Proyecta este código en clase. Los estudiantes lo escanean con el celular, ven la historia y entran directo a su prueba con su nombre y documento. No pueden elegir ser profesor.</p>
+        <div id="qrBox"><span class="small">Generando…</span></div>
+        <div class="url" id="qrUrl"></div>
+        <button class="btn ghost" type="button" id="qrCopy">Copiar el enlace para estudiantes</button>
+        <p class="small">Para quien use computador sin cámara: pega este enlace en el grupo del curso, el correo o el aula virtual. Funciona igual que el código QR.</p>
+        <p class="small" id="qrNote"></p>
+      </div>
+    </section>
+    </div>
+    <div class="tview" id="tEst" hidden>
+      <button class="linkbtn tback" type="button" data-tback>← Volver al panel</button>
+      <h2>Compartir con estudiantes</h2>
+      <p class="small">Con este código los estudiantes entran al juego como estudiantes, igual que si lo abrieran por su cuenta: ven la historia y luego el menú, donde eligen la aventura, el tutorial, el Taller o la práctica. No se evalúa, no se pide documento y no se envía nada a tu hoja.</p>
+      <div id="estBox">
+        <div id="estQr"><span class="small">Generando…</span></div>
+        <div class="url" id="estUrl"></div>
+        <button class="btn ghost" type="button" id="estCopy">Copiar el enlace</button>
+        <p class="small" id="estMsg" aria-live="polite"></p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -854,6 +891,9 @@ LEVELS.forEach(l=>{ l.rescue=l.type==="rescate"; });
 // Evaluación del profesor (?ev=...): cada estudiante recibe una cadena al azar por mundo elegido.
 // SESSION es el conjunto de niveles calificables de ese estudiante; sin evaluación, califican todos los del banco.
 let EV=null, SESSION=null;
+// ?modo=estudio (enlace «solo estudio» del profesor): entra como un estudiante cualquiera, sin evaluación,
+// sin documento y sin enviar nada a la hoja del profesor
+const STUDY=(()=>{ try{ return new URLSearchParams(location.search).get("modo")==="estudio"; }catch(e){ return false; } })();
 const gradedLevels=()=>LEVELS.filter(l=>!l.tutorial&&(!SESSION||SESSION.has(l.id)));
 let TOTAL_COINS=1; const recount=()=>{ TOTAL_COINS=gradedLevels().reduce((s,l)=>s+l.coins.length,0)||1; };
 recount();
@@ -1819,7 +1859,7 @@ function finish(){
 
 /* ============ Resultados (Google Sheets) ============ */
 function queueResult(L,coins){
-  if(!player||role!=="estudiante"||!player.documento){ flush(); return; }
+  if(STUDY||!player||role!=="estudiante"||!player.documento){ flush(); return; }
   const q=store.get("euclidia2-queue",[]);
   q.push(resultRow(L.title,coins));
   store.set("euclidia2-queue",q); flush();
@@ -1833,6 +1873,7 @@ function setSend(t){ $("sendStatus").textContent=t; $("winSend").textContent=t; 
 async function flush(){
   const q=store.get("euclidia2-queue",[]); const RESULTS_URL=resultsUrl();
   if(role==="profesor"){ setSend("Modo profesor: tus monedas no se envían a la hoja de resultados."); return; }
+  if(STUDY){ setSend("Modo estudio: tu avance se guarda solo en este aparato y no se envía al profesor."); return; }
   if(!RESULTS_URL){ setSend(q.length?`Resultados guardados en este dispositivo (${q.length}). Se enviarán cuando el profesor conecte su hoja de resultados: entra de nuevo con su código QR o su enlace.`:"Tus resultados se guardan en este dispositivo."); return; }
   while(q.length){
     try{ await fetch(RESULTS_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(q[0])}); q.shift(); store.set("euclidia2-queue",q); }
@@ -2160,7 +2201,7 @@ $("teacherPlay").onclick=()=>{ $("teacher").hidden=true; renderScore(); };
 /* ---- Registro del estudiante ---- */
 // El documento solo hace falta cuando se entra con el enlace o el QR del profesor (evaluación u hoja de resultados).
 // Quien juega por su cuenta (historia, Taller, práctica) solo da su nombre.
-function needDoc(){ return locked||!!EV||!!resultsUrl(); }
+function needDoc(){ return !STUDY&&(locked||!!EV||!!resultsUrl()); }
 function askPlayer(fresh){ const doc=needDoc(); $("reg").hidden=false; $("rErr").hidden=true; $("rDocBox").hidden=!doc;
   $("rTitle").textContent=doc?"Antes de empezar":"¿Cómo te llamas?";
   $("rNote").textContent=doc?"Tus datos solo los ve tu profesor, junto con tus monedas. Nadie más en la clase puede verlos.":"Así Coni sabe cómo llamarte. Para jugar por tu cuenta no hace falta tu documento: tu avance se guarda solo en este aparato.";
@@ -2175,7 +2216,7 @@ $("regForm").addEventListener("submit",e=>{ e.preventDefault();
 $("whoBtn").onclick=askRole;
 
 /* ---- Vista del profesor: código QR ---- */
-$("teacherBtn").onclick=()=>openTeacher();
+$("teacherBtn").onclick=()=>openTeacher("home");
 function hojaUI(){ const h=resultsUrl(); $("hojaIn").value=h;
   $("hojaState").innerHTML=h?'<span class="ok">Conectada.</span> Los resultados de quienes entren por el código QR llegan a tu hoja.':'<span class="bad">Sin hoja todavía.</span> Sin ella, los resultados quedan guardados solo en cada celular y se envían cuando la conectes.'; }
 $("hojaSave").onclick=()=>{ const v=$("hojaIn").value.trim(); const m=$("hojaMsg");
@@ -2192,20 +2233,36 @@ $("qrCopy").onclick=async()=>{ const t=$("qrUrl").textContent;
   catch(e){ const r=document.createRange(); r.selectNodeContents($("qrUrl")); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); $("qrCopy").textContent="Enlace seleccionado: cópialo"; }
   setTimeout(()=>$("qrCopy").textContent="Copiar el enlace para estudiantes",2500); };
 $("hojaCopy").onclick=async()=>{ const t=$("hojaCode"); try{ await navigator.clipboard.writeText(t.value); $("hojaCopy").textContent="Código copiado"; }catch(e){ t.focus(); t.select(); $("hojaCopy").textContent="Selecciónalo y cópialo"; } };
-function openTeacher(){
-  $("teacher").hidden=false; const u=new URL(location.href); u.hash=""; u.search=""; u.searchParams.set("rol","estudiante");
-  const hm=HOJA_RE.exec(resultsUrl()||""); if(hm) u.searchParams.set("hoja",hm[1]);
-  if(tev){ u.searchParams.set("ev",evCode(tev)); if(tev.name) u.searchParams.set("evn",tev.name); } evPanel();
-  const url=u.toString(); $("qrUrl").textContent=url; hojaUI();
-  const local=/claude\.ai|claudeusercontent|^file:|localhost/.test(url);
-  $("qrNote").textContent=local?"Esta es una vista previa privada: el código servirá cuando el juego esté publicado en GitHub Pages con un enlace público.":(hm?"":"Todavía no conectaste tu hoja de resultados (abajo).");
-  const box=$("qrBox"); box.innerHTML='<span class="small">Generando…</span>';
-  const draw=()=>{ box.innerHTML=""; try{ new window.QRCode(box,{text:url,width:240,height:240,correctLevel:window.QRCode.CorrectLevel.M}); }catch(e){ box.innerHTML='<span class="small">No se pudo generar el código. Comparte el enlace de abajo.</span>'; } };
-  if(window.QRCode) draw(); else { const s=document.createElement("script"); s.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"; s.onload=draw; s.onerror=()=>{ box.innerHTML='<span class="small">No se pudo cargar el generador de códigos. Comparte el enlace de abajo.</span>'; }; document.head.appendChild(s); }
+// El panel primero pregunta qué va a hacer el profesor: generar una prueba o compartir el juego solo para estudiar
+let pView="home";
+const T_VIEWS={home:"tHome",ev:"tEv",est:"tEst"};
+function drawQR(box,url,size,fail){ box.innerHTML='<span class="small">Generando…</span>';
+  const draw=()=>{ box.innerHTML=""; try{ new window.QRCode(box,{text:url,width:size,height:size,correctLevel:window.QRCode.CorrectLevel.M}); }catch(e){ box.innerHTML=`<span class="small">${fail}</span>`; } };
+  if(window.QRCode) draw(); else { const s=document.createElement("script"); s.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"; s.onload=draw; s.onerror=()=>{ box.innerHTML='<span class="small">No se pudo cargar el generador de códigos. Comparte el enlace de abajo.</span>'; }; document.head.appendChild(s); } }
+const isPreview=url=>/claude\.ai|claudeusercontent|^file:|localhost/.test(url);
+function studyUrl(){ const u=new URL(location.href); u.hash=""; u.search=""; u.searchParams.set("modo","estudio"); return u.toString(); }
+function openTeacher(v){ if(v) pView=v; const m=$("teacher"); m.hidden=false;
+  Object.entries(T_VIEWS).forEach(([k,id])=>$(id).hidden=k!==pView); if(v){ m.scrollTop=0; const c=m.querySelector(".card"); if(c) c.scrollTop=0; }
+  if(pView==="ev"){ const u=new URL(location.href); u.hash=""; u.search=""; u.searchParams.set("rol","estudiante");
+    const hm=HOJA_RE.exec(resultsUrl()||""); if(hm) u.searchParams.set("hoja",hm[1]);
+    if(tev){ u.searchParams.set("ev",evCode(tev)); if(tev.name) u.searchParams.set("evn",tev.name); } evPanel(); hojaUI();
+    const url=u.toString(); $("qrUrl").textContent=url; $("qrWrap").hidden=!tev;
+    $("qrNote").textContent=isPreview(url)?"Esta es una vista previa privada: el código servirá cuando el juego esté publicado en GitHub Pages con un enlace público.":(hm?"":"Todavía no conectaste tu hoja de resultados (paso 2): sin ella las notas se quedan en cada celular.");
+    if(tev) drawQR($("qrBox"),url,240,"No se pudo generar el código. Comparte el enlace de abajo."); }
+  if(pView==="est"){ const url=studyUrl(); $("estUrl").textContent=url;
+    $("estMsg").textContent=isPreview(url)?"Esta es una vista previa privada: el código servirá cuando el juego esté publicado en GitHub Pages con un enlace público.":"";
+    drawQR($("estQr"),url,240,"No se pudo generar el código. Comparte el enlace de abajo."); }
 }
+$("tGoEv").onclick=()=>openTeacher("ev");
+$("tGoEst").onclick=()=>openTeacher("est");
+document.querySelectorAll("#teacher [data-tback]").forEach(b=>b.onclick=()=>openTeacher("home"));
+$("estCopy").onclick=async()=>{ const t=$("estUrl").textContent;
+  try{ await navigator.clipboard.writeText(t); $("estCopy").textContent="Enlace copiado"; }
+  catch(e){ const r=document.createRange(); r.selectNodeContents($("estUrl")); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); $("estCopy").textContent="Enlace seleccionado: cópialo"; }
+  setTimeout(()=>$("estCopy").textContent="Copiar el enlace",2500); };
 
 /* ---- Terminar la prueba y enviar el resultado final ---- */
-function doneUI(){ $("doneBtn").hidden=!(role==="estudiante"&&player)||evEnded()||(!!SESSION&&!evStarted()); gateUI(); }
+function doneUI(){ $("doneBtn").hidden=STUDY||!(role==="estudiante"&&player)||evEnded()||(!!SESSION&&!evStarted()); gateUI(); }
 $("doneBtn").onclick=()=>{ const c=coinsTotal();
   $("doneTitle").textContent="¿Terminar la prueba?"; $("doneText").textContent=`Se enviará tu resultado final: ${c} de ${TOTAL_COINS} monedas, nota ${dec(grade())}. Los niveles que no alcanzaste cuentan con 0 monedas.`;
   $("doneSend").textContent=""; $("doneGo").hidden=false; $("doneBack").textContent="Seguir jugando"; $("done").hidden=false; };
@@ -2222,13 +2279,21 @@ async function sendFinal(timeUp){ if(evEnded()||!player) return;
 /* ---- Evaluación: niveles de cada estudiante y tiempo ---- */
 const EV_WORLDS={C:"Circunferencias",E:"Elipses",P:"Parábolas",H:"Hipérbolas",I:"Identificar",X:"Mixtos"};
 const DIFFS=["fácil","medio","difícil"];
-// Atajos del panel: corta = 1 fácil, 1 medio y 1 difícil por cónica; larga = 1, 2 y 1. Identificar y Mixtos: 1 medio y 1 difícil.
-const EV_PRESET={c:{C:[1,1,1],E:[1,1,1],P:[1,1,1],H:[1,1,1],I:[0,1,1],X:[0,1,1]},l:{C:[1,2,1],E:[1,2,1],P:[1,2,1],H:[1,2,1],I:[0,1,1],X:[0,1,1]}};
+// Largo de la prueba (Alvaro, 2026-11-27): corta = 6 niveles (uno medio por mundo, unos 20 minutos);
+// media = 12 (por cónica uno fácil y uno medio; Identificar y Mixtos uno medio y uno difícil, unos 40 minutos);
+// larga = 20 (por cónica 1 fácil, 2 medios y 1 difícil; Identificar y Mixtos uno medio y uno difícil, unos 60 minutos).
+const EV_PRESET={c:{C:[0,1,0],E:[0,1,0],P:[0,1,0],H:[0,1,0],I:[0,1,0],X:[0,1,0]},m:{C:[1,1,0],E:[1,1,0],P:[1,1,0],H:[1,1,0],I:[0,1,1],X:[0,1,1]},l:{C:[1,2,1],E:[1,2,1],P:[1,2,1],H:[1,2,1],I:[0,1,1],X:[0,1,1]}};
+const EV_MIN={c:20,m:40,l:60};
+const EV_LEN={c:"Corta: un nivel de dificultad media por mundo (circunferencias, elipses, parábolas, hipérbolas, identificar y mixtos).",
+  m:"Media: por cónica, uno fácil y uno medio; en Identificar y en Mixtos, uno medio y uno difícil.",
+  l:"Larga: por cónica, uno fácil, dos medios y uno difícil; en Identificar y en Mixtos, uno medio y uno difícil."};
+// Códigos del formato anterior (id-CEPH-c|l-minutos): conservan lo que significaban cuando se crearon
+const EV_LEGACY={c:{C:[1,1,1],E:[1,1,1],P:[1,1,1],H:[1,1,1],I:[0,1,1],X:[0,1,1]},l:EV_PRESET.l};
 const evPool=(k,d)=>LEVELS.filter(l=>l.world===EV_WORLDS[k]&&!l.tutorial&&l.diff===DIFFS[d]);
 // Código de la evaluación: id-C121E010…-minutos (por mundo: cuántos fáciles, medios y difíciles). Acepta también el formato anterior id-CEPH-c|l-minutos.
 function parseEv(code,name){ let m=/^([a-z0-9]{4,12})-((?:[CEPHIX]\d{3})+)-(\d{1,3})$/.exec(code||""), q={};
   if(m){ m[2].match(/[CEPHIX]\d{3}/g).forEach(t=>q[t[0]]=[+t[1],+t[2],+t[3]]); }
-  else { m=/^([a-z0-9]{4,12})-([CEPHIX]{1,6})-([cl])-(\d{1,3})$/.exec(code||""); if(!m) return null; [...new Set(m[2].split(""))].forEach(k=>q[k]=EV_PRESET[m[3]][k].slice()); m=[m[0],m[1],"",m[4]]; }
+  else { m=/^([a-z0-9]{4,12})-([CEPHIX]{1,6})-([cl])-(\d{1,3})$/.exec(code||""); if(!m) return null; [...new Set(m[2].split(""))].forEach(k=>q[k]=EV_LEGACY[m[3]][k].slice()); m=[m[0],m[1],"",m[4]]; }
   if(!Object.values(q).some(a=>a[0]+a[1]+a[2]>0)) return null;
   return {id:m[1],q,min:+m[3],name:String(name||"").slice(0,60)}; }
 const evCode=e=>`${e.id}-${Object.keys(EV_WORLDS).filter(k=>e.q[k]&&e.q[k].some(n=>n>0)).map(k=>k+e.q[k].join("")).join("")}-${e.min}`;
@@ -2269,22 +2334,26 @@ if(tev&&!tev.q){ try{ tev=parseEv(`${tev.id}-${tev.worlds.join("")}-${tev.len}-$
 function evPanel(){ const body=$("evQ");
   if(!body.children.length) body.innerHTML=Object.entries(EV_WORLDS).map(([k,w])=>`<tr><th scope="row">${w}</th>`+DIFFS.map((dn,d)=>{ const mx=Math.min(9,evPool(k,d).length);
     return `<td>${mx?`<select data-w="${k}" data-d="${d}" aria-label="${w}, ${dn}">${Array.from({length:mx+1},(_,n)=>`<option>${n}</option>`).join("")}</select>`:`<span class="na" aria-label="${w}, ${dn}: no hay niveles">—</span>`}</td>`; }).join("")+"</tr>").join("");
-  evFill(tev?tev.q:EV_PRESET.l); if(tev){ $("evName").value=tev.name; $("evMin").value=tev.min; } }
+  if(!evPanel.done){ evPanel.done=true; evFill(tev?tev.q:EV_PRESET.m); if(tev){ $("evName").value=tev.name; $("evMin").value=tev.min; } evSummary(); } }
 function evFill(q){ $("evQ").querySelectorAll("select").forEach(sl=>{ const v=(q[sl.dataset.w]||[0,0,0])[+sl.dataset.d]; sl.value=String(Math.min(v,sl.options.length-1)); }); evSummary(); }
 function evForm(){ const q={}; $("evQ").querySelectorAll("select").forEach(sl=>{ (q[sl.dataset.w]=q[sl.dataset.w]||[0,0,0])[+sl.dataset.d]=+sl.value; });
   Object.keys(EV_WORLDS).forEach(k=>{ if(!q[k]) q[k]=[0,0,0]; });
   return {q,min:Math.max(0,Math.min(600,Math.round(Number($("evMin").value)||0))),name:$("evName").value.trim().slice(0,60)}; }
-function evSummary(){ const f=evForm(), n=evCount(f);
+const evSame=(a,b)=>Object.keys(EV_WORLDS).every(k=>(a[k]||[0,0,0]).join()===(b[k]||[0,0,0]).join());
+function evSummary(){ const f=evForm(), n=evCount(f), pk=Object.keys(EV_PRESET).find(k=>evSame(f.q,EV_PRESET[k]));
+  document.querySelectorAll(".evlen button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.p===pk)));
+  $("evLenTxt").textContent=pk?EV_LEN[pk]:n?"Personalizada: la armaste a mano en la tabla.":"";
   $("evSum").textContent=n?`Cada estudiante tendrá ${n} niveles${f.min?` y ${f.min} minutos`:", sin límite de tiempo"}.`:"Elige al menos un nivel.";
   const full=[...$("evQ").querySelectorAll("select")].filter(sl=>+sl.value>0&&sl.selectedIndex===sl.options.length-1);
   $("evMax").textContent=full.length?"En las casillas que están al máximo todos los estudiantes reciben los mismos niveles. Si pides menos, los niveles cambian de un estudiante a otro.":"";
   $("evMake").disabled=!n;
-  $("evState").innerHTML=tev?`<span class="ok">El código QR lleva la evaluación${tev.name?` «${esc(tev.name)}»`:""}:</span> ${evCount(tev)} niveles por estudiante${tev.min?`, ${tev.min} minutos`:""}.`:"Ahora el código QR abre la práctica libre, con todos los niveles."; }
+  $("evState").innerHTML=tev?`<span class="ok">Prueba lista${tev.name?` «${esc(tev.name)}»`:""}:</span> ${evCount(tev)} niveles por estudiante${tev.min?`, ${tev.min} minutos`:", sin límite de tiempo"}. Si cambias algo arriba, vuelve a crear el código.`:"Todavía no has creado la prueba. Cuando la tengas lista, pulsa el botón y aparece su código QR."; }
 $("evQ").addEventListener("change",evSummary); $("evMin").addEventListener("input",evSummary);
-document.querySelectorAll(".evpre button").forEach(b=>b.onclick=()=>evFill(b.dataset.p==="0"?{}:EV_PRESET[b.dataset.p]));
+document.querySelectorAll("#teacher [data-p]").forEach(b=>b.onclick=()=>{ const k=b.dataset.p; if(k!=="0") $("evMin").value=EV_MIN[k]; evFill(k==="0"?{}:EV_PRESET[k]); });
 $("evMake").onclick=()=>{ const f=evForm(); if(!evCount(f)){ evSummary(); return; }
-  tev={...f,id:Math.random().toString(36).slice(2,8).padEnd(6,"0")}; store.set("euclidia2-tev",tev); openTeacher(); };
-$("evClear").onclick=()=>{ tev=null; store.set("euclidia2-tev",null); openTeacher(); };
+  tev={...f,id:Math.random().toString(36).slice(2,8).padEnd(6,"0")}; store.set("euclidia2-tev",tev); openTeacher(); evSummary();
+  try{ $("qrWrap").scrollIntoView({block:"start",behavior:"smooth"}); }catch(e){} };
+$("evClear").onclick=()=>{ tev=null; store.set("euclidia2-tev",null); openTeacher(); evSummary(); };
 
 /* ---- Hoja de borrador y calculadora ---- */
 // Trazos guardados en coordenadas de la hoja; la vista (zoom k y desplazamiento o) solo cambia cómo se ven.
@@ -2373,9 +2442,9 @@ function frame(now){
 // El código QR del profesor puede traer su hoja de resultados (?hoja=ID)
 try{ const hid=new URLSearchParams(location.search).get("hoja"); if(hid&&/^[\w-]{20,}$/.test(hid)) store.set("euclidia2-hoja",`https://script.google.com/macros/s/${hid}/exec`); }catch(e){}
 // El enlace de una evaluación (?ev=...) la guarda en el dispositivo; una evaluación nueva empieza de cero
-try{ const sp=new URLSearchParams(location.search), e=parseEv(sp.get("ev"),sp.get("evn"));
+if(!STUDY) try{ const sp=new URLSearchParams(location.search), e=parseEv(sp.get("ev"),sp.get("evn"));
   if(e){ const old=store.get("euclidia2-ev",null); if(!old||old.id!==e.id){ store.set("euclidia2-ev",e); prog={best:{},hintsUsed:0,hintsBought:0,shown:{}}; saveProg(); } } }catch(e){}
-EV=store.get("euclidia2-ev",null);
+EV=STUDY?null:store.get("euclidia2-ev",null);
 loadLevel(0); resize(); renderScore(); flush();
 // Quien entra por el QR del profesor queda fijo como estudiante en ese dispositivo: no puede elegir ser profesor
 let locked=store.get("euclidia2-lock",false);
@@ -2508,9 +2577,10 @@ const wantTaller=(()=>{ try{ return ["taller","practica"].includes(new URLSearch
 // Al entrar (cada vez que se abre el juego) se presenta la historia; después vienen el rol, el registro o «Hola de nuevo» y el menú.
 // Con el enlace de una evaluación también se muestra la historia, pero después no hay menú: va directo al quiz.
 const beginGame=()=>{ if(TEST_ENTRY&&store.get("euclidia2-intro",false)) startFlow(); else showIntro(startFlow); };
-// ?modo=estudio (enlace del profesor): entra como estudiante sin elegir rol ni dar documento; llega al Gran Mapa con las lecciones de Apolonio
-const wantStudy=(()=>{ try{ return new URLSearchParams(location.search).get("modo")==="estudio"&&!SESSION; }catch(e){ return false; } })();
-if(wantStudy&&!role){ role="estudiante"; store.set("euclidia2-role",role); }
+// ?modo=estudio (QR «solo estudio» del profesor): entra como estudiante sin elegir rol ni dar documento; después de la historia ve el menú
+// Entra como estudiante (aunque el aparato estuviera como profesor, solo en esta visita) y después de la historia ve el menú normal
+const wantStudy=STUDY;
+if(wantStudy&&role!=="estudiante"){ const had=role; role="estudiante"; if(!had) store.set("euclidia2-role",role); $("teacherBtn").hidden=true; }
 /* ============ Menú principal ============
    Se abre al entrar al juego (después de la historia, el rol y el registro, o de «Hola de nuevo»). En una evaluación
    no aparece: el estudiante va directo a su quiz. Recargar en la misma pestaña sigue donde estaba. */
@@ -2540,7 +2610,7 @@ $("howBack").onclick=()=>{ $("howto").hidden=true; openMenu(); };
 $("howTut").onclick=()=>{ const tut=LEVELS.filter(L=>L.tutorial), L=tut.find(l=>!isDone(l))||tut[0]; advGoTo(LEVELS.indexOf(L)); };
 $("mLab").onclick=()=>{ closeMenu(); tAfter=openMenu; openTaller(); tPracSet(false); };
 $("mPrac").onclick=()=>{ closeMenu(); tAfter=openMenu; openTaller(); tPracSet(true); };
-$("mTeach").onclick=()=>{ closeMenu(); openTeacher(); };
+$("mTeach").onclick=()=>{ closeMenu(); openTeacher("home"); };
 $("mWho").onclick=()=>{ closeMenu(); $("whoBtn").onclick(); };
 // «Cambiar de jugador» (en el juego o en el menú): primero la historia, luego quién juega
 { const who=$("whoBtn").onclick; $("whoBtn").onclick=()=>showIntro(()=>who()); }
@@ -2989,7 +3059,7 @@ requestAnimationFrame(frame);
    ahí, la fórmula clave y un ejemplo dibujado con sus partes (calculadas con el mismo modelo del Taller, tModelOf).
    Los ejemplos nunca son la respuesta de un nivel (lo revisa pruebas/lecciones.test.js). En una evaluación no hay lecciones.
    Las lecciones vistas se guardan en euclidia2-lecciones y se pueden repasar desde el Gran Mapa.
-   ?modo=estudio (enlace del profesor) entra como estudiante, sin documento ni rol, y después de la historia y el registro abre el Gran Mapa. */
+   ?modo=estudio (QR «solo estudio» del profesor) entra como estudiante, sin documento ni rol; después de la historia y el registro ve el menú normal. */
 const LECCIONES={
   "El Lago Redondo":{t:"Centro en el origen y radio",f:"x² + y² = r²",
     p:["Toda circunferencia es un centro y un radio. Si el centro es el origen, la ecuación es x² + y² = r².",
@@ -3162,21 +3232,6 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("leccion").hidd
   const _renderHints=renderHints; renderHints=function(){ _renderHints(); hp.hidden=!(prog.shown[level().id]>0); }; renderHints();
   const _loadLevel=loadLevel; loadLevel=function(i){ _loadLevel(i); const ls=$("lesson"); if(!ls.hidden&&!ls.querySelector(".apo-say")) ls.prepend(apoTag("lessonApo","El maestro Apolonio te explica:")); };
   const ls=$("lesson"); if(!ls.hidden&&!ls.querySelector(".apo-say")) ls.prepend(apoTag("lessonApo","El maestro Apolonio te explica:")); }
-// ?modo=estudio: al terminar de entrar se abre el Gran Mapa en vez del menú (una vez); de ahí, «☰ Menú» lleva al menú
-{ let first=wantStudy; const _openMenu=openMenu; openMenu=function(){ if(first&&!SESSION){ first=false; ["back","role","reg","teacher"].forEach(id=>$(id).hidden=true); openMap(); return true; } return _openMenu(); }; }
-// Panel del profesor: enlaces del modo estudio (aventura con lecciones, Taller y práctica), con su código QR
-{ const base=()=>{ const u=new URL(location.href); u.hash=""; u.search=""; return u; };
-  const ESTUDIO=[["estudio","Aventura con lecciones","Abre el Gran Mapa: cada valle empieza con una lección de Apolonio y luego sus niveles."],["taller","Taller de Coni","Laboratorio: mover parámetros y ver las partes de cada cónica."],["practica","Práctica sin fin","Ejercicios al azar de «halla lo que falta», con conteo de aciertos en el celular."]];
-  const linkOf=m=>{ const u=base(); u.searchParams.set("modo",m); return u.toString(); };
-  function estUI(){ $("estLinks").innerHTML=ESTUDIO.map(([m,t,d])=>`<div class="er"><b>${esc(t)}</b><span class="small">${esc(d)}</span><div class="url">${esc(linkOf(m))}</div><div class="row"><button class="btn ghost" type="button" data-c="${m}">Copiar enlace</button><button class="btn ghost" type="button" data-q="${m}">Ver código QR</button></div></div>`).join("");
-    $("estQr").hidden=true; $("estMsg").textContent=""; }
-  $("estLinks").onclick=async e=>{ const b=e.target.closest("button"); if(!b) return;
-    if(b.dataset.c){ const url=linkOf(b.dataset.c); try{ await navigator.clipboard.writeText(url); $("estMsg").textContent="Enlace copiado."; }catch(er){ $("estMsg").textContent="No se pudo copiar: selecciona el enlace y cópialo a mano."; } return; }
-    const url=linkOf(b.dataset.q), box=$("estQr"); box.hidden=false; box.innerHTML="";
-    const draw=()=>{ box.innerHTML=""; try{ new window.QRCode(box,{text:url,width:200,height:200,correctLevel:window.QRCode.CorrectLevel.M}); $("estMsg").textContent=`Código QR de: ${ESTUDIO.find(r=>r[0]===b.dataset.q)[1]}.`; }catch(er){ $("estMsg").textContent="No se pudo generar el código. Comparte el enlace."; } };
-    if(window.QRCode) draw(); else { const s=document.createElement("script"); s.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"; s.onload=draw; s.onerror=()=>{ $("estMsg").textContent="No se pudo cargar el generador de códigos. Comparte el enlace."; }; document.head.appendChild(s); } };
-  const _openTeacher=openTeacher; openTeacher=function(){ _openTeacher(); estUI(); }; }
-
 window.__euclidia={lecciones:{all:LECCIONES,show:showLesson,need:needLesson,close:closeLesson},adv:{state:advState,next:advNext,resume:advResume,chains:chainsOf,menu:openMenu},practica:{gen:pracGen,check:pracCheck,stats:prStats,model:tModelOf,set:tPracSet,ex:()=>tPx,next:tPracNew,target:prTarget,force:X=>{ tPx=X; tPracShow(); }},taller:{model:tModel,general:tGeneral,state:()=>TS,set:(st)=>tSetConic(st.c,{...st}),open:openTaller,close:closeTaller,retos:RETOS,flip:tFlip},LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
     if(ivs[i]) ivs[i]=(list||[]).map(I=>({v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):"",loC:true,hiC:true})); }); renderModes(); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,

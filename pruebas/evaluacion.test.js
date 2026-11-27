@@ -38,11 +38,11 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
  res(r.coinsMin>0,`Monedas posibles por estudiante en la larga: entre ${r.coinsMin} y ${r.coinsMax}; la nota se escala a 5,0 con las de cada uno`);
  res(r.mal===null&&r.cero===null&&r.evOk&&r.evOk.min===0&&Object.keys(r.evOk.q).join()==='C,H','Códigos de evaluación válidos e inválidos (sin niveles no vale)');
  // 2. El profesor arma la evaluación en la tabla y el QR la lleva
- const q=await p0.evaluate(async()=>{ document.getElementById('teacherBtn').click(); await new Promise(r=>setTimeout(r,100));
+ const q=await p0.evaluate(async()=>{ document.getElementById('teacherBtn').click(); await new Promise(r=>setTimeout(r,100)); document.getElementById('tGoEv').click(); await new Promise(r=>setTimeout(r,50));
    const sel=(w,d)=>document.querySelector(`#evQ select[data-w="${w}"][data-d="${d}"]`);
    const maxC=[0,1,2].map(d=>sel('C',d).options.length-1).join(','), hasX=!!sel('X',0);
-   document.querySelector('.evpre [data-p="l"]').click(); const larga=document.getElementById('evSum').textContent;
-   document.querySelector('.evpre [data-p="0"]').click(); const vacio=document.getElementById('evSum').textContent, dis=document.getElementById('evMake').disabled;
+   document.querySelector('.evlen [data-p="l"]').click(); const larga=document.getElementById('evSum').textContent;
+   document.getElementById('evZero').click(); const vacio=document.getElementById('evSum').textContent, dis=document.getElementById('evMake').disabled;
    [['C',0],['C',1],['C',2],['P',0],['P',1],['P',2]].forEach(([w,d])=>{ sel(w,d).value='1'; }); sel('C',0).dispatchEvent(new Event('change',{bubbles:true}));
    document.getElementById('evMin').value='30'; document.getElementById('evName').value='Quiz 1'; document.getElementById('evMin').dispatchEvent(new Event('input'));
    const sum=document.getElementById('evSum').textContent; document.getElementById('evMake').click(); await new Promise(r=>setTimeout(r,100));
