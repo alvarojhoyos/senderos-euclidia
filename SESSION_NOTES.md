@@ -3,7 +3,7 @@
 Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 1. **Taller de Coni + maestro Apolonio** — hecho, PR #12 (rama `claude/project-thread-offm5n`), esperando revisión de Alvaro.
 2. **Práctica sin fin** — hecho, PR apilado sobre el #12 (rama `claude/project-thread-kr0m2u`), esperando revisión de Alvaro.
-3. **Banco de datos variados** — hecho (muestra de 16 niveles), PR apilado sobre el #13 (rama `claude/project-thread-dngk74`), esperando revisión de Alvaro.
+3. **Banco de datos variados** — hecho (muestra de 16 niveles), PR #14 apilado sobre el #13 (rama `claude/project-thread-dngk74`), esperando revisión de Alvaro. Doc: https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX
 4. Modo historia en el Gran Mapa: zonas que se desbloquean, cada una enseña algo (Apolonio lo explica) y luego sus niveles; enlace del profesor (`?modo=estudio`) y botón del menú.
 5. Evaluación como una sola saga: el profesor elige cuántos niveles por dificultad y el juego arma una historia seguida de Coni.
 6. Cierre: celular, todas las pruebas, publicación, guía del profesor.
@@ -36,7 +36,7 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 - Vista del mapa: el lienzo es 4:3 (alto = 0,75·span) y Coni se detiene a ~0,07·span del borde de arriba; por eso la vista sale de `view()` en datos-variados.js.
 
 ## Pendiente / preguntas abiertas
-- Alvaro debe revisar el doc del banco de datos variados (enlace en la memoria del proyecto) y decir si quita algún tipo de dato o si quiere más cadenas antes de la etapa 4.
+- Alvaro debe revisar el doc del banco de datos variados (https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX) y decir si quita algún tipo de dato o si quiere más cadenas antes de la etapa 4.
 - Prometido: Apolonio también dirá las lecciones del tutorial y las pistas (hacerlo en la etapa 4).
 - Enlace del Taller en el panel del profesor: aún no (va con el enlace de estudio en la etapa 4).
 
