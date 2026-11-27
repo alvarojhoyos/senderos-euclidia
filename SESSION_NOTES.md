@@ -25,13 +25,13 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 - Pruebas: `pruebas/practica.test.js` (11; ~1450 ejercicios al azar).
 
 ## Qué hay en el menú principal (etapa 3b, index.html)
-- Cambio pedido por Alvaro (2026-11-27 01:02 Bogotá): la aventura NO es un apartado del menú; se presenta al entrar. Al menú le faltaba «Instrucciones y tutorial». Aprobó: quiz/QR de evaluación va directo al quiz sin menú, y el profesor ve todos los niveles abiertos.
-- Entrada: `enterAdventure()` abre el Gran Mapa (modo aventura) después del registro, al elegir «Soy profesor» y tras «Hola de nuevo → Continuar». No pasa si hay evaluación (`SESSION`). Recargar en la misma pestaña (`euclidia2-tab`) sigue donde estaba (por eso las pruebas viejas no lo ven). `?modo=taller|practica` abre el Taller y al cerrarlo sigue la entrada normal.
-- Menú `#menu` (botón «☰ Menú» en el juego y en el Gran Mapa): Instrucciones y tutorial (`#howto`: cómo se juega en 7 puntos + «Jugar el tutorial», que abre el primer paso sin terminar), Taller de Coni (Explorar / Practicar sin fin), La historia, Panel del profesor (solo profesor); pie: cambiar de jugador, «Volver a la aventura». Bloque `/* ============ Menú principal */` antes de `if(!wantTaller) beginGame()`.
+- Decisiones de Alvaro (2026-11-27, 01:02–01:40 Bogotá): al entrar se presenta LA HISTORIA (viñetas), no la aventura; después el menú para ir a donde quiera. Con enlace de evaluación: la historia y luego solo lo que el profesor puso (quiz), sin menú. El menú lleva «Instrucciones y tutorial». Aprobó: profesor con todos los niveles abiertos.
+- Entrada: `beginGame` muestra la historia en cada pestaña nueva (`!seen`) o si nunca se vio; luego `startFlow` (rol, registro u «Hola de nuevo») y `openMenu()`. Con evaluación (`SESSION`) `openMenu` no hace nada y queda la puerta «Empezar el quiz». Recargar en la misma pestaña (`euclidia2-tab`) no repite nada (por eso las pruebas viejas no lo ven; las que abren pestaña nueva cierran la historia con #introSkip). `?modo=taller|practica` abre el Taller y al cerrarlo sigue la entrada normal.
+- Menú `#menu` (botón «☰ Menú» en el juego y en el Gran Mapa): Modo aventura (abre el Gran Mapa), Instrucciones y tutorial (`#howto`: cómo se juega en 7 puntos + «Jugar el tutorial»), Taller de Coni (Explorar / Practicar sin fin), Panel del profesor (solo profesor); pie: cambiar de jugador, ir al nivel donde estaba. La historia NO está en el menú (queda «Ver la historia» en el pie del juego). Bloque `/* ============ Menú principal */` antes de `if(!wantTaller) beginGame()`.
 - Gran Mapa `#mapa`: «Continuar la aventura» (`advResume`: último nivel abierto sin superar, `euclidia2-ultimo`), valles por mundo (`#advList`), candados en las regiones sin niveles abiertos, medallas.
 - Desbloqueo (bloque `/* ============ Modo aventura */` antes de `renderLevels`): `advState()` → {open, why}. Tutorial en orden → primer valle de cada cónica; en un valle cada nivel abre el siguiente; terminar un valle abre el siguiente del mundo; Identificar y Mixtos al terminar el primer valle de las 4 cónicas. Lo superado queda abierto. Profesor y evaluación: todo abierto. `nextIdx` salta cerrados y si no hay más busca con `advNext`.
 - Barra de niveles: cerrados con candado; al tocarlos `#lockNote` explica qué terminar. API de pruebas: `window.__euclidia.adv`.
-- Pruebas: `pruebas/menu.test.js` (24).
+- Pruebas: `pruebas/menu.test.js` (26).
 - Visto al probar (ya pasaba antes): en un celular de 320 px de ancho el panel del nivel se sale 13 px por la derecha.
 
 ## Para la etapa 4 (modo historia)

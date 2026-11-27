@@ -1,4 +1,4 @@
-// Pruebas de la entrada (se presenta la aventura), el menú principal, las instrucciones y los niveles que se desbloquean.
+// Pruebas de la entrada (la historia y luego el menú), el menú principal, las instrucciones y los niveles que se desbloquean.
 // Uso: node pruebas/menu.test.js [ruta/al/juego.html]
 const {chromium,devices}=require('playwright'); const fs=require('fs'); const path=require('path');
 const SRC=process.argv[2]||path.join(__dirname,'..','index.html');
@@ -10,17 +10,20 @@ const hid=(p,id)=>p.evaluate(i=>document.getElementById(i).hidden,id);
  const b=await chromium.launch(); const errs=[];
  const page=async(url,init,dev)=>{ const ctx=await b.newContext(dev||{...devices['iPhone SE'],deviceScaleFactor:1}); const p=await ctx.newPage(); p.on('pageerror',e=>errs.push(e.message));
    await p.route(/^https?:\/\//,r=>r.abort()); if(init) await p.addInitScript(init); await p.goto('file://'+TMP+(url||'')); await p.waitForTimeout(400); return p; };
+ const skip=p=>p.evaluate(()=>{ const v=!document.getElementById('intro').hidden; if(v) document.getElementById('introSkip').click(); return v; });
  // 1. Estudiante nuevo: historia → rol → registro → menú
  let p=await page();
  await p.click('#introSkip'); await p.click('#roleStudent'); await p.fill('#rName','Ana'); await p.click('#regForm button[type=submit]'); await p.waitForTimeout(150);
- res(!(await hid(p,'mapa'))&&await hid(p,'menu'),'Estudiante nuevo: después del registro se presenta la aventura (el Gran Mapa), no el menú');
+ res(!(await hid(p,'menu'))&&await hid(p,'mapa'),'Estudiante nuevo: historia → rol → nombre → menú');
+ res(await p.evaluate(()=>!!document.getElementById('mAdv')&&!!document.getElementById('mHow')&&!document.getElementById('mStory')),'El menú tiene «Modo aventura» e «Instrucciones y tutorial»; la historia no es un apartado (sale al entrar)');
+ await p.click('#mAdv'); await p.waitForTimeout(100);
  // 2. Modo aventura: al empezar solo el tutorial está abierto
  const a=await p.evaluate(()=>({open:[...document.querySelectorAll('#advList .vl:not(.lock)')].map(b=>b.textContent),locks:document.querySelectorAll('#advList .vl.lock').length}));
  res(a.open.length===1&&/Primeros pasos/.test(a.open[0])&&a.locks>15,`Aventura: solo el tutorial abierto, ${a.locks} valles con candado`);
  await p.click('#advList .vl.lock',{force:true}); res(/Se abre al terminar el tutorial/.test(await p.textContent('#advWhy')),'Tocar un valle cerrado explica qué hay que terminar para abrirlo');
  // Menú: sin la aventura, con instrucciones y tutorial
  await p.click('#mapMenu'); await p.waitForTimeout(100);
- res(!(await hid(p,'menu'))&&await hid(p,'mapa')&&await p.evaluate(()=>!document.getElementById('mAdv')&&!!document.getElementById('mHow'))&&await hid(p,'mTeach'),'«☰ Menú» abre el menú: sin apartado de aventura, con «Instrucciones y tutorial», sin panel del profesor');
+ res(!(await hid(p,'menu'))&&await hid(p,'mapa')&&await hid(p,'mTeach'),'«☰ Menú» del Gran Mapa vuelve al menú (sin panel del profesor para el estudiante)');
  const W=await p.evaluate(()=>{ const r=document.querySelector('.menucard').getBoundingClientRect(), t=[...document.querySelectorAll('.menucard .mtile')].map(e=>e.getBoundingClientRect()); return {ok:r.left>=0&&r.right<=document.documentElement.clientWidth&&t.every(q=>q.right<=r.right)}; });
  res(W.ok,'El menú y sus apartados caben en el ancho del celular');
  await p.click('#mHow'); await p.waitForTimeout(100);
@@ -53,23 +56,23 @@ const hid=(p,id)=>p.evaluate(i=>document.getElementById(i).hidden,id);
  res(await p.evaluate(()=>window.__euclidia.LEVELS[window.__euclidia.state().idx].id==='C1'&&document.getElementById('mapa').hidden&&document.getElementById('menu').hidden),'Con el tutorial hecho, «Continuar la aventura» abre C1');
  // 6. Profesor: menú con el panel del profesor
  p=await page('',()=>{ localStorage.setItem('euclidia2-intro','true'); });
+ res(await skip(p),'Al entrar se presenta la historia (aunque ya se haya visto antes)');
  await p.click('#roleTeacher'); await p.waitForTimeout(100);
- res(!(await hid(p,'mapa'))&&await hid(p,'teacher'),'Profesor: al elegir el rol se presenta la aventura');
- await p.click('#mapMenu'); res(!(await hid(p,'menu'))&&!(await hid(p,'mTeach')),'Profesor: el menú tiene «Panel del profesor»');
+ res(!(await hid(p,'menu'))&&await hid(p,'teacher'),'Profesor: después de la historia y el rol se abre el menú');
+ res(!(await hid(p,'menu'))&&!(await hid(p,'mTeach')),'Profesor: el menú tiene «Panel del profesor»');
  await p.click('#mTeach'); res(!(await hid(p,'teacher')),'«Panel del profesor» abre el código QR y la evaluación');
  // 7. Regresar en una pestaña nueva: «Hola de nuevo» → menú
  p=await page('',()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-role','"estudiante"'); localStorage.setItem('euclidia2-player',JSON.stringify({nombre:'Ana',apellido:'Ruiz',documento:'12'})); });
- await p.click('#backGo'); res(!(await hid(p,'mapa')),'Al volver otro día: «Continuar como Ana» presenta la aventura');
- await p.click('#mapMenu');
+ await skip(p); await p.click('#backGo'); res(!(await hid(p,'menu')),'Al volver otro día: historia → «Continuar como Ana» → menú');
  await p.click('#mLab'); await p.waitForTimeout(150); res(!(await hid(p,'taller')),'«Explorar» abre el Taller de Coni');
  await p.click('#tClose'); await p.waitForTimeout(100); res(!(await hid(p,'menu')),'Al cerrar el Taller se vuelve al menú');
  // 8. Quiz: el estudiante va directo a su evaluación, sin menú
  p=await page('?ev=quiz1-C111-30&evn=Quiz',()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-role','"estudiante"'); localStorage.setItem('euclidia2-player',JSON.stringify({nombre:'Ana',apellido:'Ruiz',documento:'12'})); });
- await p.click('#backGo'); await p.waitForTimeout(100);
- res(await hid(p,'menu')&&await hid(p,'mapa')&&!(await hid(p,'evGate'))&&await hid(p,'menuBtn'),'Con el enlace de un quiz no aparece el menú: va directo a «Empezar el quiz»');
+ const st=await skip(p); await p.click('#backGo'); await p.waitForTimeout(100);
+ res(st&&await hid(p,'menu')&&await hid(p,'mapa')&&!(await hid(p,'evGate'))&&await hid(p,'menuBtn'),'Con el enlace de un quiz: la historia y luego directo a «Empezar el quiz», sin menú');
  // 9. Laptop
  p=await page('',()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-role','"profesor"'); },{viewport:{width:1280,height:800}});
- await p.click('#backGo'); await p.click('#mapMenu'); const L=await p.evaluate(()=>{ const r=document.querySelector('.menucard').getBoundingClientRect(); return {w:r.width,h:r.height}; });
+ await skip(p); await p.click('#backGo'); const L=await p.evaluate(()=>{ const r=document.querySelector('.menucard').getBoundingClientRect(); return {w:r.width,h:r.height}; });
  res(L.w>500&&L.h<760,`En laptop el menú se ve completo sin bajar (${Math.round(L.w)}×${Math.round(L.h)} px)`);
  await b.close();
  console.log(out.join('\n')); console.log(`\nTotal: ${pass} pasan, ${fail} fallan.`+(errs.length?' Errores de la página: '+errs.join('; '):''));

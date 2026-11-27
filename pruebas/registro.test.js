@@ -10,7 +10,7 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
  const b=await chromium.launch(); const errs=[];
  const fresh=async(q)=>{ const ctx=await b.newContext({...devices['iPhone SE'],deviceScaleFactor:1}); const p=await ctx.newPage(); p.on('pageerror',e=>errs.push(e.message));
    await p.route(/^https?:\/\//,r=>r.abort()); await p.addInitScript(()=>{ try{ if(!localStorage.getItem('euclidia2-intro')) localStorage.setItem('euclidia2-intro','true'); }catch(e){} });
-   await p.goto('file://'+TMP+(q||'')); await p.waitForTimeout(500); return {ctx,p}; };
+   await p.goto('file://'+TMP+(q||'')); await p.waitForTimeout(500); await p.evaluate(()=>{ if(!document.getElementById('intro').hidden) document.getElementById('introSkip').click(); }); return {ctx,p}; };
  const vis=(p,id)=>p.evaluate(id=>{ const e=document.getElementById(id); return !!(e&&e.offsetParent); },id);
  // 1. Por su cuenta: solo el nombre
  let {ctx,p}=await fresh('');
@@ -22,7 +22,7 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
  res(await p.evaluate(()=>/Ana/.test(document.getElementById('hello').textContent)),'el juego la saluda por su nombre');
  // 2. Si luego entra con el QR del profesor, ahí sí se pide el documento y no pierde su avance
  await p.evaluate(()=>{ const pr=JSON.parse(localStorage.getItem('euclidia2-prog'))||{best:{},hintsUsed:0,hintsBought:0,shown:{}}; pr.best[Object.keys(pr.best)[0]||'x']=2; localStorage.setItem('euclidia2-prog',JSON.stringify(pr)); try{ sessionStorage.clear(); }catch(e){} });
- await p.goto('file://'+TMP+'?rol=estudiante'); await p.waitForTimeout(500);
+ await p.goto('file://'+TMP+'?rol=estudiante'); await p.waitForTimeout(500); await p.evaluate(()=>{ if(!document.getElementById('intro').hidden) document.getElementById('introSkip').click(); });
  res(await vis(p,'rDoc')&&await vis(p,'rLast'),'con el enlace del profesor (?rol=estudiante) se piden apellido y documento');
  await p.fill('#rName','Ana'); await p.click('#regForm button[type=submit]'); await p.waitForTimeout(150);
  res(await p.evaluate(()=>!document.getElementById('reg').hidden&&!document.getElementById('rErr').hidden),'con el enlace del profesor no deja entrar sin documento');
