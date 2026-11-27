@@ -2,8 +2,9 @@
 
 Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 1. **Taller de Coni + maestro Apolonio** — hecho, PR #12 (rama `claude/project-thread-offm5n`), esperando revisión de Alvaro.
-2. **Práctica sin fin** — hecho, PR apilado sobre el #12 (rama `claude/project-thread-kr0m2u`), esperando revisión de Alvaro.
+2. **Práctica sin fin** — hecho y aprobado por Alvaro (2026-11-26 22:43 Bogotá), PR #13 (rama `claude/project-thread-kr0m2u`). También aprobó la entrada sin documento (commit 71aa903 del #13).
 3. **Banco de datos variados** — hecho (muestra de 16 niveles), PR #14 apilado sobre el #13 (rama `claude/project-thread-dngk74`), esperando revisión de Alvaro. Doc: https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX
+3b. **Menú principal + modo aventura con candados** (pedido de Alvaro, 2026-11-26 22:43) — hecho, PR apilado sobre el #14 (rama `claude/project-thread-6loujp`, que además trae el commit de entrada sin documento del #13). Adelanta parte de la etapa 4: los desbloqueos ya existen; falta que cada zona enseñe algo con Apolonio.
 4. Modo historia en el Gran Mapa: zonas que se desbloquean, cada una enseña algo (Apolonio lo explica) y luego sus niveles; enlace del profesor (`?modo=estudio`) y botón del menú.
 5. Evaluación como una sola saga: el profesor elige cuántos niveles por dificultad y el juego arma una historia seguida de Coni.
 6. Cierre: celular, todas las pruebas, publicación, guía del profesor.
@@ -23,7 +24,17 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 - `tDraw` usa `tPM` en la práctica: datos en naranja, ruta fallida en rojo punteado.
 - Pruebas: `pruebas/practica.test.js` (11; ~1450 ejercicios al azar).
 
+## Qué hay en el menú principal (etapa 3b, index.html)
+- Modal `#menu` (apartados: Modo aventura, Taller de Coni con Explorar / Practicar sin fin, La historia, Panel del profesor solo para el profesor; pie: cambiar de jugador, ir al nivel). Bloque `/* ============ Menú principal */` justo antes de `if(!wantTaller) beginGame()`: `openMenu()`, `closeMenu()`, `paintMenuArt()` (Apolonio y Coni en el taller).
+- Cuándo se abre: después del registro, al elegir «Soy profesor», tras «Hola de nuevo → Continuar», y con el botón «☰ Menú» del juego. No se abre si hay evaluación (`SESSION`): el quiz va directo a «Empezar el quiz». Recargar en la misma pestaña (`euclidia2-tab`) sigue donde estaba, sin menú (por eso las pruebas viejas no lo ven). `?modo=taller|practica` abre el Taller y al cerrarlo sigue la entrada normal hasta el menú.
+- Modo aventura = el modal `#mapa` ampliado: «Continuar la aventura» (`advResume`: último nivel abierto sin superar, guardado en `euclidia2-ultimo`), lista de valles por mundo (`#advList`), candados pintados en las regiones del mapa sin niveles abiertos, medallas.
+- Desbloqueo (bloque `/* ============ Modo aventura */` antes de `renderLevels`): `advState()` → {open, why}. Tutorial en orden → primer valle de cada cónica; en un valle cada nivel abre el siguiente; terminar un valle abre el siguiente del mundo; Identificar y Mixtos se abren al terminar el primer valle de las 4 cónicas. Lo superado queda abierto. Profesor y evaluación: todo abierto. `nextIdx` salta niveles cerrados y, si no hay más en orden, busca el siguiente abierto (`advNext`).
+- Barra de niveles: los cerrados salen con candado y al tocarlos `#lockNote` explica qué terminar. Expuesto en `window.__euclidia.adv`.
+- Pruebas: `pruebas/menu.test.js` (21). Todas las demás pasan.
+- Visto al probar (ya pasaba antes): en un celular de 320 px de ancho el panel del nivel se sale 13 px por la derecha.
+
 ## Para la etapa 4 (modo historia)
+- El desbloqueo ya está hecho (etapa 3b). Falta: que Apolonio explique la lección de cada valle antes de su primer nivel, y el enlace del profesor `?modo=estudio` (puede abrir directo el modo aventura).
 - Las 4 cadenas nuevas sirven como zonas del modo historia: cada tipo de dato es una lección que Apolonio puede explicar antes de sus niveles.
 - El PR #11 sigue abierto; los niveles nuevos ya funcionan con su regla.
 
@@ -42,3 +53,6 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 
 ## Ahorro (pedido de Alvaro, 2026-11-26)
 Tests y lecturas largas en subagentes; salida de comandos resumida; no cambiar modelo ni esfuerzo en un hilo; cada etapa puede arrancar en un hilo nuevo desde esta nota.
+
+## Enlace privado de prueba
+https://claude.ai/artifact/S7vw43UrnusmURTwi9MY2G (no es el sitio de estudiantes). Se arma desde index.html: cambiar las 6 primeras líneas (doctype…title) por las 2 de cabecera del artefacto («Euclidia en prueba»), quitar `</head>\n<body>` y cerrar con `</body></html>`; mathlive.min.js ya está como archivo aparte y se conserva.
