@@ -6,7 +6,7 @@ PASA  | Media: Cada estudiante tendrá 12 niveles y 40 minutos.
 PASA  | Larga: Cada estudiante tendrá 20 niveles y 60 minutos.
 PASA  | Si cambia la tabla a mano, ningún largo queda marcado y dice «Personalizada»
 PASA  | El código QR de la prueba solo aparece después de crearla
-PASA  | QR de la corta: rol=estudiante, ev=2t6skz-C010E010P010H010I010X010-20
+PASA  | QR de la corta: rol=estudiante, ev=2jos0w-C010E010P010H010I010X010-20
 PASA  | Celular: la configuración de la prueba no se sale de la pantalla
 PASA  | Cada estudiante recibe 6, 12 y 20 niveles distintos: 6,12,20
 PASA  | Los QR viejos (formato corta/larga anterior) siguen dando lo mismo que antes: 16,20
