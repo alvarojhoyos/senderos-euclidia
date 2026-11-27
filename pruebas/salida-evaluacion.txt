@@ -4,26 +4,26 @@ PASA  | El mismo documento recibe siempre los mismos niveles (espacios aparte)
 PASA  | 40 documentos reciben 40 combinaciones distintas de niveles
 PASA  | Cada estudiante recibe exactamente las cantidades de cada mundo y dificultad, sin repetir, de fácil a difícil
 PASA  | Tabla a mano (circunferencias 0·2·1, elipses 2·0·0): Cm,Cm,Cd,Ef,Ef
-PASA  | Si una casilla está al máximo (los 4 fáciles de circunferencias), todos reciben esos mismos niveles
+PASA  | Si una casilla está al máximo (los 8 fáciles de circunferencias), todos reciben esos mismos niveles
 PASA  | Los códigos QR del formato anterior (corta o larga) siguen funcionando
-PASA  | Monedas posibles por estudiante en la larga: entre 55 y 58; la nota se escala a 5,0 con las de cada uno
+PASA  | Monedas posibles por estudiante en la larga: entre 54 y 59; la nota se escala a 5,0 con las de cada uno
 PASA  | Códigos de evaluación válidos e inválidos (sin niveles no vale)
-PASA  | La tabla ofrece lo que hay en el banco: circunferencias hasta 4,6,6 (fácil, medio, difícil); mixtos sin fáciles
+PASA  | La tabla ofrece lo que hay en el banco: circunferencias hasta 8,8,8 (fácil, medio, difícil); mixtos con fáciles
 PASA  | Atajos: «Larga» llena 20 niveles y «Vaciar» deja el botón del QR desactivado
-PASA  | Enlace del QR: rol=estudiante, ev=x8j4ci-C111P111-30, evn=Quiz 1
+PASA  | Enlace del QR: rol=estudiante, ev=1qgj6t-C111P111-30, evn=Quiz 1
 PASA  | Resumen del panel: Cada estudiante tendrá 6 niveles y 30 minutos.
 PASA  | Antes de empezar: está en el Tutorial, el menú solo muestra Tutorial y se ve el aviso ««Quiz 1»: 6 niveles y 30 minutos. Si quieres, haz primero el Tutorial. El tiempo empieza cuando pulses el botón y ya no se detiene.»
 PASA  | El reloj no corre mientras hace el Tutorial (30:00 → 30:00 tras 2 s) y aún no puede terminar
 PASA  | «Empezar el quiz» pide un segundo toque y luego el aviso desaparece
 PASA  | El menú solo muestra el Tutorial y los mundos de la evaluación: Tutorial, Circunferencias, Parábolas
-PASA  | Empieza en su primer nivel de la evaluación (C13, fácil)
+PASA  | Empieza en su primer nivel de la evaluación (C1, fácil)
 PASA  | El menú de cada mundo agrupa sus niveles por dificultad: Fácil,Medio,Difícil
-PASA  | Monedas posibles = las de sus 6 niveles: 0 / 17
+PASA  | Monedas posibles = las de sus 6 niveles: 0 / 16
 PASA  | Al empezar el quiz el reloj corre: 29:59
 PASA  | Al llegar a 0:00 aparece «Se acabó el tiempo»
-PASA  | Fila final en la cola de envío: Se acabó el tiempo · Quiz 1 · 0/17 · nota 0
+PASA  | Fila final en la cola de envío: Se acabó el tiempo · Quiz 1 · 2/16 · nota 0.63
 PASA  | Después ya no se puede trazar ni volver a enviar
-PASA  | Sin evaluación: 0 / 200 monedas posibles, 7 mundos y sin reloj
+PASA  | Sin evaluación: 0 / 294 monedas posibles, 7 mundos y sin reloj
 PASA  | Celular: al bajar al teclado, la casilla del tramo 2 queda flotando justo debajo del mapa (y=273) y al subir vuelve a su lugar
 
 Total: 27 pasan, 0 fallan.

@@ -331,19 +331,55 @@ PASA  | El Faro del Lago | meta sobre la curva | distancia 0
 PASA  | El Faro del Lago | moneda (0,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Faro del Lago | moneda (-2.83,-2.83) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
 PASA  | El Faro del Lago | obstáculo (0.82,1.62) cerca de la curva (para que el lado equivocado choque) | distancia 3.498
+PASA  | La Órbita de la Luna | salida sobre la curva | distancia 0
+PASA  | La Órbita de la Luna | meta sobre la curva | distancia 0
+PASA  | La Órbita de la Luna | moneda (-5,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Órbita de la Luna | moneda (0,-5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Boca del Volcán | salida sobre la curva | distancia 0
+PASA  | La Boca del Volcán | meta sobre la curva | distancia 0
+PASA  | La Boca del Volcán | moneda (-5.64,-2.05) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | La Boca del Volcán | moneda (5.2,-3) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
+PASA  | La Fuente Redonda | salida sobre la curva | distancia 0
+PASA  | La Fuente Redonda | meta sobre la curva | distancia 0
+PASA  | La Fuente Redonda | moneda (0,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Fuente Redonda | moneda (-3,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Fuente Redonda | moneda (0,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Carrusel | salida sobre la curva | distancia 0
+PASA  | El Carrusel | meta sobre la curva | distancia 0
+PASA  | El Carrusel | moneda (4,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Carrusel | moneda (0,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Carrusel | moneda (-4,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Pista de Patines | salida sobre la curva | distancia 0
+PASA  | La Pista de Patines | meta sobre la curva | distancia 0
+PASA  | La Pista de Patines | moneda (2,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Pista de Patines | moneda (0,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Pista de Patines | moneda (-2,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Puente de la Fuente | salida sobre la curva | distancia 0
+PASA  | El Puente de la Fuente | meta sobre la curva | distancia 0
+PASA  | El Puente de la Fuente | moneda (0,5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Puente de la Fuente | moneda (3,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Plaza Cuadrada | salida sobre la curva | distancia 0
+PASA  | La Plaza Cuadrada | meta sobre la curva | distancia 0
+PASA  | La Plaza Cuadrada | moneda (-1.5,3.97) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | La Plaza Cuadrada | moneda (1.5,3.97) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
 PASA  | Rescate en la Laguna | salida sobre la curva | distancia 0
 PASA  | Rescate en la Laguna | meta sobre la curva | distancia 0
 PASA  | Rescate en la Laguna | moneda (-2,5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Rescate en la Laguna | moneda (-6,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Rescate en la Laguna | moneda (-2,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Rescate en la Laguna | obstáculo (0.08,-0.43) cerca de la curva (para que el lado equivocado choque) | distancia 1.907
-PASA  | El Remolino | salida sobre la curva | distancia 0
-PASA  | El Remolino | meta sobre la curva | distancia 0
-PASA  | El Remolino | moneda (5,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Remolino | moneda (1,6) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Remolino | moneda (-3,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Remolino | obstáculo (-0.43,-0.08) cerca de la curva (para que el lado equivocado choque) | distancia 1.907
-PASA  | El Remolino | ecuación general equivale a la canónica | general = 1 × canónica
+PASA  | El Cráter Lunar | salida sobre la curva | distancia 0
+PASA  | El Cráter Lunar | meta sobre la curva | distancia 0
+PASA  | El Cráter Lunar | moneda (4,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Cráter Lunar | moneda (-6,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Cráter Lunar | moneda (-1,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Cráter Lunar | obstáculo (-2.19,5.41) cerca de la curva (para que el lado equivocado choque) | distancia 1.655
+PASA  | La Grieta de Lava | salida sobre la curva | distancia 0
+PASA  | La Grieta de Lava | meta sobre la curva | distancia 0
+PASA  | La Grieta de Lava | moneda (2,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Grieta de Lava | moneda (6,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Grieta de Lava | moneda (2,-5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Grieta de Lava | obstáculo (-0.08,0.43) cerca de la curva (para que el lado equivocado choque) | distancia 1.907
 PASA  | La Orilla Norte | salida sobre la curva | distancia 0
 PASA  | La Orilla Norte | meta sobre la curva | distancia 0
 PASA  | La Orilla Norte | moneda (2,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -351,22 +387,17 @@ PASA  | La Orilla Norte | moneda (6,2) sobre la curva | distancia 0 (Coni la rec
 PASA  | La Orilla Norte | moneda (-2,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | La Orilla Norte | obstáculo (-4.2,1.4) cerca de la curva (para que el lado equivocado choque) | distancia 1.444
 PASA  | La Orilla Norte | obstáculo (-2.42,-3.34) cerca de la curva (para que el lado equivocado choque) | distancia 0.001
-PASA  | La Órbita de la Luna | salida sobre la curva | distancia 0
-PASA  | La Órbita de la Luna | meta sobre la curva | distancia 0
-PASA  | La Órbita de la Luna | moneda (-5,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Órbita de la Luna | moneda (0,-5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Cráter Lunar | salida sobre la curva | distancia 0
-PASA  | El Cráter Lunar | meta sobre la curva | distancia 0
-PASA  | El Cráter Lunar | moneda (4,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Cráter Lunar | moneda (-6,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Cráter Lunar | moneda (-1,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Cráter Lunar | obstáculo (-2.19,5.41) cerca de la curva (para que el lado equivocado choque) | distancia 1.655
-PASA  | La Plaza del Observatorio | salida sobre la curva | distancia 0
-PASA  | La Plaza del Observatorio | meta sobre la curva | distancia 0
-PASA  | La Plaza del Observatorio | moneda (-2,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Plaza del Observatorio | moneda (-5,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Plaza del Observatorio | moneda (-2,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Plaza del Observatorio | ecuación general equivale a la canónica | general = 2 × canónica
+PASA  | La Rueda del Molino | salida sobre la curva | distancia 0
+PASA  | La Rueda del Molino | meta sobre la curva | distancia 0
+PASA  | La Rueda del Molino | moneda (5,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Rueda del Molino | moneda (3,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Rueda del Molino | moneda (1,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Torre del Reloj | salida sobre la curva | distancia 0
+PASA  | La Torre del Reloj | meta sobre la curva | distancia 0
+PASA  | La Torre del Reloj | moneda (2,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Torre del Reloj | moneda (3.2,2.4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Torre del Reloj | moneda (-1.2,2.4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Torre del Reloj | obstáculo (-3.24,-2) cerca de la curva (para que el lado equivocado choque) | distancia 2.486
 PASA  | El Puente de la Luna | salida sobre la curva | distancia 0
 PASA  | El Puente de la Luna | meta sobre la curva | distancia 0
 PASA  | El Puente de la Luna | moneda (-4,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -374,16 +405,25 @@ PASA  | El Puente de la Luna | moneda (-3,6) sobre la curva | distancia 0 (Coni 
 PASA  | El Puente de la Luna | moneda (-3,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Puente de la Luna | obstáculo (-3.19,-2.53) cerca de la curva (para que el lado equivocado choque) | distancia 1.667
 PASA  | El Puente de la Luna | obstáculo (3.34,-1.42) cerca de la curva (para que el lado equivocado choque) | distancia 0.001
-PASA  | La Boca del Volcán | salida sobre la curva | distancia 0
-PASA  | La Boca del Volcán | meta sobre la curva | distancia 0
-PASA  | La Boca del Volcán | moneda (-5.64,-2.05) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
-PASA  | La Boca del Volcán | moneda (5.2,-3) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
-PASA  | La Grieta de Lava | salida sobre la curva | distancia 0
-PASA  | La Grieta de Lava | meta sobre la curva | distancia 0
-PASA  | La Grieta de Lava | moneda (2,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Grieta de Lava | moneda (6,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Grieta de Lava | moneda (2,-5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Grieta de Lava | obstáculo (-0.08,0.43) cerca de la curva (para que el lado equivocado choque) | distancia 1.907
+PASA  | El Estanque de los Patos | salida sobre la curva | distancia 0
+PASA  | El Estanque de los Patos | meta sobre la curva | distancia 0
+PASA  | El Estanque de los Patos | moneda (-3,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Estanque de los Patos | moneda (-5,-0.24) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
+PASA  | El Estanque de los Patos | moneda (-1,-0.24) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
+PASA  | El Estanque de los Patos | obstáculo (-3,5) cerca de la curva (para que el lado equivocado choque) | distancia 0
+PASA  | El Remolino | salida sobre la curva | distancia 0
+PASA  | El Remolino | meta sobre la curva | distancia 0
+PASA  | El Remolino | moneda (5,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Remolino | moneda (1,6) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Remolino | moneda (-3,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Remolino | obstáculo (-0.43,-0.08) cerca de la curva (para que el lado equivocado choque) | distancia 1.907
+PASA  | El Remolino | ecuación general equivale a la canónica | general = 1 × canónica
+PASA  | La Plaza del Observatorio | salida sobre la curva | distancia 0
+PASA  | La Plaza del Observatorio | meta sobre la curva | distancia 0
+PASA  | La Plaza del Observatorio | moneda (-2,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Plaza del Observatorio | moneda (-5,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Plaza del Observatorio | moneda (-2,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Plaza del Observatorio | ecuación general equivale a la canónica | general = 2 × canónica
 PASA  | El Cráter del Volcán | salida sobre la curva | distancia 0
 PASA  | El Cráter del Volcán | meta sobre la curva | distancia 0
 PASA  | El Cráter del Volcán | moneda (2,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -398,45 +438,86 @@ PASA  | El Anillo de la Montaña | moneda (0,0) sobre la curva | distancia 0 (Co
 PASA  | El Anillo de la Montaña | moneda (1,7) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Anillo de la Montaña | obstáculo (-1.3,1.15) cerca de la curva (para que el lado equivocado choque) | distancia 2.107
 PASA  | El Anillo de la Montaña | ecuación general equivale a la canónica | general = 1 × canónica
-PASA  | La Fuente Redonda | salida sobre la curva | distancia 0
-PASA  | La Fuente Redonda | meta sobre la curva | distancia 0
-PASA  | La Fuente Redonda | moneda (0,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Fuente Redonda | moneda (-3,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Fuente Redonda | moneda (0,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Rueda del Molino | salida sobre la curva | distancia 0
-PASA  | La Rueda del Molino | meta sobre la curva | distancia 0
-PASA  | La Rueda del Molino | moneda (5,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Rueda del Molino | moneda (3,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Rueda del Molino | moneda (1,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Las Tres Farolas | salida sobre la curva | distancia 0
 PASA  | Las Tres Farolas | meta sobre la curva | distancia 0
 PASA  | Las Tres Farolas | moneda (2,5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Las Tres Farolas | moneda (5,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Las Tres Farolas | moneda (2,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Kiosco de la Música | salida sobre la curva | distancia 0
+PASA  | El Kiosco de la Música | meta sobre la curva | distancia 0
+PASA  | El Kiosco de la Música | moneda (6,6) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Kiosco de la Música | moneda (0,6) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Kiosco de la Música | moneda (6,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Kiosco de la Música | obstáculo (3,-3) cerca de la curva (para que el lado equivocado choque) | distancia 1.5
 PASA  | El Arco de la Plaza | salida sobre la curva | distancia 0
 PASA  | El Arco de la Plaza | meta sobre la curva | distancia 0
 PASA  | El Arco de la Plaza | moneda (0,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Arco de la Plaza | moneda (2,4.47) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
 PASA  | El Arco de la Plaza | moneda (4,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Arco de la Plaza | obstáculo (2,6) cerca de la curva (para que el lado equivocado choque) | distancia 1.333
+PASA  | La Rueda de la Esquina | salida sobre la curva | distancia 0
+PASA  | La Rueda de la Esquina | meta sobre la curva | distancia 0
+PASA  | La Rueda de la Esquina | moneda (-1.5,0.4) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | La Rueda de la Esquina | moneda (-0.88,0.88) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | La Rueda de la Esquina | moneda (-0.4,1.5) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | La Rueda de la Esquina | obstáculo (-6,3) cerca de la curva (para que el lado equivocado choque) | distancia 0
 PASA  | La Pradera Ovalada | salida sobre la curva | distancia 0
 PASA  | La Pradera Ovalada | meta sobre la curva | distancia 0
 PASA  | La Pradera Ovalada | moneda (0,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | La Pradera Ovalada | moneda (-3,-2.4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | La Pradera Ovalada | obstáculo (2.77,4.16) cerca de la curva (para que el lado equivocado choque) | distancia 1.294
+PASA  | La Órbita del Huevo | salida sobre la curva | distancia 0
+PASA  | La Órbita del Huevo | meta sobre la curva | distancia 0
+PASA  | La Órbita del Huevo | moneda (0,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Órbita del Huevo | moneda (0,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Órbita del Huevo | obstáculo (-0.45,1.95) cerca de la curva (para que el lado equivocado choque) | distancia 2.146
+PASA  | El Lago Congelado | salida sobre la curva | distancia 0
+PASA  | El Lago Congelado | meta sobre la curva | distancia 0
+PASA  | El Lago Congelado | moneda (0,5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Lago Congelado | moneda (-2.12,-3.54) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | El Lago Congelado | obstáculo (-0.01,3) cerca de la curva (para que el lado equivocado choque) | distancia 2.667
+PASA  | La Órbita del Cometa | salida sobre la curva | distancia 0
+PASA  | La Órbita del Cometa | meta sobre la curva | distancia 0
+PASA  | La Órbita del Cometa | moneda (-4,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Órbita del Cometa | moneda (0,-5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Órbita del Cometa | moneda (4,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Órbita del Satélite Viejo | salida sobre la curva | distancia 0
+PASA  | La Órbita del Satélite Viejo | meta sobre la curva | distancia 0
+PASA  | La Órbita del Satélite Viejo | moneda (0,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Órbita del Satélite Viejo | moneda (-5,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Órbita del Satélite Viejo | moneda (0,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Órbita del Satélite Viejo | obstáculo (0,3) cerca de la curva (para que el lado equivocado choque) | distancia 1.167
+PASA  | El Anillo del Telescopio | salida sobre la curva | distancia 0
+PASA  | El Anillo del Telescopio | meta sobre la curva | distancia 0
+PASA  | El Anillo del Telescopio | moneda (-3,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Anillo del Telescopio | moneda (0,-5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Anillo del Telescopio | moneda (3,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Puente de Plata | salida sobre la curva | distancia 0
+PASA  | El Puente de Plata | meta sobre la curva | distancia 0
+PASA  | El Puente de Plata | moneda (0,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Puente de Plata | moneda (4,1.8) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Cráter Alargado | salida sobre la curva | distancia 0
+PASA  | El Cráter Alargado | meta sobre la curva | distancia 0
+PASA  | El Cráter Alargado | moneda (4,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Cráter Alargado | moneda (2,1.73) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
 PASA  | El Lago Alargado | salida sobre la curva | distancia 0
 PASA  | El Lago Alargado | meta sobre la curva | distancia 0
 PASA  | El Lago Alargado | moneda (1,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Lago Alargado | moneda (-3,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Lago Alargado | moneda (1,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Lago Alargado | obstáculo (3.09,1.41) cerca de la curva (para que el lado equivocado choque) | distancia 1.264
-PASA  | El Valle Elíptico | salida sobre la curva | distancia 0
-PASA  | El Valle Elíptico | meta sobre la curva | distancia 0
-PASA  | El Valle Elíptico | moneda (2,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Valle Elíptico | moneda (-1,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Valle Elíptico | moneda (2,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Valle Elíptico | obstáculo (1.51,1.96) cerca de la curva (para que el lado equivocado choque) | distancia 0.82
-PASA  | El Valle Elíptico | ecuación general equivale a la canónica | general = 36 × canónica
+PASA  | La Pista de Patinaje | salida sobre la curva | distancia 0
+PASA  | La Pista de Patinaje | meta sobre la curva | distancia 0
+PASA  | La Pista de Patinaje | moneda (-2,6) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Pista de Patinaje | moneda (-5,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Pista de Patinaje | moneda (-2,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Pista de Patinaje | obstáculo (-2.01,4) cerca de la curva (para que el lado equivocado choque) | distancia 2.667
+PASA  | La Grieta Helada | salida sobre la curva | distancia 0
+PASA  | La Grieta Helada | meta sobre la curva | distancia 0
+PASA  | La Grieta Helada | moneda (-1,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Grieta Helada | moneda (-6,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Grieta Helada | moneda (-1,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Grieta Helada | obstáculo (2.73,4.33) cerca de la curva (para que el lado equivocado choque) | distancia 1.377
 PASA  | Los Dos Faros | salida sobre la curva | distancia 0
 PASA  | Los Dos Faros | meta sobre la curva | distancia 0
 PASA  | Los Dos Faros | moneda (2,6) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -444,24 +525,17 @@ PASA  | Los Dos Faros | moneda (6,4.8) sobre la curva | distancia 0 (Coni la rec
 PASA  | Los Dos Faros | moneda (-2,4.8) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Los Dos Faros | obstáculo (-1.86,7.07) cerca de la curva (para que el lado equivocado choque) | distancia 1.503
 PASA  | Los Dos Faros | obstáculo (2.35,6.99) cerca de la curva (para que el lado equivocado choque) | distancia 0.872
-PASA  | La Órbita del Huevo | salida sobre la curva | distancia 0
-PASA  | La Órbita del Huevo | meta sobre la curva | distancia 0
-PASA  | La Órbita del Huevo | moneda (0,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Órbita del Huevo | moneda (0,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Órbita del Huevo | obstáculo (-0.45,1.95) cerca de la curva (para que el lado equivocado choque) | distancia 2.146
-PASA  | La Pista de Patinaje | salida sobre la curva | distancia 0
-PASA  | La Pista de Patinaje | meta sobre la curva | distancia 0
-PASA  | La Pista de Patinaje | moneda (-2,6) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Pista de Patinaje | moneda (-5,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Pista de Patinaje | moneda (-2,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Pista de Patinaje | obstáculo (-2.01,4) cerca de la curva (para que el lado equivocado choque) | distancia 2.667
-PASA  | El Estadio | salida sobre la curva | distancia 0
-PASA  | El Estadio | meta sobre la curva | distancia 0
-PASA  | El Estadio | moneda (-1,5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Estadio | moneda (-2.4,4.12) sobre la curva | distancia 0.013 (Coni la recoge a menos de 0,22)
-PASA  | El Estadio | moneda (-1,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Estadio | obstáculo (-1.1,4) cerca de la curva (para que el lado equivocado choque) | distancia 1.237
-PASA  | El Estadio | ecuación general equivale a la canónica | general = 36 × canónica
+PASA  | La Luna Estirada | salida sobre la curva | distancia 0
+PASA  | La Luna Estirada | meta sobre la curva | distancia 0
+PASA  | La Luna Estirada | moneda (1,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Luna Estirada | moneda (-4,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Luna Estirada | moneda (1,-5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Luna Estirada | obstáculo (1,2) cerca de la curva (para que el lado equivocado choque) | distancia 1.167
+PASA  | La Estación Girando | salida sobre la curva | distancia 0
+PASA  | La Estación Girando | meta sobre la curva | distancia 0
+PASA  | La Estación Girando | moneda (2,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Estación Girando | moneda (-2,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Estación Girando | moneda (-6,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Acantilado Ovalado | salida sobre la curva | distancia 0
 PASA  | El Acantilado Ovalado | meta sobre la curva | distancia 0
 PASA  | El Acantilado Ovalado | moneda (0,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -469,17 +543,26 @@ PASA  | El Acantilado Ovalado | moneda (0.8,4.2) sobre la curva | distancia 0 (C
 PASA  | El Acantilado Ovalado | moneda (0.8,-2.2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Acantilado Ovalado | obstáculo (-1.43,-1.06) cerca de la curva (para que el lado equivocado choque) | distancia 1.272
 PASA  | El Acantilado Ovalado | obstáculo (3.63,-1.32) cerca de la curva (para que el lado equivocado choque) | distancia 0.001
-PASA  | El Lago Congelado | salida sobre la curva | distancia 0
-PASA  | El Lago Congelado | meta sobre la curva | distancia 0
-PASA  | El Lago Congelado | moneda (0,5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Lago Congelado | moneda (-2.12,-3.54) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
-PASA  | El Lago Congelado | obstáculo (-0.01,3) cerca de la curva (para que el lado equivocado choque) | distancia 2.667
-PASA  | La Grieta Helada | salida sobre la curva | distancia 0
-PASA  | La Grieta Helada | meta sobre la curva | distancia 0
-PASA  | La Grieta Helada | moneda (-1,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Grieta Helada | moneda (-6,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Grieta Helada | moneda (-1,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Grieta Helada | obstáculo (2.73,4.33) cerca de la curva (para que el lado equivocado choque) | distancia 1.377
+PASA  | El Puente del Eclipse | salida sobre la curva | distancia 0
+PASA  | El Puente del Eclipse | meta sobre la curva | distancia 0
+PASA  | El Puente del Eclipse | moneda (1,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Puente del Eclipse | moneda (3,0.73) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | El Puente del Eclipse | moneda (-1,0.73) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | El Puente del Eclipse | obstáculo (1,3) cerca de la curva (para que el lado equivocado choque) | distancia 1.5
+PASA  | El Valle Elíptico | salida sobre la curva | distancia 0
+PASA  | El Valle Elíptico | meta sobre la curva | distancia 0
+PASA  | El Valle Elíptico | moneda (2,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Valle Elíptico | moneda (-1,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Valle Elíptico | moneda (2,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Valle Elíptico | obstáculo (1.51,1.96) cerca de la curva (para que el lado equivocado choque) | distancia 0.82
+PASA  | El Valle Elíptico | ecuación general equivale a la canónica | general = 36 × canónica
+PASA  | El Estadio | salida sobre la curva | distancia 0
+PASA  | El Estadio | meta sobre la curva | distancia 0
+PASA  | El Estadio | moneda (-1,5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Estadio | moneda (-2.4,4.12) sobre la curva | distancia 0.013 (Coni la recoge a menos de 0,22)
+PASA  | El Estadio | moneda (-1,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Estadio | obstáculo (-1.1,4) cerca de la curva (para que el lado equivocado choque) | distancia 1.237
+PASA  | El Estadio | ecuación general equivale a la canónica | general = 36 × canónica
 PASA  | La Puerta del Glaciar | salida sobre la curva | distancia 0
 PASA  | La Puerta del Glaciar | meta sobre la curva | distancia 0
 PASA  | La Puerta del Glaciar | moneda (2,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -494,22 +577,18 @@ PASA  | El Puente de Hielo | moneda (6.2,0.2) sobre la curva | distancia 0 (Coni
 PASA  | El Puente de Hielo | moneda (-0.2,0.2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Puente de Hielo | obstáculo (0.68,-2.63) cerca de la curva (para que el lado equivocado choque) | distancia 0.001
 PASA  | El Puente de Hielo | ecuación general equivale a la canónica | general = 16 × canónica
-PASA  | La Órbita del Cometa | salida sobre la curva | distancia 0
-PASA  | La Órbita del Cometa | meta sobre la curva | distancia 0
-PASA  | La Órbita del Cometa | moneda (-4,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Órbita del Cometa | moneda (0,-5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Órbita del Cometa | moneda (4,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Luna Estirada | salida sobre la curva | distancia 0
-PASA  | La Luna Estirada | meta sobre la curva | distancia 0
-PASA  | La Luna Estirada | moneda (1,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Luna Estirada | moneda (-4,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Luna Estirada | moneda (1,-5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Luna Estirada | obstáculo (1,2) cerca de la curva (para que el lado equivocado choque) | distancia 1.167
 PASA  | El Satélite Perdido | salida sobre la curva | distancia 0
 PASA  | El Satélite Perdido | meta sobre la curva | distancia 0
 PASA  | El Satélite Perdido | moneda (-3,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Satélite Perdido | moneda (1,-4.46) sobre la curva | distancia 0.004 (Coni la recoge a menos de 0,22)
 PASA  | El Satélite Perdido | moneda (5,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Órbita de la Estación | salida sobre la curva | distancia 0
+PASA  | La Órbita de la Estación | meta sobre la curva | distancia 0
+PASA  | La Órbita de la Estación | moneda (6,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Órbita de la Estación | moneda (1,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Órbita de la Estación | moneda (-4,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Órbita de la Estación | obstáculo (3.8,1) cerca de la curva (para que el lado equivocado choque) | distancia 3.064
+PASA  | La Órbita de la Estación | obstáculo (-1.8,1) cerca de la curva (para que el lado equivocado choque) | distancia 3.064
 PASA  | El Jardín de los Dos Faroles | salida sobre la curva | distancia 0
 PASA  | El Jardín de los Dos Faroles | meta sobre la curva | distancia 0
 PASA  | El Jardín de los Dos Faroles | moneda (4.4,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -517,12 +596,52 @@ PASA  | El Jardín de los Dos Faroles | moneda (5,1) sobre la curva | distancia 
 PASA  | El Jardín de los Dos Faroles | moneda (4.4,4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Jardín de los Dos Faroles | obstáculo (6.2,1) cerca de la curva (para que el lado equivocado choque) | distancia 1.029
 PASA  | El Jardín de los Dos Faroles | obstáculo (8.4,1) cerca de la curva (para que el lado equivocado choque) | distancia 2.497
+PASA  | La Sombra del Cometa | salida sobre la curva | distancia 0
+PASA  | La Sombra del Cometa | meta sobre la curva | distancia 0
+PASA  | La Sombra del Cometa | moneda (2,-6) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Sombra del Cometa | moneda (5,-5.2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Sombra del Cometa | moneda (-1,-5.2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Sombra del Cometa | obstáculo (2,-5) cerca de la curva (para que el lado equivocado choque) | distancia 1.167
+PASA  | La Sombra del Cometa | obstáculo (2,-7.83) cerca de la curva (para que el lado equivocado choque) | distancia 1.543
 PASA  | Tobogán del Origen | salida sobre la curva | distancia 0
 PASA  | Tobogán del Origen | meta sobre la curva | distancia 0
 PASA  | Tobogán del Origen | moneda (0,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Tobogán del Origen | moneda (2,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Tobogán del Origen | obstáculo (-0.96,1.96) cerca de la curva (para que el lado equivocado choque) | distancia 1.559
 PASA  | Tobogán del Origen | obstáculo (-4.79,2.25) cerca de la curva (para que el lado equivocado choque) | distancia 1.343
+PASA  | Cañón de Costado | salida sobre la curva | distancia 0
+PASA  | Cañón de Costado | meta sobre la curva | distancia 0
+PASA  | Cañón de Costado | moneda (0,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Cañón de Costado | moneda (1,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Cañón de Costado | obstáculo (1.96,-0.96) cerca de la curva (para que el lado equivocado choque) | distancia 1.559
+PASA  | Cañón de Costado | obstáculo (6.1,-2.76) cerca de la curva (para que el lado equivocado choque) | distancia 2.462
+PASA  | Cúpula Invertida | salida sobre la curva | distancia 0
+PASA  | Cúpula Invertida | meta sobre la curva | distancia 0
+PASA  | Cúpula Invertida | moneda (0,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Cúpula Invertida | moneda (2,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Cúpula Invertida | obstáculo (-0.96,-1.96) cerca de la curva (para que el lado equivocado choque) | distancia 1.559
+PASA  | Cúpula Invertida | obstáculo (-4.79,-2.25) cerca de la curva (para que el lado equivocado choque) | distancia 1.343
+PASA  | La Antena del Muelle | salida sobre la curva | distancia 0
+PASA  | La Antena del Muelle | meta sobre la curva | distancia 0
+PASA  | La Antena del Muelle | moneda (-0.5,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Antena del Muelle | moneda (0,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Antena del Muelle | moneda (-0.5,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Red del Pescador | salida sobre la curva | distancia 0
+PASA  | La Red del Pescador | meta sobre la curva | distancia 0
+PASA  | La Red del Pescador | moneda (-0.75,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Red del Pescador | moneda (-0.75,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Tobogán de la Playa | salida sobre la curva | distancia 0
+PASA  | El Tobogán de la Playa | meta sobre la curva | distancia 0
+PASA  | El Tobogán de la Playa | moneda (-2,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Tobogán de la Playa | moneda (2,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Ola Quieta | salida sobre la curva | distancia 0
+PASA  | La Ola Quieta | meta sobre la curva | distancia 0
+PASA  | La Ola Quieta | moneda (0,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Ola Quieta | moneda (1.5,0.75) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Faro del Espejo | salida sobre la curva | distancia 0
+PASA  | El Faro del Espejo | meta sobre la curva | distancia 0
+PASA  | El Faro del Espejo | moneda (0,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Faro del Espejo | moneda (0.5,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Puente Colgante | salida sobre la curva | distancia 0
 PASA  | Puente Colgante | meta sobre la curva | distancia 0
 PASA  | Puente Colgante | moneda (1,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -530,6 +649,48 @@ PASA  | Puente Colgante | moneda (3,0) sobre la curva | distancia 0 (Coni la rec
 PASA  | Puente Colgante | moneda (-1,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Puente Colgante | obstáculo (0.15,2.18) cerca de la curva (para que el lado equivocado choque) | distancia 2.91
 PASA  | Puente Colgante | obstáculo (-1.33,-1.78) cerca de la curva (para que el lado equivocado choque) | distancia 0.984
+PASA  | Fogata del Foco | salida sobre la curva | distancia 0
+PASA  | Fogata del Foco | meta sobre la curva | distancia 0
+PASA  | Fogata del Foco | moneda (3,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Fogata del Foco | moneda (1,0.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Fogata del Foco | moneda (5,0.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Fogata del Foco | obstáculo (3,2) cerca de la curva (para que el lado equivocado choque) | distancia 2
+PASA  | Fogata del Foco | obstáculo (1.59,-1.51) cerca de la curva (para que el lado equivocado choque) | distancia 1.658
+PASA  | Recodo del Río | salida sobre la curva | distancia 0
+PASA  | Recodo del Río | meta sobre la curva | distancia 0
+PASA  | Recodo del Río | moneda (-2,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Recodo del Río | moneda (-1,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Recodo del Río | moneda (-1,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Recodo del Río | obstáculo (0.67,0.64) cerca de la curva (para que el lado equivocado choque) | distancia 2.596
+PASA  | Recodo del Río | obstáculo (-0.04,0.04) cerca de la curva (para que el lado equivocado choque) | distancia 1.559
+PASA  | Acantilado Izquierdo | salida sobre la curva | distancia 0
+PASA  | Acantilado Izquierdo | meta sobre la curva | distancia 0
+PASA  | Acantilado Izquierdo | moneda (4,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Acantilado Izquierdo | moneda (3,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Acantilado Izquierdo | moneda (3,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Acantilado Izquierdo | obstáculo (2.5,-3.55) cerca de la curva (para que el lado equivocado choque) | distancia 0.963
+PASA  | Acantilado Izquierdo | obstáculo (3.75,2) cerca de la curva (para que el lado equivocado choque) | distancia 1.438
+PASA  | La Ladera Nevada | salida sobre la curva | distancia 0
+PASA  | La Ladera Nevada | meta sobre la curva | distancia 0
+PASA  | La Ladera Nevada | moneda (2,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Ladera Nevada | moneda (0,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Ladera Nevada | moneda (4,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Ladera Nevada | obstáculo (0.67,-3.22) cerca de la curva (para que el lado equivocado choque) | distancia 3.206
+PASA  | El Puente de los Pescadores | salida sobre la curva | distancia 0
+PASA  | El Puente de los Pescadores | meta sobre la curva | distancia 0
+PASA  | El Puente de los Pescadores | moneda (-1,1.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Puente de los Pescadores | moneda (1,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Puente de los Pescadores | moneda (3,1.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Grúa del Puerto | salida sobre la curva | distancia 0
+PASA  | La Grúa del Puerto | meta sobre la curva | distancia 0
+PASA  | La Grúa del Puerto | moneda (2,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Grúa del Puerto | moneda (0,-0.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Grúa del Puerto | moneda (4,-0.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Bahía Escondida | salida sobre la curva | distancia 0
+PASA  | La Bahía Escondida | meta sobre la curva | distancia 0
+PASA  | La Bahía Escondida | moneda (3,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Bahía Escondida | moneda (2.5,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Bahía Escondida | moneda (2.5,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Mina del Valle | salida sobre la curva | distancia 0
 PASA  | Mina del Valle | meta sobre la curva | distancia 0
 PASA  | Mina del Valle | moneda (2,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -538,26 +699,6 @@ PASA  | Mina del Valle | moneda (4,1) sobre la curva | distancia 0 (Coni la reco
 PASA  | Mina del Valle | obstáculo (-1.13,-2.24) cerca de la curva (para que el lado equivocado choque) | distancia 1.426
 PASA  | Mina del Valle | obstáculo (-0.29,3.42) cerca de la curva (para que el lado equivocado choque) | distancia 0.251
 PASA  | Mina del Valle | ecuación general equivale a la canónica | general = -1 × canónica
-PASA  | Fogata del Foco | salida sobre la curva | distancia 0
-PASA  | Fogata del Foco | meta sobre la curva | distancia 0
-PASA  | Fogata del Foco | moneda (3,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Fogata del Foco | moneda (1,0.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Fogata del Foco | moneda (5,0.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Fogata del Foco | obstáculo (3,2) cerca de la curva (para que el lado equivocado choque) | distancia 2
-PASA  | Fogata del Foco | obstáculo (1.59,-1.51) cerca de la curva (para que el lado equivocado choque) | distancia 1.658
-PASA  | Cañón de Costado | salida sobre la curva | distancia 0
-PASA  | Cañón de Costado | meta sobre la curva | distancia 0
-PASA  | Cañón de Costado | moneda (0,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Cañón de Costado | moneda (1,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Cañón de Costado | obstáculo (1.96,-0.96) cerca de la curva (para que el lado equivocado choque) | distancia 1.559
-PASA  | Cañón de Costado | obstáculo (6.1,-2.76) cerca de la curva (para que el lado equivocado choque) | distancia 2.462
-PASA  | Recodo del Río | salida sobre la curva | distancia 0
-PASA  | Recodo del Río | meta sobre la curva | distancia 0
-PASA  | Recodo del Río | moneda (-2,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Recodo del Río | moneda (-1,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Recodo del Río | moneda (-1,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Recodo del Río | obstáculo (0.67,0.64) cerca de la curva (para que el lado equivocado choque) | distancia 2.596
-PASA  | Recodo del Río | obstáculo (-0.04,0.04) cerca de la curva (para que el lado equivocado choque) | distancia 1.559
 PASA  | Faro Lateral | salida sobre la curva | distancia 0
 PASA  | Faro Lateral | meta sobre la curva | distancia 0
 PASA  | Faro Lateral | moneda (-2,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -567,25 +708,6 @@ PASA  | Faro Lateral | obstáculo (0,2) cerca de la curva (para que el lado equi
 PASA  | Faro Lateral | obstáculo (0.12,2.12) cerca de la curva (para que el lado equivocado choque) | distancia 2.117
 PASA  | Faro Lateral | obstáculo (-3.48,3.57) cerca de la curva (para que el lado equivocado choque) | distancia 1.664
 PASA  | Faro Lateral | ecuación general equivale a la canónica | general = 1 × canónica
-PASA  | Acantilado Izquierdo | salida sobre la curva | distancia 0
-PASA  | Acantilado Izquierdo | meta sobre la curva | distancia 0
-PASA  | Acantilado Izquierdo | moneda (4,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Acantilado Izquierdo | moneda (3,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Acantilado Izquierdo | moneda (3,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Acantilado Izquierdo | obstáculo (2.5,-3.55) cerca de la curva (para que el lado equivocado choque) | distancia 0.963
-PASA  | Acantilado Izquierdo | obstáculo (3.75,2) cerca de la curva (para que el lado equivocado choque) | distancia 1.438
-PASA  | Cúpula Invertida | salida sobre la curva | distancia 0
-PASA  | Cúpula Invertida | meta sobre la curva | distancia 0
-PASA  | Cúpula Invertida | moneda (0,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Cúpula Invertida | moneda (2,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Cúpula Invertida | obstáculo (-0.96,-1.96) cerca de la curva (para que el lado equivocado choque) | distancia 1.559
-PASA  | Cúpula Invertida | obstáculo (-4.79,-2.25) cerca de la curva (para que el lado equivocado choque) | distancia 1.343
-PASA  | La Ladera Nevada | salida sobre la curva | distancia 0
-PASA  | La Ladera Nevada | meta sobre la curva | distancia 0
-PASA  | La Ladera Nevada | moneda (2,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Ladera Nevada | moneda (0,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Ladera Nevada | moneda (4,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Ladera Nevada | obstáculo (0.67,-3.22) cerca de la curva (para que el lado equivocado choque) | distancia 3.206
 PASA  | Glaciar Empinado | salida sobre la curva | distancia 0
 PASA  | Glaciar Empinado | meta sobre la curva | distancia 0
 PASA  | Glaciar Empinado | moneda (-1,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -601,16 +723,6 @@ PASA  | La Cornisa Helada | moneda (1,2) sobre la curva | distancia 0 (Coni la r
 PASA  | La Cornisa Helada | moneda (-1.5,2.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | La Cornisa Helada | obstáculo (-1.39,0.48) cerca de la curva (para que el lado equivocado choque) | distancia 1.668
 PASA  | La Cornisa Helada | ecuación general equivale a la canónica | general = 1 × canónica
-PASA  | La Antena del Muelle | salida sobre la curva | distancia 0
-PASA  | La Antena del Muelle | meta sobre la curva | distancia 0
-PASA  | La Antena del Muelle | moneda (-0.5,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Antena del Muelle | moneda (0,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Antena del Muelle | moneda (-0.5,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Puente de los Pescadores | salida sobre la curva | distancia 0
-PASA  | El Puente de los Pescadores | meta sobre la curva | distancia 0
-PASA  | El Puente de los Pescadores | moneda (-1,1.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Puente de los Pescadores | moneda (1,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Puente de los Pescadores | moneda (3,1.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Canal Escondido | salida sobre la curva | distancia 0
 PASA  | El Canal Escondido | meta sobre la curva | distancia 0
 PASA  | El Canal Escondido | moneda (1,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -622,25 +734,66 @@ PASA  | El Rompeolas | meta sobre la curva | distancia 0
 PASA  | El Rompeolas | moneda (-1.5,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Rompeolas | moneda (-1,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Rompeolas | moneda (-1.5,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Concha Gigante | salida sobre la curva | distancia 0
+PASA  | La Concha Gigante | meta sobre la curva | distancia 0
+PASA  | La Concha Gigante | moneda (-1,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Concha Gigante | moneda (-0.75,0) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Concha Gigante | moneda (-0.75,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Concha Gigante | obstáculo (1,1) cerca de la curva (para que el lado equivocado choque) | distancia 2
+PASA  | El Arco del Malecón | salida sobre la curva | distancia 0
+PASA  | El Arco del Malecón | meta sobre la curva | distancia 0
+PASA  | El Arco del Malecón | moneda (-2,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Arco del Malecón | moneda (0,2.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Arco del Malecón | moneda (-4,2.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Arco del Malecón | obstáculo (0,-0.5) cerca de la curva (para que el lado equivocado choque) | distancia 2.683
 PASA  | Rampa del Cometa | salida sobre la curva | distancia 0
 PASA  | Rampa del Cometa | meta sobre la curva | distancia 0.002
 PASA  | Rampa del Cometa | moneda (5.02,2.28) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
 PASA  | Rampa del Cometa | moneda (5.94,3.3) sobre la curva | distancia 0.005 (Coni la recoge a menos de 0,22)
 PASA  | Rampa del Cometa | obstáculo (6.42,5.03) cerca de la curva (para que el lado equivocado choque) | distancia 0.898
 PASA  | Rampa del Cometa | obstáculo (2.28,2.46) cerca de la curva (para que el lado equivocado choque) | distancia 2.186
+PASA  | El Primer Géiser | salida sobre la curva | distancia 0
+PASA  | El Primer Géiser | meta sobre la curva | distancia 0.002
+PASA  | El Primer Géiser | moneda (3.03,3.77) sobre la curva | distancia 0.006 (Coni la recoge a menos de 0,22)
+PASA  | El Primer Géiser | moneda (4.4,4.46) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Primer Géiser | obstáculo (6.19,6.88) cerca de la curva (para que el lado equivocado choque) | distancia 1.088
+PASA  | El Primer Géiser | obstáculo (3.47,1.49) cerca de la curva (para que el lado equivocado choque) | distancia 2.76
+PASA  | La Entrada de la Cueva | salida sobre la curva | distancia 0
+PASA  | La Entrada de la Cueva | meta sobre la curva | distancia 0
+PASA  | La Entrada de la Cueva | moneda (-2.5,1.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Entrada de la Cueva | moneda (-3.33,2.67) sobre la curva | distancia 0.005 (Coni la recoge a menos de 0,22)
+PASA  | La Entrada de la Cueva | obstáculo (-3.21,5.03) cerca de la curva (para que el lado equivocado choque) | distancia 1.592
+PASA  | La Entrada de la Cueva | obstáculo (-0.06,2) cerca de la curva (para que el lado equivocado choque) | distancia 1.998
+PASA  | La Torre de la Señal | salida sobre la curva | distancia 0
+PASA  | La Torre de la Señal | meta sobre la curva | distancia 0
+PASA  | La Torre de la Señal | moneda (3,2.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Torre de la Señal | moneda (5,3.2) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | La Torre de la Señal | obstáculo (2,4.47) cerca de la curva (para que el lado equivocado choque) | distancia 1.665
+PASA  | La Antena del Risco | salida sobre la curva | distancia 0
+PASA  | La Antena del Risco | meta sobre la curva | distancia 0.002
+PASA  | La Antena del Risco | moneda (3.5,2.4) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | La Antena del Risco | moneda (4,3.53) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | La Antena del Risco | obstáculo (1.5,3.46) cerca de la curva (para que el lado equivocado choque) | distancia 2.744
+PASA  | La Hipérbola Equilátera | salida sobre la curva | distancia 0
+PASA  | La Hipérbola Equilátera | meta sobre la curva | distancia 0
+PASA  | La Hipérbola Equilátera | moneda (1.5,2.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Hipérbola Equilátera | moneda (2.5,3.2) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | La Hipérbola Equilátera | obstáculo (2,4.47) cerca de la curva (para que el lado equivocado choque) | distancia 1.223
+PASA  | El Mirador Alto | salida sobre la curva | distancia 0
+PASA  | El Mirador Alto | meta sobre la curva | distancia 0.002
+PASA  | El Mirador Alto | moneda (1,4.47) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | El Mirador Alto | moneda (1.5,5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Puente de Cuerdas | salida sobre la curva | distancia 0
+PASA  | El Puente de Cuerdas | meta sobre la curva | distancia 0.002
+PASA  | El Puente de Cuerdas | moneda (1.5,4.47) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | El Puente de Cuerdas | moneda (2.25,5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Puente de Cuerdas | obstáculo (2.25,2.65) cerca de la curva (para que el lado equivocado choque) | distancia 1.873
 PASA  | Garganta del Río | salida sobre la curva | distancia 0
 PASA  | Garganta del Río | meta sobre la curva | distancia 0.002
 PASA  | Garganta del Río | moneda (4.56,0.55) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
 PASA  | Garganta del Río | moneda (5,1.55) sobre la curva | distancia 0.01 (Coni la recoge a menos de 0,22)
 PASA  | Garganta del Río | moneda (5.46,2.4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Garganta del Río | obstáculo (7.88,4.19) cerca de la curva (para que el lado equivocado choque) | distancia 1.088
-PASA  | Grieta del Desfiladero | salida sobre la curva | distancia 0
-PASA  | Grieta del Desfiladero | meta sobre la curva | distancia 0.003
-PASA  | Grieta del Desfiladero | moneda (4.37,0.9) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
-PASA  | Grieta del Desfiladero | moneda (4.67,1.66) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
-PASA  | Grieta del Desfiladero | moneda (4.97,2.3) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
-PASA  | Grieta del Desfiladero | obstáculo (7.23,3.84) cerca de la curva (para que el lado equivocado choque) | distancia 1.144
-PASA  | Grieta del Desfiladero | ecuación general equivale a la canónica | general = 36 × canónica
 PASA  | Faros del Desfiladero | salida sobre la curva | distancia 0
 PASA  | Faros del Desfiladero | meta sobre la curva | distancia 0.002
 PASA  | Faros del Desfiladero | moneda (5.56,4.55) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
@@ -648,12 +801,6 @@ PASA  | Faros del Desfiladero | moneda (6,5.55) sobre la curva | distancia 0.01 
 PASA  | Faros del Desfiladero | moneda (6.46,6.4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Faros del Desfiladero | obstáculo (6.41,8.29) cerca de la curva (para que el lado equivocado choque) | distancia 1.044
 PASA  | Faros del Desfiladero | obstáculo (3.49,5.47) cerca de la curva (para que el lado equivocado choque) | distancia 2.76
-PASA  | El Primer Géiser | salida sobre la curva | distancia 0
-PASA  | El Primer Géiser | meta sobre la curva | distancia 0.002
-PASA  | El Primer Géiser | moneda (3.03,3.77) sobre la curva | distancia 0.006 (Coni la recoge a menos de 0,22)
-PASA  | El Primer Géiser | moneda (4.4,4.46) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | El Primer Géiser | obstáculo (6.19,6.88) cerca de la curva (para que el lado equivocado choque) | distancia 1.088
-PASA  | El Primer Géiser | obstáculo (3.47,1.49) cerca de la curva (para que el lado equivocado choque) | distancia 2.76
 PASA  | Torre de Vapor | salida sobre la curva | distancia 0
 PASA  | Torre de Vapor | meta sobre la curva | distancia 0.003
 PASA  | Torre de Vapor | moneda (-0.1,3.37) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
@@ -661,6 +808,42 @@ PASA  | Torre de Vapor | moneda (0.66,3.67) sobre la curva | distancia 0.003 (Co
 PASA  | Torre de Vapor | moneda (1.3,3.97) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
 PASA  | Torre de Vapor | obstáculo (0.98,1.25) cerca de la curva (para que el lado equivocado choque) | distancia 2.925
 PASA  | Torre de Vapor | obstáculo (2.84,6.23) cerca de la curva (para que el lado equivocado choque) | distancia 1.144
+PASA  | La Columna de Vapor | salida sobre la curva | distancia 0
+PASA  | La Columna de Vapor | meta sobre la curva | distancia 0.003
+PASA  | La Columna de Vapor | moneda (2.9,1.37) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | La Columna de Vapor | moneda (3.66,1.67) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
+PASA  | La Columna de Vapor | moneda (4.3,1.97) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
+PASA  | La Columna de Vapor | obstáculo (5.84,4.23) cerca de la curva (para que el lado equivocado choque) | distancia 1.144
+PASA  | Paso de las Asíntotas | salida sobre la curva | distancia 0
+PASA  | Paso de las Asíntotas | meta sobre la curva | distancia 0.003
+PASA  | Paso de las Asíntotas | moneda (-0.37,2.9) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | Paso de las Asíntotas | moneda (-0.67,3.66) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
+PASA  | Paso de las Asíntotas | moneda (-0.97,4.3) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
+PASA  | Paso de las Asíntotas | obstáculo (-3.23,5.84) cerca de la curva (para que el lado equivocado choque) | distancia 1.144
+PASA  | El Eco del Cañón | salida sobre la curva | distancia 0
+PASA  | El Eco del Cañón | meta sobre la curva | distancia 0.002
+PASA  | El Eco del Cañón | moneda (2.5,4.4) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | El Eco del Cañón | moneda (3,5.53) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | El Eco del Cañón | moneda (3.5,6.47) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | El Eco del Cañón | obstáculo (0,5.77) cerca de la curva (para que el lado equivocado choque) | distancia 3.411
+PASA  | El Chorro de la Montaña | salida sobre la curva | distancia 0
+PASA  | El Chorro de la Montaña | meta sobre la curva | distancia 0.002
+PASA  | El Chorro de la Montaña | moneda (3,2.09) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | El Chorro de la Montaña | moneda (4,2.35) sobre la curva | distancia 0.004 (Coni la recoge a menos de 0,22)
+PASA  | El Chorro de la Montaña | moneda (5,2.75) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Chorro de la Montaña | obstáculo (5,4.41) cerca de la curva (para que el lado equivocado choque) | distancia 1.342
+PASA  | La Rampa del Viento | salida sobre la curva | distancia 0
+PASA  | La Rampa del Viento | meta sobre la curva | distancia 0
+PASA  | La Rampa del Viento | moneda (2.5,2.8) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | La Rampa del Viento | moneda (3,3.65) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | La Rampa del Viento | moneda (3.5,4.35) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | Grieta del Desfiladero | salida sobre la curva | distancia 0
+PASA  | Grieta del Desfiladero | meta sobre la curva | distancia 0.003
+PASA  | Grieta del Desfiladero | moneda (4.37,0.9) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | Grieta del Desfiladero | moneda (4.67,1.66) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
+PASA  | Grieta del Desfiladero | moneda (4.97,2.3) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
+PASA  | Grieta del Desfiladero | obstáculo (7.23,3.84) cerca de la curva (para que el lado equivocado choque) | distancia 1.144
+PASA  | Grieta del Desfiladero | ecuación general equivale a la canónica | general = 36 × canónica
 PASA  | Géiser Vertical | salida sobre la curva | distancia 0
 PASA  | Géiser Vertical | meta sobre la curva | distancia 0.002
 PASA  | Géiser Vertical | moneda (5.55,1.37) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
@@ -669,24 +852,6 @@ PASA  | Géiser Vertical | moneda (7.4,1.97) sobre la curva | distancia 0.003 (C
 PASA  | Géiser Vertical | obstáculo (7.22,3.67) cerca de la curva (para que el lado equivocado choque) | distancia 1.395
 PASA  | Géiser Vertical | obstáculo (6.92,-0.61) cerca de la curva (para que el lado equivocado choque) | distancia 3.645
 PASA  | Géiser Vertical | ecuación general equivale a la canónica | general = 16 × canónica
-PASA  | La Columna de Vapor | salida sobre la curva | distancia 0
-PASA  | La Columna de Vapor | meta sobre la curva | distancia 0.003
-PASA  | La Columna de Vapor | moneda (2.9,1.37) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
-PASA  | La Columna de Vapor | moneda (3.66,1.67) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
-PASA  | La Columna de Vapor | moneda (4.3,1.97) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
-PASA  | La Columna de Vapor | obstáculo (5.84,4.23) cerca de la curva (para que el lado equivocado choque) | distancia 1.144
-PASA  | La Entrada de la Cueva | salida sobre la curva | distancia 0
-PASA  | La Entrada de la Cueva | meta sobre la curva | distancia 0
-PASA  | La Entrada de la Cueva | moneda (-2.5,1.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Entrada de la Cueva | moneda (-3.33,2.67) sobre la curva | distancia 0.005 (Coni la recoge a menos de 0,22)
-PASA  | La Entrada de la Cueva | obstáculo (-3.21,5.03) cerca de la curva (para que el lado equivocado choque) | distancia 1.592
-PASA  | La Entrada de la Cueva | obstáculo (-0.06,2) cerca de la curva (para que el lado equivocado choque) | distancia 1.998
-PASA  | Paso de las Asíntotas | salida sobre la curva | distancia 0
-PASA  | Paso de las Asíntotas | meta sobre la curva | distancia 0.003
-PASA  | Paso de las Asíntotas | moneda (-0.37,2.9) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
-PASA  | Paso de las Asíntotas | moneda (-0.67,3.66) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
-PASA  | Paso de las Asíntotas | moneda (-0.97,4.3) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
-PASA  | Paso de las Asíntotas | obstáculo (-3.23,5.84) cerca de la curva (para que el lado equivocado choque) | distancia 1.144
 PASA  | Túnel Izquierdo | salida sobre la curva | distancia 0
 PASA  | Túnel Izquierdo | meta sobre la curva | distancia 0.001
 PASA  | Túnel Izquierdo | moneda (-6.74,4.27) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
@@ -701,17 +866,6 @@ PASA  | El Abismo de la Cueva | moneda (-6.35,4.66) sobre la curva | distancia 0
 PASA  | El Abismo de la Cueva | moneda (-6.94,5.3) sobre la curva | distancia 0.005 (Coni la recoge a menos de 0,22)
 PASA  | El Abismo de la Cueva | obstáculo (-7.42,7.03) cerca de la curva (para que el lado equivocado choque) | distancia 0.898
 PASA  | El Abismo de la Cueva | ecuación general equivale a la canónica | general = 144 × canónica
-PASA  | La Torre de la Señal | salida sobre la curva | distancia 0
-PASA  | La Torre de la Señal | meta sobre la curva | distancia 0
-PASA  | La Torre de la Señal | moneda (3,2.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | La Torre de la Señal | moneda (5,3.2) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
-PASA  | La Torre de la Señal | obstáculo (2,4.47) cerca de la curva (para que el lado equivocado choque) | distancia 1.665
-PASA  | El Eco del Cañón | salida sobre la curva | distancia 0
-PASA  | El Eco del Cañón | meta sobre la curva | distancia 0.002
-PASA  | El Eco del Cañón | moneda (2.5,4.4) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
-PASA  | El Eco del Cañón | moneda (3,5.53) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
-PASA  | El Eco del Cañón | moneda (3.5,6.47) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
-PASA  | El Eco del Cañón | obstáculo (0,5.77) cerca de la curva (para que el lado equivocado choque) | distancia 3.411
 PASA  | Las Dos Cuerdas | salida sobre la curva | distancia 0
 PASA  | Las Dos Cuerdas | meta sobre la curva | distancia 0.001
 PASA  | Las Dos Cuerdas | moneda (1.75,3.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -723,12 +877,28 @@ PASA  | Las Dos Torres | moneda (-0.5,3.4) sobre la curva | distancia 0.001 (Con
 PASA  | Las Dos Torres | moneda (-1,4.53) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
 PASA  | Las Dos Torres | moneda (-1.5,5.47) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
 PASA  | Las Dos Torres | obstáculo (-1,-2.53) cerca de la curva (para que el lado equivocado choque) | distancia 0.001
+PASA  | La Torre del Faro Alto | salida sobre la curva | distancia 0
+PASA  | La Torre del Faro Alto | meta sobre la curva | distancia 0.002
+PASA  | La Torre del Faro Alto | moneda (2,5.09) sobre la curva | distancia 0.002 (Coni la recoge a menos de 0,22)
+PASA  | La Torre del Faro Alto | moneda (3,5.35) sobre la curva | distancia 0.004 (Coni la recoge a menos de 0,22)
+PASA  | La Torre del Faro Alto | moneda (4,5.75) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Las Torres Lejanas | salida sobre la curva | distancia 0.002
+PASA  | Las Torres Lejanas | meta sobre la curva | distancia 0.002
+PASA  | Las Torres Lejanas | moneda (6,2.53) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | Las Torres Lejanas | moneda (5,-1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Las Torres Lejanas | moneda (6,-4.53) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
 PASA  | ¿Isla u óvalo? | salida sobre la curva | distancia 0
 PASA  | ¿Isla u óvalo? | meta sobre la curva | distancia 0
 PASA  | ¿Isla u óvalo? | moneda (0,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | ¿Isla u óvalo? | moneda (3.46,1) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
 PASA  | ¿Isla u óvalo? | obstáculo (-2.09,3.41) cerca de la curva (para que el lado equivocado choque) | distancia 1.264
 PASA  | ¿Isla u óvalo? | obstáculo (-4.77,1.3) cerca de la curva (para que el lado equivocado choque) | distancia 0.957
+PASA  | ¿Arco o tobogán? | salida sobre la curva | distancia 0
+PASA  | ¿Arco o tobogán? | meta sobre la curva | distancia 0
+PASA  | ¿Arco o tobogán? | moneda (-2,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | ¿Arco o tobogán? | moneda (2,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | ¿Arco o tobogán? | moneda (3,4.5) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | ¿Arco o tobogán? | obstáculo (-3,1) cerca de la curva (para que el lado equivocado choque) | distancia 1.107
 PASA  | ¿Parábola o hipérbola? | salida sobre la curva | distancia 0
 PASA  | ¿Parábola o hipérbola? | meta sobre la curva | distancia 0
 PASA  | ¿Parábola o hipérbola? | moneda (3.47,4.26) sobre la curva | distancia 0.003 (Coni la recoge a menos de 0,22)
@@ -754,12 +924,34 @@ PASA  | La Ecuación Misteriosa | moneda (3.46,3.5) sobre la curva | distancia 0
 PASA  | La Ecuación Misteriosa | obstáculo (0.25,0.33) cerca de la curva (para que el lado equivocado choque) | distancia 0.536
 PASA  | La Ecuación Misteriosa | obstáculo (4.91,2.78) cerca de la curva (para que el lado equivocado choque) | distancia 1.332
 PASA  | La Ecuación Misteriosa | ecuación general equivale a la canónica | general = 4 × canónica
+PASA  | La Placa del Museo | salida sobre la curva | distancia 0
+PASA  | La Placa del Museo | meta sobre la curva | distancia 0
+PASA  | La Placa del Museo | moneda (1,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | La Placa del Museo | moneda (2,0.6) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | La Placa del Museo | moneda (0,0.6) sobre la curva | distancia 0.001 (Coni la recoge a menos de 0,22)
+PASA  | La Placa del Museo | obstáculo (4,1.35) cerca de la curva (para que el lado equivocado choque) | distancia 1.491
+PASA  | La Placa del Museo | ecuación general equivale a la canónica | general = 36 × canónica
+PASA  | Las Dos Lomas | salida sobre la curva | distancia 0
+PASA  | Las Dos Lomas | meta sobre la curva | distancia 0
+PASA  | Las Dos Lomas | moneda (0,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Las Dos Lomas | moneda (4,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Las Dos Lomas | obstáculo (4,2) cerca de la curva (para que el lado equivocado choque) | distancia 0
+PASA  | El Óvalo y la Rampa | salida sobre la curva | distancia 0
+PASA  | El Óvalo y la Rampa | meta sobre la curva | distancia 0
+PASA  | El Óvalo y la Rampa | moneda (0,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | El Óvalo y la Rampa | moneda (4,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Ruta Mixta | salida sobre la curva | distancia 0
 PASA  | Ruta Mixta | meta sobre la curva | distancia 0
 PASA  | Ruta Mixta | moneda (0,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Ruta Mixta | moneda (3,1) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Ruta Mixta | obstáculo (0,-2) cerca de la curva (para que el lado equivocado choque) | distancia 0
 PASA  | Ruta Mixta | obstáculo (4,0.5) cerca de la curva (para que el lado equivocado choque) | distancia 0.849
+PASA  | Del Valle al Lago | salida sobre la curva | distancia 0
+PASA  | Del Valle al Lago | meta sobre la curva | distancia 0
+PASA  | Del Valle al Lago | moneda (-3,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Del Valle al Lago | moneda (-2,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Del Valle al Lago | moneda (1,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
+PASA  | Del Valle al Lago | obstáculo (0.94,-2) cerca de la curva (para que el lado equivocado choque) | distancia 0.001
 PASA  | Cúpula y Abismo | salida sobre la curva | distancia 0
 PASA  | Cúpula y Abismo | meta sobre la curva | distancia 0.002
 PASA  | Cúpula y Abismo | moneda (0,3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -767,12 +959,6 @@ PASA  | Cúpula y Abismo | moneda (1.8,2.4) sobre la curva | distancia 0 (Coni l
 PASA  | Cúpula y Abismo | moneda (3.75,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | Cúpula y Abismo | obstáculo (6.88,-6.19) cerca de la curva (para que el lado equivocado choque) | distancia 1.088
 PASA  | Cúpula y Abismo | obstáculo (1.49,-3.47) cerca de la curva (para que el lado equivocado choque) | distancia 0.697
-PASA  | Del Valle al Lago | salida sobre la curva | distancia 0
-PASA  | Del Valle al Lago | meta sobre la curva | distancia 0
-PASA  | Del Valle al Lago | moneda (-3,-4) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Del Valle al Lago | moneda (-2,-3) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Del Valle al Lago | moneda (1,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
-PASA  | Del Valle al Lago | obstáculo (0.94,-2) cerca de la curva (para que el lado equivocado choque) | distancia 0.001
 PASA  | El Túnel y la Rampa | salida sobre la curva | distancia 0
 PASA  | El Túnel y la Rampa | meta sobre la curva | distancia 0
 PASA  | El Túnel y la Rampa | moneda (0,-2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
@@ -780,4 +966,4 @@ PASA  | El Túnel y la Rampa | moneda (1.5,-1.73) sobre la curva | distancia 0.0
 PASA  | El Túnel y la Rampa | moneda (5,2) sobre la curva | distancia 0 (Coni la recoge a menos de 0,22)
 PASA  | El Túnel y la Rampa | obstáculo (-1.49,1.73) cerca de la curva (para que el lado equivocado choque) | distancia 0.006
 
-Total: 765 pasan, 0 fallan.
+Total: 951 pasan, 0 fallan.

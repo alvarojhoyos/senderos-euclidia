@@ -1,40 +1,122 @@
 PASA  | C13 La Fuente Redonda | centro [0,0] | centro (0, 0)
 PASA  | C13 La Fuente Redonda | área 9 | área 9π
 PASA  | C13 La Fuente Redonda | la historia da todos los números de los datos
+PASA  | C18 El Carrusel | centro [0,0] | centro (0, 0)
+PASA  | C18 El Carrusel | perímetro 8 | perímetro 8π
+PASA  | C18 El Carrusel | la historia da todos los números de los datos
+PASA  | C19 La Pista de Patines | centro [0,0] | centro (0, 0)
+PASA  | C19 La Pista de Patines | tangenteRecta -2 | r = 2, distancia a la recta = 2
+PASA  | C19 La Pista de Patines | la historia da todos los números de los datos
+PASA  | C17 El Puente de la Fuente | centro [0,0] | centro (0, 0)
+PASA  | C17 El Puente de la Fuente | diámetro 10 | diámetro 10
+PASA  | C17 El Puente de la Fuente | la historia da todos los números de los datos
+PASA  | C20 La Plaza Cuadrada | pasa [3,3] | (3, 3) sobre la curva
+PASA  | C20 La Plaza Cuadrada | pasa [-3,3] | (-3, 3) sobre la curva
+PASA  | C20 La Plaza Cuadrada | pasa [-3,-3] | (-3, -3) sobre la curva
+PASA  | C20 La Plaza Cuadrada | pasa [3,-3] | (3, -3) sobre la curva
+PASA  | C20 La Plaza Cuadrada | la historia da todos los números de los datos
 PASA  | C14 La Rueda del Molino | centro [3,-2] | centro (3, -2)
 PASA  | C14 La Rueda del Molino | tangente "x" | r = 2, distancia al eje x = 2
 PASA  | C14 La Rueda del Molino | la historia da todos los números de los datos
+PASA  | C21 La Torre del Reloj | centro [1,2] | centro (1, 2)
+PASA  | C21 La Torre del Reloj | pasa [0,0] | (0, 0) sobre la curva
+PASA  | C21 La Torre del Reloj | la historia da todos los números de los datos
+PASA  | C22 El Estanque de los Patos | centro [-3,2] | centro (-3, 2)
+PASA  | C22 El Estanque de los Patos | perímetro 6 | perímetro 6π
+PASA  | C22 El Estanque de los Patos | la historia da todos los números de los datos
 PASA  | C15 Las Tres Farolas | pasa [-1,2] | (-1, 2) sobre la curva
 PASA  | C15 Las Tres Farolas | pasa [5,2] | (5, 2) sobre la curva
 PASA  | C15 Las Tres Farolas | pasa [2,5] | (2, 5) sobre la curva
 PASA  | C15 Las Tres Farolas | la historia da todos los números de los datos
+PASA  | C23 El Kiosco de la Música | pasa [0,0] | (0, 0) sobre la curva
+PASA  | C23 El Kiosco de la Música | pasa [6,0] | (6, 0) sobre la curva
+PASA  | C23 El Kiosco de la Música | centroRecta [1,0] | centro (3, 3) en y = 1x + 0
+PASA  | C23 El Kiosco de la Música | la historia da todos los números de los datos
 PASA  | C16 El Arco de la Plaza | centroEje "x" | centro (2, 0)
 PASA  | C16 El Arco de la Plaza | pasa [-2,2] | (-2, 2) sobre la curva
 PASA  | C16 El Arco de la Plaza | pasa [6,2] | (6, 2) sobre la curva
 PASA  | C16 El Arco de la Plaza | la historia da todos los números de los datos
+PASA  | C24 La Rueda de la Esquina | tangente "x" | r = 3, distancia al eje x = 3
+PASA  | C24 La Rueda de la Esquina | tangente "y" | r = 3, distancia al eje y = 3
+PASA  | C24 La Rueda de la Esquina | perímetro 6 | perímetro 6π
+PASA  | C24 La Rueda de la Esquina | la historia da todos los números de los datos
 PASA  | E13 La Órbita del Cometa | centro [0,0] | centro (0, 0)
 PASA  | E13 La Órbita del Cometa | vértice [0,5] | vértices (0, -5) y (0, 5)
 PASA  | E13 La Órbita del Cometa | foco [0,3] | focos (0, -3) y (0, 3)
 PASA  | E13 La Órbita del Cometa | la historia da todos los números de los datos
+PASA  | E18 La Órbita del Satélite Viejo | vértice [-5,0] | vértices (-5, 0) y (5, 0)
+PASA  | E18 La Órbita del Satélite Viejo | vértice [5,0] | vértices (-5, 0) y (5, 0)
+PASA  | E18 La Órbita del Satélite Viejo | e 0.6 | e = c/a = 0.6000
+PASA  | E18 La Órbita del Satélite Viejo | la historia da todos los números de los datos
+PASA  | E20 El Anillo del Telescopio | centro [0,0] | centro (0, 0)
+PASA  | E20 El Anillo del Telescopio | foco [0,-4] | focos (0, -4) y (0, 4)
+PASA  | E20 El Anillo del Telescopio | suma 10 | 2a = 9.999999999999996
+PASA  | E20 El Anillo del Telescopio | la historia da todos los números de los datos
+PASA  | E17 El Puente de Plata | centro [0,0] | centro (0, 0)
+PASA  | E17 El Puente de Plata | ejeMayor 10 | eje mayor 9.999999999999996, horizontal
+PASA  | E17 El Puente de Plata | ejeMenor 6 | eje menor 5.999999999999999
+PASA  | E17 El Puente de Plata | la historia da todos los números de los datos
+PASA  | E19 El Cráter Alargado | centro [0,0] | centro (0, 0)
+PASA  | E19 El Cráter Alargado | pasa [4,0] | (4, 0) sobre la curva
+PASA  | E19 El Cráter Alargado | pasa [0,2] | (0, 2) sobre la curva
+PASA  | E19 El Cráter Alargado | la historia da todos los números de los datos
 PASA  | E14 La Luna Estirada | centro [1,-1] | centro (0.9999999999999993, -1)
 PASA  | E14 La Luna Estirada | ejeMayor 10 | eje mayor 9.999999999999996, horizontal
 PASA  | E14 La Luna Estirada | e 0.6 | e = c/a = 0.6000
 PASA  | E14 La Luna Estirada | la historia da todos los números de los datos
+PASA  | E21 La Estación Girando | centro [-2,1] | centro (-2, 0.9999999999999993)
+PASA  | E21 La Estación Girando | foco [-2,4] | focos (-2, -2) y (-2, 4)
+PASA  | E21 La Estación Girando | vértice [-2,6] | vértices (-2, -4) y (-2, 6)
+PASA  | E21 La Estación Girando | la historia da todos los números de los datos
+PASA  | E22 El Puente del Eclipse | pasa [1,-3] | (1, -3) sobre la curva
+PASA  | E22 El Puente del Eclipse | pasa [1,1] | (1, 1) sobre la curva
+PASA  | E22 El Puente del Eclipse | ejeMayor 8 | eje mayor 8, horizontal
+PASA  | E22 El Puente del Eclipse | centro [1,-1] | centro (1, -1)
+PASA  | E22 El Puente del Eclipse | la historia da todos los números de los datos
 PASA  | E15 El Satélite Perdido | vértice [-3,-1] | vértices (-3, -1) y (5, -1)
 PASA  | E15 El Satélite Perdido | vértice [5,-1] | vértices (-3, -1) y (5, -1)
 PASA  | E15 El Satélite Perdido | pasa [3,2] | (3, 2) sobre la curva
 PASA  | E15 El Satélite Perdido | la historia da todos los números de los datos
+PASA  | E23 La Órbita de la Estación | centro [1,1] | centro (0.9999999999999993, 1)
+PASA  | E23 La Órbita de la Estación | foco [4,1] | focos (-2, 1) y (4, 1)
+PASA  | E23 La Órbita de la Estación | pasa [1,5] | (1, 5) sobre la curva
+PASA  | E23 La Órbita de la Estación | la historia da todos los números de los datos
 PASA  | E16 El Jardín de los Dos Faroles | foco [2,-3] | focos (2, -3) y (2, 5)
 PASA  | E16 El Jardín de los Dos Faroles | foco [2,5] | focos (2, -3) y (2, 5)
 PASA  | E16 El Jardín de los Dos Faroles | suma 10 | 2a = 10.000000000000004
 PASA  | E16 El Jardín de los Dos Faroles | la historia da todos los números de los datos
+PASA  | E24 La Sombra del Cometa | foco [-1,-2] | focos (-1, -2) y (5, -2)
+PASA  | E24 La Sombra del Cometa | foco [5,-2] | focos (-1, -2) y (5, -2)
+PASA  | E24 La Sombra del Cometa | e 0.6 | e = c/a = 0.6000
+PASA  | E24 La Sombra del Cometa | la historia da todos los números de los datos
 PASA  | P13 La Antena del Muelle | vértice [0,0] | vértices (0, 0)
 PASA  | P13 La Antena del Muelle | foco [-2,0] | focos (-2, 0)
 PASA  | P13 La Antena del Muelle | la historia da todos los números de los datos
+PASA  | P17 La Red del Pescador | vértice [0,0] | vértices (0, 0)
+PASA  | P17 La Red del Pescador | directriz 3 | directriz x = 3
+PASA  | P17 La Red del Pescador | la historia da todos los números de los datos
+PASA  | P18 El Tobogán de la Playa | vértice [0,0] | vértices (0, 0)
+PASA  | P18 El Tobogán de la Playa | foco [0,-1] | focos (0, -1)
+PASA  | P18 El Tobogán de la Playa | la historia da todos los números de los datos
+PASA  | P19 La Ola Quieta | vértice [0,0] | vértices (0, 0)
+PASA  | P19 La Ola Quieta | pasa [3,3] | (3, 3) sobre la curva
+PASA  | P19 La Ola Quieta | abre "arriba" | abre hacia arriba
+PASA  | P19 La Ola Quieta | la historia da todos los números de los datos
+PASA  | P20 El Faro del Espejo | vértice [0,0] | vértices (0, 0)
+PASA  | P20 El Faro del Espejo | abre "derecha" | abre hacia derecha
+PASA  | P20 El Faro del Espejo | ladoRecto 8 | |4p| = 8
+PASA  | P20 El Faro del Espejo | la historia da todos los números de los datos
 PASA  | P14 El Puente de los Pescadores | vértice [1,2] | vértices (1, 2)
 PASA  | P14 El Puente de los Pescadores | abre "abajo" | abre hacia abajo
 PASA  | P14 El Puente de los Pescadores | ladoRecto 8 | |4p| = 8
 PASA  | P14 El Puente de los Pescadores | la historia da todos los números de los datos
+PASA  | P21 La Grúa del Puerto | vértice [2,-1] | vértices (2, -1)
+PASA  | P21 La Grúa del Puerto | foco [2,1] | focos (2, 1)
+PASA  | P21 La Grúa del Puerto | la historia da todos los números de los datos
+PASA  | P22 La Bahía Escondida | vértice [3,-2] | vértices (3, -2)
+PASA  | P22 La Bahía Escondida | abre "izquierda" | abre hacia izquierda
+PASA  | P22 La Bahía Escondida | pasa [1,2] | (1, 2) sobre la curva
+PASA  | P22 La Bahía Escondida | la historia da todos los números de los datos
 PASA  | P15 El Canal Escondido | pasa [0,0] | (0, 0) sobre la curva
 PASA  | P15 El Canal Escondido | pasa [4,0] | (4, 0) sobre la curva
 PASA  | P15 El Canal Escondido | pasa [1,-3] | (1, -3) sobre la curva
@@ -42,14 +124,49 @@ PASA  | P15 El Canal Escondido | la historia da todos los números de los datos
 PASA  | P16 El Rompeolas | vértice [-1,-2] | vértices (-1, -2)
 PASA  | P16 El Rompeolas | directriz 1 | directriz x = 1
 PASA  | P16 El Rompeolas | la historia da todos los números de los datos
+PASA  | P23 La Concha Gigante | foco [0,1] | focos (0, 1)
+PASA  | P23 La Concha Gigante | abre "derecha" | abre hacia derecha
+PASA  | P23 La Concha Gigante | pasa [0,-1] | (0, -1) sobre la curva
+PASA  | P23 La Concha Gigante | pasa [0,3] | (0, 3) sobre la curva
+PASA  | P23 La Concha Gigante | la historia da todos los números de los datos
+PASA  | P24 El Arco del Malecón | foco [-2,1] | focos (-2, 1)
+PASA  | P24 El Arco del Malecón | abre "abajo" | abre hacia abajo
+PASA  | P24 El Arco del Malecón | pasa [2,1] | (2, 1) sobre la curva
+PASA  | P24 El Arco del Malecón | la historia da todos los números de los datos
 PASA  | H13 La Torre de la Señal | centro [0,0] | centro (0, 0)
 PASA  | H13 La Torre de la Señal | vértice [0,2] | vértices (0, -2) y (0, 2)
 PASA  | H13 La Torre de la Señal | asíntota [0.5,0] | pendientes ±0.5000 por el centro (0, 0)
 PASA  | H13 La Torre de la Señal | la historia da todos los números de los datos
+PASA  | H17 La Antena del Risco | vértice [3,0] | vértices (-3, 0) y (3, 0)
+PASA  | H17 La Antena del Risco | vértice [-3,0] | vértices (-3, 0) y (3, 0)
+PASA  | H17 La Antena del Risco | foco [5,0] | focos (-5, 0) y (5, 0)
+PASA  | H17 La Antena del Risco | foco [-5,0] | focos (-5, 0) y (5, 0)
+PASA  | H17 La Antena del Risco | la historia da todos los números de los datos
+PASA  | H18 La Hipérbola Equilátera | centro [0,0] | centro (0, 0)
+PASA  | H18 La Hipérbola Equilátera | vértice [0,2] | vértices (0, -2) y (0, 2)
+PASA  | H18 La Hipérbola Equilátera | asíntota [1,0] | pendientes ±1.0000 por el centro (0, 0)
+PASA  | H18 La Hipérbola Equilátera | asíntota [-1,0] | pendientes ±1.0000 por el centro (0, 0)
+PASA  | H18 La Hipérbola Equilátera | la historia da todos los números de los datos
+PASA  | H19 El Mirador Alto | centro [0,0] | centro (0, 0)
+PASA  | H19 El Mirador Alto | vértice [0,4] | vértices (0, -4) y (0, 4)
+PASA  | H19 El Mirador Alto | ejeConjugado 4 | eje conjugado 4
+PASA  | H19 El Mirador Alto | la historia da todos los números de los datos
+PASA  | H20 El Puente de Cuerdas | centro [0,0] | centro (0, 0)
+PASA  | H20 El Puente de Cuerdas | vértice [0,4] | vértices (0, -4) y (0, 4)
+PASA  | H20 El Puente de Cuerdas | distFocos 10 | 2c = 10
+PASA  | H20 El Puente de Cuerdas | la historia da todos los números de los datos
 PASA  | H14 El Eco del Cañón | centro [-1,2] | centro (-0.9999999999999996, 2)
 PASA  | H14 El Eco del Cañón | vértice [2,2] | vértices (-4, 2) y (2, 2)
 PASA  | H14 El Eco del Cañón | e 1.6666666666666667 | e = c/a = 1.6667
 PASA  | H14 El Eco del Cañón | la historia da todos los números de los datos
+PASA  | H21 El Chorro de la Montaña | centro [2,-1] | centro (2, -0.9999999999999996)
+PASA  | H21 El Chorro de la Montaña | foco [2,4] | focos (2, -6) y (2, 4)
+PASA  | H21 El Chorro de la Montaña | vértice [2,2] | vértices (2, -4) y (2, 2)
+PASA  | H21 El Chorro de la Montaña | la historia da todos los números de los datos
+PASA  | H22 La Rampa del Viento | vértice [-4,1] | vértices (-4, 1) y (2, 1)
+PASA  | H22 La Rampa del Viento | vértice [2,1] | vértices (-4, 1) y (2, 1)
+PASA  | H22 La Rampa del Viento | pasa [4,5] | (4, 5) sobre la curva
+PASA  | H22 La Rampa del Viento | la historia da todos los números de los datos
 PASA  | H15 Las Dos Cuerdas | asíntota [2,-1] | pendientes ±2.0000 por el centro (1, 1)
 PASA  | H15 Las Dos Cuerdas | asíntota [-2,3] | pendientes ±2.0000 por el centro (1, 1)
 PASA  | H15 Las Dos Cuerdas | vértice [1,3] | vértices (1, -1) y (1, 3)
@@ -59,5 +176,20 @@ PASA  | H16 Las Dos Torres | foco [8,1] | focos (-2, 1) y (8, 1)
 PASA  | H16 Las Dos Torres | diferencia 6 | 2a = 6.000000000000003
 PASA  | H16 Las Dos Torres | vértice [0,1] | vértices (0, 1) y (6, 1)
 PASA  | H16 Las Dos Torres | la historia da todos los números de los datos
+PASA  | H23 La Torre del Faro Alto | centro [1,2] | centro (1, 1.9999999999999991)
+PASA  | H23 La Torre del Faro Alto | foco [1,7] | focos (1, -3) y (1, 7)
+PASA  | H23 La Torre del Faro Alto | asíntota [0.75,1.25] | pendientes ±0.7500 por el centro (1, 1.9999999999999991)
+PASA  | H23 La Torre del Faro Alto | asíntota [-0.75,2.75] | pendientes ±0.7500 por el centro (1, 1.9999999999999991)
+PASA  | H23 La Torre del Faro Alto | la historia da todos los números de los datos
+PASA  | H24 Las Torres Lejanas | foco [-3,-1] | focos (-3, -1) y (7, -1)
+PASA  | H24 Las Torres Lejanas | foco [7,-1] | focos (-3, -1) y (7, -1)
+PASA  | H24 Las Torres Lejanas | pasa [7,4.333333333333333] | (7, 4.333333333333333) sobre la curva
+PASA  | H24 Las Torres Lejanas | la historia da todos los números de los datos
+PASA  | I5 ¿Arco o tobogán? | pasa [-4,8] | (-4, 8) sobre la curva
+PASA  | I5 ¿Arco o tobogán? | pasa [-2,2] | (-2, 2) sobre la curva
+PASA  | I5 ¿Arco o tobogán? | pasa [0,0] | (0, 0) sobre la curva
+PASA  | I5 ¿Arco o tobogán? | pasa [2,2] | (2, 2) sobre la curva
+PASA  | I5 ¿Arco o tobogán? | pasa [4,8] | (4, 8) sobre la curva
+PASA  | I5 ¿Arco o tobogán? | la historia da todos los números de los datos
 
-Total: 61 pasan, 0 fallan.
+Total: 193 pasan, 0 fallan.
