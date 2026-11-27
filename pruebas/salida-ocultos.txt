@@ -1,4 +1,4 @@
-PASA  | Los 18 niveles con forma general esconden sus monedas; los demás no
+PASA  | Los 19 niveles con forma general esconden sus monedas; los demás no
 PASA  | C3: la lista dice «3 Trazadores perdidos escondidos en el camino: aparecen cuando Coni pasa por ellos» y no da las coordenadas de las 3 monedas
 PASA  | C3: el mapa no muestra las monedas ni sus coordenadas antes de jugar
 PASA  | C7: la lista dice «3 Trazadores perdidos escondidos en el camino: aparecen cuando Coni pasa por ellos» y no da las coordenadas de las 3 monedas
@@ -35,6 +35,8 @@ PASA  | I4: la lista dice «3 Trazadores perdidos escondidos en el camino: apare
 PASA  | I4: el mapa no muestra las monedas ni sus coordenadas antes de jugar
 PASA  | I3: la lista dice «3 objetos escondidos en el camino: aparecen cuando Coni pasa por ellos» y no da las coordenadas de las 3 monedas
 PASA  | I3: el mapa no muestra las monedas ni sus coordenadas antes de jugar
+PASA  | I6: la lista dice «3 objetos escondidos en el camino: aparecen cuando Coni pasa por ellos» y no da las coordenadas de las 3 monedas
+PASA  | I6: el mapa no muestra las monedas ni sus coordenadas antes de jugar
 PASA  | C1 (fácil) sigue mostrando sus 2 monedas con coordenadas
 PASA  | C3 con el radio equivocado: Coni no llega, no recoge nada y los Trazadores siguen escondidos («Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se …»)
 PASA  | C3 con la ecuación correcta: Coni da la vuelta y rescata los 3 Trazadores (3 de 3)
@@ -42,4 +44,4 @@ PASA  | H3 con la ecuación correcta: Coni llega a la meta y recoge los 3 objeto
 PASA  | Al terminar el Rescate los Trazadores rescatados aparecen en el mapa
 PASA  | Sin errores de JavaScript
 
-43 pasan, 0 fallan
+45 pasan, 0 fallan
