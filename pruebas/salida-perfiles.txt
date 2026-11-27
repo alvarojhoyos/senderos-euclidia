@@ -43,7 +43,12 @@ PASA  | Luis elige su nombre y completa sus datos
 PASA  | Luis tiene su propia prueba (sin lo que hizo Ana): {"gate":true,"best":0,"doc":"222"}
 PASA  | al volver a Ana sigue su prueba donde iba, sin volver a pedir datos: {"reg":false,"b":1,"doc":"111"}
 PASA  | «jugador nuevo» con el documento de Ana vuelve a su perfil (no crea otro)
+PASA  | Ana termina y envía su prueba
+PASA  | al cerrar «Prueba terminada» Ana vuelve al menú y a su aventura (sin «Terminar y enviar»): {"menu":true,"mb":true,"gate":false,"c1":2,"done":false}
+PASA  | después de la prueba, lo que juega en la aventura no se envía a la hoja del profesor
+PASA  | al abrir otra vez el enlace de la prueba, Ana (que ya la presentó) llega al menú
+PASA  | Luis, que no la ha presentado, sigue con su prueba en el mismo celular
 PASA  | con el QR de solo estudio se ve la aventura de Ana, no su prueba
 PASA  | sin errores de JavaScript
 
-47 pasan, 0 fallan
+52 pasan, 0 fallan

@@ -1171,7 +1171,8 @@ function pfPacked(id){ try{ return JSON.parse(localStorage.getItem("euclidia2-pe
 function pfUnpack(id){ const o=pfPacked(id); Object.keys(o).forEach(k=>{ if(pfMine(k)&&o[k]!=null) try{ localStorage.setItem(k,o[k]); }catch(e){} });
   try{ localStorage.removeItem("euclidia2-perfil-"+id); }catch(e){} }
 // Avance de un perfil (el activo está en memoria; los demás, en su paquete)
-function pfProgOf(id){ if(id===PF.act) return prog; try{ return JSON.parse(pfPacked(id)[progKey()]||"null")||{best:{}}; }catch(e){ return {best:{}}; } }
+// En la lista se muestra el avance de la aventura de cada jugador (no el de una prueba)
+function pfProgOf(id){ if(id===PF.act&&!EV) return prog; try{ const v=id===PF.act?localStorage.getItem("euclidia2-prog"):pfPacked(id)["euclidia2-prog"]; return JSON.parse(v||"null")||{best:{}}; }catch(e){ return {best:{}}; } }
 const progKey=()=>EV?"euclidia2-prog-ev":"euclidia2-prog";
 const freshProg=()=>({best:{},hintsUsed:0,hintsBought:0,shown:{}});
 const pfName=p=>[p.nombre,p.apellido].filter(Boolean).join(" ").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/\s+/g," ").trim();
@@ -1182,15 +1183,21 @@ function pfCreate(n,a,d){ if(PF.act){ pfPack(); pfClearLive(); }
 function pfSync(){ const r=pfGet(PF.act); if(!r||!player) return; r.nombre=player.nombre; r.apellido=player.apellido||""; r.documento=player.documento||""; pfSave(); }
 // Una evaluación nueva empieza de cero para cada perfil (como antes para el aparato)
 function pfEvCheck(){ if(EV&&store.get("euclidia2-progev",null)!==EV.id){ prog=freshProg(); saveProg(); store.set("euclidia2-progev",EV.id); } }
+// Prueba del aparato y del jugador: quien ya terminó la prueba guardada vuelve al juego normal (menú, aventura), sin enviar
+// más resultados (POSTEV). Los demás jugadores del aparato siguen con la prueba. (Alvaro, 2026-11-27)
+let POSTEV=false;
+function evResolve(){ const e=STUDY?null:store.get("euclidia2-ev",null);
+  POSTEV=!!(e&&e.id&&player&&player.documento&&store.get(`euclidia2-evend-${e.id}-${player.documento}`,false)); EV=POSTEV?null:e; }
+function leaveEv(){ evResolve(); loadProg(); applySession(); renderLevels(); const j=advResume(); loadLevel(j>=0?j:0); renderScore(); tick(); flush(); openMenu(); }
 function loadProg(){ prog=store.get(progKey(),null)||freshProg(); prog.best=prog.best||{}; prog.shown=prog.shown||{}; prog.hintsUsed=prog.hintsUsed||0; prog.hintsBought=prog.hintsBought||0; }
 // Cambiar al perfil id: empaca el activo, desempaca el elegido y recarga el estado del juego
 function pfUse(id){ const r=pfGet(id); if(!r) return false;
   if(id!==PF.act){ pfPack(); pfClearLive(); pfUnpack(id); PF.act=id; pfSave(); }
   player=store.get("euclidia2-player",null)||{nombre:r.nombre,apellido:r.apellido,documento:r.documento}; store.set("euclidia2-player",player);
-  loadProg(); pfEvCheck(); applySession(); renderLevels();
+  evResolve(); loadProg(); pfEvCheck(); applySession(); renderLevels();
   const j=SESSION?(evStarted()?firstSession():0):advResume(); loadLevel(j>=0?j:0); renderScore(); tick(); return true; }
 function pfDelete(id){ if(!pfGet(id)) return;
-  if(id===PF.act){ pfClearLive(); PF.act=null; player=null; prog=freshProg(); applySession(); renderLevels(); loadLevel(0); renderScore(); }
+  if(id===PF.act){ pfClearLive(); PF.act=null; player=null; evResolve(); prog=freshProg(); applySession(); renderLevels(); loadLevel(0); renderScore(); }
   else { try{ localStorage.removeItem("euclidia2-perfil-"+id); }catch(e){} }
   PF.list=PF.list.filter(p=>p.id!==id); pfSave(); }
 
@@ -1955,7 +1962,7 @@ function finish(){
 
 /* ============ Resultados (Google Sheets) ============ */
 function queueResult(L,coins){
-  if(STUDY||!player||role!=="estudiante"||!player.documento){ flush(); return; }
+  if(STUDY||POSTEV||!player||role!=="estudiante"||!player.documento){ flush(); return; }
   const q=store.get("euclidia2-queue",[]);
   q.push(resultRow(L.title,coins));
   store.set("euclidia2-queue",q); flush();
@@ -2323,6 +2330,7 @@ $("regForm").addEventListener("submit",e=>{ e.preventDefault();
   const changed=!created&&player&&player.documento&&d&&player.documento!==d;
   player={nombre:n,apellido:a,documento:d}; store.set("euclidia2-player",player); pfSync();
   if(changed){ prog=freshProg(); saveProg(); loadLevel(0); }
+  { const was=EV; evResolve(); if(EV!==was) loadProg(); }
   pfEvCheck(); if(created) loadLevel(0);
   $("reg").hidden=true; applySession(); renderLevels(); if(SESSION) loadLevel(evStarted()?firstSession():0); renderScore(); tick(); flush(); markSeen(); openMenu(); });
 $("whoBtn").onclick=askRole;
@@ -2374,11 +2382,11 @@ $("estCopy").onclick=async()=>{ const t=$("estUrl").textContent;
   setTimeout(()=>$("estCopy").textContent="Copiar el enlace",2500); };
 
 /* ---- Terminar la prueba y enviar el resultado final ---- */
-function doneUI(){ $("doneBtn").hidden=STUDY||!(role==="estudiante"&&player)||evEnded()||(!!SESSION&&!evStarted()); gateUI(); }
+function doneUI(){ $("doneBtn").hidden=STUDY||POSTEV||!(role==="estudiante"&&player)||evEnded()||(!!SESSION&&!evStarted()); gateUI(); }
 $("doneBtn").onclick=()=>{ const c=coinsTotal();
   $("doneTitle").textContent="¿Terminar la prueba?"; $("doneText").textContent=`Se enviará tu resultado final: ${c} de ${TOTAL_COINS} monedas, nota ${dec(grade())}. Los niveles que no alcanzaste cuentan con 0 monedas.`;
   $("doneSend").textContent=""; $("doneGo").hidden=false; $("doneBack").textContent="Seguir jugando"; $("done").hidden=false; };
-$("doneBack").onclick=()=>{ $("done").hidden=true; };
+$("doneBack").onclick=()=>{ $("done").hidden=true; if(EV&&SESSION&&evEnded()) leaveEv(); };
 $("doneGo").onclick=()=>sendFinal(false);
 // Resultado final: lo envía el estudiante o el juego cuando se acaba el tiempo. En una evaluación, después ya no se juega.
 async function sendFinal(timeUp){ if(evEnded()||!player) return;
@@ -2600,8 +2608,7 @@ try{ const hid=new URLSearchParams(location.search).get("hoja"); if(hid&&/^[\w-]
 // El enlace de una evaluación (?ev=...) la guarda en el dispositivo; una evaluación nueva empieza de cero
 if(!STUDY) try{ const sp=new URLSearchParams(location.search), e=parseEv(sp.get("ev"),sp.get("evn"));
   if(e){ const old=store.get("euclidia2-ev",null); if(!old||old.id!==e.id) store.set("euclidia2-ev",e); } }catch(e){}
-EV=STUDY?null:store.get("euclidia2-ev",null);
-if(EV) loadProg(); pfEvCheck();
+evResolve(); if(EV) loadProg(); pfEvCheck();
 loadLevel(0); resize(); renderScore(); flush();
 // Quien entra por el QR del profesor queda fijo como estudiante en ese dispositivo: no puede elegir ser profesor
 let locked=store.get("euclidia2-lock",false);
@@ -2624,9 +2631,9 @@ let pfEdit=null, pfDel=null, pfFresh=false;
 function openProfiles(fresh){ ["back","role","reg","menu","mapa","howto","teacher"].forEach(id=>$(id).hidden=true);
   pfFresh=fresh===true; pfEdit=null; pfDel=null; pfRender(); $("perfiles").hidden=false;
   const f=$("pfList").querySelector(".pfpick"); if(f) f.focus({preventScroll:true}); }
-function pfRender(){ const ul=$("pfList"); ul.innerHTML="";
-  $("pfTitle").textContent=EV?"¿Quién va a presentar la prueba?":"¿Quién va a jugar?";
-  $("pfNote").textContent=EV?"Elige tu nombre o entra como jugador nuevo. Cada uno presenta su propia prueba, con su documento."
+function pfRender(){ const ul=$("pfList"); ul.innerHTML=""; const EVD=!STUDY&&!!store.get("euclidia2-ev",null);
+  $("pfTitle").textContent=EVD?"¿Quién va a presentar la prueba?":"¿Quién va a jugar?";
+  $("pfNote").textContent=EVD?"Elige tu nombre o entra como jugador nuevo. Cada uno presenta su propia prueba, con su documento."
     :"Cada jugador tiene su propio avance en este aparato: la aventura, las lecciones, el Taller y la práctica.";
   const mk=(tag,cls,txt)=>{ const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; };
   PF.list.forEach((p,i)=>{ const li=mk("li","pfrow"), full=[p.nombre,p.apellido].filter(Boolean).join(" ");

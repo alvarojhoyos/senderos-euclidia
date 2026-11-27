@@ -137,6 +137,23 @@ const LS=(p,k)=>p.evaluate(k=>JSON.parse(localStorage.getItem(k)||'null'),k);
   await p.fill('#rName','Ana María'); await p.fill('#rLast','Ruiz'); await p.fill('#rDoc','111'); await p.click('#regForm button[type=submit]'); await p.waitForTimeout(150);
   const reg=await LS(p,'euclidia2-perfiles');
   res(reg.list.length===2&&await p.evaluate(()=>window.__euclidia.state().prog.best['x-prueba']===1),'«jugador nuevo» con el documento de Ana vuelve a su perfil (no crea otro)');
+  // Ana termina la prueba: vuelve al juego normal; Luis sigue con su prueba
+  await p.evaluate(()=>{ const b=document.getElementById('evGo'); b.click(); b.click(); }); await p.waitForTimeout(150);
+  await p.evaluate(()=>{ ['lore','leccion'].forEach(id=>{ const e=document.getElementById(id); if(e&&!e.hidden) e.hidden=true; }); });
+  await p.evaluate(()=>document.getElementById('doneBtn').click()); await p.waitForTimeout(100); await p.click('#doneGo'); await p.waitForTimeout(300);
+  res(!(await hid(p,'done'))&&/Prueba terminada/.test(await p.textContent('#doneTitle')),'Ana termina y envía su prueba');
+  const qn=await p.evaluate(()=>JSON.parse(localStorage.getItem('euclidia2-queue')||'[]').length);
+  await p.click('#doneBack'); await p.waitForTimeout(200);
+  st=await p.evaluate(()=>{ const s=window.__euclidia.state(); return {menu:!document.getElementById('menu').hidden,mb:!document.getElementById('menuBtn').hidden,gate:!document.getElementById('evGate').hidden,c1:s.prog.best.C1,done:!document.getElementById('doneBtn').hidden}; });
+  res(st.menu&&st.mb&&!st.gate&&st.c1===2&&!st.done,'al cerrar «Prueba terminada» Ana vuelve al menú y a su aventura (sin «Terminar y enviar»): '+JSON.stringify(st));
+  await p.evaluate(()=>{ document.getElementById('menu').hidden=true; const U=window.__euclidia, i=U.LEVELS.findIndex(l=>l.id==='C3'); U.loadLevel(i); U.submit(U.LEVELS[i].answer); });
+  await p.waitForTimeout(50); await p.waitForFunction(()=>!window.__euclidia.state().g2.anim,null,{timeout:30000});
+  const won=await p.evaluate(()=>window.__euclidia.state().prog.best.C3!=null);
+  res(won&&await p.evaluate(()=>{ const q=JSON.parse(localStorage.getItem('euclidia2-queue')||'[]').length; return q; })===qn,'después de la prueba, lo que juega en la aventura no se envía a la hoja del profesor');
+  await p.close(); p=await open(ctx,'?ev=quiz9-C111-30&evn=Quiz'); await skip(p); await pick(p,'Ana María Ruiz'); await p.waitForTimeout(150);
+  res(!(await hid(p,'menu'))&&await hid(p,'evGate'),'al abrir otra vez el enlace de la prueba, Ana (que ya la presentó) llega al menú');
+  await p.click('#mWho'); await p.waitForTimeout(100); await pick(p,'Luis Mora'); await p.waitForTimeout(150);
+  res(await hid(p,'menu')&&!(await hid(p,'evGate')),'Luis, que no la ha presentado, sigue con su prueba en el mismo celular');
   // ?modo=estudio en el mismo aparato: muestra la aventura de Ana, no la prueba
   await p.close(); p=await open(ctx,'?modo=estudio'); await skip(p);
   if(!(await hid(p,'perfiles'))) await pick(p,'Ana María Ruiz'); await p.waitForTimeout(150);
