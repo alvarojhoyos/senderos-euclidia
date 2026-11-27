@@ -31,6 +31,8 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
  // 2. Al abrir el juego no aparece el panel encima de todo
  res(await p.locator('#lore').isHidden(),'Al cargar el juego no se abre el panel de historia');
  // 3. Desde el menú se abre el panel con el título y la historia; «Siguiente» lleva al nivel
+ // (la lección de Apolonio del valle se prueba en lecciones.test.js; aquí se da por vista)
+ await p.evaluate(()=>localStorage.setItem('euclidia2-lecciones',JSON.stringify({'El Lago Redondo':1})));
  await p.locator('.wt',{hasText:/Circunf/}).click();
  const btn=p.locator('.lv',{hasText:'El Faro del Lago'}); await btn.scrollIntoViewIfNeeded(); await btn.click(); await p.waitForTimeout(150);
  const pn=await p.evaluate(()=>({vis:!document.getElementById('lore').hidden,t:document.getElementById('loreTitle').textContent,r:document.getElementById('loreRegion').textContent,x:document.getElementById('loreText').textContent,lv:document.getElementById('lvTitle').textContent,f:document.activeElement&&document.activeElement.id}));

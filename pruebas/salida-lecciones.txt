@@ -1,0 +1,21 @@
+PASA  | Hay una lección para cada uno de los 30 valles
+PASA  | Los 24 ejemplos dibujados coinciden con la ecuación que se muestra
+PASA  | Ningún ejemplo es la respuesta de un nivel (no se regala la respuesta)
+PASA  | Los ejemplos de forma general de las lecciones dan la cónica del ejemplo
+PASA  | Las partes que nombra cada lección existen en el modelo del Taller
+PASA  | Al entrar por primera vez a un valle, Apolonio da su lección (con dibujo) antes del nivel
+PASA  | Al pulsar «¡A jugar!» sigue la historia del nivel
+PASA  | En el mismo valle no se repite; en un valle nuevo sí sale la suya, y quedan guardadas
+PASA  | «Verlo en el Taller» abre el ejemplo en el Taller y al cerrarlo vuelve a la lección
+PASA  | El Gran Mapa lista las lecciones de los valles abiertos (sin tutorial: 0; con tutorial: 4)
+PASA  | Tocar una lección del mapa la muestra para repasar
+PASA  | En el celular la lección cabe a lo ancho y el botón queda a la vista sin bajar
+PASA  | En una evaluación no aparece ninguna lección
+PASA  | Con el enlace del modo estudio no se pregunta el rol ni el documento: solo el nombre
+PASA  | Después del registro se abre el Gran Mapa (modo aventura) y de ahí se puede ir al menú
+PASA  | El panel del profesor trae los enlaces del modo estudio: aventura con lecciones, Taller y práctica
+PASA  | En el tutorial, la lección la presenta el maestro Apolonio
+PASA  | Al pedir una pista aparece Apolonio dándola
+PASA  | En laptop la lección se ve en una tarjeta (480×768 px)
+
+Total: 19 pasan, 0 fallan.
