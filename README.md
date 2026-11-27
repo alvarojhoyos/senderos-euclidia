@@ -37,9 +37,19 @@ Cada nivel tiene un escenario en pixel art según su lugar (lago y río, luna, v
 
 En los Rescates, cada moneda es un Trazador perdido (más grande que Coni, que es la más pequeña): cuando Coni pasa, salta de alegría y le entrega su fragmento del Gran Mapa (+1). En los Escapes la moneda toma la forma del lugar: perla, polvo de estrella, gema de lava, semilla dorada, cristal de hielo, concha, piedra rojiza, gota de vapor, cristal de cueva o moneda de Euclidia. Se recogen y se cuentan igual que antes. Al llegar a la meta, Coni celebra con confeti (salvo si el sistema pide reducir movimiento).
 
+## El Taller de Coni (modo estudio)
+
+Un laboratorio que no cuenta para la nota. Se abre con el botón «El Taller de Coni» (junto al Gran Mapa) o con el enlace `?modo=taller`. Ahí vive el maestro Apolonio, el viejo Trazador que le enseña a Coni y al navegante.
+
+- Por cada cónica el estudiante mueve h, k y r, a, b o p (con + y − o con el deslizador) y ve al instante la curva, su forma canónica, su forma general y todas sus partes. Al tocar una parte de la lista se resalta en el mapa y se explica qué es y cómo se saca de la ecuación, con las cuentas hechas (por ejemplo c² = b² − a² = 16 − 4 = 12).
+- Horizontal y vertical: un recuadro explica qué cambia en la ecuación, los vértices, los focos y las asíntotas, y un botón muestra el otro caso. Elipse con la notación de clase: a bajo x y b bajo y; la hipérbola lleva a bajo el término positivo.
+- «Prueba tu propia ecuación»: reconoce cualquier cónica sin giro, también en forma general, la muestra con sus partes y avisa si todavía no está en forma canónica.
+- Apolonio habla en un globo de diálogo y da retos cortos («haz a = b y mira qué pasa») que celebra cuando se cumplen.
+- Durante una evaluación el taller no aparece, para que no sirva de calculadora de partes.
+
 ## Toques finales
 
-- **Historia al empezar:** la primera vez que se abre el juego en un dispositivo aparecen 3 viñetas (la Niebla del Olvido, Coni en el taller y «tú eres su navegante»), con un botón para saltarlas. Se pueden volver a ver con «Ver la historia», al pie de la página.
+- **Historia al empezar:** la primera vez que se abre el juego en un dispositivo aparecen 4 viñetas (la Niebla del Olvido, Coni en el taller con su maestro, el maestro Apolonio que ya no puede salir a explorar y «tú eres su navegante»), con un botón para saltarlas. Se pueden volver a ver con «Ver la historia», al pie de la página.
 - **Sonidos:** cortos y hechos en el momento (sin archivos): al recoger una moneda, al rescatar a un Trazador, al llegar, al chocar y al caer. Empiezan apagados; cada estudiante los activa con el botón «♪ Sin sonido» y el dispositivo lo recuerda.
 - **El Gran Mapa:** muestra las 10 regiones de Euclidia. Cada nivel terminado le quita niebla a su región, y al completarla el juego avisa que salió de la niebla.
 - **Medallas por mundo:** bronce al completar todos sus niveles, plata con el 80 % de sus monedas o más, oro con todas. En un quiz el mapa y las medallas no aparecen, porque cada estudiante tiene solo sus niveles.
@@ -58,6 +68,8 @@ En los Rescates, cada moneda es un Trazador perdido (más grande que Coni, que e
 
 `pruebas/toques.test.js` comprueba las viñetas de la historia (primera vez, saltar, volver a ver), el sonido apagado por defecto, las medallas, el Gran Mapa y el aviso al recuperar una región.
 
+`pruebas/taller.test.js` comprueba el Taller de Coni: en 400 cónicas al azar la curva dibujada, la ecuación canónica, la forma general, los focos (suma o diferencia de distancias) y la directriz coinciden; que una ecuación escrita por el estudiante ponga el taller en esa cónica; los retos de Apolonio; que quepa en un celular y que no se abra durante una evaluación.
+
 `pruebas/ocultos.test.js` comprueba que en los 18 niveles de forma general las monedas no se dibujan ni se listan con coordenadas antes de jugar, que un error no las revela y que la ecuación correcta las recoge todas.
 
-Requieren Node y Playwright con Chromium: `node pruebas/curvas.test.js`, `node pruebas/niveles.test.js`, `node pruebas/evaluacion.test.js`, `node pruebas/restricciones.test.js`, `node pruebas/historia.test.js`, `node pruebas/toques.test.js` y `node pruebas/ocultos.test.js`. Los últimos resultados están en `pruebas/salida.txt`, `pruebas/salida-niveles.txt`, `pruebas/salida-evaluacion.txt`, `pruebas/salida-restricciones.txt`, `pruebas/salida-historia.txt`, `pruebas/salida-toques.txt` y `pruebas/salida-ocultos.txt`.
+Requieren Node y Playwright con Chromium: `node pruebas/curvas.test.js`, `node pruebas/niveles.test.js`, `node pruebas/evaluacion.test.js`, `node pruebas/restricciones.test.js`, `node pruebas/historia.test.js`, `node pruebas/toques.test.js` `node pruebas/ocultos.test.js` y `node pruebas/taller.test.js`. Los últimos resultados están en `pruebas/salida.txt`, `pruebas/salida-niveles.txt`, `pruebas/salida-evaluacion.txt`, `pruebas/salida-restricciones.txt`, `pruebas/salida-historia.txt`, `pruebas/salida-toques.txt` `pruebas/salida-ocultos.txt` y `pruebas/salida-taller.txt`.

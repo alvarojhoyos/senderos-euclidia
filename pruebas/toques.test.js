@@ -13,11 +13,11 @@ const hid=(p,id)=>p.evaluate(id=>document.getElementById(id).hidden,id);
  // 1. Viñetas: la primera vez aparecen antes de elegir rol; se pasan con «Siguiente» y luego sigue el juego
  await p.goto('file://'+TMP); await p.waitForTimeout(500);
  const t1=await p.evaluate(()=>document.getElementById('introTitle').textContent);
- res(!(await hid(p,'intro'))&&(await hid(p,'role'))&&t1==='La Niebla del Olvido','La primera vez se abre la historia (3 viñetas) antes de elegir rol');
+ res(!(await hid(p,'intro'))&&(await hid(p,'role'))&&t1==='La Niebla del Olvido','La primera vez se abre la historia (4 viñetas) antes de elegir rol');
  const box=await p.locator('#intro .card').boundingBox(), vw=p.viewportSize();
  res(box&&box.y>=0&&box.y+box.height<=vw.height&&box.x+box.width<=vw.width,`Las viñetas caben en un celular pequeño (${vw.width}×${vw.height})`);
- await p.click('#introGo'); await p.click('#introGo'); const last=await p.evaluate(()=>document.getElementById('introGo').textContent); await p.click('#introGo');
- res(last==='¡Vamos!'&&(await hid(p,'intro'))&&!(await hid(p,'role')),'Con «Siguiente» se pasan las 3 viñetas y al final («¡Vamos!») se pide el rol');
+ await p.click('#introGo'); await p.click('#introGo'); await p.click('#introGo'); const last=await p.evaluate(()=>document.getElementById('introGo').textContent); await p.click('#introGo');
+ res(last==='¡Vamos!'&&(await hid(p,'intro'))&&!(await hid(p,'role')),'Con «Siguiente» se pasan las 4 viñetas y al final («¡Vamos!») se pide el rol');
  await p.reload(); await p.waitForTimeout(400);
  res(await hid(p,'intro'),'Al volver a abrir el juego la historia no se repite');
  // 2. «Saltar la historia» y «Ver la historia»
