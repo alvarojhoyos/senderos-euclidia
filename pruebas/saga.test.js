@@ -43,34 +43,34 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
    const out={};
    for(const k of ['c','m','l']){ document.querySelector(`.evlen [data-p="${k}"]`).click(); await new Promise(r=>setTimeout(r,50)); out[k]=[...g('evSaga').children].map(li=>li.textContent); }
    out.vis=!g('evSagaBox').hidden; g('evZero').click(); await new Promise(r=>setTimeout(r,50)); out.vacio=g('evSagaBox').hidden; return out; });
- res(tp.vis&&tp.c.length>=6&&tp.m.length>=10&&tp.l.length>=12,`El panel muestra un ejemplo de la ruta: corta ${tp.c.length} valles, media ${tp.m.length}, larga ${tp.l.length} («${(tp.m[0]||'').trim()}»)`);
+ res(tp.vis&&tp.c.length===6&&tp.m.length===6&&tp.l.length===6&&/^Circunferencias: .+ → .+/.test(tp.m[0])&&!/ → /.test(tp.c[0]),`El panel muestra un ejemplo de la ruta por mundos con los títulos de los niveles («${(tp.m[0]||'').trim()}»)`);
  res(tp.vacio,'Con la tabla vacía no se muestra la ruta de ejemplo');
  // 3. Estudiante en celular y en laptop: prólogo, puente, aviso al ganar, barra de niveles y epílogo
  for(const [nom,dev] of [['celular (iPhone SE)',devices['iPhone SE']],['laptop',{viewport:{width:1280,height:800}}]]){
    const p=await page(dev,null,'?rol=estudiante&ev=sg7k2m-C110E110P010-30&evn=Quiz%20saga');
    await p.evaluate(async()=>{ const g=id=>document.getElementById(id); g('rName').value='Ana'; g('rLast').value='Ruiz'; g('rDoc').value='4242'; g('regForm').requestSubmit(); await new Promise(r=>setTimeout(r,300)); });
    const gate=await p.evaluate(()=>document.getElementById('evGateTxt').textContent);
-   res(/una saga de 5 niveles por \d valles? en 30 minutos/.test(gate),`${nom}: el aviso antes de empezar anuncia la saga («${gate.split('.')[0]}»)`);
+   res(/una saga de 5 niveles por 3 mundos en 30 minutos/.test(gate),`${nom}: el aviso antes de empezar anuncia la saga («${gate.split('.')[0]}»)`);
    const pr=await p.evaluate(async()=>{ const g=id=>document.getElementById(id); g('evGo').click(); g('evGo').click(); await new Promise(r=>setTimeout(r,400));
      const U=window.__euclidia, ids=U.t.sessionFor(U.t.parseEv('sg7k2m-C110E110P010-30'),'4242');
      const card=document.querySelector('#lore .card').getBoundingClientRect();
      return {vis:!g('lore').hidden,reg:g('loreRegion').textContent,tit:g('loreTitle').textContent,txt:g('loreText').textContent,route:[...g('loreRoute').children].map(li=>li.querySelector('b').textContent),
        go:g('loreGo').textContent,ids,over:document.documentElement.scrollWidth>innerWidth,fits:card.left>=0&&card.right<=innerWidth+1}; });
    res(pr.vis&&pr.reg==='La saga de hoy'&&pr.tit==='Quiz saga'&&/5 tramos seguidos/.test(pr.txt)&&pr.go==='¡En marcha!',`${nom}: al empezar sale el prólogo «${pr.tit}»: ${pr.txt.split('.')[0]}.`);
-   res(pr.route.length>=3&&pr.route.length<=5,`${nom}: la ruta muestra ${pr.route.length} valles en orden: ${pr.route.join(' → ')}`);
+   res(pr.route.join()==='Circunferencias,Elipses,Parábolas'&&/en 3 mundos/.test(pr.txt),`${nom}: la ruta del prólogo va por mundos: ${pr.route.join(' → ')}`);
    res(!pr.over&&pr.fits,`${nom}: el prólogo cabe a lo ancho sin desplazamiento horizontal`);
    const l1=await p.evaluate(async()=>{ const g=id=>document.getElementById(id); g('loreGo').click(); await new Promise(r=>setTimeout(r,200));
      const U=window.__euclidia; return {vis:!g('lore').hidden,reg:g('loreRegion').textContent,tit:g('loreTitle').textContent,route:g('loreRoute').hidden,go:g('loreGo').textContent,cur:U.LEVELS[U.state().idx].id}; });
    res(l1.vis&&l1.reg.startsWith('Tramo 1 de 5 · ')&&l1.route&&l1.go==='Siguiente'&&l1.cur===pr.ids[0],`${nom}: después del prólogo sigue la historia del primer tramo («${l1.reg}», ${l1.tit})`);
-   // abrir el primer nivel de un valle nuevo: lleva el puente
-   const br=await p.evaluate(async(ids)=>{ const g=id=>document.getElementById(id); g('loreGo').click(); const U=window.__euclidia, L=U.LEVELS;
-     const k=ids.findIndex((id,i)=>i>0&&L.find(l=>l.id===id).chain!==L.find(l=>l.id===ids[i-1]).chain);
-     U.openLevel(L.findIndex(l=>l.id===ids[k])); await new Promise(r=>setTimeout(r,150));
-     const t={k,reg:g('loreRegion').textContent,txt:g('loreText').textContent,lore:U.LORE[ids[k]]}; g('loreGo').click();
-     const k2=ids.findIndex((id,i)=>i>0&&L.find(l=>l.id===id).chain===L.find(l=>l.id===ids[i-1]).chain);
-     if(k2>0){ U.openLevel(L.findIndex(l=>l.id===ids[k2])); await new Promise(r=>setTimeout(r,150)); t.mid=g('loreText').textContent===U.LORE[ids[k2]]; g('loreGo').click(); } else t.mid=true;
-     return t; },pr.ids);
-   res(br.k>0&&br.reg.startsWith(`Tramo ${br.k+1} de 5`)&&/^Coni (deja atrás|ya cruzó) .+\. /.test(br.txt)&&br.txt.endsWith(br.lore)&&br.mid,`${nom}: al llegar a un valle nuevo la historia empieza con el puente: «${br.txt.slice(0,br.txt.length-br.lore.length).trim()}»; dentro del mismo valle no`);
+   // cada tramo dice su lugar; al cambiar de mundo o de región empieza con un puente que solo nombra lugares
+   const br=await p.evaluate(async(ids)=>{ const g=id=>document.getElementById(id); g('loreGo').click(); const U=window.__euclidia, L=U.LEVELS, lv=id=>L.find(l=>l.id===id), out=[];
+     for(let k=1;k<ids.length;k++){ U.openLevel(L.findIndex(l=>l.id===ids[k])); await new Promise(r=>setTimeout(r,120));
+       const a=lv(ids[k-1]), b=lv(ids[k]), ra=U.SCENE_OF[a.id], rb=U.SCENE_OF[b.id], txt=g('loreText').textContent, lore=U.LORE[b.id], pre=txt.slice(0,txt.length-lore.length).trim();
+       const want=a.world!==b.world?/^Coni entra en el mundo de las \S+, por .+\.$/:ra!==rb?/^Coni deja atrás .+ y sigue hacia .+\.$/:/^$/;
+       out.push({k,ok:txt.endsWith(lore)&&want.test(pre)&&g('loreRegion').textContent===`Tramo ${k+1} de 5 · ${U.REGIONS[rb]}`,pre,chainName:!!b.chain&&g('loreRegion').textContent.includes(b.chain)});
+       g('loreGo').click(); }
+     return out; },pr.ids);
+   res(br.every(x=>x.ok&&!x.chainName),`${nom}: cada tramo dice su lugar (no el valle) y el puente solo aparece al cambiar de mundo o región: ${br.map(x=>x.pre||'—').join(' | ')}`);
    // ganar el primer tramo: aviso de la saga
    const w=await p.evaluate(async(ids)=>{ const U=window.__euclidia, L=U.LEVELS, i=L.findIndex(l=>l.id===ids[0]); U.openLevel(i); document.getElementById('loreGo').click();
      U.submit(L[i].answer.map(a=>Array.isArray(a)?[...a]:a)); await new Promise(r=>{ const f=()=>U.state().g2.anim?setTimeout(f,100):setTimeout(r,200); setTimeout(f,100); });
@@ -80,7 +80,7 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
    res(nx.cur===pr.ids[1]&&nx.t.startsWith('Tramo 2 de 5'),`${nom}: «Seguir la saga» lleva al tramo 2 (${nx.cur}, «${nx.t}»)`);
    // barra de niveles por valle
    const rows=await p.evaluate(()=>[...document.querySelectorAll('.chain .cn')].map(x=>x.textContent));
-   res(rows.length>=1&&rows.every(t=>/^(Fácil|Medio|Difícil) · .+/.test(t)),`${nom}: la barra agrupa por dificultad y valle: ${rows.join(' | ')}`);
+   res(rows.length>=1&&rows.every(t=>/^(Fácil|Medio|Difícil)$/.test(t)),`${nom}: la barra agrupa por dificultad, sin nombres de valle: ${rows.join(' | ')}`);
    // último tramo con todo superado y epílogo
    const ep=await p.evaluate(async(ids)=>{ const U=window.__euclidia, L=U.LEVELS, P=U.state().prog; ids.slice(0,-1).forEach(id=>P.best[id]=L.find(l=>l.id===id).coins.length);
      const i=L.findIndex(l=>l.id===ids[ids.length-1]); U.openLevel(i); document.getElementById('loreGo').click();
@@ -97,6 +97,13 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
  const sl=await p2.evaluate(async()=>{ const U=window.__euclidia, L=U.LEVELS, i=L.findIndex(l=>l.id==='E2'); U.openLevel(i); await new Promise(r=>setTimeout(r,150));
    const g=id=>document.getElementById(id); return {reg:g('loreRegion').textContent,txt:g('loreText').textContent===U.LORE.E2,route:g('loreRoute').hidden,go:g('loreGo').textContent}; });
  res(!/Tramo/.test(sl.reg)&&sl.txt&&sl.route&&sl.go==='Siguiente',`Sin evaluación la historia del nivel no cambia (región «${sl.reg}»)`);
+ // 5. Historias autocontenidas: ningún texto nombra otro valle ni depende del nivel anterior
+ const au=await p2.evaluate(()=>{ const U=window.__euclidia, L=U.LEVELS.filter(l=>!l.tutorial), gen=/^(Desfiladero|Glaciar|Mirador|Géiseres)$/;
+   const names=[...new Set(L.map(l=>l.chain))].map(c=>[c,c.replace(/^(El|La|Los|Las) /,'')]).filter(([c,n])=>!gen.test(n));
+   const bad=[]; L.forEach(l=>{ const t=U.LORE[l.id]||''; names.forEach(([c,n])=>{ if(c!==l.chain&&t.toLowerCase().includes(n.toLowerCase())) bad.push(l.id+' nombra '+c); });
+     if(/vecin|últimas torres|volver del observatorio/i.test(t)) bad.push(l.id+' depende de otro nivel'); });
+   return bad; });
+ res(au.length===0,'Ninguna historia nombra otro valle ni depende del nivel anterior'+(au.length?': '+au.join('; '):' (C2, C8, C13 y H16 corregidos)'));
  res(errs.length===0,'Sin errores de JavaScript'+(errs.length?': '+errs.slice(0,3).join(' | '):''));
  await b.close();
  const txt=out.join('\n')+`\n\n${pass} pasan, ${fail} fallan`; fs.writeFileSync(path.join(__dirname,'salida-saga.txt'),txt+'\n'); console.log(txt); process.exit(fail?1:0);

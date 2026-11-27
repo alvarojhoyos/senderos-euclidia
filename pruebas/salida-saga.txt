@@ -1,31 +1,32 @@
 PASA  | Reparto en 480 pruebas de 8 tipos: cantidades exactas, de fácil a difícil, sin repetir y siempre niveles seguidos de un valle
 PASA  | Con N niveles de una dificultad en un mundo salen a lo sumo 2 valles (el banco tiene 2 por dificultad): máximo 2
 PASA  | Variedad: 40 de 40 estudiantes con saga distinta en la media; con 1 nivel medio de circunferencias salen los 8 posibles (8); el mismo documento da la misma saga
-PASA  | El panel muestra un ejemplo de la ruta: corta 6 valles, media 12, larga 16 («El Lago Redondo (Circunferencias, fácil, 1 nivel)»)
+PASA  | El panel muestra un ejemplo de la ruta por mundos con los títulos de los niveles («Circunferencias: La Fuente Redonda → El Cráter Lunar»)
 PASA  | Con la tabla vacía no se muestra la ruta de ejemplo
-PASA  | celular (iPhone SE): el aviso antes de empezar anuncia la saga (««Quiz saga»: una saga de 5 niveles por 5 valles en 30 minutos»)
-PASA  | celular (iPhone SE): al empezar sale el prólogo «Quiz saga»: La Niebla volvió a cubrir 5 valles de Euclidia y hay Trazadores atrapados.
-PASA  | celular (iPhone SE): la ruta muestra 5 valles en orden: El Barrio de las Fuentes → La Torre del Reloj → El Valle Ovalado → El Cinturón de Satélites → Las Cumbres Heladas
+PASA  | celular (iPhone SE): el aviso antes de empezar anuncia la saga (««Quiz saga»: una saga de 5 niveles por 3 mundos en 30 minutos»)
+PASA  | celular (iPhone SE): al empezar sale el prólogo «Quiz saga»: La Niebla volvió a cubrir Euclidia y hay Trazadores atrapados en 3 mundos.
+PASA  | celular (iPhone SE): la ruta del prólogo va por mundos: Circunferencias → Elipses → Parábolas
 PASA  | celular (iPhone SE): el prólogo cabe a lo ancho sin desplazamiento horizontal
-PASA  | celular (iPhone SE): después del prólogo sigue la historia del primer tramo («Tramo 1 de 5 · El Barrio de las Fuentes», La Plaza Cuadrada)
-PASA  | celular (iPhone SE): al llegar a un valle nuevo la historia empieza con el puente: «Coni deja atrás el Barrio de las Fuentes y sigue hacia la Torre del Reloj.»; dentro del mismo valle no
-PASA  | celular (iPhone SE): al superar un tramo: «Tramo 1 de 5 de la saga. Lo que sigue: la Torre del Reloj (Circunferencias).» y el botón «Seguir la saga»
-PASA  | celular (iPhone SE): «Seguir la saga» lleva al tramo 2 (C14, «Tramo 2 de 5 · La Torre del Reloj»)
-PASA  | celular (iPhone SE): la barra agrupa por dificultad y valle: Fácil · El Barrio de las Fuentes | Medio · La Torre del Reloj
+PASA  | celular (iPhone SE): después del prólogo sigue la historia del primer tramo («Tramo 1 de 5 · Ciudad de Euclidia», La Plaza Cuadrada)
+PASA  | celular (iPhone SE): cada tramo dice su lugar (no el valle) y el puente solo aparece al cambiar de mundo o región: — | Coni entra en el mundo de las elipses, por el hielo del glaciar. | Coni deja atrás el hielo del glaciar y sigue hacia la Luna y el observatorio. | Coni entra en el mundo de las parábolas, por la costa de los faros.
+PASA  | celular (iPhone SE): al superar un tramo: «Tramo 1 de 5 de la saga.» y el botón «Seguir la saga»
+PASA  | celular (iPhone SE): «Seguir la saga» lleva al tramo 2 (C14, «Tramo 2 de 5 · Ciudad de Euclidia»)
+PASA  | celular (iPhone SE): la barra agrupa por dificultad, sin nombres de valle: Fácil | Medio
 PASA  | celular (iPhone SE): en el último tramo con todo superado: «¡Coni recorrió toda la saga! Cuando quieras, pulsa «Terminar y enviar mi resultado».»
-PASA  | celular (iPhone SE): el epílogo al terminar: «Tu resultado: 13 de 13 monedas, nota 5,0. Coni recorrió los 5 tramos y la Niebla dejó libres los 5 valles de la ruta.»
-PASA  | laptop: el aviso antes de empezar anuncia la saga (««Quiz saga»: una saga de 5 niveles por 5 valles en 30 minutos»)
-PASA  | laptop: al empezar sale el prólogo «Quiz saga»: La Niebla volvió a cubrir 5 valles de Euclidia y hay Trazadores atrapados.
-PASA  | laptop: la ruta muestra 5 valles en orden: El Barrio de las Fuentes → La Torre del Reloj → El Valle Ovalado → El Cinturón de Satélites → Las Cumbres Heladas
+PASA  | celular (iPhone SE): el epílogo al terminar: «Tu resultado: 13 de 13 monedas, nota 5,0. Coni recorrió los 5 tramos de la saga y rescató a los Trazadores de toda la ruta.»
+PASA  | laptop: el aviso antes de empezar anuncia la saga (««Quiz saga»: una saga de 5 niveles por 3 mundos en 30 minutos»)
+PASA  | laptop: al empezar sale el prólogo «Quiz saga»: La Niebla volvió a cubrir Euclidia y hay Trazadores atrapados en 3 mundos.
+PASA  | laptop: la ruta del prólogo va por mundos: Circunferencias → Elipses → Parábolas
 PASA  | laptop: el prólogo cabe a lo ancho sin desplazamiento horizontal
-PASA  | laptop: después del prólogo sigue la historia del primer tramo («Tramo 1 de 5 · El Barrio de las Fuentes», La Plaza Cuadrada)
-PASA  | laptop: al llegar a un valle nuevo la historia empieza con el puente: «Coni deja atrás el Barrio de las Fuentes y sigue hacia la Torre del Reloj.»; dentro del mismo valle no
-PASA  | laptop: al superar un tramo: «Tramo 1 de 5 de la saga. Lo que sigue: la Torre del Reloj (Circunferencias).» y el botón «Seguir la saga»
-PASA  | laptop: «Seguir la saga» lleva al tramo 2 (C14, «Tramo 2 de 5 · La Torre del Reloj»)
-PASA  | laptop: la barra agrupa por dificultad y valle: Fácil · El Barrio de las Fuentes | Medio · La Torre del Reloj
+PASA  | laptop: después del prólogo sigue la historia del primer tramo («Tramo 1 de 5 · Ciudad de Euclidia», La Plaza Cuadrada)
+PASA  | laptop: cada tramo dice su lugar (no el valle) y el puente solo aparece al cambiar de mundo o región: — | Coni entra en el mundo de las elipses, por el hielo del glaciar. | Coni deja atrás el hielo del glaciar y sigue hacia la Luna y el observatorio. | Coni entra en el mundo de las parábolas, por la costa de los faros.
+PASA  | laptop: al superar un tramo: «Tramo 1 de 5 de la saga.» y el botón «Seguir la saga»
+PASA  | laptop: «Seguir la saga» lleva al tramo 2 (C14, «Tramo 2 de 5 · Ciudad de Euclidia»)
+PASA  | laptop: la barra agrupa por dificultad, sin nombres de valle: Fácil | Medio
 PASA  | laptop: en el último tramo con todo superado: «¡Coni recorrió toda la saga! Cuando quieras, pulsa «Terminar y enviar mi resultado».»
-PASA  | laptop: el epílogo al terminar: «Tu resultado: 13 de 13 monedas, nota 5,0. Coni recorrió los 5 tramos y la Niebla dejó libres los 5 valles de la ruta.»
+PASA  | laptop: el epílogo al terminar: «Tu resultado: 13 de 13 monedas, nota 5,0. Coni recorrió los 5 tramos de la saga y rescató a los Trazadores de toda la ruta.»
 PASA  | Sin evaluación la historia del nivel no cambia (región «Lago y río»)
+PASA  | Ninguna historia nombra otro valle ni depende del nivel anterior (C2, C8, C13 y H16 corregidos)
 PASA  | Sin errores de JavaScript
 
-29 pasan, 0 fallan
+30 pasan, 0 fallan
