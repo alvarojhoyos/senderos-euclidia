@@ -38,6 +38,19 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
    document.querySelector('#ivbox0 .ivadd').click(); const rows=document.querySelectorAll('#ivbox0 .ivrow').length; document.getElementById('eq0').value='x^2+y^2=4'; document.getElementById('eq1').value='y=x^2'; document.getElementById('go').click(); await new Promise(r=>setTimeout(r,300));
    return {rows,fb:document.getElementById('fb').innerText.replace(/\n/g,' · '),drawn:window.__euclidia.state().g2.curves.length,choose:!!window.__euclidia.state().g2.choose}; });
  res(v.rows===1&&!/al menos un extremo/.test(v.fb)&&v.drawn===2&&v.choose&&/no sabe cuál tomar/.test(v.fb),`Mixto con la circunferencia completa en el tramo 1 y una restricción vacía: dibuja las curvas y dice «${v.fb.split(' · ')[0]}»`);
+ // 4. Si la curva sigue detrás de la salida, Coni no elige sola: hay que recortarla (parábolas, hipérbolas y sus tutoriales)
+ const open=await p.evaluate(()=>window.__euclidia.LEVELS.filter(l=>!l.rescue&&!l.mixed&&/^(t3|t4|P[0-9]+|H[0-9]+|I2|I3)$/.test(l.id)).map(l=>({id:l.id,eq:l.answer[0][0]})));
+ const sinR=[]; for(const l of open){ const r=await run(l.id,[[l.eq]]); const ch=await p.evaluate(()=>!!window.__euclidia.state().g2.choose);
+   if(r.reached||r.coins||!ch||!/sigue más allá de la salida/.test(r.fb)||!/Añadir una restricción/.test(r.fb)) sinR.push(l.id+': '+r.fb.slice(0,90)); }
+ res(open.length===28&&sinR.length===0,`En los ${open.length} niveles de parábola e hipérbola, la ecuación correcta sin restricción no arranca: marca con ? el trozo que sigue detrás de la salida y pide recortarla`+(sinR.length?' · '+sinR.join(' / '):''));
+ const r1=await run('P1',[['y=x^2/4','y≤4']]);
+ res(r1.reached&&r1.coins===r1.of,'Vale cualquier restricción que corte justo en la salida: en P1 también sirve y ≤ 4 (además de x ≥ −4)');
+ const r2=await run('P3',[['y=(x-2)^2-3','x≥-1']]);
+ res(!r2.reached&&/deja un trozo de curva que sobra/.test(r2.fb),'Si la restricción corta antes de la salida, sigue el aviso del trozo que sobra');
+ const r3=await run('P3',[['y=(x+2)^2-3']]);
+ res(!r3.reached&&/Tu vértice quedó en x = −2/.test(r3.fb),'Un error conocido sin restricción recibe su mensaje de matemática, no solo el de la restricción');
+ const r4=await run('t4',[['x^2/9-y^2/4=1','y≥0']]);
+ res(r4.reached&&r4.coins===r4.of,'Tutorial de la hipérbola: con y ≥ 0 Coni sube por la rama derecha y recoge todo');
  const t=await run('t0',[['x^2+y^2=9','0≤y']]);
  res(t.reached&&t.coins===t.of,'Tutorial: la práctica de la restricción se resuelve añadiendo 0 ≤ y');
  await b.close();

@@ -48,9 +48,9 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
  const r2=await p.evaluate(()=>{ const g=window.__euclidia.state().g2; return {reached:g.result.reached,got:g.result.coinAt.filter(v=>v>=0).length,fb:document.getElementById('fb').textContent}; });
  res(r2.reached&&r2.got===3,'C3 con la ecuación correcta: Coni da la vuelta y rescata los 3 Trazadores (3 de 3)');
  // 5. Escape difícil (objetos): correcta recoge los 3; error no muestra los objetos
- await load('H3'); await p.evaluate(()=>window.__euclidia.submit(['(x-2)^2/4-(y+1)^2/9=1'])); await done();
+ await load('H3'); await p.evaluate(()=>window.__euclidia.submit([['(x-2)^2/4-(y+1)^2/9=1','y≥-1']])); await done();
  const r3=await p.evaluate(()=>{ const g=window.__euclidia.state().g2; return {reached:g.result.reached,got:g.result.coinAt.filter(v=>v>=0).length}; });
- res(r3.reached&&r3.got===3,'H3 con la ecuación correcta: Coni llega a la meta y recoge los 3 objetos');
+ res(r3.reached&&r3.got===3,'H3 con la ecuación correcta y y ≥ −1: Coni llega a la meta y recoge los 3 objetos');
  // 6. Captura del antes y el después (para revisar)
  const dir=require('os').tmpdir();
  await load('C3'); await p.waitForTimeout(300); await p.locator('#c2d').screenshot({path:path.join(dir,'ocultos-antes.png')});
