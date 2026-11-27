@@ -23,6 +23,13 @@ fs.writeFileSync(TMP,'<!doctype html><html lang="es"><head><meta charset="utf-8"
      const vertices=c.type==='parábola'?[[c.h,c.k]]:horiz?[[c.h-sMain,c.k],[c.h+sMain,c.k]]:[[c.h,c.k-sMain],[c.h,c.k+sMain]];
      L.datos.forEach(d=>{ let ok=false, det='';
        if(d.t==='centro'){ ok=nearP([c.h,c.k],d.v); det=`centro (${c.h}, ${c.k})`; }
+       else if(d.t==='diámetro'){ ok=near(2*c.r,d.v); det=`diámetro ${2*c.r}`; }
+       else if(d.t==='perímetro'){ ok=near(2*c.r,d.v); det=`perímetro ${2*c.r}π`; }
+       else if(d.t==='tangenteRecta'){ const dd=d.y!=null?Math.abs(c.k-d.y):Math.abs(c.h-d.x); ok=near(c.r,dd); det=`r = ${c.r}, distancia a la recta = ${dd}`; }
+       else if(d.t==='centroRecta'){ ok=near(c.k,d.m*c.h+d.b); det=`centro (${c.h}, ${c.k}) en y = ${d.m}x + ${d.b}`; }
+       else if(d.t==='ejeMenor'){ ok=c.type==='elipse'&&near(2*Math.min(sx,sy),d.v); det=`eje menor ${2*Math.min(sx,sy)}`; }
+       else if(d.t==='ejeConjugado'){ const sc=horiz?sy:sx; ok=c.type==='hipérbola'&&near(2*sc,d.v); det=`eje conjugado ${2*sc}`; }
+       else if(d.t==='distFocos'){ ok=near(2*cf,d.v); det=`2c = ${2*cf}`; }
        else if(d.t==='área'){ ok=near(c.r*c.r,d.v); det=`área ${(c.r*c.r)}π`; }
        else if(d.t==='tangente'){ ok=near(c.r,Math.abs(d.eje==='x'?c.k:c.h)); det=`r = ${c.r}, distancia al eje ${d.eje} = ${Math.abs(d.eje==='x'?c.k:c.h)}`; }
        else if(d.t==='centroEje'){ ok=near(d.eje==='x'?c.k:c.h,0); det=`centro (${c.h}, ${c.k})`; }
@@ -42,7 +49,7 @@ fs.writeFileSync(TMP,'<!doctype html><html lang="es"><head><meta charset="utf-8"
      // la historia (lo que lee el estudiante) menciona cada número de los datos
      const st=L.story.replace(/−/g,'-').replace(/(\d),(\d)/g,'$1.$2');
      const nums=L.datos.flatMap(d=>[].concat(d.v??[],d.x??[],d.y??[])).filter(v=>typeof v==='number');
-     const fr=v=>[String(v),String(Math.abs(v))].concat(Number.isInteger(v)?[]:[[3,5],[5,3],[1,2]].filter(([a,b])=>near(Math.abs(v),a/b)).map(([a,b])=>a+'/'+b));
+     const fr=v=>[String(v),String(Math.abs(v))].concat(Number.isInteger(v)?[]:[2,3,4,5,6].filter(q=>near(Math.abs(v)*q,Math.round(Math.abs(v)*q))).map(q=>Math.round(Math.abs(v)*q)+'/'+q));
      const miss=nums.filter(v=>!fr(v).some(s=>st.includes(s)));
      res.push({ok:!miss.length, txt:`${L.id} ${L.title} | la historia da todos los números de los datos${miss.length?' | faltan '+miss.join(', '):''}`});
    });

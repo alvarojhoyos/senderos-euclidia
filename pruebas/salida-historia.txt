@@ -1,16 +1,16 @@
-PASA  | Los 77 niveles tienen historia y región
+PASA  | Los 113 niveles tienen historia y región
 PASA  | Ninguna historia trae números ni ecuaciones (los datos para resolver van en el panel del nivel)
 PASA  | Todas las historias son cortas (70 palabras o menos)
 PASA  | Coni es «ella» en todas las historias
-PASA  | Cada Escape tiene un objeto del lugar (Perla, Polvo de estrella, Semilla dorada, Moneda de Euclidia, Concha, Cristal de hielo, Gema de lava, Piedra rojiza, Cristal de cueva, Gota de vapor)
-PASA  | En los 25 Rescates cada moneda es un Trazador perdido
+PASA  | Cada Escape tiene un objeto del lugar (Moneda de Euclidia, Perla, Polvo de estrella, Semilla dorada, Concha, Cristal de hielo, Piedra rojiza, Cristal de cueva, Gema de lava, Gota de vapor)
+PASA  | En los 33 Rescates cada moneda es un Trazador perdido
 PASA  | En la lista del nivel aparecen como «Trazador perdido (0, 4)»
 PASA  | Al cargar el juego no se abre el panel de historia
 PASA  | Al tocar un nivel en el menú se abre su historia (región, título y texto) y el botón «Siguiente» queda listo
 PASA  | En un celular pequeño (320×568) el panel cabe completo en la pantalla
 PASA  | «Siguiente» cierra el panel y deja el nivel listo para jugar
 PASA  | Tocar en el menú el nivel que ya está abierto no repite la historia
-PASA  | «Siguiente nivel» abre la historia del nivel que sigue (Rescate en la Laguna)
+PASA  | «Siguiente nivel» abre la historia del nivel que sigue (La Órbita de la Luna)
 PASA  | La tecla Esc también cierra el panel
 
 Total: 14 pasan, 0 fallan.
