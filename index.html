@@ -221,7 +221,7 @@ summary{cursor:pointer;font-weight:700}
 .introcard canvas{width:100%;aspect-ratio:5/3;image-rendering:pixelated;border-radius:10px;border:2px solid var(--line);display:block}
 .introcard p{margin:0;font-size:16px;line-height:1.5}
 .introbar{display:flex;justify-content:space-between;align-items:center;color:var(--accent);font-size:12px;letter-spacing:.2em}
-.mapcard{max-width:460px}
+.mapcard{max-width:520px}
 .mapcard h3{margin:0;font:800 16px var(--f-display)}
 .mapcard canvas{width:100%;aspect-ratio:8/5;image-rendering:pixelated;border-radius:10px;border:2px solid var(--line);display:block}
 .mapreg{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
@@ -233,6 +233,36 @@ summary{cursor:pointer;font-weight:700}
 .medal.oro{background:#f2b632}.medal.plata{background:#c9d1d9}.medal.bronce{background:#c98a5a}.medal.none{background:transparent;border-style:dashed;border-color:var(--grid-strong);box-shadow:none}
 .mapbtn{margin:0 0 8px}
 .mapbtns{display:flex;flex-wrap:wrap;gap:8px}
+@media (max-width:480px){ .mapbtns{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px} .mapbtns .btn{padding:9px 8px;font-size:13px;white-space:normal} }
+/* Menú principal y modo aventura */
+.menucard{max-width:640px;border-top:4px solid var(--accent);gap:14px}
+.menuhead{display:flex;gap:12px;align-items:center}
+.menuhead canvas{width:112px;aspect-ratio:120/56;image-rendering:pixelated;border-radius:10px;border:2px solid var(--line);flex:none}
+.menuhead h2{font-size:22px}
+.mgrid{display:grid;gap:10px;grid-template-columns:1fr}
+@media (min-width:600px){ .mgrid{grid-template-columns:1fr 1fr} .mtile.big,.mtile.wide{grid-column:1/-1} }
+.mtile{display:grid;grid-template-columns:40px 1fr;gap:3px 12px;align-content:start;text-align:left;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:14px;padding:12px 14px;font:inherit;width:100%}
+button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
+.mtile .ico{grid-row:1/span 4;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.mtile .ico svg{width:24px;height:24px}
+.mtile b{font:800 17px/1.2 var(--f-display)}
+.mtile .d{font-size:13px;color:var(--muted);line-height:1.4}
+.mtile .st{font:600 12px/1.4 var(--f-mono);color:var(--gold)}
+.mtile .row2{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.mtile.big{border:1.5px solid var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--panel))}
+.mtile.big b{font-size:20px}
+.menufoot{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between;align-items:center}
+.lk{width:13px;height:13px;vertical-align:-2px;flex:none}
+.lv.lock,.vl.lock{color:var(--muted);border-style:dashed;cursor:not-allowed;background:transparent}
+.worlds .wt .lk{margin-right:4px}
+.locknote{font-size:12.5px;color:var(--muted);margin:0}
+.advtop{display:grid;gap:4px}
+.advw{display:grid;gap:6px}
+.advw h4{margin:4px 0 0;font:700 11.5px var(--f-body);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.vrow{display:flex;flex-wrap:wrap;gap:6px}
+.vl{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:10px;padding:6px 10px;font:600 13px var(--f-body);cursor:pointer;display:inline-flex;gap:6px;align-items:center;text-align:left}
+.vl .got{font:600 12px var(--f-mono);color:var(--gold)}
+.vl.ok{border-color:var(--ok)} .vl.ok .got{color:var(--ok)}
 .taller{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;padding:12px 16px 24px;display:grid;gap:10px;align-content:start}
 .taller .t-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .taller .t-eye{font:700 11px var(--f-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--part)}
@@ -313,7 +343,7 @@ summary{cursor:pointer;font-weight:700}
     </div>
   </header>
   <div class="evgate" id="evGate" hidden><p id="evGateTxt"></p><button class="btn" type="button" id="evGo">Empezar el quiz</button></div>
-  <div class="mapbtns"><button class="btn ghost mapbtn" type="button" id="mapBtn">Ver el Gran Mapa y las medallas</button><button class="btn ghost mapbtn" type="button" id="tallerBtn">El Taller de Coni</button></div>
+  <div class="mapbtns"><button class="btn ghost mapbtn" type="button" id="menuBtn">☰ Menú</button><button class="btn ghost mapbtn" type="button" id="mapBtn">Gran Mapa</button><button class="btn ghost mapbtn" type="button" id="tallerBtn">Taller de Coni</button></div>
   <div class="levels" id="levels"></div>
   <main class="stage-wrap">
     <section class="stage" id="stage" aria-label="Mapa del nivel">
@@ -408,6 +438,18 @@ summary{cursor:pointer;font-weight:700}
     <span class="small" id="calcMsg">Usa + − * / ^ ( ) y sqrt( ). El resultado aparece mientras escribes.</span>
   </div>
 </div>
+<div class="modal" id="menu" hidden>
+  <div class="card menucard" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+    <div class="menuhead"><canvas id="menuArt" width="120" height="56" aria-hidden="true"></canvas><div><h2 id="menuTitle">Senderos de Euclidia</h2><p class="small" id="menuHello">Mundo de las cónicas</p></div></div>
+    <div class="mgrid">
+      <button class="mtile big" type="button" id="mAdv"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg></span><b>Modo aventura</b><span class="d">Recorre el Gran Mapa con Coni. Cada nivel que superas abre el siguiente y le quita niebla a su región.</span><span class="st" id="mAdvSt"></span></button>
+      <div class="mtile"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg></span><b>El Taller de Coni</b><span class="d">El laboratorio del maestro Apolonio: mueve la curva y mira sus partes, o practica «te dan, halla» sin fin. No cuenta para la nota.</span><span class="row2"><button class="btn" type="button" id="mLab">Explorar</button><button class="btn ghost" type="button" id="mPrac">Practicar sin fin</button></span><span class="st" id="mPracSt"></span></div>
+      <button class="mtile" type="button" id="mStory"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H3z"/><path d="M21 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z"/></svg></span><b>La historia</b><span class="d">Cómo la Niebla del Olvido borró el Gran Mapa y por qué Coni te necesita como navegante.</span></button>
+      <button class="mtile wide" type="button" id="mTeach" hidden><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM21 14v2M14 21h3M20 18v3"/></svg></span><b>Panel del profesor</b><span class="d">Código QR para la clase, evaluaciones (quiz) y hoja de resultados.</span></button>
+    </div>
+    <div class="menufoot"><button class="linkbtn" type="button" id="mWho">Cambiar de jugador</button><button class="linkbtn" type="button" id="mPlay">Ir al nivel donde estaba</button></div>
+  </div>
+</div>
 <div class="modal" id="intro" hidden>
   <div class="card introcard" role="dialog" aria-modal="true" aria-labelledby="introTitle">
     <canvas id="introArt" width="120" height="72" aria-hidden="true"></canvas>
@@ -419,9 +461,14 @@ summary{cursor:pointer;font-weight:700}
 </div>
 <div class="modal" id="mapa" hidden>
   <div class="card mapcard" role="dialog" aria-modal="true" aria-labelledby="mapTitle">
-    <h2 id="mapTitle">El Gran Mapa de Euclidia</h2>
+    <h2 id="mapTitle">Modo aventura: el Gran Mapa</h2>
     <canvas id="mapArt" width="160" height="100" role="img" aria-label="Mapa de Euclidia con sus regiones"></canvas>
+    <div class="advtop"><button class="btn" type="button" id="advGo">Continuar la aventura</button><span class="small" id="advNext"></span></div>
     <p class="small" id="mapSum"></p>
+    <h3>Los valles</h3>
+    <p class="small" id="advHow"></p>
+    <div class="advw" id="advList"></div>
+    <p class="locknote" id="advWhy" aria-live="polite" hidden></p>
     <ul class="mapreg" id="mapRegions"></ul>
     <h3>Medallas por mundo</h3>
     <ul class="medals" id="mapMedals"></ul>
@@ -1776,17 +1823,43 @@ let menuWorld=null; const wOf=L=>L.world||"Otros";
 const vis=L=>!SESSION||L.tutorial||(evStarted()&&SESSION.has(L.id));
 const nextIdx=()=>{ const L=level();
   if(SESSION&&!L.tutorial){ const k=SESSION_ORDER.indexOf(L.id), id=SESSION_ORDER[k+1]; return id?LEVELS.findIndex(l=>l.id===id):-1; }
-  for(let j=idx+1;j<LEVELS.length;j++) if(vis(LEVELS[j])&&(!SESSION||LEVELS[j].tutorial)) return j;
-  return SESSION&&evStarted()?firstSession():-1; };
+  for(let j=idx+1;j<LEVELS.length;j++) if(vis(LEVELS[j])&&(!SESSION||LEVELS[j].tutorial)&&isOpen(LEVELS[j])) return j;
+  return SESSION?(evStarted()?firstSession():-1):advNext(); };
+/* ============ Modo aventura: niveles que se desbloquean ============
+   El tutorial va en orden; al terminarlo se abre el primer valle (cadena) de cada cónica. Dentro de un valle cada nivel
+   abre el siguiente, y al terminar un valle se abre el siguiente valle de ese mundo. Identificar y Mixtos se abren al
+   terminar el primer valle de las cuatro cónicas. Lo ya superado queda abierto. El profesor (para revisar) y las
+   evaluaciones (tienen su propio orden) no tienen candados. */
+const CONIC_W=["Circunferencias","Elipses","Parábolas","Hipérbolas"];
+const LOCK_SVG='<svg class="lk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+const isDone=L=>prog.best[L.id]!=null;
+function advWorlds(){ return WORLD_ORDER.filter(w=>LEVELS.some(l=>wOf(l)===w)).concat([...new Set(LEVELS.map(wOf))].filter(w=>!WORLD_ORDER.includes(w))); }
+function chainsOf(w){ const g=[]; LEVELS.forEach(L=>{ if(wOf(L)!==w) return; const key=L.tutorial?"Tutorial":(L.chain||L.title); let c=g.find(x=>x.key===key);
+  if(!c) g.push(c={key,name:L.tutorial?"Primeros pasos":(L.chain||L.title),w,ls:[]}); c.ls.push(L); }); return g; }
+function advState(free){ const open=new Set(), why={}, all=free!=null?free:(role==="profesor"||!!SESSION), whole=c=>!!c&&c.ls.every(isDone);
+  const tutDone=LEVELS.filter(L=>L.tutorial).every(isDone), firstDone=CONIC_W.every(w=>whole(chainsOf(w)[0]));
+  advWorlds().forEach(w=>{ const cs=chainsOf(w); cs.forEach((c,ci)=>{
+    const gate=ci>0?whole(cs[ci-1]):w==="Tutorial"?true:CONIC_W.includes(w)?tutDone:firstDone;
+    const gw=ci>0?`Se abre al terminar «${cs[ci-1].name}»`:CONIC_W.includes(w)?"Se abre al terminar el tutorial":"Se abre al terminar el primer valle de las cuatro cónicas";
+    c.ls.forEach((L,pi)=>{ if(all||isDone(L)||(pi===0?gate:isDone(c.ls[pi-1]))) open.add(L.id); else why[L.id]=pi===0?gw:`Se abre al superar «${c.ls[pi-1].title}»`; }); }); });
+  return {open,why}; }
+const isOpen=L=>advState().open.has(L.id);
+// Siguiente nivel abierto y sin superar, buscando después de «from» y dando la vuelta
+function advNext(from){ const st=advState(), n=LEVELS.length, f=from==null?idx:from;
+  for(let s=1;s<=n;s++){ const j=(f+s)%n, L=LEVELS[j]; if(vis(L)&&st.open.has(L.id)&&!isDone(L)) return j; } return -1; }
+// Dónde sigue la aventura: el último nivel que abrió el jugador si le falta, si no el siguiente abierto
+function advResume(){ const id=store.get("euclidia2-ultimo",null); let k=LEVELS.findIndex(l=>l.id===id); if(k<0) k=0;
+  const L=LEVELS[k]; if(!isDone(L)&&isOpen(L)) return k; const j=advNext(k); return j; }
+function lockMsg(L,why){ const n=$("lockNote"); if(!n) return; n.innerHTML=`${LOCK_SVG} «${esc(L.title)}» sigue cubierto por la Niebla. ${esc(why||"")}.`; n.hidden=false; }
 function renderLevels(){
-  $("mapBtn").hidden=!!SESSION; $("tallerBtn").hidden=!!SESSION; const box=$("levels"); box.innerHTML=""; const cur=level();
+  $("mapBtn").hidden=!!SESSION; $("tallerBtn").hidden=!!SESSION; $("menuBtn").hidden=!!SESSION; const box=$("levels"); box.innerHTML=""; const cur=level(), AS=advState();
   if(!menuWorld) menuWorld=wOf(cur);
   const worlds=WORLD_ORDER.filter(w=>LEVELS.some(l=>wOf(l)===w&&vis(l))).concat([...new Set(LEVELS.filter(vis).map(wOf))].filter(w=>!WORLD_ORDER.includes(w)));
   const tabs=document.createElement("div"); tabs.className="worlds"; tabs.setAttribute("role","tablist"); tabs.setAttribute("aria-label","Mundos");
   worlds.forEach(w=>{ const ls=LEVELS.filter(l=>wOf(l)===w&&vis(l)), t=document.createElement("button"); t.type="button"; t.className="wt"; t.setAttribute("role","tab"); t.setAttribute("aria-selected",String(w===menuWorld));
     const got=ls.reduce((s,l)=>s+(prog.best[l.id]||0),0), all=ls.reduce((s,l)=>s+l.coins.length,0);
     const tut=ls.every(l=>l.tutorial), done=ls.filter(l=>prog.best[l.id]).length;
-    t.innerHTML=esc(w)+(tut?` <span class="got">${done===ls.length?"✓":done+"/"+ls.length}</span>`:` <span class="got">${got}/${all}</span>`);
+    t.innerHTML=(ls.some(l=>AS.open.has(l.id))?"":LOCK_SVG)+esc(w)+(tut?` <span class="got">${done===ls.length?"✓":done+"/"+ls.length}</span>`:` <span class="got">${got}/${all}</span>`);
     t.onclick=()=>{ menuWorld=w; renderLevels(); }; tabs.appendChild(t); });
   box.appendChild(tabs);
   const sel=tabs.querySelector('[aria-selected="true"]'); if(sel) tabs.scrollLeft=Math.max(0,sel.offsetLeft-tabs.offsetLeft-(tabs.clientWidth-sel.offsetWidth)/2);
@@ -1799,9 +1872,12 @@ function renderLevels(){
     g.items.forEach(([L,i,pos])=>{ const b=document.createElement("button"); b.type="button"; b.className="lv"; b.setAttribute("aria-current",i===idx?"true":"false");
       const n=L.tutorial?"T":String(pos||L.step||"");
       const badge=L.tutorial?(prog.best[L.id]?' <span class="done" aria-label="completado">✓</span>':""):(prog.best[L.id]!=null?` <span class="got">${prog.best[L.id]}/${L.coins.length}</span>`:"");
-      b.innerHTML=`<span class="n">${n}</span>${esc(L.title)}${badge}`; b.title=`${L.kind} · ${L.diff}`; b.onclick=()=>openLevel(i); row.appendChild(b); });
+      if(!AS.open.has(L.id)){ b.classList.add("lock"); b.setAttribute("aria-disabled","true"); b.innerHTML=`<span class="n">${LOCK_SVG}</span>${esc(L.title)}`; b.title=AS.why[L.id]||""; b.onclick=()=>lockMsg(L,AS.why[L.id]); }
+      else { b.innerHTML=`<span class="n">${n}</span>${esc(L.title)}${badge}`; b.title=`${L.kind} · ${L.diff}`; b.onclick=()=>openLevel(i); }
+      row.appendChild(b); });
     chains.appendChild(row); });
   box.appendChild(chains);
+  const ln=document.createElement("p"); ln.className="locknote"; ln.id="lockNote"; ln.setAttribute("aria-live","polite"); ln.hidden=true; box.appendChild(ln);
 }
 function renderHints(){
   const L=level(), shown=prog.shown[L.id]||0, ol=$("hintList"); ol.innerHTML="";
@@ -1914,7 +1990,7 @@ function showLore(L){ const t=LORE[L.id]; if(!t) return;
   $("loreRegion").textContent=REGIONS[SCENE_OF[L.id]]||""; $("loreTitle").textContent=L.title; $("loreText").textContent=t;
   $("lore").hidden=false; $("loreGo").focus({preventScroll:true}); }
 function hideLore(){ $("lore").hidden=true; }
-function openLevel(i){ const same=i===idx&&$("lore").hidden; loadLevel(i); if(!same) showLore(level()); }
+function openLevel(i){ const same=i===idx&&$("lore").hidden; loadLevel(i); store.set("euclidia2-ultimo",LEVELS[i].id); if(!same) showLore(level()); }
 $("loreGo").onclick=hideLore;
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("lore").hidden) hideLore(); });
 $("stayBtn").onclick=()=>{ $("win").hidden=true; };
@@ -1936,7 +2012,7 @@ $("zIn").onclick=()=>setZoom(zoom.k*1.5); $("zOut").onclick=()=>setZoom(zoom.k/1
 /* ---- Rol: estudiante o profesor ---- */
 function askRole(){ ["reg","teacher"].forEach(id=>$(id).hidden=true); $("role").hidden=false; }
 $("roleStudent").onclick=()=>{ role="estudiante"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=true; askPlayer(true); };
-$("roleTeacher").onclick=()=>{ role="profesor"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=false; applySession(); renderLevels(); renderScore(); tick(); openTeacher(); };
+$("roleTeacher").onclick=()=>{ role="profesor"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=false; applySession(); renderLevels(); renderScore(); tick(); markSeen(); openMenu(); };
 $("regBack").onclick=askRole; $("teacherBack").onclick=askRole;
 $("teacherPlay").onclick=()=>{ $("teacher").hidden=true; renderScore(); };
 /* ---- Registro del estudiante ---- */
@@ -1947,7 +2023,7 @@ $("regForm").addEventListener("submit",e=>{ e.preventDefault();
   const changed=player&&player.documento!==d;
   player={nombre:n,apellido:a,documento:d}; store.set("euclidia2-player",player);
   if(changed){ prog={best:{},hintsUsed:0,hintsBought:0,shown:{}}; saveProg(); loadLevel(0); }
-  $("reg").hidden=true; applySession(); if(SESSION) loadLevel(evStarted()?firstSession():0); renderScore(); tick(); flush(); });
+  $("reg").hidden=true; applySession(); if(SESSION) loadLevel(evStarted()?firstSession():0); renderScore(); tick(); flush(); markSeen(); openMenu(); });
 $("whoBtn").onclick=askRole;
 
 /* ---- Vista del profesor: código QR ---- */
@@ -2165,7 +2241,7 @@ function welcomeBack(){ const c=coinsTotal();
   if(role==="profesor"){ $("backTitle").textContent="Hola de nuevo, profesor"; $("backText").textContent="La última vez entraste como profesor en este dispositivo."; $("backGo").textContent="Continuar como profesor"; $("backNew").textContent="Cambiar de rol"; }
   else { $("backTitle").textContent=`Hola de nuevo, ${player.nombre}`; $("backText").textContent=`${player.nombre} ${player.apellido} tiene ${c} ${c===1?"moneda guardada":"monedas guardadas"} en este dispositivo.`; $("backGo").textContent=`Continuar como ${player.nombre}`; $("backNew").textContent=`No soy ${player.nombre}`; }
   $("back").hidden=false; }
-$("backGo").onclick=()=>{ $("back").hidden=true; markSeen(); };
+$("backGo").onclick=()=>{ $("back").hidden=true; markSeen(); openMenu(); };
 $("backNew").onclick=()=>{ $("back").hidden=true; markSeen(); if(locked) askPlayer(true); else askRole(); };
 if(role==="profesor") $("teacherBtn").hidden=false;
 /* ============ Mapa de Euclidia y medallas (etapa 7c) ============
@@ -2196,15 +2272,37 @@ function paintMap(){ const cv=$("mapArt"), x=cv.getContext("2d"), st=regionStats
   // la niebla tapa lo que falta por recorrer en cada región
   Object.entries(MAP_SPOTS).forEach(([k,[a,b]])=>{ const s=st[k], f=s.all?1-s.done/s.all:0; if(f<=0) return; x.fillStyle=`rgba(176,176,192,${(0.25+0.65*f).toFixed(2)})`;
     [[0,0,13],[-7,4,9],[8,3,9],[3,-6,8]].forEach(([dx,dy,rr])=>{ x.beginPath(); x.ellipse(a+dx,b+dy,rr,rr*0.7,0,0,7); x.fill(); }); });
+  // candado en las regiones que todavía no tienen ningún nivel abierto
+  const AS=advState(); Object.entries(MAP_SPOTS).forEach(([k,[a,b]])=>{ if(LEVELS.some(L=>SCENE_OF[L.id]===k&&AS.open.has(L.id))) return;
+    r(a-4,b-4,1,4,"#4a4a5c"); r(a+3,b-4,1,4,"#4a4a5c"); r(a-3,b-6,6,2,"#4a4a5c"); r(a-5,b,11,8,"#4a4a5c"); r(a-4,b+1,9,6,"#f2b632"); r(a,b+2,1,3,"#4a4a5c"); });
   return st; }
-function openMap(){ const st=paintMap(); const ok=Object.values(st).filter(s=>s.all&&s.done===s.all).length;
-  $("mapSum").textContent=`Regiones recuperadas: ${ok} de ${Object.keys(st).length}. Cada nivel que terminas le quita niebla a su región.`;
+let mapFromMenu=false;
+function advListUI(){ const AS=advState();
+  $("advList").innerHTML=advWorlds().map(w=>`<h4>${esc(w)}</h4><div class="vrow">`+chainsOf(w).map((c,ci)=>{
+    const op=c.ls.some(L=>AS.open.has(L.id)), done=c.ls.filter(isDone).length, tut=c.ls[0].tutorial;
+    const got=c.ls.reduce((s,L)=>s+(prog.best[L.id]||0),0), all=c.ls.reduce((s,L)=>s+L.coins.length,0);
+    if(!op) return `<button type="button" class="vl lock" aria-disabled="true" data-w="${esc(w)}" data-c="${ci}" title="${esc(AS.why[c.ls[0].id]||"")}">${LOCK_SVG}${esc(c.name)}</button>`;
+    const ok=done===c.ls.length; return `<button type="button" class="vl${ok?" ok":""}" data-w="${esc(w)}" data-c="${ci}">${esc(c.name)} <span class="got">${tut?(ok?"✓":done+"/"+c.ls.length):got+"/"+all}</span></button>`; }).join("")+"</div>").join("");
+  const j=advResume(), free=role==="profesor";
+  $("advGo").textContent=j<0?"Volver a jugar":"Continuar la aventura";
+  $("advNext").textContent=j<0?"¡Recorriste todo el Gran Mapa! Puedes repetir cualquier nivel para mejorar tus monedas.":`Sigue en: ${LEVELS[j].title} (${wOf(LEVELS[j])}).`;
+  $("advHow").textContent=free?"Como profesor ves todos los niveles abiertos. Tus estudiantes los van abriendo: el tutorial primero, luego el primer valle de cada cónica, y cada nivel superado abre el siguiente."
+    :"Cada nivel superado abre el siguiente. El tutorial abre el primer valle de cada cónica, y al terminar un valle se abre el siguiente. Toca un valle para jugarlo.";
+  $("advWhy").hidden=true; }
+function advGoTo(j){ $("mapa").hidden=true; mapFromMenu=false; closeMenu(); if(j<0) j=idx; openLevel(j); try{ window.scrollTo({top:0}); }catch(e){} }
+$("advGo").onclick=()=>{ const j=advResume(); advGoTo(j<0?idx:j); };
+$("advList").onclick=e=>{ const b=e.target.closest(".vl"); if(!b) return; const c=chainsOf(b.dataset.w)[+b.dataset.c]; if(!c) return;
+  if(b.classList.contains("lock")){ const w=$("advWhy"); w.innerHTML=`${LOCK_SVG} «${esc(c.name)}» sigue cubierto por la Niebla. ${esc(advState().why[c.ls[0].id]||"")}.`; w.hidden=false; return; }
+  const AS=advState(), L=c.ls.find(l=>AS.open.has(l.id)&&!isDone(l))||c.ls[0]; advGoTo(LEVELS.indexOf(L)); };
+function openMap(fromMenu){ mapFromMenu=fromMenu===true; const st=paintMap(); const ok=Object.values(st).filter(s=>s.all&&s.done===s.all).length;
+  $("mapSum").textContent=`Regiones recuperadas: ${ok} de ${Object.keys(st).length}. Cada nivel que terminas le quita niebla a su región.`; advListUI();
+  $("mapClose").textContent=mapFromMenu?"Volver al menú":"Volver al juego";
   $("mapRegions").innerHTML=Object.keys(MAP_SPOTS).map(k=>`<li${st[k].done===st[k].all?' class="ok"':""}>${esc(REGIONS[k])} <b>${st[k].done}/${st[k].all}</b></li>`).join("");
   $("mapMedals").innerHTML=WORLD_ORDER.filter(w=>w!=="Tutorial").map(w=>{ const M=medalOf(w); if(!M) return "";
     const txt=M.m?`Medalla de ${M.m} · ${M.got} de ${M.all} monedas`:`${M.done} de ${M.n} niveles completados`;
     return `<li><span class="medal ${M.m||"none"}" aria-hidden="true"></span><span><b>${esc(w)}</b><br><span class="small">${txt}</span></span></li>`; }).join("");
   $("mapa").hidden=false; $("mapClose").focus({preventScroll:true}); }
-$("mapBtn").onclick=openMap; $("mapClose").onclick=()=>{ $("mapa").hidden=true; };
+$("mapBtn").onclick=()=>openMap(false); $("mapClose").onclick=()=>{ $("mapa").hidden=true; if(mapFromMenu){ mapFromMenu=false; openMenu(); } };
 /* ============ Viñetas de la historia (etapa 7c) ============
    Se muestran la primera vez que se abre el juego en el dispositivo; se pueden saltar y volver a ver desde el pie de página. */
 const INTRO=[
@@ -2258,6 +2356,33 @@ const startFlow=()=>{ if(!role) askRole(); else if(role==="estudiante"&&!player)
 // ?modo=taller abre el Taller de Coni (modo estudio) antes que todo; al cerrarlo sigue el juego normal
 const wantTaller=(()=>{ try{ return ["taller","practica"].includes(new URLSearchParams(location.search).get("modo"))&&!SESSION; }catch(e){ return false; } })();
 const beginGame=()=>{ if(!store.get("euclidia2-intro",false)) showIntro(startFlow); else startFlow(); };
+/* ============ Menú principal ============
+   Se abre al entrar al juego (después de la historia, el rol y el registro, o de «Hola de nuevo»). En una evaluación
+   no aparece: el estudiante va directo a su quiz. Recargar en la misma pestaña sigue donde estaba. */
+function paintMenuArt(){ const cv=$("menuArt"), x=cv.getContext("2d"), r=(a,b,w,h,c)=>{ x.fillStyle=c; x.fillRect(a,b,w,h); };
+  r(0,0,120,56,"#3b3345"); r(0,46,120,10,"#5a4a3a"); for(let i=0;i<120;i+=12) r(i,46,1,10,"#4c3e30");
+  r(8,8,30,20,"#e9e1c8"); r(9,9,28,18,"#f4eed9"); x.fillStyle="#3b6fd6"; for(let s=11;s<=35;s+=0.5) x.fillRect(Math.round(s),Math.round(24-((s-23)*(s-23))/10),1,1);
+  r(92,10,18,14,"#2a2433"); r(94,12,14,10,"#b0b0c0"); r(100,12,1,10,"#2a2433");
+  const g=x.createRadialGradient(64,4,0,64,4,36); g.addColorStop(0,"rgba(255,214,102,0.4)"); g.addColorStop(1,"rgba(255,214,102,0)"); x.fillStyle=g; x.fillRect(0,0,120,56);
+  miniApolonio(x,56,46,false,false); miniConi(x,80,46,false,true); }
+function openMenu(){ if(SESSION) return false; ["back","role","reg","teacher","mapa"].forEach(id=>$(id).hidden=true);
+  const prof=role==="profesor", done=LEVELS.filter(isDone).length, c=coinsTotal(), j=advResume();
+  $("menuHello").textContent=prof?"Hola, profesor. Elige qué quieres hacer.":player?`Hola, ${player.nombre}. Elige qué quieres hacer.`:"Elige qué quieres hacer.";
+  $("mAdvSt").textContent=`${done} de ${LEVELS.length} niveles · ${c} ${c===1?"moneda":"monedas"}`+(j>=0?` · Sigue en: ${LEVELS[j].title}`:" · ¡Gran Mapa completo!");
+  let pr=null; try{ pr=JSON.parse(localStorage.getItem("euclidia2-practica")||"null"); }catch(e){}
+  $("mPracSt").textContent=pr&&pr.ok?`${pr.ok} ${pr.ok===1?"acierto":"aciertos"} en la práctica`+(pr.mejor?` · mejor racha ${pr.mejor}`:""):"";
+  $("mTeach").hidden=!prof; $("mWho").textContent=locked?"Cambiar de estudiante":prof?"Cambiar de rol":"Cambiar de jugador";
+  paintMenuArt(); $("menu").hidden=false; $("mAdv").focus({preventScroll:true}); return true; }
+function closeMenu(){ $("menu").hidden=true; }
+$("menuBtn").onclick=openMenu;
+$("mAdv").onclick=()=>{ closeMenu(); openMap(true); };
+$("mLab").onclick=()=>{ closeMenu(); tAfter=openMenu; openTaller(); tPracSet(false); };
+$("mPrac").onclick=()=>{ closeMenu(); tAfter=openMenu; openTaller(); tPracSet(true); };
+$("mStory").onclick=()=>{ closeMenu(); showIntro(openMenu); };
+$("mTeach").onclick=()=>{ closeMenu(); openTeacher(); };
+$("mWho").onclick=()=>{ closeMenu(); $("whoBtn").onclick(); };
+$("mPlay").onclick=closeMenu;
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("menu").hidden) closeMenu(); });
 if(!wantTaller) beginGame();
 /* ============ El Taller de Coni (modo estudio) ============
    Laboratorio sin nota: el estudiante mueve h, k, r, a, b o p (o escribe una ecuación) y ve la curva con todas sus
@@ -2696,7 +2821,7 @@ $("tCheck").onclick=tPracCheck; $("tNext").onclick=tPracNew; $("tHint").onclick=
 if(wantTaller){ tAfter=beginGame; openTaller(); if(new URLSearchParams(location.search).get("modo")==="practica") tPracSet(true); }
 markSeen();
 requestAnimationFrame(frame);
-window.__euclidia={practica:{gen:pracGen,check:pracCheck,stats:prStats,model:tModelOf,set:tPracSet,ex:()=>tPx,next:tPracNew,target:prTarget,force:X=>{ tPx=X; tPracShow(); }},taller:{model:tModel,general:tGeneral,state:()=>TS,set:(st)=>tSetConic(st.c,{...st}),open:openTaller,close:closeTaller,retos:RETOS,flip:tFlip},LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
+window.__euclidia={adv:{state:advState,next:advNext,resume:advResume,chains:chainsOf,menu:openMenu},practica:{gen:pracGen,check:pracCheck,stats:prStats,model:tModelOf,set:tPracSet,ex:()=>tPx,next:tPracNew,target:prTarget,force:X=>{ tPx=X; tPracShow(); }},taller:{model:tModel,general:tGeneral,state:()=>TS,set:(st)=>tSetConic(st.c,{...st}),open:openTaller,close:closeTaller,retos:RETOS,flip:tFlip},LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
     if(ivs[i]) ivs[i]=(list||[]).map(I=>({v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):"",loC:true,hiC:true})); }); renderModes(); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
   state:()=>({g2,prog,player,idx}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),
