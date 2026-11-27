@@ -6,8 +6,8 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 3. **Banco de datos variados** — hecho (52 niveles nuevos y todo el banco en cadenas por dificultad), PR #14 apilado sobre el #13 (rama `claude/project-thread-dngk74`), aprobado por Alvaro el 2026-11-27. Doc: https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX
 3b. **Menú principal + modo aventura con candados** (pedido de Alvaro, 2026-11-26 22:43) — hecho, PR apilado sobre el #14 (rama `claude/project-thread-6loujp`, que además trae el commit de entrada sin documento del #13). Adelanta parte de la etapa 4: los desbloqueos ya existen; falta que cada zona enseñe algo con Apolonio.
 4. **Modo historia** — hecho, PR #16 (rama `claude/project-thread-4ynul0`, apilada sobre el #15), esperando revisión de Alvaro: lección de Apolonio antes de cada valle, repaso en el Gran Mapa, `?modo=estudio` y enlaces del profesor.
-5. **Evaluación como una sola saga** — hecho de noche (2026-11-27, encargo de Alvaro mientras dormía), PR apilado sobre el #17 (rama `claude/project-thread-h5xgfs`), esperando su revisión.
-6. Cierre: celular, todas las pruebas, publicación, guía del profesor.
+5. **Evaluación como una sola saga** — hecho de noche (2026-11-27, encargo de Alvaro mientras dormía), PR #18 apilado sobre el #17 (rama `claude/project-thread-h5xgfs`), esperando su revisión.
+6. **Cierre** — hecho de noche (2026-11-27, mismo encargo), PR apilado sobre el #18 (rama `claude/project-thread-77azem`), esperando su revisión. Trae además el PR #11 ya integrado (ver «Estado final y orden de fusión»).
 
 ## Qué hay en la etapa 1 (index.html)
 - Bloque `/* ============ El Taller de Coni ... */` antes de `window.__euclidia`: `tModel()` calcula ecuación, forma general y partes de la cónica actual (`TS`); `tRender()` arma controles y lista; `tDraw()` dibuja en `#tCanvas`; `tTry()` lee una ecuación con `compileEq`/`classify`.
@@ -32,7 +32,7 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 - Desbloqueo (bloque `/* ============ Modo aventura */` antes de `renderLevels`): `advState()` → {open, why}. Tutorial en orden → primer valle de cada cónica; en un valle cada nivel abre el siguiente; terminar un valle abre el siguiente del mundo; Identificar y Mixtos al terminar el primer valle de las 4 cónicas. Lo superado queda abierto. Profesor y evaluación: todo abierto. `nextIdx` salta cerrados y si no hay más busca con `advNext`.
 - Barra de niveles: cerrados con candado; al tocarlos `#lockNote` explica qué terminar. API de pruebas: `window.__euclidia.adv`.
 - Pruebas: `pruebas/menu.test.js` (29).
-- Visto al probar (ya pasaba antes): en un celular de 320 px de ancho el panel del nivel se sale 13 px por la derecha.
+- Visto al probar: en un celular de 320 px de ancho el panel del nivel se salía 13 px por la derecha (arreglado en la etapa 6).
 
 ## Qué hay en la etapa 4 (modo historia, PR #16, rama `claude/project-thread-4ynul0`, apilada sobre el #15)
 - Bloque `/* ============ Modo historia ... */` justo antes de `window.__euclidia`. `LECCIONES` = una lección por cadena (30), clave = nombre de la cadena: {t, f (fórmula; dos espacios separan alternativas), p (párrafos), ex (estado del Taller, opcional), parts (claves de partes de `tModel`)}. Identificar y Mixtos no traen `ex` (sin dibujo).
@@ -65,12 +65,20 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 - La corta y la media dan 1 nivel por valle (son un nivel por mundo y dificultad), así que la saga es una ruta de valles distintos unidos por puentes. Con 2 o más de la misma dificultad (larga o tabla a mano) ya salen niveles seguidos del mismo valle.
 - Las historias de cada nivel no se reescribieron; si un tramo empieza a mitad de valle, su texto puede decir «la laguna vecina» sin haber visto la anterior.
 
-## Para la etapa 6 (cierre)
-- Probar en celular todo el recorrido (historia → menú → aventura → Taller → panel → prueba como saga) y en laptop.
-- Correr todas las pruebas (`node pruebas/<archivo>.test.js` para cada archivo de `pruebas/`).
-- Publicación (Alvaro pidió esperar a terminar las 6 etapas): orden PR #11, luego actualizar docs del banco y skill diseñar-nivel, luego #12 → #13 → #14 → #15 → #16 → #17 → etapa 5 → etapa 6, apilados. Pedirle a Alvaro una captura de uso antes de publicar (comparar gasto).
-- Guía del profesor (https://claude.ai/artifact/CmkjC3Qf3DaoJLz3qyuqT3): agregar prueba como saga, largos (6/12/20), QR de solo estudio, Taller, práctica y modo historia.
-- Pendiente visto antes: en 320 px el panel del nivel se sale 13 px por la derecha.
+## Qué hay en la etapa 6 (cierre, rama `claude/project-thread-77azem`)
+- Arreglo de celular: en 320 px el panel del nivel se salía 13 px. La causa era la columna de la grilla de `.panel` (crecía con el teclado y con el botón de pistas, que no partía su texto). Ahora `.panel` tiene `grid-template-columns:minmax(0,1fr)`, `.hints` igual y `.hints .btn{white-space:normal}`.
+- Nueva `pruebas/cierre.test.js` (25): recorre la entrada real (historia → nombre → menú), instrucciones, Gran Mapa, lección de Apolonio, nivel, Taller (explorar y práctica), panel del profesor (inicio, prueba, prueba creada, solo estudio), `?modo=estudio` y la prueba como saga (aviso, prólogo, nivel, prueba terminada) en iPhone SE (320 px), 375 px, Pixel 7 y laptop: 18 pantallas por ancho, sin desplazamiento horizontal ni elementos fuera, sin errores de JavaScript. Con el index.html anterior falla en 320 px (así se comprobó que detecta el problema).
+- **PR #11 integrado en esta rama** (merge de `restriccion-salida`): chocaba con la reorganización del banco (#14) en la lista de niveles. Se resolvió nivel por nivel y campo por campo (base = main, nuestro = la pila, suyo = #11): de la pila quedan chain/step/diff y lo nuevo; del #11, las respuestas y errores con la restricción en la salida (P1–P12, H1–H12, I2, I3; t3 y t4 entraron sin choque). No hubo ningún campo cambiado por los dos lados.
+- Guía del profesor actualizada (https://claude.ai/artifact/CmkjC3Qf3DaoJLz3qyuqT3): pasos del panel nuevo, largos 6/12/20 con tiempos, tabla a mano, la prueba como saga (aviso, prólogo, «Seguir la saga»), QR de solo estudio, modo aventura, lecciones de Apolonio y Taller. Ojo: describe la versión que aún no está publicada en el sitio de estudiantes.
+- Enlace privado de prueba republicado (versión 13) y verificado descargando la página publicada y corriendo `cierre.test.js` sobre ella (25/25).
+
+## Estado final y orden de fusión (para Alvaro)
+Todo está en ramas apiladas, sin fusionar. Cada PR tiene como base la rama del anterior:
+main ← #12 (Taller) ← #13 (práctica) ← #14 (banco) ← #15 (menú) ← #16 (modo historia) ← #17 (panel) ← #18 (saga) ← PR de la etapa 6 (cierre + #11).
+- Orden recomendado (decisión tomada de noche, para que Alvaro la revise): fusionar de abajo hacia arriba, #12 → #13 → #14 → #15 → #16 → #17 → #18 → etapa 6, cada uno con «Create a merge commit» (no squash ni rebase, para que la pila no se rompa). Al fusionar uno, GitHub cambia la base del siguiente a main. El #11 queda dentro de la etapa 6, así que GitHub lo marca como fusionado solo al llegar a main; no hay que fusionarlo aparte.
+- Por qué no «#11 primero» (lo que estaba anotado): el #11 está hecho sobre el banco viejo de 56 niveles y choca con el #14 en la lista de niveles. Fusionarlo primero obliga a resolver ese choque a mano al fusionar el #14. Si Alvaro prefiere ese orden, el choque se resuelve igual que aquí (campo por campo) en la rama del #14.
+- Después de fusionar: actualizar los docs del banco y la skill diseñar-nivel con la regla del #11 (restricción en la salida) y la organización por valles de una sola dificultad; pedirle a Alvaro una captura de uso antes de publicar (comparar gasto con la línea base).
+- Decisiones de noche que siguen abiertas para su revisión: las de la etapa 5 (abajo) y este orden de fusión.
 
 ## Qué hay en la etapa 3 (index.html)
 - Banco: 108 niveles, 294 monedas, en 30 cadenas. Cada cadena tiene UNA dificultad (pedido de Alvaro): por cónica 6 cadenas de 4 (fácil, fácil, medio, medio, difícil, difícil); identificar y mixtos 3 cadenas de 2 (fácil, medio, difícil). El mapa completo de cadenas está en el doc.
@@ -84,7 +92,7 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 
 ## Pendiente / preguntas abiertas
 - Etapa 3 aprobada (2026-11-27). Doc del banco v2: https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX
-- Etapa 4 (PR #16) y menú (PR #15): aprobados por Alvaro el 2026-11-27. Panel del profesor reorganizado (PR #17): aprobado por encargo de Alvaro (2026-11-27 3:07 Bogotá). Etapa 5: falta su revisión.
+- Etapa 4 (PR #16) y menú (PR #15): aprobados por Alvaro el 2026-11-27. Panel del profesor reorganizado (PR #17): aprobado por encargo de Alvaro (2026-11-27 3:07 Bogotá). Etapas 5 y 6: falta su revisión.
 - Pedido de Alvaro (coordinador): captura de uso para comparar gasto cuando haya unas 3 etapas con la nueva modalidad.
 
 ## Ahorro (pedido de Alvaro, 2026-11-26)
