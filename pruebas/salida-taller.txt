@@ -1,0 +1,13 @@
+PASA  | ?modo=taller abre el Taller de una vez (sin la historia ni el registro encima)
+PASA  | 400 cónicas al azar: la curva dibujada (9500 puntos), la ecuación canónica, la forma general y los focos/directriz coinciden
+PASA  | Una hipérbola vertical escrita por el estudiante queda con a = 2 (bajo y), b = 3 y centro (2, −1)
+PASA  | Una elipse en forma general se reconoce y el taller avisa que falta la forma canónica
+PASA  | (y − 2)² = −8(x + 1) abre a la izquierda con p = 2 y vértice (−1, 2)
+PASA  | x·y = 1 se rechaza explicando que la cónica está girada
+PASA  | Apolonio da un reto y lo celebra cuando se cumple (a = b → circunferencia)
+PASA  | En un celular (333 px) no hay desplazamiento lateral, los botones miden 36 px o más y el mapa se ve (261 px de alto)
+PASA  | Al cerrar el taller sigue el juego (aparece la historia la primera vez)
+PASA  | Durante una evaluación el taller no se abre y su botón no aparece
+PASA  | Sin errores en la página
+
+11 pasan, 0 fallan

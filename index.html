@@ -232,6 +232,41 @@ summary{cursor:pointer;font-weight:700}
 .medal{width:26px;height:26px;border-radius:50%;flex:none;border:2px solid var(--ink);box-shadow:inset -3px -3px 0 rgb(0 0 0 / .18)}
 .medal.oro{background:#f2b632}.medal.plata{background:#c9d1d9}.medal.bronce{background:#c98a5a}.medal.none{background:transparent;border-style:dashed;border-color:var(--grid-strong);box-shadow:none}
 .mapbtn{margin:0 0 8px}
+.mapbtns{display:flex;flex-wrap:wrap;gap:8px}
+.taller{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;padding:12px 16px 24px;display:grid;gap:10px;align-content:start}
+.taller .t-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.taller .t-eye{font:700 11px var(--f-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--part)}
+.taller h2{font:800 20px var(--f-display);margin:0}
+.taller h3{font:800 15px var(--f-display);margin:4px 0 0}
+.t-apo{display:flex;gap:10px;align-items:flex-end}
+.t-apo canvas{width:68px;height:64px;image-rendering:pixelated;flex:none}
+.t-say{position:relative;background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;min-width:0;flex:1}
+.t-say::before{content:"";position:absolute;left:-8px;bottom:14px;border:7px solid transparent;border-right-color:var(--line);border-left:0}
+.t-say b{font-size:12px;color:var(--part)} .t-say p{margin:2px 0 4px;font-size:14px;line-height:1.4}
+.tseg{display:flex;flex-wrap:wrap;gap:6px}
+.tseg button{flex:1 1 auto;min-height:40px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:600 13.5px var(--f-body);cursor:pointer;padding:6px 10px}
+.tseg button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1.5px var(--accent);color:var(--accent)}
+.t-main{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
+.t-stage{position:sticky;top:-12px;z-index:2;border:1px solid var(--grid-strong);border-radius:12px;overflow:hidden;aspect-ratio:4/3;background:var(--paper)}
+.t-stage canvas{width:100%;height:100%;display:block}
+.t-side{display:grid;gap:10px;min-width:0}
+.t-eq{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:grid;gap:2px}
+.t-eq .mono{font:600 15px var(--f-mono);overflow-wrap:anywhere}
+.t-ctl{display:grid;gap:8px}
+.tparam{display:grid;grid-template-columns:5.5em 40px minmax(0,1fr) 40px;gap:6px;align-items:center}
+.tparam label{font:600 14px var(--f-mono)} .tparam input{width:100%;accent-color:var(--accent)}
+.tparam button{height:40px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:700 18px var(--f-body);cursor:pointer}
+.t-orient{border-left:4px solid var(--part);background:color-mix(in srgb,var(--part) 7%,var(--panel));border-radius:10px;padding:8px 12px;display:grid;gap:8px;justify-items:start}
+.t-orient p{margin:0;font-size:14px;line-height:1.45}
+.t-parts{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.t-parts button{width:100%;display:flex;justify-content:space-between;gap:10px;text-align:left;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:9px;padding:9px 12px;font:600 14px var(--f-body);cursor:pointer}
+.t-parts button b{font:600 13px var(--f-mono);text-align:right;overflow-wrap:anywhere}
+.t-parts button[aria-expanded="true"]{border-color:var(--accent);color:var(--accent)}
+.tdet{padding:6px 12px 2px;font-size:14px;line-height:1.45} .tdet p{margin:0 0 6px}
+.t-try{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:10px}
+.t-try .tin{width:100%;min-height:44px;font:15px var(--f-mono);padding:8px 10px;border-radius:9px;border:1.5px solid var(--grid-strong);background:var(--panel);color:var(--ink);box-sizing:border-box}
+.tmsg{margin:0;font-size:14px;line-height:1.45} .tmsg.bad{color:var(--bad)} .tmsg.warn{color:var(--part)}
+@media (max-width:860px){ .t-main{grid-template-columns:minmax(0,1fr)} .t-stage{aspect-ratio:auto;height:min(46vh,360px);box-shadow:0 6px 14px -10px color-mix(in srgb,var(--ink) 45%,transparent)} }
 .lorecard{border-top:4px solid var(--accent)}
 .lorecard .lorereg{font:700 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
 .lorecard p{margin:0;font-size:16px;line-height:1.5}
@@ -270,7 +305,7 @@ summary{cursor:pointer;font-weight:700}
     </div>
   </header>
   <div class="evgate" id="evGate" hidden><p id="evGateTxt"></p><button class="btn" type="button" id="evGo">Empezar el quiz</button></div>
-  <button class="btn ghost mapbtn" type="button" id="mapBtn">Ver el Gran Mapa y las medallas</button>
+  <div class="mapbtns"><button class="btn ghost mapbtn" type="button" id="mapBtn">Ver el Gran Mapa y las medallas</button><button class="btn ghost mapbtn" type="button" id="tallerBtn">El Taller de Coni</button></div>
   <div class="levels" id="levels"></div>
   <main class="stage-wrap">
     <section class="stage" id="stage" aria-label="Mapa del nivel">
@@ -321,6 +356,22 @@ summary{cursor:pointer;font-weight:700}
   </div>
 </div>
 
+<div class="taller" id="taller" hidden role="dialog" aria-modal="true" aria-labelledby="tTitle">
+  <div class="t-top"><div><span class="t-eye">Modo estudio</span><h2 id="tTitle">El Taller de Coni</h2></div><button class="btn" type="button" id="tClose">Volver al juego</button></div>
+  <div class="t-apo"><canvas id="tApo" width="34" height="32" aria-hidden="true"></canvas><div class="t-say"><b>Maestro Apolonio</b><p id="tSay" aria-live="polite"></p><button class="linkbtn" type="button" id="tReto">Dame un reto</button></div></div>
+  <div class="tseg t-tabs" id="tTabs" role="group" aria-label="Cónica"><button type="button" data-c="circ">Circunferencia</button><button type="button" data-c="elip">Elipse</button><button type="button" data-c="para">Parábola</button><button type="button" data-c="hip">Hipérbola</button></div>
+  <div class="t-main">
+    <div class="t-stage"><canvas id="tCanvas" aria-label="Mapa del taller con la curva y sus partes"></canvas></div>
+    <div class="t-side">
+      <div class="t-eq"><span class="small">Forma canónica</span><div class="mono" id="tEq"></div><div class="mono" id="tEq2"></div><span class="small">Forma general</span><div class="mono" id="tGen"></div></div>
+      <div class="t-ctl" id="tCtl"></div>
+      <div class="t-orient"><p id="tOrient"></p><button class="btn ghost" type="button" id="tFlip"></button></div>
+      <h3>Partes</h3><p class="small">Toca una parte para verla resaltada en el mapa.</p>
+      <ul class="t-parts" id="tParts"></ul>
+      <div class="t-try"><h3>Prueba tu propia ecuación</h3><div id="tInBox"></div><button class="btn" type="button" id="tTry">Ver sus partes</button><p class="tmsg" id="tMsg" aria-live="polite"></p></div>
+    </div>
+  </div>
+</div>
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="shTitle">
   <div class="sh-top"><div><h2 id="shTitle">Hoja de borrador</h2><div class="sh-eq" id="shEq"></div></div><button class="btn" type="button" id="shClose">Volver al juego</button></div>
   <div class="tools" role="toolbar" aria-label="Herramientas de dibujo">
@@ -1675,7 +1726,7 @@ const nextIdx=()=>{ const L=level();
   for(let j=idx+1;j<LEVELS.length;j++) if(vis(LEVELS[j])&&(!SESSION||LEVELS[j].tutorial)) return j;
   return SESSION&&evStarted()?firstSession():-1; };
 function renderLevels(){
-  $("mapBtn").hidden=!!SESSION; const box=$("levels"); box.innerHTML=""; const cur=level();
+  $("mapBtn").hidden=!!SESSION; $("tallerBtn").hidden=!!SESSION; const box=$("levels"); box.innerHTML=""; const cur=level();
   if(!menuWorld) menuWorld=wOf(cur);
   const worlds=WORLD_ORDER.filter(w=>LEVELS.some(l=>wOf(l)===w&&vis(l))).concat([...new Set(LEVELS.filter(vis).map(wOf))].filter(w=>!WORLD_ORDER.includes(w)));
   const tabs=document.createElement("div"); tabs.className="worlds"; tabs.setAttribute("role","tablist"); tabs.setAttribute("aria-label","Mundos");
@@ -2105,7 +2156,8 @@ $("mapBtn").onclick=openMap; $("mapClose").onclick=()=>{ $("mapa").hidden=true; 
    Se muestran la primera vez que se abre el juego en el dispositivo; se pueden saltar y volver a ver desde el pie de página. */
 const INTRO=[
   {t:"La Niebla del Olvido",x:"En Euclidia los caminos están hechos de ecuaciones. Una noche, la Niebla del Olvido borró el Gran Mapa, y los Trazadores que cuidaban los caminos quedaron perdidos."},
-  {t:"Coni",x:"Solo se salvó Coni, la Trazadora más joven y la más pequeña, porque esa noche estaba en el taller. Ahora le toca a ella encontrar a los demás."},
+  {t:"Coni",x:"Solo se salvó Coni, la Trazadora más joven y la más pequeña, porque esa noche estaba en el taller aprendiendo con su maestro, el viejo Apolonio."},
+  {t:"El maestro Apolonio",x:"Apolonio trazó los primeros caminos de Euclidia, pero ya está muy viejo para salir a explorar. «Yo te enseño, Coni, y tú vas por ellos», le dijo. Desde el taller los guiará a los dos."},
   {t:"Tú eres su navegante",x:"Coni camina exactamente por la curva que le escribas, ni un paso más ni uno menos. Escribe bien cada ecuación y juntos recogerán los fragmentos del Gran Mapa."}];
 let introK=0, introRAF=0, introThen=null;
 function miniConi(x,X,Y,blink,happy){ const r=(a,b,w,h,c)=>{ x.fillStyle=c; x.fillRect(X+a,Y+b,w,h); };
@@ -2132,8 +2184,11 @@ function paintIntro(t){ const cv=$("introArt"), x=cv.getContext("2d"), Wc=cv.wid
     r(30,40,52,4,"#9a7a55"); r(34,44,3,10,"#7a5a3a"); r(75,44,3,10,"#7a5a3a"); // mesa
     const glow=x.createRadialGradient(56,8,0,56,8,40); glow.addColorStop(0,"rgba(255,214,102,0.45)"); glow.addColorStop(1,"rgba(255,214,102,0)"); x.fillStyle=glow; x.fillRect(0,0,Wc,Hc);
     r(55,0,1,6,"#1b2735"); r(52,6,7,3,"#f2b632");
-    miniConi(x,56,40,blink,false); }
-  if(k===2){ r(0,0,Wc,Hc,"#dff0f7"); r(0,50,Wc,Hc-50,"#cfe6b8"); r(10,8,14,4,"#ffffff"); r(14,6,8,2,"#ffffff"); r(84,12,18,4,"#ffffff");
+    miniConi(x,46,40,blink,false); miniApolonio(x,72,54,blink,false); }
+  if(k===2){ r(0,0,Wc,Hc,"#3b3345"); r(0,54,Wc,Hc-54,"#5a4a3a"); for(let i=0;i<Wc;i+=12) r(i,54,1,Hc-54,"#4c3e30");
+    r(14,10,40,26,"#e9e1c8"); r(15,11,38,24,"#f4eed9"); x.fillStyle="#3b6fd6"; for(let s=18;s<=50;s+=0.5) x.fillRect(Math.round(s),Math.round(31-((s-34)*(s-34))/14),1,1); r(34,30,1,1,"#c92a2a"); // pizarra con una parábola
+    miniApolonio(x,66,54,blink,!still&&Math.floor(t*6)%2===0); miniConi(x,92,54,blink,true); }
+  if(k===3){ r(0,0,Wc,Hc,"#dff0f7"); r(0,50,Wc,Hc-50,"#cfe6b8"); r(10,8,14,4,"#ffffff"); r(14,6,8,2,"#ffffff"); r(84,12,18,4,"#ffffff");
     // el camino que escribe el navegante: una curva por la que Coni avanza
     const f=s=>58-((s-60)*(s-60))/58; x.fillStyle="#3b6fd6"; for(let s=14;s<=106;s+=0.5){ x.fillRect(Math.round(s),Math.round(f(s)),2,2); }
     const s0=still?60:22+((t*14)%84); r(100,f(100)-12,8,6,"#f2b632"); r(101,f(100)-11,6,1,"#1b2735");
@@ -2147,10 +2202,250 @@ $("introGo").onclick=()=>{ if(introK<INTRO.length-1){ introK++; introUI(); } els
 $("introSkip").onclick=closeIntro;
 $("storyBtn").onclick=()=>showIntro();
 const startFlow=()=>{ if(!role) askRole(); else if(role==="estudiante"&&!player) askPlayer(); else if(!seen) welcomeBack(); };
-if(!store.get("euclidia2-intro",false)) showIntro(startFlow); else startFlow();
+// ?modo=taller abre el Taller de Coni (modo estudio) antes que todo; al cerrarlo sigue el juego normal
+const wantTaller=(()=>{ try{ return new URLSearchParams(location.search).get("modo")==="taller"&&!SESSION; }catch(e){ return false; } })();
+const beginGame=()=>{ if(!store.get("euclidia2-intro",false)) showIntro(startFlow); else startFlow(); };
+if(!wantTaller) beginGame();
+/* ============ El Taller de Coni (modo estudio) ============
+   Laboratorio sin nota: el estudiante mueve h, k, r, a, b o p (o escribe una ecuación) y ve la curva con todas sus
+   partes. Cada parte dice qué significa y cómo se saca de la ecuación. Notación de clase:
+   elipse (x − h)²/a² + (y − k)²/b² = 1 con a bajo x y b bajo y; hipérbola con a bajo el término positivo. */
+const TC={circ:"Circunferencia",elip:"Elipse",para:"Parábola",hip:"Hipérbola"};
+const TDEF={circ:{h:0,k:0,r:3},elip:{h:0,k:0,a:4,b:2},para:{h:0,k:0,p:1,dir:"arriba"},hip:{h:0,k:0,a:3,b:2,hz:true}};
+let TS={c:"circ",...structuredClone(TDEF.circ)}, tSel="centro", tView=null, tTarget=null, tRAF=0, tWalk=0, tOpen=false;
+const tKeep={}; // valores de cada cónica, para no perderlos al cambiar de pestaña
+const nice=v=>Math.abs(v*4-Math.round(v*4))<1e-9;
+const tn=v=>fmt(Math.abs(v)<1e-12?0:v);
+const tP=(x,y)=>"("+tn(x)+", "+tn(y)+")";
+function tRoot(v2){ const s=Math.sqrt(v2); return nice(s)?tn(s):`√${tn(v2)} ≈ ${tn(Math.round(s*100)/100)}`; }
+function tSq(v,c){ return Math.abs(c)<1e-12?`${v}²`:`(${v} ${c>0?"−":"+"} ${tn(Math.abs(c))})²`; }
+function tLin(v,c){ return Math.abs(c)<1e-12?v:`(${v} ${c>0?"−":"+"} ${tn(Math.abs(c))})`; }
+const tFr=(num,den)=>Math.abs(den-1)<1e-12?num:`${num}/${tn(den)}`;
+// Datos de la cónica actual: ecuación, forma general, partes (para el mapa y para la lista) y notas
+function tModel(){ const S=TS, {h,k}=S, out={parts:[],notes:[]};
+  const P=(key,name,val,mean,how,draw)=>out.parts.push({key,name,val,mean,how,draw:draw||[]});
+  const ctr={r:"centro",at:[h,k],tag:"C"};
+  if(S.c==="circ"){ const r=S.r, r2=r*r; out.eq=`${tSq("x",h)} + ${tSq("y",k)} = ${tn(r2)}`; out.gen=[1,1,-2*h,-2*k,h*h+k*k-r2];
+    out.box=[h-r,k-r,h+r,k+r];
+    P("centro","Centro",tP(h,k),"El punto del medio. Todos los puntos de la curva están a la misma distancia de él.",
+      `Se lee dentro de los paréntesis con el signo contrario: ${tSq("x",h)} da h = ${tn(h)} y ${tSq("y",k)} da k = ${tn(k)}.`,[ctr]);
+    P("radio","Radio r",tn(r),"La distancia del centro a cualquier punto de la curva.",
+      `El lado derecho es r² = ${tn(r2)}, así que r = ${tRoot(r2)}. Ojo: en la ecuación va r², no r.`,[{r:"seg",a:[h,k],b:[h+r*Math.cos(0.8),k+r*Math.sin(0.8)],txt:"r"}]);
+    P("diametro","Diámetro",tn(2*r),"La cuerda más larga: pasa por el centro y mide el doble del radio.",
+      `Diámetro = 2r = 2 · ${tn(r)} = ${tn(2*r)}. Si te dan los extremos de un diámetro, el centro es su punto medio.`,[{r:"seg",a:[h-r,k],b:[h+r,k],txt:"2r",both:true}]);
+    out.orient="La circunferencia no tiene orientación: se ve igual en todas las direcciones, porque x y y tienen el mismo coeficiente.";
+    out.curve=[[...Array(121)].map((_,i)=>{ const t=i/120*2*Math.PI; return [h+r*Math.cos(t),k+r*Math.sin(t)]; })]; }
+  if(S.c==="elip"){ const {a,b}=S, A2=a*a, B2=b*b, hz=a>=b, M=Math.max(a,b), m=Math.min(a,b), c2=M*M-m*m, c=Math.sqrt(c2);
+    out.eq=`${tFr(tSq("x",h),A2)} + ${tFr(tSq("y",k),B2)} = 1`; out.gen=[B2,A2,-2*h*B2,-2*k*A2,B2*h*h+A2*k*k-A2*B2];
+    out.box=[h-a,k-b,h+a,k+b];
+    P("centro","Centro",tP(h,k),"El punto medio de la elipse: está en la mitad de los dos ejes.",`Se lee con el signo contrario dentro de cada paréntesis: h = ${tn(h)}, k = ${tn(k)}.`,[ctr]);
+    P("a","Semieje horizontal a",tn(a),"La distancia del centro al borde, en horizontal.",`Bajo ${tSq("x",h)} está a² = ${tn(A2)}, así que a = ${tRoot(A2)}.`,[{r:"seg",a:[h,k],b:[h+a,k],txt:"a"}]);
+    P("b","Semieje vertical b",tn(b),"La distancia del centro al borde, en vertical.",`Bajo ${tSq("y",k)} está b² = ${tn(B2)}, así que b = ${tRoot(B2)}.`,[{r:"seg",a:[h,k],b:[h,k+b],txt:"b"}]);
+    const V=hz?[[h-a,k],[h+a,k]]:[[h,k-b],[h,k+b]], W2=hz?[[h,k-b],[h,k+b]]:[[h-a,k],[h+a,k]], F=hz?[[h-c,k],[h+c,k]]:[[h,k-c],[h,k+c]];
+    P("vertices","Vértices",V.map(q=>tP(...q)).join(" y "),"Los extremos del eje mayor: los puntos de la elipse más lejanos del centro.",
+      hz?`El eje mayor es horizontal porque a > b. Los vértices son (h ± a, k).`:`El eje mayor es vertical porque b > a. Los vértices son (h, k ± b).`,V.map((q,i)=>({r:"punto",at:q,tag:"V"+(i+1)})));
+    P("covertices","Extremos del eje menor",W2.map(q=>tP(...q)).join(" y "),"Los puntos de la elipse más cercanos al centro.",hz?"Están en (h, k ± b).":"Están en (h ± a, k).",W2.map(q=>({r:"punto",at:q,tag:"B"})));
+    P("focos","Focos",c<1e-9?"en el centro":F.map(q=>tP(...q)).join(" y "),"Dos puntos sobre el eje mayor. Para cualquier punto de la elipse, la suma de sus distancias a los dos focos es siempre la longitud del eje mayor.",
+      `c² = ${hz?"a² − b²":"b² − a²"} = ${tn(M*M)} − ${tn(m*m)} = ${tn(c2)}, así que c = ${tRoot(c2)}. Los focos quedan a una distancia c del centro, sobre el eje mayor.`,
+      c<1e-9?[{r:"foco",at:[h,k]}]:F.map((q,i)=>({r:"foco",at:q,tag:"F"+(i+1)})));
+    P("ejes","Ejes",`mayor ${tn(2*M)}, menor ${tn(2*m)}`,"El eje mayor une los vértices; el menor une los extremos del eje menor.",`Eje mayor = 2 · ${tn(M)} = ${tn(2*M)}; eje menor = 2 · ${tn(m)} = ${tn(2*m)}.`,
+      [{r:"seg",a:V[0],b:V[1],both:true},{r:"seg",a:W2[0],b:W2[1],both:true,thin:true}]);
+    P("e","Excentricidad e",tn(Math.round(c/M*1000)/1000),"Mide qué tan estirada está: 0 es una circunferencia y cerca de 1 es muy alargada.",`e = c / ${hz?"a":"b"} = ${tn(Math.round(c*1000)/1000)} / ${tn(M)}.`);
+    const lr=2*m*m/M; P("lr","Lado recto",tn(Math.round(lr*1000)/1000),"La cuerda que pasa por un foco y es perpendicular al eje mayor.",`Mide 2·(semieje menor)²/(semieje mayor) = 2 · ${tn(m*m)} / ${tn(M)}.`,
+      [{r:"seg",a:hz?[h+c,k-m*m/M]:[h-m*m/M,k+c],b:hz?[h+c,k+m*m/M]:[h+m*m/M,k+c],both:true}]);
+    out.orient=Math.abs(a-b)<1e-9?"Con a = b los dos semiejes son iguales: la elipse es una circunferencia y los focos se juntan en el centro.":
+      hz?`Eje mayor horizontal: el denominador mayor (a² = ${tn(A2)}) está bajo x. Vértices (h ± a, k) y focos (h ± c, k), con c² = a² − b².`:
+         `Eje mayor vertical: el denominador mayor (b² = ${tn(B2)}) está bajo y. Vértices (h, k ± b) y focos (h, k ± c), con c² = b² − a².`;
+    out.flip="Ver el caso "+(hz?"vertical":"horizontal");
+    out.curve=[[...Array(121)].map((_,i)=>{ const t=i/120*2*Math.PI; return [h+a*Math.cos(t),k+b*Math.sin(t)]; })]; }
+  if(S.c==="para"){ const vert=S.dir==="arriba"||S.dir==="abajo", p=(S.dir==="arriba"||S.dir==="derecha")?S.p:-S.p, q4=4*p, aa=1/q4;
+    const X=vert?"x":"y", Y=vert?"y":"x", hX=vert?h:k, kY=vert?k:h;
+    out.eq=`${tSq(X,hX)} = ${tn(q4)}${Math.abs(kY)<1e-12?Y:tLin(Y,kY)}`;
+    out.eq2=`${Y} = ${aa<0?"−":""}${tFr(tSq(X,hX),Math.abs(q4))}${Math.abs(kY)<1e-12?"":` ${kY>0?"+":"−"} ${tn(Math.abs(kY))}`}`;
+    out.gen=vert?[1,0,-2*h,-q4,h*h+q4*k]:[0,1,-q4,-2*k,k*k+q4*h];
+    const Fc=vert?[h,k+p]:[h+p,k], L1=vert?[h-2*p,k+p]:[h+p,k-2*p], L2=vert?[h+2*p,k+p]:[h+p,k+2*p];
+    out.box=vert?[h-2*Math.abs(p)-1,Math.min(k,k+2*p)-1,h+2*Math.abs(p)+1,Math.max(k,k+2*p)+1]:[Math.min(h,h+2*p)-1,k-2*Math.abs(p)-1,Math.max(h,h+2*p)+1,k+2*Math.abs(p)+1];
+    out.box=vert?[out.box[0],Math.min(out.box[1],k-p-0.5),out.box[2],Math.max(out.box[3],k-p+0.5)]:[Math.min(out.box[0],h-p-0.5),out.box[1],Math.max(out.box[2],h-p+0.5),out.box[3]];
+    P("vertice","Vértice",tP(h,k),"El punto donde la parábola da la vuelta. Está a medio camino entre el foco y la directriz.",
+      `Se lee con el signo contrario dentro de los paréntesis: h = ${tn(h)}, k = ${tn(k)}.`,[{r:"punto",at:[h,k],tag:"V"}]);
+    P("p","Distancia p",tn(p),"La distancia con signo del vértice al foco. Su signo dice hacia dónde abre.",
+      `En ${tSq(X,"h")} = 4p${Y==="y"?"(y − k)":"(x − h)"} el número es 4p = ${tn(q4)}, así que p = ${tn(q4)}/4 = ${tn(p)}. ${p>0?"p > 0":"p < 0"}: abre hacia ${S.dir==="arriba"?"arriba":S.dir==="abajo"?"abajo":"la "+S.dir}.`,
+      [{r:"seg",a:[h,k],b:Fc,txt:"p"}]);
+    P("foco","Foco",tP(...Fc),"Todo punto de la parábola está a la misma distancia del foco que de la directriz.",
+      vert?`Está a p del vértice, sobre el eje: (h, k + p) = (${tn(h)}, ${tn(k)} + ${tn(p)}).`:`Está a p del vértice, sobre el eje: (h + p, k) = (${tn(h)} + ${tn(p)}, ${tn(k)}).`,[{r:"foco",at:Fc,tag:"F"}]);
+    P("directriz","Directriz",vert?`y = ${tn(k-p)}`:`x = ${tn(h-p)}`,"La recta del otro lado del vértice, a la misma distancia p que el foco.",
+      vert?`y = k − p = ${tn(k)} − ${tn(p)} = ${tn(k-p)}.`:`x = h − p = ${tn(h)} − ${tn(p)} = ${tn(h-p)}.`,[vert?{r:"linea",y:k-p}:{r:"linea",x:h-p}]);
+    P("eje","Eje de simetría",vert?`x = ${tn(h)}`:`y = ${tn(k)}`,"La recta que parte la parábola en dos mitades iguales. Pasa por el vértice y el foco.",
+      vert?"Es la recta vertical x = h.":"Es la recta horizontal y = k.",[vert?{r:"linea",x:h,thin:true}:{r:"linea",y:k,thin:true}]);
+    P("lr","Lado recto",tn(Math.abs(q4)),"La cuerda que pasa por el foco, paralela a la directriz. Sus extremos ayudan a dibujar la parábola.",
+      `Mide |4p| = ${tn(Math.abs(q4))}. Sus extremos son ${tP(...L1)} y ${tP(...L2)}.`,[{r:"seg",a:L1,b:L2,both:true},{r:"punto",at:L1},{r:"punto",at:L2}]);
+    P("a","Coeficiente a",tn(Math.round(aa*10000)/10000),`En la otra forma canónica, ${Y} = a${tSq(X,"h")} + ${vert?"k":"h"}.`,
+      `a = 1/(4p) = 1/${tn(q4)}. ${aa>0?"a > 0":"a < 0"}, y mientras más grande |a|, más cerrada la parábola.`);
+    out.orient=vert?`La variable al cuadrado es x: la parábola abre hacia arriba o hacia abajo. El signo de p lo decide: p > 0 arriba, p < 0 abajo. La directriz es horizontal (y = …).`:
+      `La variable al cuadrado es y: la parábola abre hacia los lados. El signo de p lo decide: p > 0 a la derecha, p < 0 a la izquierda. La directriz es vertical (x = …).`;
+    out.flip="Girar la parábola";
+    const T=Math.max(4,Math.sqrt(64*Math.abs(p))*1.6+6), pts=[]; for(let i=0;i<=160;i++){ const s=-T+2*T*i/160, d=s*s/q4; pts.push(vert?[h+s,k+d]:[h+d,k+s]); } out.curve=[pts]; }
+  if(S.c==="hip"){ const {a,b}=S, hz=S.hz, A2=a*a, B2=b*b, c2=A2+B2, c=Math.sqrt(c2);
+    out.eq=hz?`${tFr(tSq("x",h),A2)} − ${tFr(tSq("y",k),B2)} = 1`:`${tFr(tSq("y",k),A2)} − ${tFr(tSq("x",h),B2)} = 1`;
+    out.gen=hz?[B2,-A2,-2*h*B2,2*k*A2,B2*h*h-A2*k*k-A2*B2]:[-A2,B2,2*h*A2,-2*k*B2,B2*k*k-A2*h*h-A2*B2];
+    const V=hz?[[h-a,k],[h+a,k]]:[[h,k-a],[h,k+a]], W2=hz?[[h,k-b],[h,k+b]]:[[h-b,k],[h+b,k]], F=hz?[[h-c,k],[h+c,k]]:[[h,k-c],[h,k+c]], m=hz?b/a:a/b;
+    out.box=hz?[h-c-1,k-b-1,h+c+1,k+b+1]:[h-b-1,k-c-1,h+b+1,k+c+1];
+    P("centro","Centro",tP(h,k),"El punto medio entre los dos vértices y entre los dos focos. Ahí se cruzan las asíntotas.",`Se lee con el signo contrario dentro de los paréntesis: h = ${tn(h)}, k = ${tn(k)}.`,[ctr]);
+    P("a","a (centro a vértice)",tn(a),"La distancia del centro a cada vértice, sobre el eje que corta la curva.",`a² es el denominador del término positivo (${hz?"el de x":"el de y"}): a² = ${tn(A2)}, a = ${tRoot(A2)}.`,[{r:"seg",a:[h,k],b:V[1],txt:"a"}]);
+    P("b","b (eje conjugado)",tn(b),"La mitad del lado del rectángulo que no corta la curva. Junto con a da la inclinación de las asíntotas.",`b² es el denominador del término negativo: b² = ${tn(B2)}, b = ${tRoot(B2)}.`,[{r:"seg",a:[h,k],b:W2[1],txt:"b"}]);
+    P("vertices","Vértices",V.map(q=>tP(...q)).join(" y "),"Los puntos donde empieza cada rama: los más cercanos al centro.",hz?"Están en (h ± a, k).":"Están en (h, k ± a).",V.map((q,i)=>({r:"punto",at:q,tag:"V"+(i+1)})));
+    P("focos","Focos",F.map(q=>tP(...q)).join(" y "),"Dos puntos más afuera que los vértices. Para cualquier punto de la hipérbola, la diferencia de sus distancias a los focos es siempre 2a.",
+      `c² = a² + b² = ${tn(A2)} + ${tn(B2)} = ${tn(c2)}, así que c = ${tRoot(c2)}. Ojo: en la hipérbola se suma; en la elipse se resta.`,F.map((q,i)=>({r:"foco",at:q,tag:"F"+(i+1)})));
+    const ms=tn(Math.round(m*1000)/1000), mf=hz?(nice(m)?ms:`${tn(b)}/${tn(a)}`):(nice(m)?ms:`${tn(a)}/${tn(b)}`);
+    P("asintotas","Asíntotas",`${tLin("y",k)} = ±${mf}·${tLin("x",h)}`,"Las rectas a las que se acercan las ramas sin tocarlas nunca. Son las diagonales del rectángulo.",
+      `Pasan por el centro con pendiente ±${hz?"b/a":"a/b"} = ±${mf}.${Math.abs(a-b)<1e-9?" Como a = b, la pendiente es ±1 y las asíntotas son perpendiculares (hipérbola equilátera).":""}`,
+      [{r:"asintota",at:[h,k],m},{r:"asintota",at:[h,k],m:-m}]);
+    P("rect","Rectángulo",`${tn(2*(hz?a:b))} × ${tn(2*(hz?b:a))}`,"Una ayuda para dibujar: su centro es el de la hipérbola y sus diagonales son las asíntotas.",hz?"Mide 2a de ancho y 2b de alto.":"Mide 2b de ancho y 2a de alto.",
+      [{r:"rect",a:hz?[h-a,k-b]:[h-b,k-a],b:hz?[h+a,k+b]:[h+b,k+a]}]);
+    P("e","Excentricidad e",tn(Math.round(c/a*1000)/1000),"En la hipérbola siempre es mayor que 1. Mientras más grande, más abiertas las ramas.",`e = c / a = ${tn(Math.round(c*1000)/1000)} / ${tn(a)}.`);
+    out.orient=hz?`El término positivo es el de x: la hipérbola abre hacia los lados. Vértices (h ± a, k), focos (h ± c, k) y asíntotas con pendiente ±b/a.`:
+      `El término positivo es el de y: la hipérbola abre hacia arriba y hacia abajo. Vértices (h, k ± a), focos (h, k ± c) y asíntotas con pendiente ±a/b.`;
+    out.flip="Ver el caso "+(hz?"vertical":"horizontal");
+    const T=Math.asinh(12/Math.min(a,b))+0.3, br=s=>[...Array(121)].map((_,i)=>{ const t=-T+2*T*i/120, u=s*a*Math.cosh(t), v=b*Math.sinh(t); return hz?[h+u,k+v]:[h+v,k+u]; });
+    out.curve=[br(1),br(-1)]; }
+  return out; }
+// Forma general con coeficientes enteros cuando se puede: Ax² + Cy² + Dx + Ey + F = 0
+function tGeneral(g){ let m=1; for(const t of [1,2,3,4,5,6,8,10,12,16,20,24,25,36,48,64,100,144,400]){ if(g.every(v=>Math.abs(v*t-Math.round(v*t))<1e-9)){ m=t; break; } }
+  let G=g.map(v=>Math.round(v*m*1e6)/1e6); const gcd=(u,v)=>v?gcd(v,u%v):u; if(G.every(Number.isInteger)){ const d=G.reduce((u,v)=>gcd(u,Math.abs(v)),0); if(d>1) G=G.map(v=>v/d); }
+  const lead=G.find(v=>Math.abs(v)>1e-12); if(lead<0) G=G.map(v=>-v);
+  const nm=["x²","y²","x","y",""]; let s="";
+  G.forEach((v,i)=>{ if(Math.abs(v)<1e-12) return; const av=Math.abs(v), coef=(av===1&&nm[i])?"":tn(av);
+    s+=(s?(v<0?" − ":" + "):(v<0?"−":""))+coef+nm[i]; });
+  return (s||"0")+" = 0"; }
+const TPARAMS={circ:[["h","h",-6,6,0.5],["k","k",-6,6,0.5],["r","r",0.5,7,0.5]],elip:[["h","h",-6,6,0.5],["k","k",-6,6,0.5],["a","a",0.5,7,0.5],["b","b",0.5,7,0.5]],
+  para:[["h","h",-6,6,0.5],["k","k",-6,6,0.5],["p","|p|",0.25,4,0.25]],hip:[["h","h",-6,6,0.5],["k","k",-6,6,0.5],["a","a",0.5,6,0.5],["b","b",0.5,6,0.5]]};
+function tSetConic(c,keep){ tKeep[TS.c]={...TS}; TS=keep||tKeep[c]||{c,...structuredClone(TDEF[c])}; TS.c=c; tSel=tModel().parts[0].key; tTarget=null; tWalk=0; tReto=null; tSay(TALK[c]); tRender(); }
+function tRender(){ const M=tModel();
+  document.querySelectorAll("#tTabs button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.c===TS.c)));
+  const ctl=$("tCtl"); ctl.innerHTML="";
+  if(TS.c==="para"){ const row=document.createElement("div"); row.className="tseg"; row.setAttribute("role","group"); row.setAttribute("aria-label","Hacia dónde abre");
+    [["arriba","Abre arriba"],["abajo","Abre abajo"],["derecha","A la derecha"],["izquierda","A la izquierda"]].forEach(([d,t])=>{ const b=document.createElement("button"); b.type="button"; b.textContent=t; b.setAttribute("aria-pressed",String(TS.dir===d)); b.onclick=()=>{ TS.dir=d; tTarget=null; tRender(); }; row.appendChild(b); }); ctl.appendChild(row); }
+  if(TS.c==="hip"){ const row=document.createElement("div"); row.className="tseg"; row.setAttribute("role","group"); row.setAttribute("aria-label","Hacia dónde abre");
+    [[true,"Abre a los lados"],[false,"Abre arriba y abajo"]].forEach(([v,t])=>{ const b=document.createElement("button"); b.type="button"; b.textContent=t; b.setAttribute("aria-pressed",String(TS.hz===v)); b.onclick=()=>{ TS.hz=v; tTarget=null; tRender(); }; row.appendChild(b); }); ctl.appendChild(row); }
+  TPARAMS[TS.c].forEach(([key,lbl,mn,mx,st])=>{ const row=document.createElement("div"); row.className="tparam";
+    row.innerHTML=`<label for="tp_${key}"><i>${lbl}</i> = <b>${tn(TS[key])}</b></label><button type="button" aria-label="Bajar ${lbl}">−</button><input type="range" id="tp_${key}" min="${mn}" max="${mx}" step="${st}"><button type="button" aria-label="Subir ${lbl}">+</button>`;
+    const inp=row.querySelector("input"), [dn,up]=row.querySelectorAll("button"), set=v=>{ TS[key]=Math.max(mn,Math.min(mx,Math.round(v/st)*st)); tRender(); };
+    inp.value=TS[key]; inp.oninput=()=>set(+inp.value); dn.onclick=()=>set(TS[key]-st); up.onclick=()=>set(TS[key]+st); ctl.appendChild(row); });
+  $("tEq").textContent=M.eq; $("tEq2").textContent=M.eq2||""; $("tEq2").hidden=!M.eq2; $("tGen").textContent=tGeneral(M.gen);
+  $("tOrient").textContent=M.orient; $("tFlip").hidden=!M.flip; if(M.flip) $("tFlip").textContent=M.flip;
+  if(!M.parts.some(p=>p.key===tSel)) tSel=M.parts[0].key;
+  $("tParts").innerHTML=M.parts.map(p=>`<li><button type="button" data-k="${p.key}" aria-expanded="${p.key===tSel}"><span>${esc(p.name)}</span><b>${esc(p.val)}</b></button>${p.key===tSel?`<div class="tdet"><p><b>Qué es.</b> ${esc(p.mean)}</p><p><b>Cómo se saca.</b> ${esc(p.how)}</p></div>`:""}</li>`).join("");
+  $("tParts").querySelectorAll("button").forEach(b=>b.onclick=()=>{ tSel=b.dataset.k; tRender(); const q=tModelCache.parts.find(p=>p.key===tSel); if(q&&!tReto) tSay(q.mean); });
+  tModelCache=M; tCheckReto(); }
+let tModelCache=null;
+function tFlip(){ if(TS.c==="elip"){ const a=TS.a; TS.a=TS.b; TS.b=a; } else if(TS.c==="hip") TS.hz=!TS.hz;
+  else if(TS.c==="para"){ const o=["arriba","derecha","abajo","izquierda"]; TS.dir=o[(o.indexOf(TS.dir)+1)%4]; } tTarget=null; tRender(); }
+// Leer una ecuación escrita por el estudiante y poner el taller en esa cónica
+function tTry(){ const msg=$("tMsg"), src=$("tIn").tagName==="MATH-FIELD"?tex2plain($("tIn").value):$("tIn").value; msg.className="tmsg";
+  if(!src.trim()){ msg.textContent="Escribe una ecuación, por ejemplo (x − 1)²/9 + (y + 2)²/4 = 1."; return; }
+  let e; try{ e=compileEq(src); }catch(err){ msg.classList.add("bad"); msg.textContent=err.message; return; }
+  const s=classify(e.F), note=canonicalProblem(e)||formProblem(e);
+  const map={"circunferencia":"circ","elipse":"elip","parábola":"para","hipérbola":"hip"};
+  if(!map[s.type]){ msg.classList.add("bad"); msg.textContent=diagnose(s,{type:"x"})||"Esa ecuación no es una de las cuatro cónicas del taller."; return; }
+  let st={c:map[s.type],h:s.h,k:s.k};
+  if(s.type==="circunferencia") st.r=s.r;
+  if(s.type==="elipse"){ st.a=s.a; st.b=s.b; }
+  if(s.type==="hipérbola"){ st.hz=s.horiz; st.a=s.horiz?s.a:s.b; st.b=s.horiz?s.b:s.a; }
+  if(s.type==="parábola"){ const p=1/(4*s.p); st.p=Math.abs(p); st.dir=s.vert?(p>0?"arriba":"abajo"):(p>0?"derecha":"izquierda"); }
+  for(const key in st) if(typeof st[key]==="number") st[key]=Math.round(st[key]*1e6)/1e6;
+  tSetConic(st.c,st);
+  msg.textContent=`Es ${ART[s.type]}. `+(note?`Todavía no está en forma canónica. ${note} Arriba ves cómo queda y abajo sus partes.`:"Abajo ves sus partes.");
+  if(note) msg.classList.add("warn"); }
+/* ---- Dibujo del taller ---- */
+const tCv=$("tCanvas"), tX=tCv.getContext("2d"); let tW=0,tH=0,tD=1;
+function tSize(){ const r=tCv.getBoundingClientRect(); tD=Math.min(window.devicePixelRatio||1,2); tW=r.width; tH=r.height; tCv.width=Math.round(tW*tD); tCv.height=Math.round(tH*tD); }
+function tGoal(M){ const [x0,y0,x1,y1]=M.box, w=Math.max(x1-x0,4), hh=Math.max(y1-y0,4), asp=tH/tW||0.75;
+  const span=Math.max(w,hh/asp)*1.3+2; return {cx:(x0+x1)/2,cy:(y0+y1)/2,span}; }
+function tFits(V,G){ return Math.abs(G.cx-V.cx)+G.span/2<=V.span/2*1.02&&Math.abs(G.cy-V.cy)+G.span*(tH/tW)/2<=V.span*(tH/tW)/2*1.02&&G.span>V.span*0.45; }
+function tDraw(now){ if(!tOpen){ tRAF=0; return; } tRAF=requestAnimationFrame(tDraw); tPaintApolonio(now); const M=tModelCache; if(!M||!tW) return;
+  const G=tGoal(M); if(!tTarget||!tFits(tTarget,G)) tTarget=G; if(!tView) tView={...tTarget};
+  const f=reduceMotion?1:0.18; tView.cx+=(tTarget.cx-tView.cx)*f; tView.cy+=(tTarget.cy-tView.cy)*f; tView.span+=(tTarget.span-tView.span)*f;
+  const s=tW/tView.span, S=(x,y)=>[(x-tView.cx)*s+tW/2,tH/2-(y-tView.cy)*s], x=tX, t=now/1000;
+  const C={paper:css("--paper"),grid:css("--grid"),gs:css("--grid-strong"),ink:css("--ink"),muted:css("--muted"),curve:css("--curve"),part:css("--part"),acc:css("--accent")};
+  x.setTransform(tD,0,0,tD,0,0); x.fillStyle=C.paper; x.fillRect(0,0,tW,tH);
+  const X0=tView.cx-tView.span/2, X1=tView.cx+tView.span/2, hy=tView.span*tH/tW/2, Y0=tView.cy-hy, Y1=tView.cy+hy, stp=tView.span>30?5:tView.span>16?2:1;
+  x.lineWidth=1; for(let g=Math.ceil(X0/stp)*stp; g<=X1; g+=stp){ const [a]=S(g,0); x.strokeStyle=C.grid; x.beginPath(); x.moveTo(a+.5,0); x.lineTo(a+.5,tH); x.stroke(); }
+  for(let g=Math.ceil(Y0/stp)*stp; g<=Y1; g+=stp){ const [,b]=S(0,g); x.strokeStyle=C.grid; x.beginPath(); x.moveTo(0,b+.5); x.lineTo(tW,b+.5); x.stroke(); }
+  const [ox,oy]=S(0,0); x.strokeStyle=C.gs; x.lineWidth=1.5; x.beginPath(); x.moveTo(0,oy); x.lineTo(tW,oy); x.moveTo(ox,0); x.lineTo(ox,tH); x.stroke();
+  x.fillStyle=C.muted; x.font="10.5px "+css("--f-mono"); x.textAlign="center"; x.textBaseline="top";
+  for(let g=Math.ceil(X0/(stp*2))*stp*2; g<=X1; g+=stp*2){ if(!g) continue; const [a]=S(g,0); x.fillText(String(g).replace("-","−"),a,Math.min(Math.max(oy+3,2),tH-13)); }
+  x.textAlign="right"; x.textBaseline="middle"; for(let g=Math.ceil(Y0/(stp*2))*stp*2; g<=Y1; g+=stp*2){ if(!g) continue; const [,b]=S(0,g); x.fillText(String(g).replace("-","−"),Math.min(Math.max(ox-4,22),tW-3),b); }
+  // partes: la elegida resaltada; las demás tenues
+  const lbl=(txt,a,b,col)=>{ x.font="700 11.5px "+css("--f-body"); x.textAlign="left"; x.textBaseline="middle"; const w=x.measureText(txt).width, lx=Math.max(3,Math.min(tW-w-5,a+8)), ly=Math.max(9,Math.min(tH-9,b-12));
+    x.fillStyle=C.paper; x.globalAlpha=0.85; x.fillRect(lx-3,ly-8,w+6,16); x.globalAlpha=1; x.fillStyle=col; x.fillText(txt,lx,ly); };
+  const drawP=(d,col,strong)=>{ x.strokeStyle=col; x.fillStyle=col; x.lineWidth=strong?(d.thin?2:3):1.5; x.globalAlpha=strong?1:0.45;
+    if(d.r==="rect"){ const a=S(...d.a), b=S(...d.b); x.setLineDash([5,5]); x.strokeRect(Math.min(a[0],b[0]),Math.min(a[1],b[1]),Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1])); x.setLineDash([]); }
+    else if(d.r==="linea"||d.r==="asintota"){ let A,B; if(d.r==="linea") [A,B]=d.y!=null?[[X0,d.y],[X1,d.y]]:[[d.x,Y0],[d.x,Y1]]; else { A=[X0,d.at[1]+d.m*(X0-d.at[0])]; B=[X1,d.at[1]+d.m*(X1-d.at[0])]; }
+      const a=S(...A), b=S(...B); x.setLineDash(d.thin?[3,5]:[8,6]); x.beginPath(); x.moveTo(...a); x.lineTo(...b); x.stroke(); x.setLineDash([]); }
+    else if(d.r==="seg"){ const a=S(...d.a), b=S(...d.b); x.beginPath(); x.moveTo(...a); x.lineTo(...b); x.stroke();
+      const tip=(p,q)=>{ const an=Math.atan2(q[1]-p[1],q[0]-p[0]); x.beginPath(); x.moveTo(...q); x.lineTo(q[0]-8*Math.cos(an-0.45),q[1]-8*Math.sin(an-0.45)); x.lineTo(q[0]-8*Math.cos(an+0.45),q[1]-8*Math.sin(an+0.45)); x.closePath(); x.fill(); };
+      if(Math.hypot(b[0]-a[0],b[1]-a[1])>10){ tip(a,b); if(d.both) tip(b,a); } if(strong&&d.txt) lbl(d.txt,(a[0]+b[0])/2,(a[1]+b[1])/2,col); }
+    else { const p=S(...d.at); x.beginPath(); if(d.r==="foco"){ for(let k=0;k<8;k++){ const r=k%2?2.5:6.5, an=k*Math.PI/4; x.lineTo(p[0]+r*Math.cos(an),p[1]+r*Math.sin(an)); } x.closePath(); } else x.arc(p[0],p[1],strong?5:4,0,7); x.fill();
+      if(d.tag) lbl(strong?d.tag+" "+tP(...d.at):d.tag,p[0],p[1],col); }
+    x.globalAlpha=1; };
+  M.parts.forEach(p=>{ if(p.key!==tSel) p.draw.forEach(d=>drawP(d,C.part,false)); });
+  // la curva
+  x.strokeStyle=C.curve; x.lineWidth=3.5; x.lineJoin="round"; x.lineCap="round";
+  M.curve.forEach(br=>{ x.beginPath(); br.forEach((q,i)=>{ const p=S(...q); i?x.lineTo(...p):x.moveTo(...p); }); x.stroke(); });
+  const sel=M.parts.find(p=>p.key===tSel); if(sel) sel.draw.forEach(d=>drawP(d,C.acc,true));
+  // Coni pasea por la curva (en la primera rama)
+  const br=M.curve[0].filter(q=>q[0]>=X0&&q[0]<=X1&&q[1]>=Y0&&q[1]<=Y1); if(br.length>2){
+    const closed=TS.c==="circ"||TS.c==="elip", n=br.length-1; if(!reduceMotion) tWalk+=0.05;
+    let u=(tWalk%(closed?n:2*n)); if(!closed&&u>n) u=2*n-u; const i=Math.min(n-1,Math.floor(u)), fr=u-i, q=[br[i][0]+(br[i+1][0]-br[i][0])*fr,br[i][1]+(br[i+1][1]-br[i][1])*fr];
+    const p=S(...q); x.save(); x.translate(Math.round(p[0]),Math.round(p[1])); x.scale(2.4,2.4); miniConi(x,0,1,Math.sin(t*1.3)>0.97,false); x.restore(); } }
+function openTaller(){ if(SESSION&&!evEnded()) return; tOpen=true; $("taller").hidden=false; document.body.style.overflow="hidden"; tSize(); tRender(); tView=null; tTarget=null; if(!tReto) tSay(TALK[TS.c]); if(!tRAF) tRAF=requestAnimationFrame(tDraw); $("tClose").focus({preventScroll:true}); }
+function closeTaller(){ tOpen=false; $("taller").hidden=true; document.body.style.overflow=""; if(tAfter){ const f=tAfter; tAfter=null; f(); } }
+let tAfter=null;
+(function(){ const box=$("tInBox"); let el;
+  if(ML){ el=new MathfieldElement(); try{ el.smartFence=false; el.smartSuperscript=true; el.menuItems=[]; el.popoverPolicy="off"; }catch(e){} el.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); tTry(); } }); }
+  else { el=document.createElement("input"); el.placeholder="por ejemplo: (x-1)^2/9 + (y+2)^2/4 = 1"; el.spellcheck=false; el.setAttribute("autocapitalize","off"); el.setAttribute("autocorrect","off"); el.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); tTry(); } }); }
+  el.id="tIn"; el.className="tin"; el.setAttribute("aria-label","Ecuación para probar en el taller"); box.appendChild(el); })();
+document.querySelectorAll("#tTabs button").forEach(b=>b.onclick=()=>{ if(b.dataset.c!==TS.c) tSetConic(b.dataset.c); });
+$("tFlip").onclick=tFlip; $("tReto").onclick=tNewReto; $("tTry").onclick=tTry; $("tClose").onclick=closeTaller; $("tallerBtn").onclick=openTaller;
+window.addEventListener("resize",()=>{ if(tOpen){ tSize(); tTarget=null; } });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&tOpen) closeTaller(); });
+/* ---- El maestro Apolonio: el viejo Trazador que enseña a Coni y al navegante ---- */
+function miniApolonio(x,X,Y,blink,talk){ const r=(a,b,w,h,c)=>{ x.fillStyle=c; x.fillRect(X+a,Y+b,w,h); }, ink="#1b2735", wh="#f4f4f4", tin="#8fa3b0";
+  r(9,-18,1,18,"#7a5a3a"); r(7,-19,3,1,"#7a5a3a"); r(7,-11,2,2,tin); // bastón y mano
+  r(-4,-2,3,2,ink); r(1,-2,3,2,ink); r(-7,-13,14,11,ink); r(-6,-12,12,10,"#6b4f8a"); r(-6,-4,12,1,"#4c3766"); // túnica
+  r(-6,-23,12,10,ink); r(-5,-22,10,8,tin); r(-4,-21,8,4,ink); // cabeza de Trazador con pantalla
+  r(-4,-22,3,1,wh); r(1,-22,3,1,wh); r(-3,blink?-19:-20,2,1,"#fff"); r(1,blink?-19:-20,2,1,"#fff"); // cejas y ojos
+  r(-5,-17,10,2,wh); r(-4,-15,8,3,wh); r(-3,-12,6,2,wh); r(-2,-10,4,2,wh); r(-1,-8,2,1,wh); // barba larga
+  if(talk) r(-1,-16,2,1,ink);
+  r(0,-26,1,3,ink); r(1,-27,2,1,ink); r(2,-29,2,2,"#d6a63a"); }
+const TALK={circ:"La circunferencia es la más sencilla, Coni: un centro y un radio. Toca cada parte de la lista y te cuento qué es.",
+  elip:"La elipse es una circunferencia estirada. Fíjate en qué denominador es mayor: ese te dice si es horizontal o vertical.",
+  para:"La parábola tiene un foco y una directriz. Cada punto de la curva está a la misma distancia de los dos.",
+  hip:"La hipérbola tiene dos ramas y dos asíntotas. Mira el signo: el término positivo te dice hacia dónde abre."};
+const RETOS={circ:[["Pon el centro en (2, −1).",S=>S.h===2&&S.k===-1,"¡Bien! Fíjate en la ecuación: el centro (2, −1) da (x − 2)² y (y + 1)²."],
+    ["Haz que la circunferencia pase por el origen.",S=>Math.abs(S.h*S.h+S.k*S.k-S.r*S.r)<1e-9,"¡Eso es! Si pasa por (0, 0), el radio es la distancia del centro al origen: r² = h² + k²."],
+    ["Haz que toque el eje x en un solo punto.",S=>Math.abs(Math.abs(S.k)-S.r)<1e-9,"¡Muy bien! Es tangente al eje x cuando el radio es igual a |k|."]],
+  elip:[["Haz a = b. ¿Qué curva queda?",S=>Math.abs(S.a-S.b)<1e-9,"¡Exacto! Con a = b es una circunferencia: c = 0 y los dos focos se juntan en el centro."],
+    ["Pon el eje mayor vertical.",S=>S.b>S.a,"¡Bien! Ahora el denominador mayor está bajo y, y los focos subieron al eje vertical."],
+    ["Con centro en el origen, pon los focos en (±3, 0).",S=>S.h===0&&S.k===0&&S.a>S.b&&Math.abs(S.a*S.a-S.b*S.b-9)<1e-9,"¡Lo lograste! c² = a² − b² = 9. Por ejemplo, a = 5 y b = 4."]],
+  para:[["Con vértice en el origen, pon el foco en (0, 2).",S=>S.h===0&&S.k===0&&S.dir==="arriba"&&S.p===2,"¡Bien! p = 2, así que 4p = 8 y queda x² = 8y."],
+    ["Haz que la directriz sea x = 3 y que abra a la izquierda desde el origen.",S=>S.h===0&&S.k===0&&S.dir==="izquierda"&&S.p===3,"¡Eso es! La directriz está a p = 3 del vértice, del lado contrario al foco: y² = −12x."],
+    ["Haz que el lado recto mida 8.",S=>S.p===2,"¡Muy bien! El lado recto mide |4p|, así que p = 2."]],
+  hip:[["Haz que las asíntotas sean perpendiculares.",S=>Math.abs(S.a-S.b)<1e-9,"¡Exacto! Con a = b las pendientes son ±1: es una hipérbola equilátera."],
+    ["Haz que abra arriba y abajo, con vértices en (0, ±2).",S=>!S.hz&&S.h===0&&S.k===0&&S.a===2,"¡Bien! El término positivo ahora es el de y, y a = 2."],
+    ["Con centro en el origen, pon los focos en (±5, 0).",S=>S.hz&&S.h===0&&S.k===0&&Math.abs(S.a*S.a+S.b*S.b-25)<1e-9,"¡Lo lograste! En la hipérbola c² = a² + b² = 25. Por ejemplo, a = 3 y b = 4."]]};
+let tReto=null, tTalkT=0;
+function tSay(txt){ $("tSay").textContent=txt; tTalkT=performance.now(); }
+function tNewReto(){ const L=RETOS[TS.c], done=store.get("euclidia2-retos",{}), left=L.filter(r=>!done[r[0]]), pool=left.length?left:L;
+  tReto=pool[Math.floor(Math.random()*pool.length)]; tSay("Reto: "+tReto[0]); }
+function tCheckReto(){ if(!tReto||!tReto[1](TS)) return; const done=store.get("euclidia2-retos",{}); done[tReto[0]]=true; store.set("euclidia2-retos",done);
+  tSay(tReto[2]); tReto=null; sfx("coin"); }
+function tPaintApolonio(now){ const cv=$("tApo"); if(!cv) return; const x=cv.getContext("2d"); x.clearRect(0,0,cv.width,cv.height);
+  const talk=now-tTalkT<1800&&Math.floor(now/160)%2===0, blink=(now/1000%3.6)<0.14; miniApolonio(x,16,cv.height-1,blink,talk); }
+if(wantTaller){ tAfter=beginGame; openTaller(); }
 markSeen();
 requestAnimationFrame(frame);
-window.__euclidia={LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
+window.__euclidia={taller:{model:tModel,general:tGeneral,state:()=>TS,set:(st)=>tSetConic(st.c,{...st}),open:openTaller,close:closeTaller,retos:RETOS,flip:tFlip},LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
     if(ivs[i]) ivs[i]=(list||[]).map(I=>({v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):"",loC:true,hiC:true})); }); renderModes(); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
   state:()=>({g2,prog,player,idx}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),
