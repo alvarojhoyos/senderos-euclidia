@@ -52,18 +52,21 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 
 ## Qué hay en la etapa 5 (evaluación como saga, rama `claude/project-thread-h5xgfs`, apilada sobre el #17)
 - Reparto (`sessionFor`): por mundo y dificultad, los valles (cadenas) de esa dificultad se barajan, se ponen uno tras otro y se toma un tramo SEGUIDO de N niveles desde un punto al azar (puede acabar un valle y seguir con el comienzo del otro). Así N niveles de una dificultad salen de 1 o 2 valles. Orden: mundo por mundo (C, E, P, H, I, X), de fácil a difícil. La misma prueba y el mismo documento dan siempre lo mismo. Ojo: cambió qué niveles le tocan a cada documento respecto a antes (no importa porque aún no se ha publicado).
-- Bloque de la saga justo después de `sessionFor`: `sagaOf(order)` (capítulos = niveles seguidos del mismo valle), `sagaPos(id)`, `sagaBridge` (frase puente entre valles), `showSagaIntro` (prólogo), `sagaWin` (aviso al ganar), `sagaEnd` (epílogo en «Prueba terminada»).
-- Flujo del estudiante: aviso antes de empezar («una saga de N niveles por V valles»); «Empezar el quiz» → prólogo en el modal `#lore` («La saga de hoy», nombre de la prueba o «La travesía de Coni», ruta `#loreRoute` con los valles) → «¡En marcha!» → historia del tramo 1. Cada historia dice «Tramo k de N · valle» y, al entrar a un valle nuevo, empieza con el puente («Coni deja atrás… y sigue hacia…» o «Coni ya cruzó… Ahora entra en el mundo de…»). Al ganar: «Tramo k de N de la saga» y qué valle sigue; botón «Seguir la saga». En el último: si falta algo lo dice; si no, «¡Coni recorrió toda la saga!». Epílogo con tramos y valles liberados.
-- Barra de niveles en la evaluación: agrupada por «Dificultad · valle».
-- Panel del profesor: debajo del resumen, `#evSagaBox` con un ejemplo de la ruta de un estudiante (cambia con la tabla y los largos).
+- Cambio pedido por Alvaro (2026-11-27 13:18 Bogotá): en la evaluación cada nivel se entiende solo; las referencias a niveles o lugares anteriores pueden quedar en el modo aventura, no en la prueba. Por eso la saga NO usa los nombres de los valles (en las cadenas viejas el nombre del valle no coincide con los escenarios: «El Lago Redondo» tiene Luna, volcán y ciudad): cada tramo se presenta con la región de su escenario (`SCENE_OF` → `REGIONS`).
+- Bloque de la saga justo después de `sessionFor`: `sagaOf(order)` (agrupa por mundo), `sagaPos(id)` (k, n, región, tramo anterior), `sagaBridge(P,L)` (puente solo al cambiar de mundo o de región, con `SAGA_REG`/`SAGA_WORLD`), `showSagaIntro` (prólogo), `sagaWin`, `sagaEnd` (epílogo).
+- Flujo del estudiante: aviso («una saga de N niveles por W mundos»); «Empezar el quiz» → prólogo en `#lore` («La saga de hoy», ruta `#loreRoute` por mundos con tramos y dificultades) → «¡En marcha!» → historia del tramo 1. Cada historia: «Tramo k de N · región»; si cambia de mundo, «Coni entra en el mundo de las elipses, por el hielo del glaciar.»; si cambia de región, «Coni deja atrás… y sigue hacia…». Al ganar: «Tramo k de N de la saga» y el mundo que sigue; botón «Seguir la saga». Epílogo con tramos superados.
+- Barra de niveles en la evaluación: por dificultad (como antes).
+- Panel del profesor: `#evSagaBox`, ejemplo de ruta por mundos con los títulos de los niveles.
+- Textos corregidos en `LORE` (valen para los dos modos): C2 (ya no dice «laguna vecina»), C8 (ya no «volver del observatorio»), C13 (ya no nombra el Barrio de las Fuentes), H16 (ya no «las dos últimas torres»). `saga.test.js` revisa que ninguna historia nombre otro valle ni dependa del nivel anterior.
 - `hideLore` llama a `loreThen` (si hay); `showLore` lo borra, así un nivel normal no hereda el prólogo.
-- Pruebas: `pruebas/saga.test.js` (29; celular iPhone SE y laptop). Se ajustó `evaluacion.test.js` (filas de la barra = «Dificultad · valle»).
+- Pruebas: `pruebas/saga.test.js` (30; celular iPhone SE y laptop).
 
 ### Decisiones tomadas de noche (para que Alvaro las revise)
-- Sin lecciones de Apolonio en la evaluación (sigue como antes): la prueba evalúa, no enseña. Apolonio solo «marca la ruta» en el prólogo.
-- El tramo puede empezar a mitad de un valle (para que estudiantes vecinos no tengan lo mismo); con 1 nivel medio de circunferencias salen 8 opciones distintas. Si prefiere que siempre empiece al comienzo del valle, es un cambio de una línea (`s0`) pero baja la variedad.
-- La corta y la media dan 1 nivel por valle (son un nivel por mundo y dificultad), así que la saga es una ruta de valles distintos unidos por puentes. Con 2 o más de la misma dificultad (larga o tabla a mano) ya salen niveles seguidos del mismo valle.
-- Las historias de cada nivel no se reescribieron; si un tramo empieza a mitad de valle, su texto puede decir «la laguna vecina» sin haber visto la anterior.
+- Sin lecciones de Apolonio en la evaluación: la prueba evalúa, no enseña. Apolonio solo «marca la ruta» en el prólogo.
+- Reparto: por mundo y dificultad, tramo seguido de las cadenas desde un punto al azar (variedad: 8 opciones con 1 nivel medio de circunferencias). Como cada nivel ya se entiende solo, empezar a mitad de valle no afecta la historia (Alvaro preguntó, 2026-11-27).
+
+### Pendiente para el modo aventura (no se tocó)
+- En las 15 cadenas de los 56 niveles viejos, el nombre del valle no describe sus escenarios (p. ej. «El Lago Redondo» = lago, órbita de la Luna, volcán y una fuente de la ciudad; «El Río de Costado» incluye un volcán). Arreglarlo sería renombrar esos valles (afecta `LECCIONES`, que usa el nombre como clave, el doc del banco y las pruebas) o reescribir escenarios. Proponérselo a Alvaro.
 
 ## Para la etapa 6 (cierre)
 - Probar en celular todo el recorrido (historia → menú → aventura → Taller → panel → prueba como saga) y en laptop.

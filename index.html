@@ -616,7 +616,7 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
       <p class="small" id="evLenTxt"></p>
       <details id="evMore">
         <summary>Elegir los niveles a mano</summary>
-        <p class="small">Cuántos niveles de cada dificultad entran por mundo. A cada estudiante le tocan esas cantidades en niveles seguidos de un mismo valle (para que sea una sola historia), elegidos al azar y ordenados de fácil a difícil.</p>
+        <p class="small">Cuántos niveles de cada dificultad entran por mundo. A cada estudiante le tocan esas cantidades en niveles seguidos de un mismo valle, elegidos al azar y ordenados de fácil a difícil.</p>
         <table class="evt" aria-label="Niveles por mundo y dificultad"><thead><tr><th></th><th>Fácil</th><th>Medio</th><th>Difícil</th></tr></thead><tbody id="evQ"></tbody></table>
         <p class="small" id="evMax"></p>
         <div class="row"><button class="btn ghost" type="button" data-p="0" id="evZero">Vaciar la tabla</button></div>
@@ -624,7 +624,7 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
       <label for="evMin">Tiempo en minutos (0 = sin límite)</label><input id="evMin" inputmode="numeric" value="40">
       <label for="evName">Nombre de la prueba (opcional, sale en tu hoja)</label><input id="evName" maxlength="60" placeholder="por ejemplo: Quiz de cónicas, grupo 2">
       <p class="small" id="evSum"></p>
-      <div id="evSagaBox" hidden><p class="small"><b>La prueba es una saga:</b> cada estudiante recorre una sola historia de Coni, con niveles seguidos de los mismos valles. Ejemplo de la ruta de un estudiante (a cada uno le tocan valles o tramos distintos):</p><ol class="evsaga" id="evSaga"></ol></div>
+      <div id="evSagaBox" hidden><p class="small"><b>La prueba es una saga:</b> cada estudiante recorre sus niveles como una sola travesía de Coni, mundo por mundo y de fácil a difícil, con un prólogo y un final. Cada nivel se entiende solo, sin depender de los anteriores. Ejemplo de la ruta de un estudiante (a cada uno le tocan niveles distintos):</p><ol class="evsaga" id="evSaga"></ol></div>
       <p class="small">La nota es monedas obtenidas / monedas posibles × 5,0.</p>
     </section>
     <section class="hojabox" aria-labelledby="hojaH">
@@ -1376,18 +1376,18 @@ const LORE={
   t3:"El tercer camino baja y vuelve a subir, o se abre de costado. Con él los Trazadores cruzaban valles, puentes y toboganes.",
   t4:"El último camino del taller tiene dos ramas que nunca se tocan. Con él, Coni podrá subir por desfiladeros y chorros de vapor.",
   C1:"La Niebla cubrió el Lago del Faro y varios Trazadores quedaron perdidos en su orilla. La luz del faro todavía brilla en el centro. Coni sale del muelle y tiene que dar toda la vuelta para encontrarlos.",
-  C2:"En la laguna vecina, la Niebla dejó a unos Trazadores sobre la orilla, sin camino para volver. Coni sale del muelle a buscarlos.",
+  C2:"En una laguna pequeña, la Niebla dejó a unos Trazadores sobre la orilla, sin camino para volver. Coni sale del muelle a buscarlos.",
   C3:"Un remolino gira en medio del lago y arrastró a los Trazadores que intentaban cruzarlo a nado. Coni debe rodear su borde sin caer al agua y volver a la boya. Del remolino solo queda su ecuación en el mapa.",
   C4:"Coni busca la salida del lago por la orilla norte. Abajo está el agua fría, y un mal paso le mojaría los circuitos. En la orilla brillan fragmentos del Gran Mapa.",
   C5:"La Niebla subió hasta el cielo y apagó la estación espacial. Los Trazadores astrónomos flotan perdidos alrededor de la Tierra. Coni sale de la estación para recorrer la órbita.",
   C6:"En la Luna, unos Trazadores cayeron dentro de un cráter y esperan en su borde. Coni sale desde la antena para rodearlo.",
   C7:"La plaza del observatorio quedó a oscuras y los Trazadores astrónomos no encuentran la salida. Nadie recuerda la forma de la plaza: solo queda su ecuación grabada en el mapa.",
-  C8:"Para volver del observatorio hay que cruzar el Puente de la Luna. La Niebla borró una de sus mitades, y Coni debe ir solo por la que queda.",
+  C8:"El Puente de la Luna cruza sobre un cráter muy hondo. La Niebla borró una de sus mitades, y Coni debe ir solo por la que queda.",
   C9:"El volcán despertó con la Niebla. Algunos Trazadores quedaron en el borde de su boca, rodeados de humo. Coni sale desde lo alto para rescatarlos.",
   C10:"Una grieta de lava partió el cráter en dos. Los Trazadores esperan en el borde, y Coni tiene que rodearlo todo sin pisar la lava.",
   C11:"Los Trazadores geólogos estudiaban el cráter cuando llegó la Niebla. El dibujo del cráter se borró, pero su ecuación sigue grabada en una piedra caliente.",
   C12:"Un sendero rodea la montaña, pero de un lado hubo un derrumbe. Coni debe ir solo por el lado que sigue en pie, recogiendo los fragmentos del Gran Mapa.",
-  C13:"En el Barrio de las Fuentes, la Niebla dejó a unos Trazadores sentados en el borde de la fuente grande, sin saber volver. El agua todavía brilla, y Coni sale a rodearla.",
+  C13:"En la plaza grande, la Niebla dejó a unos Trazadores sentados en el borde de la fuente, sin saber volver. El agua todavía brilla, y Coni sale a rodearla.",
   C14:"El viejo molino del barrio dejó de girar cuando llegó la Niebla, y los Trazadores molineros quedaron colgados de su rueda. Coni sale del piso para recorrerla y bajarlos.",
   C15:"En la glorieta del barrio, tres farolas siguen encendidas en medio de la Niebla. Los Trazadores que barrían la glorieta se perdieron entre ellas, y Coni la recorre entera para encontrarlos.",
   C16:"Coni sale del barrio por el arco de piedra de la plaza. Abajo hay una reja vieja, así que debe pasar por encima del arco, recogiendo los fragmentos del Gran Mapa.",
@@ -1438,7 +1438,7 @@ const LORE={
   H13:"En lo alto del desfiladero, unas torres mandaban señales a los Trazadores para que no se perdieran. La primera torre sigue en pie, y Coni sube por su rampa.",
   H14:"En el cañón, el eco rebota entre dos paredes y forma un camino invisible. La Niebla lo apagó, pero los Trazadores dejaron anotado cuánto se estira.",
   H15:"Dos cuerdas tensas cruzan el desfiladero, y los Trazadores las usaban de guía para subir sin caer. El camino se borró, pero las cuerdas siguen ahí.",
-  H16:"Las dos últimas torres guían a los barcos desde lejos: quien escucha sus señales sabe en qué curva está. Coni sigue esa curva para salir del desfiladero.",
+  H16:"Dos torres lejanas guían a los barcos: quien escucha sus señales sabe en qué curva está. Coni sigue esa curva para salir del desfiladero.",
   C17:"Sobre el canal del barrio hay un puente de piedra en forma de arco. La Niebla lo cubrió, y Coni lo cruza recogiendo los fragmentos del Gran Mapa.",
   C18:"En la plaza del barrio, el carrusel se detuvo con la Niebla y unos Trazadores quedaron montados en sus caballitos. Coni lo recorre para bajarlos.",
   C19:"Los Trazadores patinaban en la pista redonda del barrio cuando llegó la Niebla. Ahora no ven la baranda, y Coni sale a guiarlos.",
@@ -2057,7 +2057,7 @@ function renderLevels(){
   const sel=tabs.querySelector('[aria-selected="true"]'); if(sel) tabs.scrollLeft=Math.max(0,sel.offsetLeft-tabs.offsetLeft-(tabs.clientWidth-sel.offsetWidth)/2);
   const chains=document.createElement("div"); chains.className="chains"; const groups=[];
   if(SESSION&&menuWorld!=="Tutorial") SESSION_ORDER.map(id=>LEVELS.findIndex(l=>l.id===id)).filter(i=>i>=0&&wOf(LEVELS[i])===menuWorld&&vis(LEVELS[i])).forEach((i,k)=>{ const L=LEVELS[i], d=L.diff[0].toUpperCase()+L.diff.slice(1);
-    const key=d+"|"+(L.chain||L.title); let g=groups.find(x=>x.key===key); if(!g) groups.push(g={key,name:`${d} · ${L.chain||L.title}`,items:[]}); g.items.push([L,i,k+1]); });
+    let g=groups.find(x=>x.key===d); if(!g) groups.push(g={key:d,name:d,items:[]}); g.items.push([L,i,k+1]); });
   else LEVELS.forEach((L,i)=>{ if(wOf(L)!==menuWorld||!vis(L)) return; const key=L.chain||L.title; let g=groups.find(x=>x.key===key); if(!g) groups.push(g={key,name:L.chain,items:[]}); g.items.push([L,i]); });
   groups.forEach(g=>{ const row=document.createElement("div"); row.className="chain";
     if(g.name){ const n=document.createElement("span"); n.className="cn"; n.textContent=g.name; row.appendChild(n); }
@@ -2179,8 +2179,8 @@ $("form").addEventListener("submit",e=>{ e.preventDefault(); doSubmit(); });
 $("nextBtn").onclick=()=>{ const j=nextIdx(); if(j>=0) openLevel(j); };
 // Panel de historia: al abrir un nivel desde el menú, con "Siguiente nivel" o al empezar el quiz
 function showLore(L){ const t=LORE[L.id]; if(!t) return; const P=SESSION&&!L.tutorial?sagaPos(L.id):null, reg=REGIONS[SCENE_OF[L.id]]||"";
-  $("loreRegion").textContent=P?`Tramo ${P.k} de ${P.n} · ${P.chain}`:reg; $("loreTitle").textContent=L.title;
-  $("loreText").textContent=(P&&P.first&&P.c>0?sagaBridge(P.ch[P.c-1],P.ch[P.c])+" ":"")+t;
+  $("loreRegion").textContent=P?`Tramo ${P.k} de ${P.n}`+(reg?` · ${reg}`:""):reg; $("loreTitle").textContent=L.title;
+  $("loreText").textContent=(P?sagaBridge(P,L):"")+t;
   $("loreRoute").hidden=true; $("loreGo").textContent="Siguiente"; loreThen=null;
   $("lore").hidden=false; $("loreGo").focus({preventScroll:true}); }
 function hideLore(){ $("lore").hidden=true; $("loreRoute").hidden=true; const f=loreThen; loreThen=null; if(f) f(); }
@@ -2324,36 +2324,40 @@ function sessionFor(ev,doc){ const r=rng(hash32(ev.id+"|"+String(doc).trim())), 
       const seq=ch.flatMap(c=>c.ls.map(l=>l.id)), m=Math.min(n,seq.length), s0=Math.floor(r()*(seq.length-m+1));
       ids.push(...seq.slice(s0,s0+m)); }); });
   return ids; }
-// La saga: capítulos = niveles seguidos del mismo valle
-function sagaOf(order){ const ch=[]; (order||[]).forEach((id,i)=>{ const L=LEVELS.find(l=>l.id===id); if(!L) return; const last=ch[ch.length-1];
-    if(last&&last.chain===L.chain) last.ids.push(id); else ch.push({chain:L.chain||L.title,world:L.world,diff:L.diff,ids:[id],from:i}); }); return ch; }
-function sagaPos(id){ const k=SESSION_ORDER.indexOf(id); if(k<0) return null; const ch=sagaOf(SESSION_ORDER), c=ch.findIndex(x=>x.ids.includes(id));
-  return {k:k+1,n:SESSION_ORDER.length,c,ch,chain:ch[c].chain,world:ch[c].world,first:ch[c].ids[0]===id}; }
-const sagaArt=t=>String(t).replace(/^(El|La|Los|Las) /,m=>m.toLowerCase());
+// La saga (Alvaro, 2026-11-27): en la evaluación cada nivel se entiende solo. Los tramos se presentan con su
+// propio lugar (la región de su escenario), no con el nombre del valle, y la ruta se resume por mundos.
+const sagaReg=id=>SCENE_OF[id]||"";
+function sagaOf(order){ const ch=[]; (order||[]).forEach(id=>{ const L=LEVELS.find(l=>l.id===id); if(!L) return; const last=ch[ch.length-1];
+    if(last&&last.world===L.world) last.ids.push(id); else ch.push({world:L.world,ids:[id]}); }); return ch; }
+function sagaPos(id){ const k=SESSION_ORDER.indexOf(id); if(k<0) return null; const L=LEVELS.find(l=>l.id===id), prev=k>0?LEVELS.find(l=>l.id===SESSION_ORDER[k-1]):null;
+  return {k:k+1,n:SESSION_ORDER.length,world:L.world,reg:sagaReg(id),prev}; }
+const SAGA_REG={taller:"el taller",lago:"el lago y el río",luna:"la Luna y el observatorio",volcan:"el volcán",pradera:"la montaña y la pradera",hielo:"el hielo del glaciar",costa:"la costa de los faros",desfiladero:"el desfiladero",geiser:"los campos de géiseres",cueva:"la cueva",ciudad:"la ciudad de Euclidia"};
 const SAGA_WORLD={Circunferencias:"el mundo de las circunferencias",Elipses:"el mundo de las elipses",Parábolas:"el mundo de las parábolas",Hipérbolas:"el mundo de las hipérbolas",Identificar:"los lugares donde hay que reconocer cada curva",Mixtos:"los caminos de varios tramos"};
-// Puente entre un valle y el siguiente (sin dar datos del nivel)
-function sagaBridge(prev,cur){ return prev.world!==cur.world?`Coni ya cruzó ${sagaArt(prev.chain)}. Ahora entra en ${SAGA_WORLD[cur.world]||cur.world}: ${sagaArt(cur.chain)}.`
-  :`Coni deja atrás ${sagaArt(prev.chain)} y sigue hacia ${sagaArt(cur.chain)}.`; }
+// Puente cuando el tramo cambia de lugar (solo nombra regiones; no da datos del nivel)
+function sagaBridge(P,L){ if(!P||!P.prev) return ""; const a=sagaReg(P.prev.id), b=P.reg;
+  if(P.prev.world!==L.world) return `Coni entra en ${SAGA_WORLD[L.world]||L.world}${b&&SAGA_REG[b]?`, por ${SAGA_REG[b]}`:""}. `;
+  return a&&b&&a!==b&&SAGA_REG[a]&&SAGA_REG[b]?`Coni deja atrás ${SAGA_REG[a]} y sigue hacia ${SAGA_REG[b]}. `:""; }
 const sagaDone=id=>prog.best[id]!=null;
-function sagaRouteHTML(ch,cur){ return ch.map((c,i)=>{ const ok=c.ids.every(sagaDone), n=c.ids.length;
-    return `<li class="${ok?"ok":""}${i===cur?" cur":""}"><b>${esc(c.chain)}</b><span>${esc(c.world)} · ${esc(c.diff)} · ${n} ${n===1?"tramo":"tramos"}${ok?" · ✓":""}</span></li>`; }).join(""); }
+const sagaDiffs=c=>{ const d=[...new Set(c.ids.map(id=>LEVELS.find(l=>l.id===id).diff))]; return d.length>1?`de ${d[0]} a ${d[d.length-1]}`:d[0]; };
+function sagaRouteHTML(ch){ return ch.map(c=>{ const ok=c.ids.every(sagaDone), n=c.ids.length;
+    return `<li class="${ok?"ok":""}"><b>${esc(c.world)}</b><span>${n} ${n===1?"tramo":"tramos"} · ${esc(sagaDiffs(c))}${ok?" · ✓":""}</span></li>`; }).join(""); }
 // Prólogo al pulsar «Empezar el quiz»: la ruta completa de la saga
 let loreThen=null;
 function showSagaIntro(then){ const ch=sagaOf(SESSION_ORDER); if(!ch.length){ if(then) then(); return; }
-  const n=SESSION_ORDER.length, nv=ch.length;
+  const n=SESSION_ORDER.length, nw=ch.length;
   $("loreRegion").textContent="La saga de hoy"; $("loreTitle").textContent=EV&&EV.name?EV.name:"La travesía de Coni";
-  $("loreText").textContent=`La Niebla volvió a cubrir ${nv===1?"un valle":nv+" valles"} de Euclidia y hay Trazadores atrapados. El maestro Apolonio marcó la ruta: Coni la recorrerá de principio a fin, ${n===1?"en un solo tramo":`en ${n} tramos seguidos`}. En cada tramo escribes la ecuación del camino.`+(EV&&EV.min?` Tienes ${EV.min} minutos.`:"");
-  const r=$("loreRoute"); r.innerHTML=sagaRouteHTML(ch,-1); r.hidden=false; $("loreGo").textContent="¡En marcha!";
+  $("loreText").textContent=`La Niebla volvió a cubrir Euclidia y hay Trazadores atrapados en ${nw===1?"un mundo":nw+" mundos"}. El maestro Apolonio marcó la ruta: Coni la recorrerá de principio a fin, ${n===1?"en un solo tramo":`en ${n} tramos seguidos`}. En cada tramo escribes la ecuación del camino.`+(EV&&EV.min?` Tienes ${EV.min} minutos.`:"");
+  const r=$("loreRoute"); r.innerHTML=sagaRouteHTML(ch); r.hidden=false; $("loreGo").textContent="¡En marcha!";
   loreThen=then||null; $("lore").hidden=false; $("loreGo").focus({preventScroll:true}); }
 // Al ganar un nivel de la saga: qué sigue
 function sagaWin(L){ const b=$("nextBtn"); b.textContent="Siguiente nivel"; if(!SESSION||L.tutorial||!SESSION.has(L.id)) return; const P=sagaPos(L.id); if(!P) return;
   b.textContent="Seguir la saga"; const j=nextIdx(), left=SESSION_ORDER.filter(id=>!sagaDone(id)).length;
   if(j<0) $("winText").textContent+=left?` Era el último tramo de la ruta, pero aún ${left===1?"falta 1 tramo":`faltan ${left} tramos`} por superar: búscalos en la barra de niveles.`:" ¡Coni recorrió toda la saga! Cuando quieras, pulsa «Terminar y enviar mi resultado».";
-  else { const Q=sagaPos(LEVELS[j].id); $("winText").textContent+=` Tramo ${P.k} de ${P.n} de la saga.`+(Q&&Q.c!==P.c?` Lo que sigue: ${sagaArt(Q.chain)} (${Q.world}).`:""); } }
+  else { const nx=LEVELS[j]; $("winText").textContent+=` Tramo ${P.k} de ${P.n} de la saga.`+(nx.world!==L.world?` Lo que sigue: ${SAGA_WORLD[nx.world]||nx.world}.`:""); } }
 // Epílogo al terminar la prueba
-function sagaEnd(){ if(!SESSION||!SESSION_ORDER.length) return ""; const ch=sagaOf(SESSION_ORDER), ok=SESSION_ORDER.filter(sagaDone).length, vl=ch.filter(c=>c.ids.every(sagaDone)).length, n=SESSION_ORDER.length;
-  return ok===n?` Coni recorrió los ${n} tramos y la Niebla dejó libres ${ch.length===1?"el valle":`los ${ch.length} valles`} de la ruta.`
-    :ok?` Coni superó ${ok} de ${n} tramos y liberó ${vl===1?"1 valle":vl+" valles"} de ${ch.length}. La Niebla sigue en el resto de la ruta.`:` Coni no alcanzó a superar ningún tramo de la ruta esta vez.`; }
+function sagaEnd(){ if(!SESSION||!SESSION_ORDER.length) return ""; const ok=SESSION_ORDER.filter(sagaDone).length, n=SESSION_ORDER.length;
+  return ok===n?` Coni recorrió los ${n} tramos de la saga y rescató a los Trazadores de toda la ruta.`
+    :ok?` Coni superó ${ok} de ${n} tramos de la saga. La Niebla sigue en el resto de la ruta.`:` Coni no alcanzó a superar ningún tramo de la ruta esta vez.`; }
 function evCount(ev){ return Object.keys(EV_WORLDS).reduce((s,k)=>s+(ev.q[k]?DIFFS.reduce((t,_,d)=>t+Math.min(ev.q[k][d],evPool(k,d).length),0):0),0); }
 let SESSION_ORDER=[];
 function applySession(){ SESSION_ORDER=EV&&role==="estudiante"&&player?sessionFor(EV,player.documento):[]; SESSION=SESSION_ORDER.length?new Set(SESSION_ORDER):null; recount(); }
@@ -2364,8 +2368,8 @@ function evStart(){ if(EV&&SESSION&&!store.get(evKey("start"),0)) store.set(evKe
 // Antes de empezar el estudiante puede hacer el Tutorial: el reloj y los niveles del quiz esperan al botón "Empezar el quiz"
 function gateUI(){ const g=$("evGate"), on=!!SESSION&&!evStarted()&&!evEnded(); g.hidden=!on; if(!on) return;
   const n=SESSION.size, nm=EV.name?`«${EV.name}»`:"Tu quiz";
-  const nv=sagaOf(SESSION_ORDER).length;
-  $("evGateTxt").textContent=`${nm}: una saga de ${n} niveles por ${nv===1?"un valle":nv+" valles"}${EV.min?` en ${EV.min} minutos`:", sin límite de tiempo"}. Si quieres, haz primero el Tutorial. El tiempo empieza cuando pulses el botón y ya no se detiene.`;
+  const nw=sagaOf(SESSION_ORDER).length;
+  $("evGateTxt").textContent=`${nm}: una saga de ${n} niveles por ${nw===1?"un mundo":nw+" mundos"}${EV.min?` en ${EV.min} minutos`:", sin límite de tiempo"}. Si quieres, haz primero el Tutorial. El tiempo empieza cuando pulses el botón y ya no se detiene.`;
   const b=$("evGo"); b.textContent=b.dataset.confirm?"Toca otra vez para empezar":"Empezar el quiz"; }
 $("evGo").onclick=()=>{ const b=$("evGo");
   if(!b.dataset.confirm){ b.dataset.confirm="1"; gateUI(); setTimeout(()=>{ if(b.dataset.confirm){ delete b.dataset.confirm; gateUI(); } },4000); return; }
@@ -2394,7 +2398,7 @@ function evSummary(){ const f=evForm(), n=evCount(f), pk=Object.keys(EV_PRESET).
   $("evLenTxt").textContent=pk?EV_LEN[pk]:n?"Personalizada: la armaste a mano en la tabla.":"";
   $("evSum").textContent=n?`Cada estudiante tendrá ${n} niveles${f.min?` y ${f.min} minutos`:", sin límite de tiempo"}.`:"Elige al menos un nivel.";
   const ex=n?sagaOf(sessionFor({...f,id:"ejemplo"},"1")):[]; $("evSagaBox").hidden=!ex.length;
-  $("evSaga").innerHTML=ex.map(c=>`<li>${esc(c.chain)} <span>(${esc(c.world)}, ${esc(c.diff)}, ${c.ids.length} ${c.ids.length===1?"nivel":"niveles"})</span></li>`).join("");
+  $("evSaga").innerHTML=ex.map(c=>`<li><b>${esc(c.world)}:</b> ${c.ids.map(id=>esc(LEVELS.find(l=>l.id===id).title)).join(" → ")}</li>`).join("");
   const full=[...$("evQ").querySelectorAll("select")].filter(sl=>+sl.value>0&&sl.selectedIndex===sl.options.length-1);
   $("evMax").textContent=full.length?"En las casillas que están al máximo todos los estudiantes reciben los mismos niveles. Si pides menos, los niveles cambian de un estudiante a otro.":"";
   $("evMake").disabled=!n;
