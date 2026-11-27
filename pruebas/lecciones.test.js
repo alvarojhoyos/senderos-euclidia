@@ -56,10 +56,10 @@ const STUDENT=()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage
  res(t.taller&&!t.lec&&t.st.c==='elip'&&t.st.h===2&&t.st.k===-1&&t.back&&t.btn==='Cerrar','«Verlo en el Taller» abre el ejemplo en el Taller y al cerrarlo vuelve a la lección');
  // 5. Repaso en el Gran Mapa: solo las lecciones de los valles abiertos
  await p.evaluate(()=>{ const P=window.__euclidia.state().prog; Object.keys(P.best).forEach(k=>delete P.best[k]); });
- await p.evaluate(()=>window.__euclidia.adv.enter()); await p.waitForTimeout(150);
+ await p.evaluate(()=>window.__euclidia.adv.menu()); await p.click('#mAdv'); await p.waitForTimeout(150);
  const m0=await p.evaluate(()=>document.querySelectorAll('#lecList button').length);
  await p.evaluate(()=>{ document.getElementById('mapClose').click(); const P=window.__euclidia.state().prog; ['t0','t1','t2','t3','t4'].forEach(id=>P.best[id]=1); });
- await p.evaluate(()=>window.__euclidia.adv.enter()); await p.waitForTimeout(150);
+ await p.evaluate(()=>window.__euclidia.adv.menu()); await p.click('#mAdv'); await p.waitForTimeout(150);
  const m1=await p.evaluate(()=>[...document.querySelectorAll('#lecList button')].map(b=>b.textContent));
  res(m0===0&&m1.length===4,`El Gran Mapa lista las lecciones de los valles abiertos (sin tutorial: ${m0}; con tutorial: ${m1.length})`);
  await p.click('#lecList button'); res(!(await hid(p,'leccion'))&&(await p.textContent('#lecGo'))==='Cerrar','Tocar una lección del mapa la muestra para repasar');
@@ -70,8 +70,9 @@ const STUDENT=()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage
  p=await page('?ev=abcd-C111-0&evn=Quiz',STUDENT);
  const ev=await p.evaluate(()=>{ const U=window.__euclidia; return U.LEVELS.filter(l=>!l.tutorial).some(l=>U.lecciones.need(l)); });
  res(!ev,'En una evaluación no aparece ninguna lección');
- // 7. ?modo=estudio: estudiante nuevo, sin elegir rol ni dar documento, llega al Gran Mapa; «☰ Menú» lleva al menú
+ // 7. ?modo=estudio: estudiante nuevo, sin elegir rol ni dar documento, después de la historia llega al Gran Mapa; «☰ Menú» lleva al menú
  p=await page('?modo=estudio',()=>localStorage.setItem('euclidia2-intro','true'));
+ if(!(await hid(p,'intro'))) await p.click('#introSkip');
  const s0={role:await hid(p,'role'),reg:!(await hid(p,'reg')),doc:await p.evaluate(()=>{ const d=document.getElementById('rDoc'); return !d||d.offsetParent===null||!d.required; })};
  await p.fill('#rName','Luis'); await p.click('#regForm button[type=submit]'); await p.waitForTimeout(150);
  const s1={map:!(await hid(p,'mapa')),menu:await hid(p,'menu'),back:!(await hid(p,'mapMenu'))};
@@ -80,7 +81,7 @@ const STUDENT=()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage
  res(s1.map&&s1.menu&&s1.back&&s2,'Después del registro se abre el Gran Mapa (modo aventura) y de ahí se puede ir al menú');
  // 8. Panel del profesor: enlaces del modo estudio
  p=await page('',()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-role','"profesor"'); });
- await p.click('#backGo'); await p.click('#mapMenu'); await p.click('#mTeach'); await p.waitForTimeout(100);
+ if(!(await hid(p,'intro'))) await p.click('#introSkip'); await p.click('#backGo'); await p.click('#mTeach'); await p.waitForTimeout(100);
  const T=await p.evaluate(()=>[...document.querySelectorAll('#estLinks .url')].map(e=>new URL(e.textContent).searchParams.get('modo')));
  res(T.join()==='estudio,taller,practica','El panel del profesor trae los enlaces del modo estudio: aventura con lecciones, Taller y práctica');
  // 9. Apolonio dice las pistas y las lecciones del tutorial
