@@ -26,12 +26,13 @@ const hid=(p,id)=>p.evaluate(i=>document.getElementById(i).hidden,id);
  const u=await p.evaluate(()=>{ const U=window.__euclidia, P=U.state().prog, op=id=>U.adv.state().open.has(id), r={};
    r.t1=op('t1'); r.c1=op('C1'); ['t0','t1','t2','t3','t4'].forEach(id=>P.best[id]=1);
    r.c1b=op('C1')&&op('E1')&&op('P1')&&op('H1'); r.c2=op('C2'); r.i1=op('I1');
-   P.best.C1=2; r.c2b=op('C2'); r.c5=op('C5'); ['C2','C3','C4'].forEach(id=>P.best[id]=1); r.c5b=op('C5');
-   ['E1','E2','E3','E4','P1','P2','P3','P4','H1','H2','H3','H4'].forEach(id=>P.best[id]=1); r.i1b=op('I1')&&op('X1');
+   // Primer valle de cada cónica: C1 C5 C9 C13 (y así E, P, H); el segundo valle de circunferencias empieza en C18
+   P.best.C1=2; r.c2b=op('C5'); r.c5=op('C18'); ['C5','C9','C13'].forEach(id=>P.best[id]=1); r.c5b=op('C18');
+   ['E1','E5','E9','E13','P1','P5','P9','P13','H1','H5','H9','H13'].forEach(id=>P.best[id]=1); r.i1b=op('I1')&&op('X5');
    r.prof=U.adv.state(true).open.size===U.LEVELS.length; return r; });
  res(!u.t1&&!u.c1,'Sin hacer nada, el segundo paso del tutorial y los mundos están cerrados');
  res(u.c1b&&!u.c2&&!u.i1,'Al terminar el tutorial se abre el primer nivel de cada cónica (no el segundo, ni Identificar)');
- res(u.c2b&&!u.c5,'Superar C1 abre C2, pero el valle siguiente sigue cerrado');
+ res(u.c2b&&!u.c5,'Superar C1 abre el paso 2 de su valle (C5), pero el valle siguiente sigue cerrado');
  res(u.c5b,'Terminar el primer valle de circunferencias abre el segundo');
  res(u.i1b,'Terminar el primer valle de las cuatro cónicas abre Identificar y Mixtos');
  res(u.prof,'Sin candados (profesor o evaluación): todos los niveles abiertos');
