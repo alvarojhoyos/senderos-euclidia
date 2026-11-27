@@ -1,9 +1,9 @@
-PASA  | Los 61 niveles tienen historia y región
+PASA  | Los 77 niveles tienen historia y región
 PASA  | Ninguna historia trae números ni ecuaciones (los datos para resolver van en el panel del nivel)
 PASA  | Todas las historias son cortas (70 palabras o menos)
 PASA  | Coni es «ella» en todas las historias
-PASA  | Cada Escape tiene un objeto del lugar (Perla, Polvo de estrella, Semilla dorada, Concha, Cristal de hielo, Gema de lava, Piedra rojiza, Cristal de cueva, Gota de vapor, Moneda de Euclidia)
-PASA  | En los 19 Rescates cada moneda es un Trazador perdido
+PASA  | Cada Escape tiene un objeto del lugar (Perla, Polvo de estrella, Semilla dorada, Moneda de Euclidia, Concha, Cristal de hielo, Gema de lava, Piedra rojiza, Cristal de cueva, Gota de vapor)
+PASA  | En los 25 Rescates cada moneda es un Trazador perdido
 PASA  | En la lista del nivel aparecen como «Trazador perdido (0, 4)»
 PASA  | Al cargar el juego no se abre el panel de historia
 PASA  | Al tocar un nivel en el menú se abre su historia (región, título y texto) y el botón «Siguiente» queda listo

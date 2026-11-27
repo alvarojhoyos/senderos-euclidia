@@ -1,0 +1,63 @@
+PASA  | C13 La Fuente Redonda | centro [0,0] | centro (0, 0)
+PASA  | C13 La Fuente Redonda | área 9 | área 9π
+PASA  | C13 La Fuente Redonda | la historia da todos los números de los datos
+PASA  | C14 La Rueda del Molino | centro [3,-2] | centro (3, -2)
+PASA  | C14 La Rueda del Molino | tangente "x" | r = 2, distancia al eje x = 2
+PASA  | C14 La Rueda del Molino | la historia da todos los números de los datos
+PASA  | C15 Las Tres Farolas | pasa [-1,2] | (-1, 2) sobre la curva
+PASA  | C15 Las Tres Farolas | pasa [5,2] | (5, 2) sobre la curva
+PASA  | C15 Las Tres Farolas | pasa [2,5] | (2, 5) sobre la curva
+PASA  | C15 Las Tres Farolas | la historia da todos los números de los datos
+PASA  | C16 El Arco de la Plaza | centroEje "x" | centro (2, 0)
+PASA  | C16 El Arco de la Plaza | pasa [-2,2] | (-2, 2) sobre la curva
+PASA  | C16 El Arco de la Plaza | pasa [6,2] | (6, 2) sobre la curva
+PASA  | C16 El Arco de la Plaza | la historia da todos los números de los datos
+PASA  | E13 La Órbita del Cometa | centro [0,0] | centro (0, 0)
+PASA  | E13 La Órbita del Cometa | vértice [0,5] | vértices (0, -5) y (0, 5)
+PASA  | E13 La Órbita del Cometa | foco [0,3] | focos (0, -3) y (0, 3)
+PASA  | E13 La Órbita del Cometa | la historia da todos los números de los datos
+PASA  | E14 La Luna Estirada | centro [1,-1] | centro (0.9999999999999993, -1)
+PASA  | E14 La Luna Estirada | ejeMayor 10 | eje mayor 9.999999999999996, horizontal
+PASA  | E14 La Luna Estirada | e 0.6 | e = c/a = 0.6000
+PASA  | E14 La Luna Estirada | la historia da todos los números de los datos
+PASA  | E15 El Satélite Perdido | vértice [-3,-1] | vértices (-3, -1) y (5, -1)
+PASA  | E15 El Satélite Perdido | vértice [5,-1] | vértices (-3, -1) y (5, -1)
+PASA  | E15 El Satélite Perdido | pasa [3,2] | (3, 2) sobre la curva
+PASA  | E15 El Satélite Perdido | la historia da todos los números de los datos
+PASA  | E16 El Jardín de los Dos Faroles | foco [2,-3] | focos (2, -3) y (2, 5)
+PASA  | E16 El Jardín de los Dos Faroles | foco [2,5] | focos (2, -3) y (2, 5)
+PASA  | E16 El Jardín de los Dos Faroles | suma 10 | 2a = 10.000000000000004
+PASA  | E16 El Jardín de los Dos Faroles | la historia da todos los números de los datos
+PASA  | P13 La Antena del Muelle | vértice [0,0] | vértices (0, 0)
+PASA  | P13 La Antena del Muelle | foco [-2,0] | focos (-2, 0)
+PASA  | P13 La Antena del Muelle | la historia da todos los números de los datos
+PASA  | P14 El Puente de los Pescadores | vértice [1,2] | vértices (1, 2)
+PASA  | P14 El Puente de los Pescadores | abre "abajo" | abre hacia abajo
+PASA  | P14 El Puente de los Pescadores | ladoRecto 8 | |4p| = 8
+PASA  | P14 El Puente de los Pescadores | la historia da todos los números de los datos
+PASA  | P15 El Canal Escondido | pasa [0,0] | (0, 0) sobre la curva
+PASA  | P15 El Canal Escondido | pasa [4,0] | (4, 0) sobre la curva
+PASA  | P15 El Canal Escondido | pasa [1,-3] | (1, -3) sobre la curva
+PASA  | P15 El Canal Escondido | la historia da todos los números de los datos
+PASA  | P16 El Rompeolas | vértice [-1,-2] | vértices (-1, -2)
+PASA  | P16 El Rompeolas | directriz 1 | directriz x = 1
+PASA  | P16 El Rompeolas | la historia da todos los números de los datos
+PASA  | H13 La Torre de la Señal | centro [0,0] | centro (0, 0)
+PASA  | H13 La Torre de la Señal | vértice [0,2] | vértices (0, -2) y (0, 2)
+PASA  | H13 La Torre de la Señal | asíntota [0.5,0] | pendientes ±0.5000 por el centro (0, 0)
+PASA  | H13 La Torre de la Señal | la historia da todos los números de los datos
+PASA  | H14 El Eco del Cañón | centro [-1,2] | centro (-0.9999999999999996, 2)
+PASA  | H14 El Eco del Cañón | vértice [2,2] | vértices (-4, 2) y (2, 2)
+PASA  | H14 El Eco del Cañón | e 1.6666666666666667 | e = c/a = 1.6667
+PASA  | H14 El Eco del Cañón | la historia da todos los números de los datos
+PASA  | H15 Las Dos Cuerdas | asíntota [2,-1] | pendientes ±2.0000 por el centro (1, 1)
+PASA  | H15 Las Dos Cuerdas | asíntota [-2,3] | pendientes ±2.0000 por el centro (1, 1)
+PASA  | H15 Las Dos Cuerdas | vértice [1,3] | vértices (1, -1) y (1, 3)
+PASA  | H15 Las Dos Cuerdas | la historia da todos los números de los datos
+PASA  | H16 Las Dos Torres | foco [-2,1] | focos (-2, 1) y (8, 1)
+PASA  | H16 Las Dos Torres | foco [8,1] | focos (-2, 1) y (8, 1)
+PASA  | H16 Las Dos Torres | diferencia 6 | 2a = 6.000000000000003
+PASA  | H16 Las Dos Torres | vértice [0,1] | vértices (0, 1) y (6, 1)
+PASA  | H16 Las Dos Torres | la historia da todos los números de los datos
+
+Total: 61 pasan, 0 fallan.

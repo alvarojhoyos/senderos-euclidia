@@ -47,6 +47,18 @@ PASA  | El Cráter del Volcán | error «no sumó lo mismo al otro lado»: (x-2)
 PASA  | El Anillo de la Montaña (escape) | esperada (x+3)^2+(y-4)^2=25 con x≥-3 | gana, 3 de 3 monedas, 388 pasos | ¡Camino perfecto!
 PASA  | El Anillo de la Montaña | error «signos al completar (radio con la salida)»: (x-3)^2+(y+4)^2=45 con x≥-3 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu centro quedó en (3, −4). Al completar x² + 6x el paréntesis lleva el signo del término en x.
 PASA  | El Anillo de la Montaña | error «solo sumó 9 a la derecha»: (x+3)^2+(y-4)^2=9 con x≥-3 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu radio es demasiado pequeño: completaste dos cuadrados, así que a la de
+PASA  | La Fuente Redonda (rescate) | esperada x^2+y^2=9 | gana, 3 de 3 monedas, 467 pasos | ¡Camino perfecto!
+PASA  | La Fuente Redonda | error «usó el área como radio»: x^2+y^2=81 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu fuente es demasiado grande: el área es πr² = 9π, así que r² = 9, no r 
+PASA  | La Fuente Redonda | error «r en lugar de r²»: x^2+y^2=3 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu fuente es demasiado pequeña: de πr² = 9π sale r² = 9, y en la ecuación
+PASA  | La Rueda del Molino (rescate) | esperada (x-3)^2+(y+2)^2=4 | gana, 3 de 3 monedas, 309 pasos | ¡Camino perfecto!
+PASA  | La Rueda del Molino | error «tomó como radio la distancia al eje y»: (x-3)^2+(y+2)^2=9 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu rueda es demasiado grande: toca el eje x, así que el radio es la dista
+PASA  | La Rueda del Molino | error «signos de h y k cambiados»: (x+3)^2+(y-2)^2=4 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu centro quedó en (−3, 2): dentro de cada paréntesis va el signo contrar
+PASA  | Las Tres Farolas (rescate) | esperada (x-2)^2+(y-2)^2=9 | gana, 3 de 3 monedas, 467 pasos | ¡Camino perfecto!
+PASA  | Las Tres Farolas | error «centro en el promedio de los tres puntos»: (x-2)^2+(y-3)^2=9 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu centro quedó en (2, 3), el promedio de las farolas, pero ese punto no 
+PASA  | Las Tres Farolas | error «r en lugar de r²»: (x-2)^2+(y-2)^2=3 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu glorieta es demasiado pequeña: el centro está a 3 de cada farola, y en
+PASA  | El Arco de la Plaza (escape) | esperada (x-2)^2+y^2=20 con y≥2 | gana, 3 de 3 monedas, 243 pasos | ¡Camino perfecto!
+PASA  | El Arco de la Plaza | error «centro en el punto medio de la salida y la meta»: (x-2)^2+(y-2)^2=16 con y≥2 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu arco sube demasiado: el punto medio de la salida y la meta es (2, 2), pero el centro debe estar sobre el eje x, debaj
+PASA  | El Arco de la Plaza | error «signo de h cambiado»: (x+2)^2+y^2=20 con y≥2 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu centro quedó en (−2, 0): en (x − h)² el signo dentro del paréntesis es
 PASA  | La Pradera Ovalada (rescate) | esperada x^2/25+y^2/9=1 | gana, 2 de 2 monedas, 633 pasos | ¡Camino perfecto!
 PASA  | La Pradera Ovalada | error «a y b sin elevar al cuadrado»: x^2/5+y^2/3=1 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu elipse es demasiado pequeña: abajo van a² y b², no a y b.
 PASA  | La Pradera Ovalada | error «circunferencia en vez de elipse»: x^2+y^2=25 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu ecuación es una circunferencia; la pradera solo sube hasta y = 3, así que es una elipse.
@@ -83,6 +95,18 @@ PASA  | La Puerta del Glaciar | error «denominadores intercambiados al dividir�
 PASA  | El Puente de Hielo (escape) | esperada (x-3)^2/16+(y+1)^2/4=1 con y≥-1 | gana, 3 de 3 monedas, 237 pasos | ¡Camino perfecto!
 PASA  | El Puente de Hielo | error «lado equivocado»: (x-3)^2/16+(y+1)^2/4=1 con y≤-1 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu ecuación es la correcta, pero la restricción deja a Coni abajo.
 PASA  | El Puente de Hielo | error «denominadores intercambiados al dividir»: (x-3)^2/4+(y+1)^2/16=1 con y≥-1 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu elipse quedó parada: al dividir (x − 3)² entre 16 queda (x − 3)²/16.
+PASA  | La Órbita del Cometa (rescate) | esperada x^2/16+y^2/25=1 | gana, 3 de 3 monedas, 704 pasos | ¡Camino perfecto!
+PASA  | La Órbita del Cometa | error «tomó b = c»: x^2/9+y^2/25=1 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu órbita es demasiado angosta: 3 es la distancia c del centro al foco, n
+PASA  | La Órbita del Cometa | error «b² = a² + c² (fórmula de la hipérbola)»: x^2/34+y^2/25=1 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu órbita es demasiado ancha: en la elipse el semieje menor sale de a² − 
+PASA  | La Luna Estirada (rescate) | esperada (x-1)^2/25+(y+1)^2/16=1 | gana, 3 de 3 monedas, 704 pasos | ¡Camino perfecto!
+PASA  | La Luna Estirada | error «tomó b = c»: (x-1)^2/25+(y+1)^2/9=1 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu órbita es demasiado aplanada: con e = c/a = 3/5 sale c = 3, que es la distancia al foco. El semieje menor sale de b² 
+PASA  | La Luna Estirada | error «usó el eje completo como a»: (x-1)^2/100+(y+1)^2/64=1 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu órbita es demasiado grande: el eje mayor mide 10, así que el semieje e
+PASA  | El Satélite Perdido (rescate) | esperada (x-1)^2/16+(y+1)^2/12=1 | gana, 3 de 3 monedas, 582 pasos | ¡Camino perfecto!
+PASA  | El Satélite Perdido | error «tomó b como la altura de la antena»: (x-1)^2/16+(y+1)^2/9=1 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu órbita no pasa por la antena: la antena está 3 arriba del centro, pero
+PASA  | El Satélite Perdido | error «signos de h y k cambiados»: (x+1)^2/16+(y-1)^2/12=1 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu centro quedó en (−1, 1): dentro de cada paréntesis va el signo contrar
+PASA  | El Jardín de los Dos Faroles (escape) | esperada (x-2)^2/9+(y-1)^2/25=1 con x≥2 | gana, 3 de 3 monedas, 314 pasos | ¡Camino perfecto!
+PASA  | El Jardín de los Dos Faroles | error «tomó b = c»: (x-2)^2/16+(y-1)^2/25=1 con x≥2 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu jardín es demasiado ancho: 4 es la distancia c del centro a cada farol, no el semieje horizontal. Usa b² = a² − c².
+PASA  | El Jardín de los Dos Faroles | error «b² = a² + c² (fórmula de la hipérbola)»: (x-2)^2/41+(y-1)^2/25=1 con x≥2 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu jardín es demasiado ancho: en la elipse b² = a² − c², no a² + c².
 PASA  | Tobogán del Origen (escape) | esperada y=x^2/4 | gana, 2 de 2 monedas, 291 pasos | ¡Camino perfecto!
 PASA  | Tobogán del Origen | error «y al cuadrado (abre a la izquierda)»: y^2=-4x | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Pusiste al cuadrado la y y tu parábola abre a la izquierda. Este camino abre hacia arriba.
 PASA  | Tobogán del Origen | error «abre hacia abajo»: y=-x^2/4+8 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu parábola abre hacia abajo. El camino baja hasta el origen, así que a es positivo.
@@ -119,6 +143,18 @@ PASA  | Glaciar Empinado | error «dejó 4x dentro del paréntesis»: y=2(x+2)^2
 PASA  | La Cornisa Helada (escape) | esperada x=-2(y-1)^2+3 | gana, 3 de 3 monedas, 264 pasos | ¡Camino perfecto!
 PASA  | La Cornisa Helada | error «signos al completar»: x=-2(y+1)^2+3 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu vértice quedó en y = −1. Al completar y² − 2y el paréntesis lleva el signo del término en y.
 PASA  | La Cornisa Helada | error «no compensó el factor al completar»: x=-2(y-1)^2+2 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu vértice quedó corrido a la izquierda: al completar dentro de −2(y² − 2
+PASA  | La Antena del Muelle (escape) | esperada y^2=-8x con y≤4 | gana, 3 de 3 monedas, 225 pasos | ¡Camino perfecto!
+PASA  | La Antena del Muelle | error «signo de p»: y^2=8x con y≤4 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu parábola abre hacia la derecha, pero el foco está a la izquierda del v
+PASA  | La Antena del Muelle | error «usó p en vez de 4p»: y^2=-2x con y≤4 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu parábola es demasiado cerrada: en (y − k)² = 4p(x − h) el número es 4p
+PASA  | El Puente de los Pescadores (escape) | esperada (x-1)^2=-8(y-2) con x≥-3 | gana, 3 de 3 monedas, 225 pasos | ¡Camino perfecto!
+PASA  | El Puente de los Pescadores | error «usó el doble del lado recto»: (x-1)^2=-16(y-2) con x≥-3 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu puente es demasiado plano: el lado recto mide |4p|, así que 4p = −8.
+PASA  | El Puente de los Pescadores | error «signo de p»: (x-1)^2=8(y-2) con x≥-3 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu puente abre hacia arriba: si abre hacia abajo, p es negativo y queda 4
+PASA  | El Canal Escondido (escape) | esperada y=(x-2)^2-4 con x≥0 | gana, 3 de 3 monedas, 355 pasos | ¡Camino perfecto!
+PASA  | El Canal Escondido | error «signo de a»: y=-(x-2)^2+4 con x≥0 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu canal sube en vez de bajar: la boya (1, −3) está debajo del eje x, así que la parábola abre hacia arriba y a es posit
+PASA  | El Canal Escondido | error «tomó la altura de la boya como el vértice»: y=(x-2)^2-3 con x≥0 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu canal no pasa por (0, 0): la boya no es el punto más bajo. El vértice 
+PASA  | El Rompeolas (escape) | esperada (y+2)^2=-8(x+1) con y≥-6 | gana, 3 de 3 monedas, 225 pasos | ¡Camino perfecto!
+PASA  | El Rompeolas | error «abre hacia la directriz»: (y+2)^2=8(x+1) con y≥-6 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu rompeolas abre hacia el muro: la parábola abre lejos de la directriz. 
+PASA  | El Rompeolas | error «tomó p como el doble de la distancia vértice–directriz»: (y+2)^2=-16(x+1) con y≥-6 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu rompeolas es demasiado abierto: p es la distancia del vértice a la dir
 PASA  | Rampa del Cometa (escape) | esperada x^2/16-y^2/9=1 | gana, 2 de 2 monedas, 119 pasos | ¡Camino perfecto!
 PASA  | Rampa del Cometa | error «b = a»: x^2/16-y^2/16=1 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Las ramas se abren demasiado: revisa b con la meta.
 PASA  | Rampa del Cometa | error «elipse en vez de hipérbola»: x^2/16+y^2/9=1 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu ecuación es una elipse: en la hipérbola los términos se restan.
@@ -155,6 +191,18 @@ PASA  | Túnel Izquierdo | error «signos al completar»: (x-2)^2/16-(y+3)^2/4=1
 PASA  | El Abismo de la Cueva (escape) | esperada (x+1)^2/16-(y-2)^2/9=1 | gana, 3 de 3 monedas, 119 pasos | ¡Camino perfecto!
 PASA  | El Abismo de la Cueva | error «dividió los dos términos entre 16 (olvidó el factor −16)»: (x+1)^2/16-(y-2)^2/16=1 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Las ramas se abren demasiado: −16(y − 2)² dividido entre 144 da (y − 2)²/9.
 PASA  | El Abismo de la Cueva | error «signos al completar»: (x-1)^2/16-(y+2)^2/9=1 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu centro quedó en (1, −2): al completar x² + 2x el paréntesis lleva el s
+PASA  | La Torre de la Señal (escape) | esperada y^2/4-x^2/16=1 con x≥0 | gana, 2 de 2 monedas, 192 pasos | ¡Camino perfecto!
+PASA  | La Torre de la Señal | error «pendiente = b/a en la hipérbola vertical»: y^2/4-x^2=1 con x≥0 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tus ramas suben muy rápido: en la hipérbola vertical la pendiente de las asíntotas es a/b = 2/b, y debe dar 1/2.
+PASA  | La Torre de la Señal | error «orientación horizontal»: x^2/4-y^2/16=1 con x≥0 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu hipérbola abre a los lados: el vértice está arriba del centro, así que
+PASA  | El Eco del Cañón (escape) | esperada (x+1)^2/9-(y-2)^2/16=1 con y≥2 | gana, 3 de 3 monedas, 139 pasos | ¡Camino perfecto!
+PASA  | El Eco del Cañón | error «usó c como a»: (x+1)^2/25-(y-2)^2/16=1 con y≥2 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu hipérbola no pasa por el vértice: a es la distancia del centro al vért
+PASA  | El Eco del Cañón | error «elipse»: (x+1)^2/9+(y-2)^2/16=1 con y≥2 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu ecuación es una elipse, no una hipérbola: en la hipérbola los dos términos se restan.
+PASA  | Las Dos Cuerdas (escape) | esperada (y-1)^2/4-(x-1)^2=1 con x≥1 | gana, 2 de 2 monedas, 77 pasos | ¡Camino perfecto!
+PASA  | Las Dos Cuerdas | error «pendiente = b/a en la hipérbola vertical»: (y-1)^2/4-(x-1)^2/16=1 con x≥1 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tus ramas se abren demasiado: en la hipérbola vertical la pendiente de las asíntotas es a/b = 2, así que b = 1.
+PASA  | Las Dos Cuerdas | error «centro en el origen»: y^2/4-x^2=1 con x≥1 | no gana, 0 monedas | muestra su mensaje | Tu camino no llega a la meta. · Tu hipérbola no pasa por el vértice: el centro no es el origen, es el punto donde se cruzan las asíntotas. Resuelve 2x
+PASA  | Las Dos Torres (escape) | esperada (x-3)^2/9-(y-1)^2/16=1 con y≥1 | gana, 3 de 3 monedas, 139 pasos | ¡Camino perfecto!
+PASA  | Las Dos Torres | error «usó la diferencia como a»: (x-3)^2/36-(y-1)^2/16=1 con y≥1 | no gana, 0 monedas | muestra su mensaje | Tu camino no pasa por la salida: Coni no tiene por dónde empezar y se cae. · Tu hipérbola no pasa por el vértice: la diferencia de distancias es 2a = 
+PASA  | Las Dos Torres | error «lado equivocado»: (x-3)^2/9-(y-1)^2/16=1 con y≤1 | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu ecuación es la correcta, pero la restricción manda a Coni hacia abajo. La meta está arriba del vértice.
 PASA  | ¿Isla u óvalo? (escape) | esperada x^2/16+y^2/4=1 con 0≤y | gana, 2 de 2 monedas, 237 pasos | ¡Camino perfecto!
 PASA  | ¿Isla u óvalo? | error «circunferencia»: x^2+y^2=16 con 0≤y | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu ecuación es una circunferencia; el arco solo sube hasta y = 2, así que es una elipse.
 PASA  | ¿Isla u óvalo? | error «hipérbola»: x^2/16-y^2/4=1 con 0≤y | no gana, 0 monedas | muestra su mensaje | ¡Chocaste con un obstáculo! · Tu ecuación es una hipérbola: no se cierra en arco. Aquí los términos se suman.
@@ -190,6 +238,9 @@ PASA  | La Plaza del Observatorio: Coni recorre 18.64 (vuelta completa ≈ 18.85
 PASA  | La Boca del Volcán: Coni recorre 37.48 (vuelta completa ≈ 37.70) y termina a 0.22 de la salida
 PASA  | La Grieta de Lava: Coni recorre 24.92 (vuelta completa ≈ 25.13) y termina a 0.21 de la salida
 PASA  | El Cráter del Volcán: Coni recorre 31.20 (vuelta completa ≈ 31.42) y termina a 0.22 de la salida
+PASA  | La Fuente Redonda: Coni recorre 18.64 (vuelta completa ≈ 18.85) y termina a 0.21 de la salida
+PASA  | La Rueda del Molino: Coni recorre 12.32 (vuelta completa ≈ 12.57) y termina a 0.25 de la salida
+PASA  | Las Tres Farolas: Coni recorre 18.64 (vuelta completa ≈ 18.85) y termina a 0.21 de la salida
 PASA  | La Pradera Ovalada: Coni recorre 25.28 (vuelta completa ≈ 25.53) y termina a 0.25 de la salida
 PASA  | El Lago Alargado: Coni recorre 19.16 (vuelta completa ≈ 19.38) y termina a 0.22 de la salida
 PASA  | El Valle Elíptico: Coni recorre 15.64 (vuelta completa ≈ 15.87) y termina a 0.23 de la salida
@@ -199,6 +250,9 @@ PASA  | El Estadio: Coni recorre 15.64 (vuelta completa ≈ 15.87) y termina a 0
 PASA  | El Lago Congelado: Coni recorre 25.28 (vuelta completa ≈ 25.53) y termina a 0.25 de la salida
 PASA  | La Grieta Helada: Coni recorre 22.80 (vuelta completa ≈ 23.01) y termina a 0.21 de la salida
 PASA  | La Puerta del Glaciar: Coni recorre 28.12 (vuelta completa ≈ 28.36) y termina a 0.24 de la salida
+PASA  | La Órbita del Cometa: Coni recorre 28.12 (vuelta completa ≈ 28.36) y termina a 0.24 de la salida
+PASA  | La Luna Estirada: Coni recorre 28.12 (vuelta completa ≈ 28.36) y termina a 0.24 de la salida
+PASA  | El Satélite Perdido: Coni recorre 23.24 (vuelta completa ≈ 23.48) y termina a 0.24 de la salida
 PASA  | La Plaza Escondida: Coni recorre 18.64 (vuelta completa ≈ 18.85) y termina a 0.21 de la salida
 PASA  | Parte dibujada: Lección 1: la circunferencia | centro «Centro (−1, 1)» | centro (-1, 1)
 PASA  | Parte dibujada: Lección 1: la circunferencia | radio «r = 3» | r = 3, flecha 2.998
@@ -218,6 +272,6 @@ PASA  | Parte dibujada: Lección 4: la hipérbola | centro «Centro» | centro (
 PASA  | Parte dibujada: Lección 4: la hipérbola | vértice «Vértice» | sobre la curva
 PASA  | Parte dibujada: Lección 4: la hipérbola | semieje «b = 2» | flecha 2.000, a = 2.9999999999999996, b = 2
 PASA  | Parte dibujada: Lección 4: la hipérbola | foco «Foco (√13, 0)» | focos (-3.606, 0.000) y (3.606, 0.000)
-PASA  | Pistas: 3 gratis, la cuarta pide confirmar y cuesta 2 monedas | monedas 5 / 154 → 3 / 154 | Ya viste todas las pistas de este nivel / Comprar una pista por 2 monedas / Toca otra vez para pagar 2 monedas | 5 / 154 / Ya viste todas las pistas de este nivel | 3 / 154
+PASA  | Pistas: 3 gratis, la cuarta pide confirmar y cuesta 2 monedas | monedas 5 / 200 → 3 / 200 | Ya viste todas las pistas de este nivel / Comprar una pista por 2 monedas / Toca otra vez para pagar 2 monedas | 5 / 200 / Ya viste todas las pistas de este nivel | 3 / 200
 
-Total: 221 pasan, 0 fallan.
+Total: 275 pasan, 0 fallan.

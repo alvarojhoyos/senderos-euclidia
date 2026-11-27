@@ -1,6 +1,6 @@
-PASA  | La primera vez se abre la historia (3 viñetas) antes de elegir rol
+PASA  | La primera vez se abre la historia (4 viñetas) antes de elegir rol
 PASA  | Las viñetas caben en un celular pequeño (320×568)
-PASA  | Con «Siguiente» se pasan las 3 viñetas y al final («¡Vamos!») se pide el rol
+PASA  | Con «Siguiente» se pasan las 4 viñetas y al final («¡Vamos!») se pide el rol
 PASA  | Al volver a abrir el juego la historia no se repite
 PASA  | «Saltar la historia» la cierra de una vez
 PASA  | «Ver la historia» (pie de página) la vuelve a abrir

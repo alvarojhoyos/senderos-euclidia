@@ -3,7 +3,7 @@
 Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 1. **Taller de Coni + maestro Apolonio** — hecho, PR #12 (rama `claude/project-thread-offm5n`), esperando revisión de Alvaro.
 2. **Práctica sin fin** — hecho, PR apilado sobre el #12 (rama `claude/project-thread-kr0m2u`), esperando revisión de Alvaro.
-3. Generador + verificador de un banco muy amplio (cónica × tipo de dato × orientación × dificultad); mostrar una muestra a Alvaro antes de meterlos todos. Usar la skill diseñar-nivel. Respetar la regla del PR #11 (restricción en la salida), que conviene fusionar antes.
+3. **Banco de datos variados** — hecho (muestra de 16 niveles), PR apilado sobre el #13 (rama `claude/project-thread-dngk74`), esperando revisión de Alvaro.
 4. Modo historia en el Gran Mapa: zonas que se desbloquean, cada una enseña algo (Apolonio lo explica) y luego sus niveles; enlace del profesor (`?modo=estudio`) y botón del menú.
 5. Evaluación como una sola saga: el profesor elige cuántos niveles por dificultad y el juego arma una historia seguida de Coni.
 6. Cierre: celular, todas las pruebas, publicación, guía del profesor.
@@ -23,12 +23,20 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 - `tDraw` usa `tPM` en la práctica: datos en naranja, ruta fallida en rojo punteado.
 - Pruebas: `pruebas/practica.test.js` (11; ~1450 ejercicios al azar).
 
-## Para la etapa 3 (banco amplio)
-- `pracGen` ya produce datos coherentes y verificados; puede servir de semilla para el generador de niveles (cónica × tipo de dato × orientación).
-- El PR #11 (restricción obligatoria en parábola e hipérbola) sigue abierto: fusionarlo antes de generar niveles nuevos.
+## Para la etapa 4 (modo historia)
+- Las 4 cadenas nuevas sirven como zonas del modo historia: cada tipo de dato es una lección que Apolonio puede explicar antes de sus niveles.
+- El PR #11 sigue abierto; los niveles nuevos ya funcionan con su regla.
+
+## Qué hay en la etapa 3 (index.html)
+- 16 niveles nuevos, una cadena de 4 por cónica (fácil, medio, difícil, difícil), insertada después de C12, E12, P12 y H12: El Barrio de las Fuentes (C13–C16, región ciudad), Las Órbitas del Cometa (E13–E16, luna), El Puerto de las Antenas (P13–P16, costa), La Red de Señales (H13–H16, desfiladero). Historias en `LORE`, regiones en `SCENE_OF`.
+- Cada nivel da un tipo de dato distinto (área, tangente a un eje, tres puntos, centro sobre un eje, foco+vértice, excentricidad, vértices+punto, suma de distancias, lado recto, cortes con el eje x, directriz, asíntota como ecuación, asíntotas que no pasan por el origen, diferencia de distancias). Campo nuevo `datos` (lista de {t, v...}); lo revisa `pruebas/datos.test.js` contra `classify` y contra el texto `story`.
+- Las abiertas llevan la restricción en la salida (regla del PR #11). Verificados con y sin el PR #11. Ninguno usa forma general.
+- Monedas totales: 200 (antes 154); `evaluacion.test.js` actualizado.
+- Herramientas en archivos del proyecto `senderos-euclidia/banco/`: `datos-variados.js` (fichas; calcula la vista 4:3), `verificar-datos-variados.js` (juega cada ficha en el juego real), `insertar-datos-variados.js`, `doc-datos-variados.js` (tablas del doc). Para crecer el banco: añadir fichas, verificar, insertar.
+- Vista del mapa: el lienzo es 4:3 (alto = 0,75·span) y Coni se detiene a ~0,07·span del borde de arriba; por eso la vista sale de `view()` en datos-variados.js.
 
 ## Pendiente / preguntas abiertas
-- Alvaro no ha confirmado el nombre «Apolonio».
+- Alvaro debe revisar el doc del banco de datos variados (enlace en la memoria del proyecto) y decir si quita algún tipo de dato o si quiere más cadenas antes de la etapa 4.
 - Prometido: Apolonio también dirá las lecciones del tutorial y las pistas (hacerlo en la etapa 4).
 - Enlace del Taller en el panel del profesor: aún no (va con el enlace de estudio en la etapa 4).
 
