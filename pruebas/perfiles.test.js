@@ -160,6 +160,18 @@ const LS=(p,k)=>p.evaluate(k=>JSON.parse(localStorage.getItem(k)||'null'),k);
   res(await p.evaluate(()=>{ const s=window.__euclidia.state(); return s.prog.best.C1===2&&!s.prog.best['x-prueba']; }),'con el QR de solo estudio se ve la aventura de Ana, no su prueba');
   await ctx.close();
  }
+ // 6. Con el enlace de estudio o el de una prueba nadie puede pasar a profesor
+ for(const [url,nm,pre] of [['?modo=estudio','enlace de estudio, aparato nuevo',null],['?modo=estudio','enlace de estudio en un aparato que estaba como profesor','profesor'],['?rol=estudiante&ev=quiz9-C111-30&evn=Quiz','enlace de una prueba, aparato nuevo',null]]){
+  const ctx=await newCtx('phone'); let p=await open(ctx);
+  await p.evaluate(r=>{ localStorage.clear(); sessionStorage.clear(); localStorage.setItem('euclidia2-intro','true'); if(r) localStorage.setItem('euclidia2-role',JSON.stringify(r)); },pre);
+  await p.goto('file://'+TMP+url); await p.waitForTimeout(400); await skip(p);
+  const seen=[]; const look=async()=>seen.push(await p.evaluate(()=>{ const v=id=>{ const e=document.getElementById(id); return !!(e&&e.offsetParent); }; return v('roleTeacher')||v('pfRole')||v('mTeach')||v('teacherBtn')||(v('regBack')&&/no soy estudiante/.test(document.getElementById('regBack').textContent)); }));
+  await look(); if(!(await hid(p,'reg'))){ await p.fill('#rName','Sofía'); if(await p.evaluate(()=>!!document.getElementById('rDoc').offsetParent)){ await p.fill('#rLast','Gil'); await p.fill('#rDoc','999'); } await p.click('#regForm button[type=submit]'); await p.waitForTimeout(150); }
+  await look(); if(!(await hid(p,'menu'))){ await p.click('#mWho'); } else { await p.evaluate(()=>document.getElementById('whoBtn').click()); } await p.waitForTimeout(100); await look();
+  await p.evaluate(()=>{ if(!document.getElementById('perfiles').hidden) document.getElementById('pfNew').click(); }); await p.waitForTimeout(100); await skip(p); await look();
+  await p.evaluate(()=>{ const b=document.getElementById('regBack'); if(b.offsetParent) b.click(); }); await p.waitForTimeout(100); await look();
+  res(!seen.some(Boolean)&&await hid(p,'role'),`${nm}: en ningún paso aparece la opción de ser profesor (${JSON.stringify(seen)})`);
+  await ctx.close(); }
  }catch(e){ res(false,'la prueba se detuvo: '+e.message.split('\n')[0]); }
  res(errs.length===0,'sin errores de JavaScript'+(errs.length?': '+errs.slice(0,3).join(' | '):''));
  await b.close();

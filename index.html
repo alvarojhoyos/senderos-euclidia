@@ -2298,7 +2298,11 @@ c2.addEventListener("wheel",e=>{ if(!e.ctrlKey) return; e.preventDefault(); setZ
 $("zIn").onclick=()=>setZoom(zoom.k*1.5); $("zOut").onclick=()=>setZoom(zoom.k/1.5); $("zReset").onclick=resetZoom;
 
 /* ---- Rol: estudiante o profesor ---- */
-function askRole(){ ["reg","teacher","perfiles"].forEach(id=>$(id).hidden=true); $("role").hidden=false; }
+// Con el enlace de estudio (?modo=estudio) o el del profesor (?rol=estudiante, también el de una prueba) no se puede elegir
+// ser profesor: quien entra así es estudiante (Alvaro, 2026-11-27)
+const noTeacher=()=>STUDY||locked;
+function askRole(){ if(noTeacher()){ if(PF.list.length) openProfiles(); else askPlayer(true); return; }
+  ["reg","teacher","perfiles"].forEach(id=>$(id).hidden=true); $("role").hidden=false; }
 $("roleStudent").onclick=()=>{ role="estudiante"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=true; if(PF.list.length) openProfiles(); else askPlayer(true); };
 $("roleTeacher").onclick=()=>{ role="profesor"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=false; applySession(); renderLevels(); renderScore(); tick(); markSeen(); openMenu(); };
 $("regBack").onclick=()=>{ if(PF.list.length) openProfiles(); else askRole(); }; $("teacherBack").onclick=askRole;
@@ -2310,7 +2314,7 @@ function needDoc(){ return !STUDY&&(locked||!!EV||!!resultsUrl()); }
 // askPlayer(true) crea un perfil nuevo; askPlayer() completa los datos del perfil activo (p. ej. el documento para una prueba)
 let regNew=false;
 function askPlayer(fresh){ const doc=needDoc(); regNew=fresh===true; $("reg").hidden=false; $("rErr").hidden=true; $("rDocBox").hidden=!doc;
-  const toList=PF.list.length>0; $("regBack").textContent=toList?"Volver a la lista de jugadores":"Volver: no soy estudiante"; $("regBack").hidden=locked&&!toList;
+  const toList=PF.list.length>0; $("regBack").textContent=toList?"Volver a la lista de jugadores":"Volver: no soy estudiante"; $("regBack").hidden=noTeacher()&&!toList;
   $("rTitle").textContent=doc?"Antes de empezar":"¿Cómo te llamas?";
   $("rNote").textContent=doc?"Tus datos solo los ve tu profesor, junto con tus monedas. Nadie más en la clase puede verlos.":"Así Coni sabe cómo llamarte. Para jugar por tu cuenta no hace falta tu documento: tu avance se guarda solo en este aparato.";
   $("rErr").textContent=doc?"Completa los tres campos.":"Escribe tu nombre."; if(fresh===true){ ["rName","rLast","rDoc"].forEach(id=>$(id).value=""); } else if(player){ $("rName").value=player.nombre; $("rLast").value=player.apellido; $("rDoc").value=player.documento; } setTimeout(()=>$("rName").focus(),50); }
@@ -2661,7 +2665,7 @@ function pfRender(){ const ul=$("pfList"); ul.innerHTML=""; const EVD=!STUDY&&!!
       li.append(b,ed); }
     ul.append(li); });
   $("pfNew").hidden=PF.list.length>=PF_MAX; $("pfFull").hidden=PF.list.length<PF_MAX; $("pfFull").textContent=`Ya hay ${PF_MAX} jugadores en este aparato: borra uno que ya no se use para agregar otro.`;
-  $("pfRole").hidden=locked||STUDY; $("pfBack").hidden=!(player&&PF.act&&pfGet(PF.act)); if(player) $("pfBack").textContent=`Volver: sigo siendo ${player.nombre}`; }
+  $("pfRole").hidden=noTeacher(); $("pfBack").hidden=!(player&&PF.act&&pfGet(PF.act)); if(player) $("pfBack").textContent=`Volver: sigo siendo ${player.nombre}`; }
 function pfPick(id){ pfUse(id); $("perfiles").hidden=true; markSeen(); flush();
   if(needDoc()&&!player.documento) askPlayer(); else openMenu(); }
 // Jugador nuevo: ve la historia (si no la acaba de ver al abrir el juego) y escribe su nombre
