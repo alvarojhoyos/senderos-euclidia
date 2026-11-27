@@ -1,0 +1,23 @@
+PASA  | Al abrir el panel solo pregunta: «Generar una prueba» o «Compartir con estudiantes (solo estudio)»
+PASA  | Celular (iPhone SE): el inicio del panel no se sale de la pantalla
+PASA  | «Generar una prueba» abre la configuración; por defecto la media: Cada estudiante tendrá 12 niveles y 40 minutos.
+PASA  | Corta: Cada estudiante tendrá 6 niveles y 20 minutos.
+PASA  | Media: Cada estudiante tendrá 12 niveles y 40 minutos.
+PASA  | Larga: Cada estudiante tendrá 20 niveles y 60 minutos.
+PASA  | Si cambia la tabla a mano, ningún largo queda marcado y dice «Personalizada»
+PASA  | El código QR de la prueba solo aparece después de crearla
+PASA  | QR de la corta: rol=estudiante, ev=2t6skz-C010E010P010H010I010X010-20
+PASA  | Celular: la configuración de la prueba no se sale de la pantalla
+PASA  | Cada estudiante recibe 6, 12 y 20 niveles distintos: 6,12,20
+PASA  | Los QR viejos (formato corta/larga anterior) siguen dando lo mismo que antes: 16,20
+PASA  | «Compartir con estudiantes» muestra un solo enlace y QR (?modo=estudio), sin hoja ni opciones de prueba
+PASA  | Celular: la vista de compartir no se sale de la pantalla
+PASA  | QR de estudio: sale la historia y luego solo pide el nombre (sin rol ni documento)
+PASA  | Luego sale el menú de estudiante: aventura, instrucciones y tutorial, Taller y práctica
+PASA  | No hay botón «Terminar y enviar» y el juego avisa que nada se envía: Modo estudio: tu avance se guarda solo en este aparato y no se envía al profesor.
+PASA  | En el modo estudio, superar un nivel no deja nada en la cola de envío (aunque haya hoja guardada)
+PASA  | Una evaluación guardada de antes no se activa en el modo estudio (y queda guardada para cuando vuelva con su QR)
+PASA  | Laptop: panel de 420 px, botones de largo de 113/113/113 px
+PASA  | Sin errores de JavaScript
+
+21 pasan, 0 fallan
