@@ -7,7 +7,7 @@ fs.writeFileSync(TMP,'<!doctype html><html lang="es"><head><meta charset="utf-8"
 const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.push((ok?'PASA ':'FALLA')+' | '+txt); };
 (async()=>{
  const b=await chromium.launch(); const errs=[]; const ctx=await b.newContext({...devices['Pixel 7'],deviceScaleFactor:1}); const p=await ctx.newPage(); p.on('pageerror',e=>errs.push(e.message));
- await p.route(/^https?:\/\//,r=>r.abort()); await p.addInitScript(()=>{ localStorage.setItem('euclidia2-role','"profesor"'); localStorage.setItem('euclidia2-intro','true'); sessionStorage.setItem('euclidia2-tab','1'); });
+ await p.route(/^https?:\/\//,r=>r.abort()); await p.addInitScript(()=>{ localStorage.setItem('euclidia2-role','"profesor"'); localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-pruebas','true'); sessionStorage.setItem('euclidia2-tab','1'); });
  await p.goto('file://'+TMP); await p.waitForTimeout(500);
  // 1. Matemática: una lista de restricciones exige todas a la vez
  const m=await p.evaluate(()=>{ const T=window.__euclidia.t, I=[{v:'x',lo:-Infinity,hi:5},{v:'y',lo:0,hi:Infinity}];

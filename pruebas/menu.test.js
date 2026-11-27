@@ -67,6 +67,10 @@ const hid=(p,id)=>p.evaluate(i=>document.getElementById(i).hidden,id);
  await skip(p); await p.click('#backGo'); res(!(await hid(p,'menu')),'Al volver otro día: historia → «Continuar como Ana» → menú');
  await p.click('#mLab'); await p.waitForTimeout(150); res(!(await hid(p,'taller')),'«Explorar» abre el Taller de Coni');
  await p.click('#tClose'); await p.waitForTimeout(100); res(!(await hid(p,'menu')),'Al cerrar el Taller se vuelve al menú');
+ await p.reload(); await p.waitForTimeout(400); res(await skip(p)&&!(await hid(p,'menu')),'Al volver a abrir el juego en la misma pestaña: otra vez la historia y luego el menú');
+ await p.click('#mWho'); await p.waitForTimeout(100); res(!(await hid(p,'intro')),'«Cambiar de jugador»: el jugador nuevo ve primero la historia');
+ await skip(p); await p.click('#roleStudent'); await p.fill('#rName','Luis'); await p.click('#regForm button[type=submit]'); await p.waitForTimeout(150);
+ res(!(await hid(p,'menu')),'Después de registrarse, el jugador nuevo llega al menú');
  // 8. Quiz: el estudiante va directo a su evaluación, sin menú
  p=await page('?ev=quiz1-C111-30&evn=Quiz',()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-role','"estudiante"'); localStorage.setItem('euclidia2-player',JSON.stringify({nombre:'Ana',apellido:'Ruiz',documento:'12'})); });
  const st=await skip(p); await p.click('#backGo'); await p.waitForTimeout(100);
