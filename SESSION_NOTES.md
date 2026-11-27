@@ -5,7 +5,7 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 2. **Práctica sin fin** — hecho y aprobado por Alvaro (2026-11-26 22:43 Bogotá), PR #13 (rama `claude/project-thread-kr0m2u`). También aprobó la entrada sin documento (commit 71aa903 del #13).
 3. **Banco de datos variados** — hecho (52 niveles nuevos y todo el banco en cadenas por dificultad), PR #14 apilado sobre el #13 (rama `claude/project-thread-dngk74`), aprobado por Alvaro el 2026-11-27. Doc: https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX
 3b. **Menú principal + modo aventura con candados** (pedido de Alvaro, 2026-11-26 22:43) — hecho, PR apilado sobre el #14 (rama `claude/project-thread-6loujp`, que además trae el commit de entrada sin documento del #13). Adelanta parte de la etapa 4: los desbloqueos ya existen; falta que cada zona enseñe algo con Apolonio.
-4. Modo historia en el Gran Mapa: zonas que se desbloquean, cada una enseña algo (Apolonio lo explica) y luego sus niveles; enlace del profesor (`?modo=estudio`) y botón del menú.
+4. **Modo historia** — hecho, PR #16 (rama `claude/project-thread-4ynul0`, apilada sobre el #15), esperando revisión de Alvaro: lección de Apolonio antes de cada valle, repaso en el Gran Mapa, `?modo=estudio` y enlaces del profesor.
 5. Evaluación como una sola saga: el profesor elige cuántos niveles por dificultad y el juego arma una historia seguida de Coni.
 6. Cierre: celular, todas las pruebas, publicación, guía del profesor.
 
@@ -34,10 +34,19 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 - Pruebas: `pruebas/menu.test.js` (29).
 - Visto al probar (ya pasaba antes): en un celular de 320 px de ancho el panel del nivel se sale 13 px por la derecha.
 
-## Para la etapa 4 (modo historia)
-- El desbloqueo ya está hecho (etapa 3b). Falta: que Apolonio explique la lección de cada valle antes de su primer nivel, y el enlace del profesor `?modo=estudio` (puede abrir directo el modo aventura).
-- Las cadenas ya son de una sola dificultad: cada una puede ser una zona del modo historia, y sus tipos de dato son la lección que Apolonio explica antes de sus niveles.
-- El PR #11 sigue abierto; los niveles nuevos ya funcionan con su regla (verificados con y sin ella).
+## Qué hay en la etapa 4 (modo historia, PR #16, rama `claude/project-thread-4ynul0`, apilada sobre el #15)
+- Bloque `/* ============ Modo historia ... */` justo antes de `window.__euclidia`. `LECCIONES` = una lección por cadena (30), clave = nombre de la cadena: {t, f (fórmula; dos espacios separan alternativas), p (párrafos), ex (estado del Taller, opcional), parts (claves de partes de `tModel`)}. Identificar y Mixtos no traen `ex` (sin dibujo).
+- `showLesson(L,then,review)` abre el modal `#leccion` (después de `#lore`): Apolonio, texto, fórmula, dibujo `lecFig` y lista de partes con `tModelOf(ex)`. `needLesson(L)`: primera vez en ese valle y sin evaluación. Vistas en `euclidia2-lecciones`.
+- Enganches sin tocar el código del menú: se reasignan `openLevel` (lección antes de la historia), `openMap` (sección «Lecciones de Apolonio» `#lecRepaso` insertada tras `#advWhy`), `renderHints` y `loadLevel` (Apolonio en pistas y lecciones del tutorial) `openMenu` (con `?modo=estudio`, después de la historia y el registro abre el Gran Mapa una vez en vez del menú) y `openTeacher` (enlaces del modo estudio). Ojo: el script es un IIFE, `openLevel` no es global; desde pruebas usar `window.__euclidia.openLevel`.
+- `?modo=estudio`: `wantStudy` (antes del bloque del menú) pone rol estudiante si no hay rol; no pide documento (sin `rol=estudiante`).
+- Panel del profesor: sección `#estLinks` con enlaces y QR de `?modo=estudio|taller|practica`.
+- Pruebas: `pruebas/lecciones.test.js` (19). Revisa que ningún ejemplo sea la respuesta de un nivel: al agregar niveles puede fallar; cambiar el `ex` de la lección (y su texto si lo menciona).
+- La rama del #15 no traía los últimos commits del #14 (36 niveles): el hilo del #15 ya los trajo (39c8930) y esta rama está al día con el #15.
+
+## Para la etapa 5 (evaluación como una sola saga)
+- El profesor ya elige cuántos niveles por dificultad (tabla del panel). Falta que el quiz se presente como una historia seguida de Coni: orden de valles con narración entre niveles (`LORE`) y quizá una lección corta de Apolonio desactivada (en evaluación no hay lecciones a propósito).
+- Con N niveles de una dificultad debe salir una sola saga: revisar que el banco alcance (por cónica hay 2 cadenas por dificultad = 8 niveles).
+- El PR #11 sigue abierto; los niveles nuevos ya funcionan con su regla.
 
 ## Qué hay en la etapa 3 (index.html)
 - Banco: 108 niveles, 294 monedas, en 30 cadenas. Cada cadena tiene UNA dificultad (pedido de Alvaro): por cónica 6 cadenas de 4 (fácil, fácil, medio, medio, difícil, difícil); identificar y mixtos 3 cadenas de 2 (fácil, medio, difícil). El mapa completo de cadenas está en el doc.
@@ -51,8 +60,8 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 
 ## Pendiente / preguntas abiertas
 - Etapa 3 aprobada (2026-11-27). Doc del banco v2: https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX
-- Prometido: Apolonio también dirá las lecciones del tutorial y las pistas (hacerlo en la etapa 4).
-- Enlace del Taller en el panel del profesor: aún no (va con el enlace de estudio en la etapa 4).
+- Etapa 4 (PR #16): falta la revisión de Alvaro en el enlace privado de prueba.
+- Pedido de Alvaro (coordinador): captura de uso para comparar gasto cuando haya unas 3 etapas con la nueva modalidad.
 
 ## Ahorro (pedido de Alvaro, 2026-11-26)
 Tests y lecturas largas en subagentes; salida de comandos resumida; no cambiar modelo ni esfuerzo en un hilo; cada etapa puede arrancar en un hilo nuevo desde esta nota.

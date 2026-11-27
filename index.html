@@ -326,6 +326,30 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
   .stage{position:sticky;top:0;z-index:5;box-shadow:0 6px 14px -10px color-mix(in srgb,var(--ink) 45%,transparent)}
   .panel>.head{order:1} #fb{order:2} #form{order:3} .story{order:4} .panel.tut .story{order:1} .panel.tut .lesson{order:1} .general{order:4} .targets{order:5} .hints{order:6} details{order:7}
 }
+/* ---- Modo historia: lecciones de Apolonio (etapa 4 del modo estudio) ---- */
+.leccard{border-top:4px solid var(--part);max-width:480px}
+.lechead{display:flex;gap:12px;align-items:center}
+.lechead canvas{width:50px;height:80px;image-rendering:pixelated;flex:none}
+.lechead .kick{font:700 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--part)}
+.lechead h2{margin:2px 0 0;font:800 20px var(--f-display)}
+.lecbody{display:grid;gap:8px}
+.lecbody p{margin:0;font-size:15px;line-height:1.5}
+.lecfm{font:600 15px var(--f-mono);border:1px solid var(--line);border-left:4px solid var(--part);border-radius:10px;padding:8px 10px;background:color-mix(in srgb,var(--part) 6%,var(--panel))}
+.lecfm span{display:block;font:600 11px var(--f-body);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+#lecFig{width:100%;aspect-ratio:8/5;border:1px solid var(--line);border-radius:10px;display:block}
+.lecparts{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:13.5px}
+.lecparts li b{color:var(--part)}
+.lecparts li .v{font-family:var(--f-mono)}
+.leccard>.row{position:sticky;bottom:-20px;background:var(--panel);padding:10px 0 4px;margin-bottom:-4px;border-top:1px solid var(--line)}
+.leclist{display:flex;flex-wrap:wrap;gap:6px}
+.leclist button{font-size:13px}
+.apo-say{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;color:var(--part)}
+.apo-say canvas{width:24px;height:30px;image-rendering:pixelated;flex:none}
+.estl{display:grid;gap:8px}
+.estl .er{display:grid;gap:4px;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.estl .er .url{word-break:break-all}
+.estl .er .row{gap:6px}
+#estQr{justify-self:center}
 </style>
 
 </head>
@@ -504,6 +528,16 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
     <button class="btn" type="button" id="loreGo">Siguiente</button>
   </div>
 </div>
+<div class="modal" id="leccion" hidden>
+  <div class="card leccard" role="dialog" aria-modal="true" aria-labelledby="lecTitle">
+    <div class="lechead"><canvas id="lecApo" width="20" height="32" aria-hidden="true"></canvas><div><span class="kick" id="lecKick">Lección del maestro Apolonio</span><h2 id="lecTitle"></h2><span class="small" id="lecValle"></span></div></div>
+    <div class="lecbody" id="lecBody"></div>
+    <div class="lecfm" id="lecFm"></div>
+    <canvas id="lecFig" role="img" aria-label="Dibujo del ejemplo de la lección"></canvas>
+    <ul class="lecparts" id="lecParts"></ul>
+    <div class="row"><button class="btn" type="button" id="lecGo">¡A jugar!</button><button class="btn ghost" type="button" id="lecLab">Verlo en el Taller</button></div>
+  </div>
+</div>
 <div class="modal" id="done" hidden>
   <div class="card">
     <h2 id="doneTitle">¿Terminar la prueba?</h2>
@@ -562,6 +596,13 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
     <button class="btn ghost" type="button" id="qrCopy">Copiar el enlace para estudiantes</button>
     <p class="small">Para quien use computador sin cámara: pega este enlace en el grupo del curso, el correo o el aula virtual. Funciona igual que el código QR.</p>
     <p class="small" id="qrNote"></p>
+    <section class="evbox" aria-labelledby="estH">
+      <h3 id="estH">Modo estudio (sin nota)</h3>
+      <p class="small">Para repasar en casa o antes de un quiz. Nada se envía a tu hoja y no se pide documento.</p>
+      <div class="estl" id="estLinks"></div>
+      <div id="estQr" hidden></div>
+      <p class="small" id="estMsg" aria-live="polite"></p>
+    </section>
     <section class="hojabox" aria-labelledby="hojaH">
       <h3 id="hojaH">Hoja de resultados</h3>
       <p class="small" id="hojaState"></p>
@@ -2467,6 +2508,9 @@ const wantTaller=(()=>{ try{ return ["taller","practica"].includes(new URLSearch
 // Al entrar (cada vez que se abre el juego) se presenta la historia; después vienen el rol, el registro o «Hola de nuevo» y el menú.
 // Con el enlace de una evaluación también se muestra la historia, pero después no hay menú: va directo al quiz.
 const beginGame=()=>{ if(TEST_ENTRY&&store.get("euclidia2-intro",false)) startFlow(); else showIntro(startFlow); };
+// ?modo=estudio (enlace del profesor): entra como estudiante sin elegir rol ni dar documento; llega al Gran Mapa con las lecciones de Apolonio
+const wantStudy=(()=>{ try{ return new URLSearchParams(location.search).get("modo")==="estudio"&&!SESSION; }catch(e){ return false; } })();
+if(wantStudy&&!role){ role="estudiante"; store.set("euclidia2-role",role); }
 /* ============ Menú principal ============
    Se abre al entrar al juego (después de la historia, el rol y el registro, o de «Hola de nuevo»). En una evaluación
    no aparece: el estudiante va directo a su quiz. Recargar en la misma pestaña sigue donde estaba. */
@@ -2940,7 +2984,200 @@ $("tCheck").onclick=tPracCheck; $("tNext").onclick=tPracNew; $("tHint").onclick=
 if(wantTaller){ tAfter=beginGame; openTaller(); if(new URLSearchParams(location.search).get("modo")==="practica") tPracSet(true); }
 markSeen();
 requestAnimationFrame(frame);
-window.__euclidia={adv:{state:advState,next:advNext,resume:advResume,chains:chainsOf,menu:openMenu},practica:{gen:pracGen,check:pracCheck,stats:prStats,model:tModelOf,set:tPracSet,ex:()=>tPx,next:tPracNew,target:prTarget,force:X=>{ tPx=X; tPracShow(); }},taller:{model:tModel,general:tGeneral,state:()=>TS,set:(st)=>tSetConic(st.c,{...st}),open:openTaller,close:closeTaller,retos:RETOS,flip:tFlip},LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
+/* ============ Modo historia: el maestro Apolonio enseña cada valle (etapa 4 del modo estudio) ============
+   Antes del primer nivel de cada valle (la primera vez que se entra a él) Apolonio da una lección corta: qué se aprende
+   ahí, la fórmula clave y un ejemplo dibujado con sus partes (calculadas con el mismo modelo del Taller, tModelOf).
+   Los ejemplos nunca son la respuesta de un nivel (lo revisa pruebas/lecciones.test.js). En una evaluación no hay lecciones.
+   Las lecciones vistas se guardan en euclidia2-lecciones y se pueden repasar desde el Gran Mapa.
+   ?modo=estudio (enlace del profesor) entra como estudiante, sin documento ni rol, y después de la historia y el registro abre el Gran Mapa. */
+const LECCIONES={
+  "El Lago Redondo":{t:"Centro en el origen y radio",f:"x² + y² = r²",
+    p:["Toda circunferencia es un centro y un radio. Si el centro es el origen, la ecuación es x² + y² = r².",
+       "Si te dan un punto de la curva, el radio es su distancia al centro: el punto (6, 8) está a √(6² + 8²) = 10 del origen. Si te dan el diámetro, divídelo entre 2. Si te dan el área A = πr², despeja r."],
+    ex:{c:"circ",h:0,k:0,r:10},parts:["centro","radio","diametro"]},
+  "El Barrio de las Fuentes":{t:"El radio desde otras medidas",f:"P = 2πr        A = πr²",
+    p:["Aquí no te dan el radio directo. El perímetro es P = 2πr, así que r = P/(2π).",
+       "Si la curva toca una recta, el radio es la distancia del centro a esa recta (si la recta es y = c, esa distancia es |k − c|). Si pasa por las cuatro esquinas de un cuadrado, el centro es el centro del cuadrado y el radio llega a cualquier esquina."],
+    ex:{c:"circ",h:1,k:-1,r:3},parts:["centro","radio","diametro"]},
+  "El Observatorio Lunar":{t:"Centro fuera del origen",f:"(x − h)² + (y − k)² = r²",
+    p:["Cuando el centro es (h, k), en la ecuación van los signos al revés: centro (3, −4) da (x − 3)² + (y + 4)².",
+       "Si te dan los extremos de un diámetro, el centro es su punto medio y el radio es la mitad de la distancia entre ellos. Si el camino es solo un pedazo de la curva, agrega la restricción, por ejemplo y ≥ 2."],
+    ex:{c:"circ",h:3,k:-4,r:2},parts:["centro","radio"]},
+  "La Torre del Reloj":{t:"Tangente a un eje, o centro y un punto",f:"r² = (x₁ − h)² + (y₁ − k)²",
+    p:["Si la circunferencia toca el eje x, el radio es la distancia del centro a ese eje: r = |k|. Si toca el eje y, r = |h|.",
+       "Con el centro y un punto (x₁, y₁) de la curva, el radio es la distancia entre ellos. Usa r² directo en la ecuación, sin sacar la raíz."],
+    ex:{c:"circ",h:3,k:2,r:2},parts:["centro","radio"]},
+  "El Volcán Dormido":{t:"De la forma general a la canónica",f:"x² + y² + Dx + Ey + F = 0",
+    p:["La forma general esconde el centro. Completa cuadrados: agrupa las x, agrupa las y, y suma a los dos lados el cuadrado de la mitad de cada coeficiente.",
+       "Ejemplo: x² + y² + 4x − 6y − 3 = 0 → (x + 2)² + (y − 3)² = 3 + 4 + 9 = 16. Centro (−2, 3) y radio 4. Escribe siempre la respuesta en forma canónica."],
+    ex:{c:"circ",h:-2,k:3,r:4},parts:["centro","radio"]},
+  "La Plaza de las Farolas":{t:"El centro escondido",f:"(x − h)² + (y − k)² = r²",
+    p:["Si la curva pasa por tres puntos, el centro está a la misma distancia de los tres: queda donde se cruzan las mediatrices de los segmentos que los unen.",
+       "Si el centro está sobre una recta o un eje, úsalo como condición: centro en el eje x quiere decir k = 0. Si la curva toca los dos ejes, |h| = |k| = r."],
+    ex:{c:"circ",h:4,k:-4,r:4},parts:["centro","radio"]},
+  "El Valle Ovalado":{t:"La elipse con centro en el origen",f:"x²/a² + y²/b² = 1",
+    p:["a es lo que la elipse llega a los lados y b lo que llega arriba. Si llega a x = 6 y a y = 2, entonces a² = 36 y b² = 4.",
+       "Si el denominador mayor está bajo y, la elipse es vertical. Los focos están sobre el eje mayor, a una distancia c del centro, con c² = (semieje mayor)² − (semieje menor)²."],
+    ex:{c:"elip",h:0,k:0,a:2,b:5},parts:["a","b","vertices","focos"]},
+  "Las Órbitas del Cometa":{t:"Excentricidad y suma de distancias",f:"e = c / (semieje mayor)",
+    p:["Para todo punto de la elipse, la suma de sus distancias a los dos focos es igual al eje mayor, el doble del semieje mayor. Si la suma es 10, el semieje mayor es 5.",
+       "Con los vértices sabes el semieje mayor; con la excentricidad sacas c, y el semieje menor sale de (menor)² = (mayor)² − c²."],
+    ex:{c:"elip",h:1,k:0,a:5,b:4},parts:["vertices","focos","e"]},
+  "La Torre del Huevo":{t:"Centro fuera del origen",f:"(x − h)²/a² + (y − k)²/b² = 1",
+    p:["Con centro (h, k) los signos van al revés, como en la circunferencia. Recuerda: a va siempre bajo x y b bajo y, aunque la elipse sea vertical.",
+       "Si te dan los focos, el centro es su punto medio y c es la mitad de la distancia entre ellos."],
+    ex:{c:"elip",h:2,k:-1,a:3,b:5},parts:["centro","a","b","focos"]},
+  "El Cinturón de Satélites":{t:"Del foco y el vértice a la ecuación",f:"(menor)² = (mayor)² − c²",
+    p:["El vértice y el foco están sobre el eje mayor. La distancia del centro al vértice es el semieje mayor; la del centro al foco es c.",
+       "Después el semieje menor sale de (menor)² = (mayor)² − c². Si te dan la excentricidad, c = e · (semieje mayor)."],
+    ex:{c:"elip",h:-1,k:1,a:5,b:3},parts:["centro","vertices","focos"]},
+  "El Glaciar":{t:"Elipse en forma general",f:"Ax² + Cy² + Dx + Ey + F = 0",
+    p:["Si A y C tienen el mismo signo y son distintos, es una elipse. Saca factor común A de las x y C de las y, completa cuadrados y divide todo para que quede igualada a 1.",
+       "Ejemplo: 9x² + 4y² + 36x − 8y + 4 = 0 → 9(x + 2)² + 4(y − 1)² = 36 → (x + 2)²/4 + (y − 1)²/9 = 1. Si la dejas igualada a 36, el juego te dirá que es correcta pero que falta la forma canónica."],
+    ex:{c:"elip",h:-2,k:1,a:2,b:3},parts:["centro","a","b"]},
+  "La Sombra del Cometa":{t:"Con un punto de la curva",f:"(mayor)² = c² + (menor)²",
+    p:["Si sabes los vértices, ya tienes el centro y el semieje mayor. Para el otro semieje, reemplaza en la ecuación el punto que te dan y despeja el denominador que falta.",
+       "Si te dan un foco y un extremo del eje menor, la distancia entre ellos es el semieje mayor: centro, foco y extremo forman un triángulo rectángulo."],
+    ex:{c:"elip",h:1,k:0,a:5,b:3},parts:["vertices","covertices","focos"]},
+  "El Valle de los Toboganes":{t:"Parábola con vértice en el origen",f:"x² = 4py        y² = 4px",
+    p:["Si abre hacia arriba o hacia abajo, x² = 4py; si abre de costado, y² = 4px. p es la distancia del vértice al foco, y la directriz está al otro lado, a la misma distancia.",
+       "Si te dan un punto, reemplázalo y despeja p. Si p es negativo, abre hacia abajo (o hacia la izquierda). Con vértice en el origen, la directriz y = 2 da p = −2."],
+    ex:{c:"para",h:0,k:0,p:1.5,dir:"arriba"},parts:["vertice","foco","directriz"]},
+  "El Puerto de las Antenas":{t:"Foco, directriz y lado recto",f:"lado recto = |4p|",
+    p:["El vértice está justo en la mitad entre el foco y la directriz. Así que p es la distancia del vértice al foco, con signo según hacia dónde abre.",
+       "El lado recto es la cuerda que pasa por el foco, perpendicular al eje: mide |4p|. Si mide 8, entonces |p| = 2."],
+    ex:{c:"para",h:0,k:0,p:1.5,dir:"derecha"},parts:["vertice","foco","directriz","lr"]},
+  "El Río de Costado":{t:"Vértice fuera del origen",f:"(x − h)² = 4p(y − k)        (y − k)² = 4p(x − h)",
+    p:["Con vértice (h, k), la primera forma abre hacia arriba o hacia abajo, y la segunda de costado. También vale y = a(x − h)² + k, con a = 1/(4p).",
+       "Si te dan el foco y la directriz, el vértice es el punto medio entre los dos, y p es la distancia del vértice al foco."],
+    ex:{c:"para",h:-1,k:2,p:1,dir:"izquierda"},parts:["vertice","foco","directriz"]},
+  "Las Cumbres Heladas":{t:"Hacia abajo y con un punto",f:"y = a(x − h)² + k",
+    p:["Una cima es el vértice de una parábola que abre hacia abajo: en y = a(x − h)² + k el coeficiente a es negativo.",
+       "Con el vértice y otro punto, reemplaza el punto y despeja a. Por ejemplo, vértice (0, 5) y punto (2, 1): 1 = 4a + 5, así que a = −1."],
+    ex:{c:"para",h:0,k:5,p:0.25,dir:"abajo"},parts:["vertice","a","foco"]},
+  "La Mina Profunda":{t:"Parábola en forma general",f:"x² + Dx + Ey + F = 0",
+    p:["Si solo una variable está al cuadrado, es una parábola. Pasa al otro lado lo que no está al cuadrado y completa el cuadrado de la variable que sí lo está.",
+       "Ejemplo: x² + 6x − 4y + 1 = 0 → (x + 3)² = 4y + 8 = 4(y + 2). Vértice (−3, −2) y 4p = 4, así que p = 1: abre hacia arriba."],
+    ex:{c:"para",h:-3,k:-2,p:1,dir:"arriba"},parts:["vertice","p","foco"]},
+  "El Malecón":{t:"Cortes con el eje y lado recto",f:"h = (x₁ + x₂) / 2",
+    p:["Si una parábola vertical corta el eje x en x₁ y x₂, el vértice está en la mitad. Usa el otro punto que te dan para hallar el coeficiente y escribe la forma canónica.",
+       "Los extremos del lado recto están a una distancia |2p| del foco, uno a cada lado. Si te dan el foco y un extremo, ya sabes |p|."],
+    ex:{c:"para",h:1,k:-4,p:0.25,dir:"arriba"},parts:["vertice","foco","lr"]},
+  "El Desfiladero":{t:"La hipérbola con centro en el origen",f:"x²/a² − y²/b² = 1        y²/a² − x²/b² = 1",
+    p:["La primera abre hacia los lados y la segunda hacia arriba y abajo. Manda el término positivo, y a va bajo él: es la distancia del centro al vértice.",
+       "Las asíntotas pasan por el centro. Si abre hacia los lados, su pendiente es ±b/a: con el vértice sacas a y con la pendiente sacas b."],
+    ex:{c:"hip",h:0,k:0,a:2,b:1,hz:true},parts:["vertices","focos","asintotas"]},
+  "La Red de Señales":{t:"Focos y ejes de la hipérbola",f:"c² = a² + b²",
+    p:["En la hipérbola c² = a² + b²: se suma, no se resta como en la elipse. c es la distancia del centro a cada foco, y los focos quedan más lejos que los vértices.",
+       "El eje transverso mide 2a y une los vértices; el eje conjugado mide 2b. Si la distancia entre los focos es 10, entonces c = 5."],
+    ex:{c:"hip",h:0,k:0,a:8,b:6,hz:true},parts:["vertices","focos","b"]},
+  "Los Géiseres":{t:"Centro fuera del origen",f:"(x − h)²/a² − (y − k)²/b² = 1",
+    p:["Con centro (h, k) los signos van al revés. Si el término positivo es el de y, (y − k)²/a² − (x − h)²/b² = 1, la hipérbola abre hacia arriba y abajo.",
+       "Las asíntotas se cruzan en el centro. Si abre hacia arriba y abajo, su pendiente es ±a/b."],
+    ex:{c:"hip",h:-1,k:2,a:2,b:3,hz:false},parts:["centro","vertices","asintotas"]},
+  "La Cueva del Oeste":{t:"Excentricidad y un punto",f:"e = c / a",
+    p:["En la hipérbola la excentricidad es e = c/a y siempre es mayor que 1. Con el vértice sabes a; con e sacas c = e · a, y b² = c² − a².",
+       "Si te dan los vértices y otro punto de la curva, reemplaza el punto en la ecuación y despeja b²."],
+    ex:{c:"hip",h:1,k:0,a:3,b:4,hz:true},parts:["vertices","focos","e"]},
+  "Los Túneles Profundos":{t:"Hipérbola en forma general",f:"Ax² + Cy² + Dx + Ey + F = 0",
+    p:["Si x² y y² tienen signos contrarios, es una hipérbola. Completa los cuadrados como en la elipse y divide para que quede igualada a 1; el término que queda positivo te dice hacia dónde abre.",
+       "Ejemplo: 9x² − 4y² − 18x − 16y − 43 = 0 → 9(x − 1)² − 4(y + 2)² = 36 → (x − 1)²/4 − (y + 2)²/9 = 1."],
+    ex:{c:"hip",h:1,k:-2,a:2,b:3,hz:true},parts:["centro","vertices","asintotas"]},
+  "Las Torres Lejanas":{t:"Diferencia de distancias",f:"|d₁ − d₂| = 2a",
+    p:["Para todo punto de la hipérbola, la diferencia de sus distancias a los dos focos (la mayor menos la menor) es 2a. Si la diferencia es 6, entonces a = 3.",
+       "Con las dos asíntotas sabes el centro (donde se cruzan) y la razón entre b y a. Con un foco y esa pendiente, usa c² = a² + b² para hallar a y b."],
+    ex:{c:"hip",h:0,k:0,a:3,b:2,hz:false},parts:["vertices","focos","asintotas"]},
+  "El Mirador":{t:"¿Qué cónica es?",
+    p:["Mira la forma: cerrada y redonda es circunferencia; cerrada y estirada, elipse; una sola curva en U, parábola; dos ramas que se acercan a unas rectas, hipérbola.",
+       "Si te dan puntos, busca la simetría: ¿hay un punto donde la curva da la vuelta? Prueba los puntos en tu ecuación antes de trazar."]},
+  "La Biblioteca de Euclidia":{t:"Leer la ecuación",f:"Ax² + Cy² + Dx + Ey + F = 0",
+    p:["Si A = C, es circunferencia. Si A y C tienen el mismo signo y son distintos, elipse. Si tienen signos contrarios, hipérbola. Si falta uno de los dos cuadrados, parábola.",
+       "Si el camino se acerca a dos rectas sin tocarlas nunca, esas rectas son asíntotas: es una hipérbola."]},
+  "La Puerta Sellada":{t:"Identificar y pasar a forma canónica",
+    p:["Primero identifica la cónica con los signos de x² y y². Después completa cuadrados para hallar el centro o el vértice.",
+       "Escribe la respuesta en forma canónica: elipse e hipérbola igualadas a 1, circunferencia igualada a r². Si al final el lado derecho te da 0 o negativo, revisa las cuentas."]},
+  "La Salida de la Ciudad":{t:"Caminos de dos tramos",
+    p:["Cada tramo es su propia cónica con su propia restricción. «Por arriba» del centro es y ≥ k, «por abajo» es y ≤ k, «por la derecha» es x ≥ h.",
+       "El segundo tramo empieza justo donde termina el primero: revisa que ese punto cumpla las dos ecuaciones."]},
+  "Las Cúpulas":{t:"Intervalos que encajan",
+    p:["Cuando un tramo es una parábola o una rama de hipérbola, limita su recorrido con un intervalo, por ejemplo 2 ≤ x ≤ 4.",
+       "Escribe las dos ecuaciones en forma canónica y comprueba el punto de unión en las dos antes de trazar."]},
+  "El Valle y el Túnel":{t:"Dos cónicas distintas",
+    p:["Aquí cada tramo es de un tipo diferente. Primero identifica qué cónica es cada pedazo por su descripción, y después halla sus partes por separado.",
+       "Media elipse por debajo del centro lleva y ≤ k; una rama de hipérbola se escoge con la restricción, por ejemplo x ≥ h para la de la derecha."]}
+};
+const lecSeen=()=>store.get("euclidia2-lecciones",{});
+const chainOfL=L=>chainsOf(wOf(L)).find(c=>c.ls.includes(L));
+const lecOf=L=>!L||L.tutorial?null:LECCIONES[L.chain]||null;
+// La lección se muestra la primera vez que se entra a un valle (en una evaluación nunca)
+const needLesson=L=>!SESSION&&!!lecOf(L)&&!lecSeen()[L.chain];
+function paintApo(cv,talk){ if(!cv) return; const x=cv.getContext("2d"); x.clearRect(0,0,cv.width,cv.height); miniApolonio(x,Math.round(cv.width/2),cv.height-2,false,!!talk); }
+// Dibujo del ejemplo: cuadrícula, ejes, la curva y las partes de la lección (del modelo del Taller)
+function lecFig(cv,M,keys){ const r=cv.getBoundingClientRect(), W=Math.max(240,Math.round(r.width||320)), H=Math.round(W*5/8), d=Math.min(2,window.devicePixelRatio||1);
+  cv.width=W*d; cv.height=H*d; const x=cv.getContext("2d"); x.setTransform(d,0,0,d,0,0); const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim()||"#888";
+  const C={paper:css("--paper"),grid:css("--grid"),gs:css("--grid-strong"),curve:css("--curve"),part:css("--part"),muted:css("--muted")};
+  let [x0,y0,x1,y1]=M.box; x0=Math.min(x0,0)-1; y0=Math.min(y0,0)-1; x1=Math.max(x1,0)+1; y1=Math.max(y1,0)+1;
+  const cx=(x0+x1)/2, cy=(y0+y1)/2, sp=Math.max(x1-x0,(y1-y0)*W/H), S=(a,b)=>[W/2+(a-cx)*W/sp,H/2-(b-cy)*W/sp], X0=cx-sp/2, X1=cx+sp/2, Y0=cy-sp*H/W/2, Y1=cy+sp*H/W/2;
+  x.fillStyle=C.paper; x.fillRect(0,0,W,H); const stp=sp>24?2:1; x.lineWidth=1; x.strokeStyle=C.grid;
+  for(let g=Math.ceil(X0/stp)*stp; g<=X1; g+=stp){ const [a]=S(g,0); x.beginPath(); x.moveTo(a+.5,0); x.lineTo(a+.5,H); x.stroke(); }
+  for(let g=Math.ceil(Y0/stp)*stp; g<=Y1; g+=stp){ const [,b]=S(0,g); x.beginPath(); x.moveTo(0,b+.5); x.lineTo(W,b+.5); x.stroke(); }
+  const [ox,oy]=S(0,0); x.strokeStyle=C.gs; x.lineWidth=1.5; x.beginPath(); x.moveTo(0,oy); x.lineTo(W,oy); x.moveTo(ox,0); x.lineTo(ox,H); x.stroke();
+  x.strokeStyle=C.curve; x.lineWidth=3; (M.curve||[]).forEach(br=>{ x.beginPath(); let on=false; br.forEach(q=>{ if(!isFinite(q[0])||!isFinite(q[1])||Math.abs(q[1]-cy)>sp*2){ on=false; return; } const p=S(q[0],q[1]); on?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]); on=true; }); x.stroke(); });
+  x.strokeStyle=C.part; x.fillStyle=C.part;
+  M.parts.filter(p=>keys.includes(p.key)).forEach(P=>P.draw.forEach(dd=>{ x.lineWidth=2.5;
+    if(dd.r==="rect"){ const a=S(...dd.a), b=S(...dd.b); x.setLineDash([5,5]); x.strokeRect(Math.min(a[0],b[0]),Math.min(a[1],b[1]),Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1])); x.setLineDash([]); }
+    else if(dd.r==="linea"||dd.r==="asintota"){ let A,B; if(dd.r==="linea") [A,B]=dd.y!=null?[[X0,dd.y],[X1,dd.y]]:[[dd.x,Y0],[dd.x,Y1]]; else { A=[X0,dd.at[1]+dd.m*(X0-dd.at[0])]; B=[X1,dd.at[1]+dd.m*(X1-dd.at[0])]; }
+      const a=S(...A), b=S(...B); x.setLineDash([8,6]); x.beginPath(); x.moveTo(...a); x.lineTo(...b); x.stroke(); x.setLineDash([]); }
+    else if(dd.r==="seg"){ const a=S(...dd.a), b=S(...dd.b); x.beginPath(); x.moveTo(...a); x.lineTo(...b); x.stroke();
+      if(dd.txt){ x.font="700 12px "+css("--f-body"); x.textAlign="left"; x.textBaseline="bottom"; x.fillText(dd.txt,(a[0]+b[0])/2+4,(a[1]+b[1])/2-3); } }
+    else if(dd.at){ const p=S(...dd.at); x.beginPath(); if(dd.r==="foco"){ for(let k=0;k<8;k++){ const rr=k%2?2.5:6.5, an=k*Math.PI/4; x.lineTo(p[0]+rr*Math.cos(an),p[1]+rr*Math.sin(an)); } x.closePath(); } else x.arc(p[0],p[1],4.5,0,7); x.fill();
+      if(dd.tag){ x.font="700 12px "+css("--f-body"); x.textAlign="left"; x.textBaseline="bottom"; x.fillText(dd.tag,Math.min(W-24,p[0]+6),Math.max(14,p[1]-4)); } } })); }
+let lecDone=null, lecCur=null;
+function showLesson(L,then,review){ const Lc=lecOf(L); if(!Lc){ if(then) then(); return; } lecCur=L; lecDone=then||null;
+  $("lecTitle").textContent=Lc.t; const c=chainOfL(L); $("lecValle").textContent=`${wOf(L)} · ${L.chain}`+(c&&c.ls[0].diff?` · ${c.ls[0].diff}`:"");
+  const glue=t=>t.replace(/\([^)]*\)/g,m=>m.replace(/ /g,"\u00a0")).replace(/ = /g,"\u00a0=\u00a0");
+  $("lecBody").innerHTML=Lc.p.map(t=>`<p>${esc(glue(t))}</p>`).join("");
+  $("lecFm").hidden=!Lc.f; $("lecFm").innerHTML=Lc.f?`<span>La fórmula de este valle</span>`+Lc.f.split(/\s{2,}/).map(t=>`<div>${esc(glue(t))}</div>`).join(""):"";
+  const M=Lc.ex?tModelOf(Lc.ex):null; $("lecFig").hidden=!M; $("lecLab").hidden=!M||(!!SESSION&&!evEnded());
+  $("lecParts").innerHTML=M?`<li><b>Ejemplo:</b> <span class="v">${esc(M.eq)}</span></li>`+M.parts.filter(p=>Lc.parts.includes(p.key)).map(p=>`<li><b>${esc(p.name)}:</b> <span class="v">${esc(p.val)}</span>. ${esc(p.how)}</li>`).join(""):"";
+  $("lecGo").textContent=review?"Cerrar":"¡A jugar!";
+  paintApo($("lecApo"),true); $("leccion").hidden=false; if(M) lecFig($("lecFig"),M,Lc.parts); $("lecGo").focus({preventScroll:true}); }
+function closeLesson(){ $("leccion").hidden=true; if(lecCur&&lecCur.chain){ const s=lecSeen(); s[lecCur.chain]=1; store.set("euclidia2-lecciones",s); } const f=lecDone; lecDone=null; if(f) f(); }
+$("lecGo").onclick=closeLesson;
+$("lecLab").onclick=()=>{ const L=lecCur, Lc=lecOf(L), back=lecDone; if(!Lc||!Lc.ex) return; $("leccion").hidden=true; lecDone=null;
+  tAfter=()=>showLesson(L,back,$("lecGo").textContent==="Cerrar"); openTaller(); tPracSet(false); tSetConic(Lc.ex.c,{...Lc.ex}); };
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("leccion").hidden) closeLesson(); });
+// Entrar a un nivel: si es el primero que se juega de su valle, primero la lección y después la historia del nivel
+{ const _openLevel=openLevel; openLevel=function(i){ _openLevel(i); const L=level(); if(needLesson(L)){ const loreUp=!$("lore").hidden; hideLore(); showLesson(L,()=>{ if(loreUp) showLore(L); }); } }; }
+// Repasar las lecciones desde el Gran Mapa: las de los valles abiertos
+{ const box=document.createElement("div"); box.id="lecRepaso"; box.innerHTML='<h3>Lecciones de Apolonio</h3><p class="small">Antes de cada valle el maestro Apolonio te explica lo que vas a usar. Aquí puedes repasar las de los valles que ya abriste.</p><div class="leclist" id="lecList"></div>';
+  $("advWhy").after(box);
+  $("lecList").onclick=e=>{ const b=e.target.closest("button"); if(!b) return; const L=LEVELS.find(l=>l.id===b.dataset.id); if(L) showLesson(L,null,true); };
+  const _openMap=openMap; openMap=function(){ _openMap(); const AS=advState();
+    const cs=advWorlds().flatMap(w=>chainsOf(w)).filter(c=>LECCIONES[c.key]&&c.ls.some(L=>AS.open.has(L.id)));
+    $("lecList").innerHTML=cs.map(c=>`<button class="btn ghost" type="button" data-id="${esc(c.ls[0].id)}">${esc(LECCIONES[c.key].t)}${lecSeen()[c.key]?"":' <span class="got">nueva</span>'}</button>`).join("")||'<span class="small">Termina el tutorial para abrir la primera lección.</span>'; }; }
+// Apolonio también dice las lecciones del tutorial y las pistas
+{ const apoTag=(id,txt)=>{ const d=document.createElement("div"); d.className="apo-say"; d.id=id; d.innerHTML=`<canvas width="24" height="30" aria-hidden="true"></canvas><span>${esc(txt)}</span>`; paintApo(d.querySelector("canvas"),true); return d; };
+  const hp=apoTag("hintApo","El maestro Apolonio te da una pista:"); $("hintList").before(hp);
+  const _renderHints=renderHints; renderHints=function(){ _renderHints(); hp.hidden=!(prog.shown[level().id]>0); }; renderHints();
+  const _loadLevel=loadLevel; loadLevel=function(i){ _loadLevel(i); const ls=$("lesson"); if(!ls.hidden&&!ls.querySelector(".apo-say")) ls.prepend(apoTag("lessonApo","El maestro Apolonio te explica:")); };
+  const ls=$("lesson"); if(!ls.hidden&&!ls.querySelector(".apo-say")) ls.prepend(apoTag("lessonApo","El maestro Apolonio te explica:")); }
+// ?modo=estudio: al terminar de entrar se abre el Gran Mapa en vez del menú (una vez); de ahí, «☰ Menú» lleva al menú
+{ let first=wantStudy; const _openMenu=openMenu; openMenu=function(){ if(first&&!SESSION){ first=false; ["back","role","reg","teacher"].forEach(id=>$(id).hidden=true); openMap(); return true; } return _openMenu(); }; }
+// Panel del profesor: enlaces del modo estudio (aventura con lecciones, Taller y práctica), con su código QR
+{ const base=()=>{ const u=new URL(location.href); u.hash=""; u.search=""; return u; };
+  const ESTUDIO=[["estudio","Aventura con lecciones","Abre el Gran Mapa: cada valle empieza con una lección de Apolonio y luego sus niveles."],["taller","Taller de Coni","Laboratorio: mover parámetros y ver las partes de cada cónica."],["practica","Práctica sin fin","Ejercicios al azar de «halla lo que falta», con conteo de aciertos en el celular."]];
+  const linkOf=m=>{ const u=base(); u.searchParams.set("modo",m); return u.toString(); };
+  function estUI(){ $("estLinks").innerHTML=ESTUDIO.map(([m,t,d])=>`<div class="er"><b>${esc(t)}</b><span class="small">${esc(d)}</span><div class="url">${esc(linkOf(m))}</div><div class="row"><button class="btn ghost" type="button" data-c="${m}">Copiar enlace</button><button class="btn ghost" type="button" data-q="${m}">Ver código QR</button></div></div>`).join("");
+    $("estQr").hidden=true; $("estMsg").textContent=""; }
+  $("estLinks").onclick=async e=>{ const b=e.target.closest("button"); if(!b) return;
+    if(b.dataset.c){ const url=linkOf(b.dataset.c); try{ await navigator.clipboard.writeText(url); $("estMsg").textContent="Enlace copiado."; }catch(er){ $("estMsg").textContent="No se pudo copiar: selecciona el enlace y cópialo a mano."; } return; }
+    const url=linkOf(b.dataset.q), box=$("estQr"); box.hidden=false; box.innerHTML="";
+    const draw=()=>{ box.innerHTML=""; try{ new window.QRCode(box,{text:url,width:200,height:200,correctLevel:window.QRCode.CorrectLevel.M}); $("estMsg").textContent=`Código QR de: ${ESTUDIO.find(r=>r[0]===b.dataset.q)[1]}.`; }catch(er){ $("estMsg").textContent="No se pudo generar el código. Comparte el enlace."; } };
+    if(window.QRCode) draw(); else { const s=document.createElement("script"); s.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"; s.onload=draw; s.onerror=()=>{ $("estMsg").textContent="No se pudo cargar el generador de códigos. Comparte el enlace."; }; document.head.appendChild(s); } };
+  const _openTeacher=openTeacher; openTeacher=function(){ _openTeacher(); estUI(); }; }
+
+window.__euclidia={lecciones:{all:LECCIONES,show:showLesson,need:needLesson,close:closeLesson},adv:{state:advState,next:advNext,resume:advResume,chains:chainsOf,menu:openMenu},practica:{gen:pracGen,check:pracCheck,stats:prStats,model:tModelOf,set:tPracSet,ex:()=>tPx,next:tPracNew,target:prTarget,force:X=>{ tPx=X; tPracShow(); }},taller:{model:tModel,general:tGeneral,state:()=>TS,set:(st)=>tSetConic(st.c,{...st}),open:openTaller,close:closeTaller,retos:RETOS,flip:tFlip},LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
     if(ivs[i]) ivs[i]=(list||[]).map(I=>({v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):"",loC:true,hiC:true})); }); renderModes(); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
   state:()=>({g2,prog,player,idx}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),
