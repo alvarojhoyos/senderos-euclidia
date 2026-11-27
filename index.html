@@ -311,6 +311,13 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
 .lorecard{border-top:4px solid var(--accent)}
 .lorecard .lorereg{font:700 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
 .lorecard p{margin:0;font-size:16px;line-height:1.5}
+.saga{margin:0;padding:0 0 0 22px;display:grid;gap:6px;max-height:clamp(96px,100dvh - 420px,42vh);overflow:auto;font-size:14px}
+.lorecard #loreGo{position:sticky;bottom:0;box-shadow:0 6px 0 var(--panel),0 -6px 0 var(--panel)}
+.saga li b{display:block;font-weight:700}
+.saga li span{color:var(--muted);font-size:12.5px}
+.saga li.ok b{color:var(--good,var(--accent))}
+.saga li.cur b{color:var(--accent)}
+.evsaga{margin:6px 0 0;padding:0 0 0 20px;font-size:13px;color:var(--muted)}
 .card .err{color:var(--bad);font-size:13px;margin:0}
 #qrBox{display:grid;place-items:center;background:#fff;border-radius:12px;padding:12px;min-height:120px}
 #qrBox img,#qrBox canvas{max-width:100%;height:auto}
@@ -536,6 +543,7 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
     <span class="lorereg" id="loreRegion"></span>
     <h2 id="loreTitle"></h2>
     <p id="loreText"></p>
+    <ol class="saga" id="loreRoute" hidden></ol>
     <button class="btn" type="button" id="loreGo">Siguiente</button>
   </div>
 </div>
@@ -608,7 +616,7 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
       <p class="small" id="evLenTxt"></p>
       <details id="evMore">
         <summary>Elegir los niveles a mano</summary>
-        <p class="small">Cuántos niveles de cada dificultad entran por mundo. A cada estudiante le tocan niveles al azar con esas cantidades, ordenados de fácil a difícil.</p>
+        <p class="small">Cuántos niveles de cada dificultad entran por mundo. A cada estudiante le tocan esas cantidades en niveles seguidos de un mismo valle (para que sea una sola historia), elegidos al azar y ordenados de fácil a difícil.</p>
         <table class="evt" aria-label="Niveles por mundo y dificultad"><thead><tr><th></th><th>Fácil</th><th>Medio</th><th>Difícil</th></tr></thead><tbody id="evQ"></tbody></table>
         <p class="small" id="evMax"></p>
         <div class="row"><button class="btn ghost" type="button" data-p="0" id="evZero">Vaciar la tabla</button></div>
@@ -616,6 +624,7 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
       <label for="evMin">Tiempo en minutos (0 = sin límite)</label><input id="evMin" inputmode="numeric" value="40">
       <label for="evName">Nombre de la prueba (opcional, sale en tu hoja)</label><input id="evName" maxlength="60" placeholder="por ejemplo: Quiz de cónicas, grupo 2">
       <p class="small" id="evSum"></p>
+      <div id="evSagaBox" hidden><p class="small"><b>La prueba es una saga:</b> cada estudiante recorre una sola historia de Coni, con niveles seguidos de los mismos valles. Ejemplo de la ruta de un estudiante (a cada uno le tocan valles o tramos distintos):</p><ol class="evsaga" id="evSaga"></ol></div>
       <p class="small">La nota es monedas obtenidas / monedas posibles × 5,0.</p>
     </section>
     <section class="hojabox" aria-labelledby="hojaH">
@@ -1839,7 +1848,7 @@ function finish(){
     $("winText").textContent= L.tutorial ? "Ya sabes jugar. Este nivel no cuenta para la nota: los siguientes sí."
       : `Monedas en este nivel: ${coins} de ${L.coins.length}.`+(all?"":" Tu curva no es exactamente la pedida, por eso perdiste monedas. Puedes intentarlo otra vez: cuenta tu mejor intento.");
     if(!L.tutorial&&!SESSION&&!wasDone&&regDone()) $("winText").textContent+=` ¡${REGIONS[reg]} salió de la niebla! Mírala en el Gran Mapa.`;
-    $("nextBtn").hidden=nextIdx()<0; $("win").hidden=false;
+    $("nextBtn").hidden=nextIdx()<0; $("win").hidden=false; sagaWin(L);
     const extra=r.extra&&EXTRA_RULE==="aviso"?" Ojo: tu restricción deja un trozo de curva que sobra junto al inicio. Hay un límite exacto que lo evita.":"";
     showFb(all?"good":"",all?"¡Camino perfecto!":"Llegaste, pero faltaron monedas.",(all?"":notes.join(" ")||"Revisa los números de tu ecuación.")+extra);
     return;
@@ -2048,7 +2057,7 @@ function renderLevels(){
   const sel=tabs.querySelector('[aria-selected="true"]'); if(sel) tabs.scrollLeft=Math.max(0,sel.offsetLeft-tabs.offsetLeft-(tabs.clientWidth-sel.offsetWidth)/2);
   const chains=document.createElement("div"); chains.className="chains"; const groups=[];
   if(SESSION&&menuWorld!=="Tutorial") SESSION_ORDER.map(id=>LEVELS.findIndex(l=>l.id===id)).filter(i=>i>=0&&wOf(LEVELS[i])===menuWorld&&vis(LEVELS[i])).forEach((i,k)=>{ const L=LEVELS[i], d=L.diff[0].toUpperCase()+L.diff.slice(1);
-    let g=groups.find(x=>x.key===d); if(!g) groups.push(g={key:d,name:d,items:[]}); g.items.push([L,i,k+1]); });
+    const key=d+"|"+(L.chain||L.title); let g=groups.find(x=>x.key===key); if(!g) groups.push(g={key,name:`${d} · ${L.chain||L.title}`,items:[]}); g.items.push([L,i,k+1]); });
   else LEVELS.forEach((L,i)=>{ if(wOf(L)!==menuWorld||!vis(L)) return; const key=L.chain||L.title; let g=groups.find(x=>x.key===key); if(!g) groups.push(g={key,name:L.chain,items:[]}); g.items.push([L,i]); });
   groups.forEach(g=>{ const row=document.createElement("div"); row.className="chain";
     if(g.name){ const n=document.createElement("span"); n.className="cn"; n.textContent=g.name; row.appendChild(n); }
@@ -2169,10 +2178,12 @@ function loadLevel(i){
 $("form").addEventListener("submit",e=>{ e.preventDefault(); doSubmit(); });
 $("nextBtn").onclick=()=>{ const j=nextIdx(); if(j>=0) openLevel(j); };
 // Panel de historia: al abrir un nivel desde el menú, con "Siguiente nivel" o al empezar el quiz
-function showLore(L){ const t=LORE[L.id]; if(!t) return;
-  $("loreRegion").textContent=REGIONS[SCENE_OF[L.id]]||""; $("loreTitle").textContent=L.title; $("loreText").textContent=t;
+function showLore(L){ const t=LORE[L.id]; if(!t) return; const P=SESSION&&!L.tutorial?sagaPos(L.id):null, reg=REGIONS[SCENE_OF[L.id]]||"";
+  $("loreRegion").textContent=P?`Tramo ${P.k} de ${P.n} · ${P.chain}`:reg; $("loreTitle").textContent=L.title;
+  $("loreText").textContent=(P&&P.first&&P.c>0?sagaBridge(P.ch[P.c-1],P.ch[P.c])+" ":"")+t;
+  $("loreRoute").hidden=true; $("loreGo").textContent="Siguiente"; loreThen=null;
   $("lore").hidden=false; $("loreGo").focus({preventScroll:true}); }
-function hideLore(){ $("lore").hidden=true; }
+function hideLore(){ $("lore").hidden=true; $("loreRoute").hidden=true; const f=loreThen; loreThen=null; if(f) f(); }
 function openLevel(i){ const same=i===idx&&$("lore").hidden; loadLevel(i); store.set("euclidia2-ultimo",LEVELS[i].id); if(!same) showLore(level()); }
 $("loreGo").onclick=hideLore;
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("lore").hidden) hideLore(); });
@@ -2273,7 +2284,7 @@ async function sendFinal(timeUp){ if(evEnded()||!player) return;
   const q=store.get("euclidia2-queue",[]); q.push(resultRow(timeUp?"Se acabó el tiempo":"Terminó la prueba","")); store.set("euclidia2-queue",q);
   if(EV&&SESSION) store.set(evKey("end"),true);
   $("doneTitle").textContent=timeUp?"Se acabó el tiempo":"Prueba terminada"; $("doneGo").hidden=true; $("doneBack").textContent="Cerrar";
-  $("doneText").textContent=(timeUp?"El juego envió tu resultado. ":"")+`Tu resultado: ${coinsTotal()} de ${TOTAL_COINS} monedas, nota ${dec(grade())}.`;
+  $("doneText").textContent=(timeUp?"El juego envió tu resultado. ":"")+`Tu resultado: ${coinsTotal()} de ${TOTAL_COINS} monedas, nota ${dec(grade())}.`+sagaEnd();
   $("doneSend").textContent=""; $("done").hidden=false; renderScore(); await flush(); }
 
 /* ---- Evaluación: niveles de cada estudiante y tiempo ---- */
@@ -2299,14 +2310,50 @@ function parseEv(code,name){ let m=/^([a-z0-9]{4,12})-((?:[CEPHIX]\d{3})+)-(\d{1
 const evCode=e=>`${e.id}-${Object.keys(EV_WORLDS).filter(k=>e.q[k]&&e.q[k].some(n=>n>0)).map(k=>k+e.q[k].join("")).join("")}-${e.min}`;
 function hash32(t){ let h=2166136261; for(const ch of t){ h^=ch.codePointAt(0); h=Math.imul(h,16777619); } return h>>>0; }
 function rng(seed){ let a=seed; return ()=>{ a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
-// Niveles de cada estudiante: de cada mundo y dificultad, tantos como pidió el profesor, al azar y ordenados de fácil a difícil.
+// Niveles de cada estudiante (etapa 5, evaluación como saga): de cada mundo y dificultad, tantos como pidió el profesor,
+// tomados SEGUIDOS de los valles (cadenas) de esa dificultad, para que la prueba sea una sola historia de Coni.
+// Los valles se barajan, se ponen uno tras otro y se toma un tramo seguido que empieza en un punto al azar
+// (puede terminar un valle y seguir con el comienzo del otro). Orden: mundo por mundo, de fácil a difícil.
 // La misma evaluación y el mismo documento dan siempre los mismos niveles.
 function sessionFor(ev,doc){ const r=rng(hash32(ev.id+"|"+String(doc).trim())), ids=[];
   Object.keys(EV_WORLDS).forEach(k=>{ const q=ev.q[k]; if(!q) return;
-    DIFFS.forEach((_,d)=>{ const pool=evPool(k,d).map(l=>l.id);
-      for(let i=pool.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
-      ids.push(...pool.slice(0,q[d])); }); });
+    DIFFS.forEach((_,d)=>{ const n=q[d]; if(!n) return; const ch=[];
+      evPool(k,d).forEach(l=>{ const key=l.chain||l.id; let c=ch.find(x=>x.k===key); if(!c) ch.push(c={k:key,ls:[]}); c.ls.push(l); });
+      ch.forEach(c=>c.ls.sort((a,b)=>(a.step||0)-(b.step||0)));
+      for(let i=ch.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [ch[i],ch[j]]=[ch[j],ch[i]]; }
+      const seq=ch.flatMap(c=>c.ls.map(l=>l.id)), m=Math.min(n,seq.length), s0=Math.floor(r()*(seq.length-m+1));
+      ids.push(...seq.slice(s0,s0+m)); }); });
   return ids; }
+// La saga: capítulos = niveles seguidos del mismo valle
+function sagaOf(order){ const ch=[]; (order||[]).forEach((id,i)=>{ const L=LEVELS.find(l=>l.id===id); if(!L) return; const last=ch[ch.length-1];
+    if(last&&last.chain===L.chain) last.ids.push(id); else ch.push({chain:L.chain||L.title,world:L.world,diff:L.diff,ids:[id],from:i}); }); return ch; }
+function sagaPos(id){ const k=SESSION_ORDER.indexOf(id); if(k<0) return null; const ch=sagaOf(SESSION_ORDER), c=ch.findIndex(x=>x.ids.includes(id));
+  return {k:k+1,n:SESSION_ORDER.length,c,ch,chain:ch[c].chain,world:ch[c].world,first:ch[c].ids[0]===id}; }
+const sagaArt=t=>String(t).replace(/^(El|La|Los|Las) /,m=>m.toLowerCase());
+const SAGA_WORLD={Circunferencias:"el mundo de las circunferencias",Elipses:"el mundo de las elipses",Parábolas:"el mundo de las parábolas",Hipérbolas:"el mundo de las hipérbolas",Identificar:"los lugares donde hay que reconocer cada curva",Mixtos:"los caminos de varios tramos"};
+// Puente entre un valle y el siguiente (sin dar datos del nivel)
+function sagaBridge(prev,cur){ return prev.world!==cur.world?`Coni ya cruzó ${sagaArt(prev.chain)}. Ahora entra en ${SAGA_WORLD[cur.world]||cur.world}: ${sagaArt(cur.chain)}.`
+  :`Coni deja atrás ${sagaArt(prev.chain)} y sigue hacia ${sagaArt(cur.chain)}.`; }
+const sagaDone=id=>prog.best[id]!=null;
+function sagaRouteHTML(ch,cur){ return ch.map((c,i)=>{ const ok=c.ids.every(sagaDone), n=c.ids.length;
+    return `<li class="${ok?"ok":""}${i===cur?" cur":""}"><b>${esc(c.chain)}</b><span>${esc(c.world)} · ${esc(c.diff)} · ${n} ${n===1?"tramo":"tramos"}${ok?" · ✓":""}</span></li>`; }).join(""); }
+// Prólogo al pulsar «Empezar el quiz»: la ruta completa de la saga
+let loreThen=null;
+function showSagaIntro(then){ const ch=sagaOf(SESSION_ORDER); if(!ch.length){ if(then) then(); return; }
+  const n=SESSION_ORDER.length, nv=ch.length;
+  $("loreRegion").textContent="La saga de hoy"; $("loreTitle").textContent=EV&&EV.name?EV.name:"La travesía de Coni";
+  $("loreText").textContent=`La Niebla volvió a cubrir ${nv===1?"un valle":nv+" valles"} de Euclidia y hay Trazadores atrapados. El maestro Apolonio marcó la ruta: Coni la recorrerá de principio a fin, ${n===1?"en un solo tramo":`en ${n} tramos seguidos`}. En cada tramo escribes la ecuación del camino.`+(EV&&EV.min?` Tienes ${EV.min} minutos.`:"");
+  const r=$("loreRoute"); r.innerHTML=sagaRouteHTML(ch,-1); r.hidden=false; $("loreGo").textContent="¡En marcha!";
+  loreThen=then||null; $("lore").hidden=false; $("loreGo").focus({preventScroll:true}); }
+// Al ganar un nivel de la saga: qué sigue
+function sagaWin(L){ const b=$("nextBtn"); b.textContent="Siguiente nivel"; if(!SESSION||L.tutorial||!SESSION.has(L.id)) return; const P=sagaPos(L.id); if(!P) return;
+  b.textContent="Seguir la saga"; const j=nextIdx(), left=SESSION_ORDER.filter(id=>!sagaDone(id)).length;
+  if(j<0) $("winText").textContent+=left?` Era el último tramo de la ruta, pero aún ${left===1?"falta 1 tramo":`faltan ${left} tramos`} por superar: búscalos en la barra de niveles.`:" ¡Coni recorrió toda la saga! Cuando quieras, pulsa «Terminar y enviar mi resultado».";
+  else { const Q=sagaPos(LEVELS[j].id); $("winText").textContent+=` Tramo ${P.k} de ${P.n} de la saga.`+(Q&&Q.c!==P.c?` Lo que sigue: ${sagaArt(Q.chain)} (${Q.world}).`:""); } }
+// Epílogo al terminar la prueba
+function sagaEnd(){ if(!SESSION||!SESSION_ORDER.length) return ""; const ch=sagaOf(SESSION_ORDER), ok=SESSION_ORDER.filter(sagaDone).length, vl=ch.filter(c=>c.ids.every(sagaDone)).length, n=SESSION_ORDER.length;
+  return ok===n?` Coni recorrió los ${n} tramos y la Niebla dejó libres ${ch.length===1?"el valle":`los ${ch.length} valles`} de la ruta.`
+    :ok?` Coni superó ${ok} de ${n} tramos y liberó ${vl===1?"1 valle":vl+" valles"} de ${ch.length}. La Niebla sigue en el resto de la ruta.`:` Coni no alcanzó a superar ningún tramo de la ruta esta vez.`; }
 function evCount(ev){ return Object.keys(EV_WORLDS).reduce((s,k)=>s+(ev.q[k]?DIFFS.reduce((t,_,d)=>t+Math.min(ev.q[k][d],evPool(k,d).length),0):0),0); }
 let SESSION_ORDER=[];
 function applySession(){ SESSION_ORDER=EV&&role==="estudiante"&&player?sessionFor(EV,player.documento):[]; SESSION=SESSION_ORDER.length?new Set(SESSION_ORDER):null; recount(); }
@@ -2317,11 +2364,13 @@ function evStart(){ if(EV&&SESSION&&!store.get(evKey("start"),0)) store.set(evKe
 // Antes de empezar el estudiante puede hacer el Tutorial: el reloj y los niveles del quiz esperan al botón "Empezar el quiz"
 function gateUI(){ const g=$("evGate"), on=!!SESSION&&!evStarted()&&!evEnded(); g.hidden=!on; if(!on) return;
   const n=SESSION.size, nm=EV.name?`«${EV.name}»`:"Tu quiz";
-  $("evGateTxt").textContent=`${nm}: ${n} niveles${EV.min?` y ${EV.min} minutos`:", sin límite de tiempo"}. Si quieres, haz primero el Tutorial. El tiempo empieza cuando pulses el botón y ya no se detiene.`;
+  const nv=sagaOf(SESSION_ORDER).length;
+  $("evGateTxt").textContent=`${nm}: una saga de ${n} niveles por ${nv===1?"un valle":nv+" valles"}${EV.min?` en ${EV.min} minutos`:", sin límite de tiempo"}. Si quieres, haz primero el Tutorial. El tiempo empieza cuando pulses el botón y ya no se detiene.`;
   const b=$("evGo"); b.textContent=b.dataset.confirm?"Toca otra vez para empezar":"Empezar el quiz"; }
 $("evGo").onclick=()=>{ const b=$("evGo");
   if(!b.dataset.confirm){ b.dataset.confirm="1"; gateUI(); setTimeout(()=>{ if(b.dataset.confirm){ delete b.dataset.confirm; gateUI(); } },4000); return; }
-  delete b.dataset.confirm; evStart(); openLevel(firstSession()); renderScore(); tick(); window.scrollTo({top:0,behavior:"smooth"}); };
+  delete b.dataset.confirm; evStart(); loadLevel(firstSession()); renderScore(); tick(); window.scrollTo({top:0,behavior:"smooth"});
+  showSagaIntro(()=>showLore(level())); };
 function evLeft(){ if(!EV||!SESSION||!EV.min) return null; const t0=store.get(evKey("start"),0); if(!t0) return EV.min*60; return Math.max(0,Math.ceil((t0+EV.min*60000-Date.now())/1000)); }
 function firstSession(){ const j=SESSION_ORDER.length?LEVELS.findIndex(l=>l.id===SESSION_ORDER[0]):-1; return j<0?0:j; }
 function tick(){ const left=evLeft(), p=$("sTime"); p.hidden=left==null; if(left==null) return;
@@ -2344,6 +2393,8 @@ function evSummary(){ const f=evForm(), n=evCount(f), pk=Object.keys(EV_PRESET).
   document.querySelectorAll(".evlen button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.p===pk)));
   $("evLenTxt").textContent=pk?EV_LEN[pk]:n?"Personalizada: la armaste a mano en la tabla.":"";
   $("evSum").textContent=n?`Cada estudiante tendrá ${n} niveles${f.min?` y ${f.min} minutos`:", sin límite de tiempo"}.`:"Elige al menos un nivel.";
+  const ex=n?sagaOf(sessionFor({...f,id:"ejemplo"},"1")):[]; $("evSagaBox").hidden=!ex.length;
+  $("evSaga").innerHTML=ex.map(c=>`<li>${esc(c.chain)} <span>(${esc(c.world)}, ${esc(c.diff)}, ${c.ids.length} ${c.ids.length===1?"nivel":"niveles"})</span></li>`).join("");
   const full=[...$("evQ").querySelectorAll("select")].filter(sl=>+sl.value>0&&sl.selectedIndex===sl.options.length-1);
   $("evMax").textContent=full.length?"En las casillas que están al máximo todos los estudiantes reciben los mismos niveles. Si pides menos, los niveles cambian de un estudiante a otro.":"";
   $("evMake").disabled=!n;

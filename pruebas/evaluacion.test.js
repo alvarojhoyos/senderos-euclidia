@@ -70,7 +70,7 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
  res(s.once&&s.gate,'«Empezar el quiz» pide un segundo toque y luego el aviso desaparece');
  res(s.tabs.join()==='Tutorial,Circunferencias,Parábolas',`El menú solo muestra el Tutorial y los mundos de la evaluación: ${s.tabs.join(', ')}`);
  res(s.cur===s.first&&s.firstDiff==='fácil',`Empieza en su primer nivel de la evaluación (${s.cur}, ${s.firstDiff})`);
- res(s.rows==='Fácil,Medio,Difícil',`El menú de cada mundo agrupa sus niveles por dificultad: ${s.rows}`);
+ res(/^Fácil · [^,]+(,Fácil · [^,]+)?,Medio · [^,]+(,Medio · [^,]+)?,Difícil · [^,]+(,Difícil · [^,]+)?$/.test(s.rows),`El menú de cada mundo agrupa sus niveles por dificultad y valle de la saga: ${s.rows}`);
  res(s.coins==='0 / '+s.poss,`Monedas posibles = las de sus 6 niveles: ${s.coins}`);
  res(/^29:5\d$/.test(s.time),`Al empezar el quiz el reloj corre: ${s.time}`);
  // 4. Al acabarse el tiempo se envía el resultado y ya no se juega

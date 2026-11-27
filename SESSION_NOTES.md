@@ -6,7 +6,7 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 3. **Banco de datos variados** — hecho (52 niveles nuevos y todo el banco en cadenas por dificultad), PR #14 apilado sobre el #13 (rama `claude/project-thread-dngk74`), aprobado por Alvaro el 2026-11-27. Doc: https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX
 3b. **Menú principal + modo aventura con candados** (pedido de Alvaro, 2026-11-26 22:43) — hecho, PR apilado sobre el #14 (rama `claude/project-thread-6loujp`, que además trae el commit de entrada sin documento del #13). Adelanta parte de la etapa 4: los desbloqueos ya existen; falta que cada zona enseñe algo con Apolonio.
 4. **Modo historia** — hecho, PR #16 (rama `claude/project-thread-4ynul0`, apilada sobre el #15), esperando revisión de Alvaro: lección de Apolonio antes de cada valle, repaso en el Gran Mapa, `?modo=estudio` y enlaces del profesor.
-5. Evaluación como una sola saga: el profesor elige cuántos niveles por dificultad y el juego arma una historia seguida de Coni.
+5. **Evaluación como una sola saga** — hecho de noche (2026-11-27, encargo de Alvaro mientras dormía), PR apilado sobre el #17 (rama `claude/project-thread-h5xgfs`), esperando su revisión.
 6. Cierre: celular, todas las pruebas, publicación, guía del profesor.
 
 ## Qué hay en la etapa 1 (index.html)
@@ -50,10 +50,27 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 - Pruebas: `pruebas/panel.test.js` (21). Se ajustaron `evaluacion.test.js` (entra por «Generar una prueba», `#evZero`) y `lecciones.test.js` (estudio → menú; un solo enlace).
 - Publicado en el enlace privado de prueba (versión 10). La extensión de Chrome no estaba conectada, así que la verificación fue descargando la página publicada y corriendo `panel.test.js` sobre ella (21/21, iPhone SE y laptop).
 
-## Para la etapa 5 (evaluación como una sola saga)
-- El profesor ya elige el largo (corta 6, media 12, larga 20) o cuántos niveles por dificultad (tabla del panel). Falta que el quiz se presente como una historia seguida de Coni: orden de valles con narración entre niveles (`LORE`) y quizá una lección corta de Apolonio desactivada (en evaluación no hay lecciones a propósito).
-- Con N niveles de una dificultad debe salir una sola saga: revisar que el banco alcance (por cónica hay 2 cadenas por dificultad = 8 niveles).
-- El PR #11 sigue abierto; los niveles nuevos ya funcionan con su regla.
+## Qué hay en la etapa 5 (evaluación como saga, rama `claude/project-thread-h5xgfs`, apilada sobre el #17)
+- Reparto (`sessionFor`): por mundo y dificultad, los valles (cadenas) de esa dificultad se barajan, se ponen uno tras otro y se toma un tramo SEGUIDO de N niveles desde un punto al azar (puede acabar un valle y seguir con el comienzo del otro). Así N niveles de una dificultad salen de 1 o 2 valles. Orden: mundo por mundo (C, E, P, H, I, X), de fácil a difícil. La misma prueba y el mismo documento dan siempre lo mismo. Ojo: cambió qué niveles le tocan a cada documento respecto a antes (no importa porque aún no se ha publicado).
+- Bloque de la saga justo después de `sessionFor`: `sagaOf(order)` (capítulos = niveles seguidos del mismo valle), `sagaPos(id)`, `sagaBridge` (frase puente entre valles), `showSagaIntro` (prólogo), `sagaWin` (aviso al ganar), `sagaEnd` (epílogo en «Prueba terminada»).
+- Flujo del estudiante: aviso antes de empezar («una saga de N niveles por V valles»); «Empezar el quiz» → prólogo en el modal `#lore` («La saga de hoy», nombre de la prueba o «La travesía de Coni», ruta `#loreRoute` con los valles) → «¡En marcha!» → historia del tramo 1. Cada historia dice «Tramo k de N · valle» y, al entrar a un valle nuevo, empieza con el puente («Coni deja atrás… y sigue hacia…» o «Coni ya cruzó… Ahora entra en el mundo de…»). Al ganar: «Tramo k de N de la saga» y qué valle sigue; botón «Seguir la saga». En el último: si falta algo lo dice; si no, «¡Coni recorrió toda la saga!». Epílogo con tramos y valles liberados.
+- Barra de niveles en la evaluación: agrupada por «Dificultad · valle».
+- Panel del profesor: debajo del resumen, `#evSagaBox` con un ejemplo de la ruta de un estudiante (cambia con la tabla y los largos).
+- `hideLore` llama a `loreThen` (si hay); `showLore` lo borra, así un nivel normal no hereda el prólogo.
+- Pruebas: `pruebas/saga.test.js` (29; celular iPhone SE y laptop). Se ajustó `evaluacion.test.js` (filas de la barra = «Dificultad · valle»).
+
+### Decisiones tomadas de noche (para que Alvaro las revise)
+- Sin lecciones de Apolonio en la evaluación (sigue como antes): la prueba evalúa, no enseña. Apolonio solo «marca la ruta» en el prólogo.
+- El tramo puede empezar a mitad de un valle (para que estudiantes vecinos no tengan lo mismo); con 1 nivel medio de circunferencias salen 8 opciones distintas. Si prefiere que siempre empiece al comienzo del valle, es un cambio de una línea (`s0`) pero baja la variedad.
+- La corta y la media dan 1 nivel por valle (son un nivel por mundo y dificultad), así que la saga es una ruta de valles distintos unidos por puentes. Con 2 o más de la misma dificultad (larga o tabla a mano) ya salen niveles seguidos del mismo valle.
+- Las historias de cada nivel no se reescribieron; si un tramo empieza a mitad de valle, su texto puede decir «la laguna vecina» sin haber visto la anterior.
+
+## Para la etapa 6 (cierre)
+- Probar en celular todo el recorrido (historia → menú → aventura → Taller → panel → prueba como saga) y en laptop.
+- Correr todas las pruebas (`node pruebas/<archivo>.test.js` para cada archivo de `pruebas/`).
+- Publicación (Alvaro pidió esperar a terminar las 6 etapas): orden PR #11, luego actualizar docs del banco y skill diseñar-nivel, luego #12 → #13 → #14 → #15 → #16 → #17 → etapa 5 → etapa 6, apilados. Pedirle a Alvaro una captura de uso antes de publicar (comparar gasto).
+- Guía del profesor (https://claude.ai/artifact/CmkjC3Qf3DaoJLz3qyuqT3): agregar prueba como saga, largos (6/12/20), QR de solo estudio, Taller, práctica y modo historia.
+- Pendiente visto antes: en 320 px el panel del nivel se sale 13 px por la derecha.
 
 ## Qué hay en la etapa 3 (index.html)
 - Banco: 108 niveles, 294 monedas, en 30 cadenas. Cada cadena tiene UNA dificultad (pedido de Alvaro): por cónica 6 cadenas de 4 (fácil, fácil, medio, medio, difícil, difícil); identificar y mixtos 3 cadenas de 2 (fácil, medio, difícil). El mapa completo de cadenas está en el doc.
@@ -67,7 +84,7 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 
 ## Pendiente / preguntas abiertas
 - Etapa 3 aprobada (2026-11-27). Doc del banco v2: https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX
-- Etapa 4 (PR #16) y menú (PR #15): aprobados por Alvaro el 2026-11-27. Panel del profesor reorganizado: falta su revisión.
+- Etapa 4 (PR #16) y menú (PR #15): aprobados por Alvaro el 2026-11-27. Panel del profesor reorganizado (PR #17): aprobado por encargo de Alvaro (2026-11-27 3:07 Bogotá). Etapa 5: falta su revisión.
 - Pedido de Alvaro (coordinador): captura de uso para comparar gasto cuando haya unas 3 etapas con la nueva modalidad.
 
 ## Ahorro (pedido de Alvaro, 2026-11-26)
