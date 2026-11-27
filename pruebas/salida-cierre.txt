@@ -1,0 +1,27 @@
+PASA  | iPhone SE (320 px): un estudiante nuevo ve la historia, escribe su nombre y llega al menú
+PASA  | iPhone SE (320 px): el menú abre el Gran Mapa y el primer valle empieza con la lección de Apolonio
+PASA  | iPhone SE (320 px): el panel del profesor deja crear una prueba y compartir el modo estudio
+PASA  | iPhone SE (320 px): el enlace de solo estudio entra al menú
+PASA  | iPhone SE (320 px): la prueba arranca con el prólogo de la saga y termina con «Prueba terminada»
+PASA  | iPhone SE (320 px): las 18 pantallas caben a lo ancho
+PASA  | celular de 375 px: un estudiante nuevo ve la historia, escribe su nombre y llega al menú
+PASA  | celular de 375 px: el menú abre el Gran Mapa y el primer valle empieza con la lección de Apolonio
+PASA  | celular de 375 px: el panel del profesor deja crear una prueba y compartir el modo estudio
+PASA  | celular de 375 px: el enlace de solo estudio entra al menú
+PASA  | celular de 375 px: la prueba arranca con el prólogo de la saga y termina con «Prueba terminada»
+PASA  | celular de 375 px: las 18 pantallas caben a lo ancho
+PASA  | Pixel 7: un estudiante nuevo ve la historia, escribe su nombre y llega al menú
+PASA  | Pixel 7: el menú abre el Gran Mapa y el primer valle empieza con la lección de Apolonio
+PASA  | Pixel 7: el panel del profesor deja crear una prueba y compartir el modo estudio
+PASA  | Pixel 7: el enlace de solo estudio entra al menú
+PASA  | Pixel 7: la prueba arranca con el prólogo de la saga y termina con «Prueba terminada»
+PASA  | Pixel 7: las 18 pantallas caben a lo ancho
+PASA  | laptop: un estudiante nuevo ve la historia, escribe su nombre y llega al menú
+PASA  | laptop: el menú abre el Gran Mapa y el primer valle empieza con la lección de Apolonio
+PASA  | laptop: el panel del profesor deja crear una prueba y compartir el modo estudio
+PASA  | laptop: el enlace de solo estudio entra al menú
+PASA  | laptop: la prueba arranca con el prólogo de la saga y termina con «Prueba terminada»
+PASA  | laptop: las 18 pantallas caben a lo ancho
+PASA  | Sin errores de JavaScript
+
+25 pasan, 0 fallan
