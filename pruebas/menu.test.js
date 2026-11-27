@@ -34,15 +34,16 @@ const hid=(p,id)=>p.evaluate(i=>document.getElementById(i).hidden,id);
  await p.click('#loreGo').catch(()=>{}); await p.evaluate(()=>{ document.getElementById('lore').hidden=true; });
  // 3. Reglas de desbloqueo
  const u=await p.evaluate(()=>{ const U=window.__euclidia, P=U.state().prog, op=id=>U.adv.state().open.has(id), r={};
-   r.t1=op('t1'); r.c1=op('C1'); ['t0','t1','t2','t3','t4'].forEach(id=>P.best[id]=1);
-   r.c1b=op('C1')&&op('E1')&&op('P1')&&op('H1'); r.c2=op('C2'); r.i1=op('I1');
-   P.best.C1=2; r.c2b=op('C2'); r.c5=op('C5'); ['C2','C3','C4'].forEach(id=>P.best[id]=1); r.c5b=op('C5');
-   ['E1','E2','E3','E4','P1','P2','P3','P4','H1','H2','H3','H4'].forEach(id=>P.best[id]=1); r.i1b=op('I1')&&op('X1');
+   const ch=w=>U.adv.chains(w), C=ch('Circunferencias'), done=c=>c.ls.forEach(L=>P.best[L.id]=1);
+   r.t1=op('t1'); r.c1=op(C[0].ls[0].id); done(ch('Tutorial')[0]);
+   r.c1b=['Circunferencias','Elipses','Parábolas','Hipérbolas'].every(w=>op(ch(w)[0].ls[0].id)); r.c2=op(C[0].ls[1].id); r.i1=op(ch('Identificar')[0].ls[0].id);
+   P.best[C[0].ls[0].id]=2; r.c2b=op(C[0].ls[1].id); r.c5=op(C[1].ls[0].id); done(C[0]); r.c5b=op(C[1].ls[0].id)&&!op(C[1].ls[1].id);
+   ['Elipses','Parábolas','Hipérbolas'].forEach(w=>done(ch(w)[0])); r.i1b=op(ch('Identificar')[0].ls[0].id)&&op(ch('Mixtos')[0].ls[0].id);
    r.prof=U.adv.state(true).open.size===U.LEVELS.length; return r; });
  res(!u.t1&&!u.c1,'Sin hacer nada, el segundo paso del tutorial y los mundos están cerrados');
  res(u.c1b&&!u.c2&&!u.i1,'Al terminar el tutorial se abre el primer nivel de cada cónica (no el segundo, ni Identificar)');
- res(u.c2b&&!u.c5,'Superar C1 abre C2, pero el valle siguiente sigue cerrado');
- res(u.c5b,'Terminar el primer valle de circunferencias abre el segundo');
+ res(u.c2b&&!u.c5,'Superar el primer nivel de un valle abre el segundo, pero el valle siguiente sigue cerrado');
+ res(u.c5b,'Terminar el primer valle de circunferencias abre el primer nivel del segundo (no más)');
  res(u.i1b,'Terminar el primer valle de las cuatro cónicas abre Identificar y Mixtos');
  res(u.prof,'Sin candados (profesor o evaluación): todos los niveles abiertos');
  // 4. En el juego los niveles cerrados tienen candado y no se abren
@@ -53,7 +54,7 @@ const hid=(p,id)=>p.evaluate(i=>document.getElementById(i).hidden,id);
  // 5. «Continuar la aventura» lleva al siguiente nivel abierto sin superar
  const c=await p.evaluate(()=>{ const U=window.__euclidia, P=U.state().prog; ['t0','t1','t2','t3','t4'].forEach(id=>P.best[id]=1); localStorage.removeItem('euclidia2-ultimo'); return true; });
  await p.click('#mapBtn'); await p.click('#advGo'); await p.waitForTimeout(100);
- res(await p.evaluate(()=>window.__euclidia.LEVELS[window.__euclidia.state().idx].id==='C1'&&document.getElementById('mapa').hidden&&document.getElementById('menu').hidden),'Con el tutorial hecho, «Continuar la aventura» abre C1');
+ res(await p.evaluate(()=>window.__euclidia.LEVELS[window.__euclidia.state().idx].id==='C1'&&document.getElementById('mapa').hidden&&document.getElementById('menu').hidden),'Con el tutorial hecho, «Continuar la aventura» abre el primer nivel de circunferencias');
  // 6. Profesor: menú con el panel del profesor
  p=await page('',()=>{ localStorage.setItem('euclidia2-intro','true'); });
  res(await skip(p),'Al entrar se presenta la historia (aunque ya se haya visto antes)');
