@@ -251,6 +251,9 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
 .mtile .row2{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 .mtile.big{border:1.5px solid var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--panel))}
 .mtile.big b{font-size:20px}
+.howcard{max-width:560px;border-top:4px solid var(--accent)}
+.howlist .f{white-space:nowrap;font:600 13.5px var(--f-mono)}
+.howlist{margin:0;padding-left:20px;display:grid;gap:8px;font-size:14.5px;line-height:1.5}
 .menufoot{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between;align-items:center}
 .lk{width:13px;height:13px;vertical-align:-2px;flex:none}
 .lv.lock,.vl.lock{color:var(--muted);border-style:dashed;cursor:not-allowed;background:transparent}
@@ -442,12 +445,28 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
   <div class="card menucard" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
     <div class="menuhead"><canvas id="menuArt" width="120" height="56" aria-hidden="true"></canvas><div><h2 id="menuTitle">Senderos de Euclidia</h2><p class="small" id="menuHello">Mundo de las cónicas</p></div></div>
     <div class="mgrid">
-      <button class="mtile big" type="button" id="mAdv"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg></span><b>Modo aventura</b><span class="d">Recorre el Gran Mapa con Coni. Cada nivel que superas abre el siguiente y le quita niebla a su región.</span><span class="st" id="mAdvSt"></span></button>
+      <button class="mtile big" type="button" id="mHow"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><path d="M12 17.2v.1"/></svg></span><b>Instrucciones y tutorial</b><span class="d">Cómo se juega: escribir la ecuación, recortar la curva, monedas, pistas y nota. Desde aquí juegas el tutorial guiado.</span><span class="st" id="mHowSt"></span></button>
       <div class="mtile"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg></span><b>El Taller de Coni</b><span class="d">El laboratorio del maestro Apolonio: mueve la curva y mira sus partes, o practica «te dan, halla» sin fin. No cuenta para la nota.</span><span class="row2"><button class="btn" type="button" id="mLab">Explorar</button><button class="btn ghost" type="button" id="mPrac">Practicar sin fin</button></span><span class="st" id="mPracSt"></span></div>
       <button class="mtile" type="button" id="mStory"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H3z"/><path d="M21 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z"/></svg></span><b>La historia</b><span class="d">Cómo la Niebla del Olvido borró el Gran Mapa y por qué Coni te necesita como navegante.</span></button>
       <button class="mtile wide" type="button" id="mTeach" hidden><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM21 14v2M14 21h3M20 18v3"/></svg></span><b>Panel del profesor</b><span class="d">Código QR para la clase, evaluaciones (quiz) y hoja de resultados.</span></button>
     </div>
-    <div class="menufoot"><button class="linkbtn" type="button" id="mWho">Cambiar de jugador</button><button class="linkbtn" type="button" id="mPlay">Ir al nivel donde estaba</button></div>
+    <div class="menufoot"><button class="linkbtn" type="button" id="mWho">Cambiar de jugador</button><button class="linkbtn" type="button" id="mPlay">Volver a la aventura</button></div>
+  </div>
+</div>
+<div class="modal" id="howto" hidden>
+  <div class="card howcard" role="dialog" aria-modal="true" aria-labelledby="howTitle">
+    <h2 id="howTitle">Cómo se juega</h2>
+    <ol class="howlist">
+      <li><b>Escribe el camino.</b> Coni camina exactamente por la curva de tu ecuación, de la <b>salida</b> a la <b>meta</b>. Escríbela con el teclado del juego y pulsa <b>Trazar</b>.</li>
+      <li><b>Forma canónica.</b> Elipse e hipérbola igualadas a 1, por ejemplo <span class="f">x²/a² + y²/b² = 1</span>; la circunferencia <span class="f">(x − h)² + (y − k)² = r²</span>; la parábola en sus dos formas, <span class="f">y = a(x − h)² + k</span> o <span class="f">(x − h)² = 4p(y − k)</span>. Si tu ecuación es correcta pero no está en forma canónica, el juego te lo dice.</li>
+      <li><b>Recorta la curva.</b> Si la curva sigue más allá de la salida o de la meta, toca «+ Añadir una restricción» y escribe, por ejemplo, <span class="f">0 ≤ x ≤ 3</span>. Coni no elige sola el lado.</li>
+      <li><b>Monedas y obstáculos.</b> Las monedas son fragmentos del Gran Mapa; los obstáculos no se pueden tocar. Tu nota sale de las monedas que juntas.</li>
+      <li><b>Pistas.</b> Tienes <span id="howFree">3</span> pistas gratis; después cada pista cuesta <span id="howCost">2</span> monedas. En el tutorial son gratis.</li>
+      <li><b>Si te equivocas,</b> Coni recorre tu camino y ves dónde falla, con la explicación matemática. El juego nunca te da la respuesta.</li>
+      <li><b>Hoja de borrador y calculadora</b> para hacer tus cuentas; el mapa se acerca y aleja con + y −.</li>
+    </ol>
+    <button class="btn" type="button" id="howTut">Jugar el tutorial</button>
+    <button class="btn ghost" type="button" id="howBack">Volver al menú</button>
   </div>
 </div>
 <div class="modal" id="intro" hidden>
@@ -473,7 +492,8 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
     <h3>Medallas por mundo</h3>
     <ul class="medals" id="mapMedals"></ul>
     <p class="small">Bronce: completas todos los niveles del mundo. Plata: además juntas el 80 % de sus monedas. Oro: todas sus monedas.</p>
-    <button class="btn" type="button" id="mapClose">Volver al juego</button>
+    <button class="btn ghost" type="button" id="mapMenu">☰ Menú</button>
+    <button class="btn ghost" type="button" id="mapClose">Volver al juego</button>
   </div>
 </div>
 <div class="modal" id="lore" hidden>
@@ -2012,7 +2032,7 @@ $("zIn").onclick=()=>setZoom(zoom.k*1.5); $("zOut").onclick=()=>setZoom(zoom.k/1
 /* ---- Rol: estudiante o profesor ---- */
 function askRole(){ ["reg","teacher"].forEach(id=>$(id).hidden=true); $("role").hidden=false; }
 $("roleStudent").onclick=()=>{ role="estudiante"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=true; askPlayer(true); };
-$("roleTeacher").onclick=()=>{ role="profesor"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=false; applySession(); renderLevels(); renderScore(); tick(); markSeen(); openMenu(); };
+$("roleTeacher").onclick=()=>{ role="profesor"; store.set("euclidia2-role",role); $("role").hidden=true; $("teacherBtn").hidden=false; applySession(); renderLevels(); renderScore(); tick(); markSeen(); enterAdventure(); };
 $("regBack").onclick=askRole; $("teacherBack").onclick=askRole;
 $("teacherPlay").onclick=()=>{ $("teacher").hidden=true; renderScore(); };
 /* ---- Registro del estudiante ---- */
@@ -2029,7 +2049,7 @@ $("regForm").addEventListener("submit",e=>{ e.preventDefault();
   const changed=player&&player.documento&&d&&player.documento!==d;
   player={nombre:n,apellido:a,documento:d}; store.set("euclidia2-player",player);
   if(changed){ prog={best:{},hintsUsed:0,hintsBought:0,shown:{}}; saveProg(); loadLevel(0); }
-  $("reg").hidden=true; applySession(); if(SESSION) loadLevel(evStarted()?firstSession():0); renderScore(); tick(); flush(); markSeen(); openMenu(); });
+  $("reg").hidden=true; applySession(); if(SESSION) loadLevel(evStarted()?firstSession():0); renderScore(); tick(); flush(); markSeen(); enterAdventure(); });
 $("whoBtn").onclick=askRole;
 
 /* ---- Vista del profesor: código QR ---- */
@@ -2247,7 +2267,7 @@ function welcomeBack(){ const c=coinsTotal();
   if(role==="profesor"){ $("backTitle").textContent="Hola de nuevo, profesor"; $("backText").textContent="La última vez entraste como profesor en este dispositivo."; $("backGo").textContent="Continuar como profesor"; $("backNew").textContent="Cambiar de rol"; }
   else { $("backTitle").textContent=`Hola de nuevo, ${player.nombre}`; $("backText").textContent=`${[player.nombre,player.apellido].filter(Boolean).join(" ")} tiene ${c} ${c===1?"moneda guardada":"monedas guardadas"} en este dispositivo.`; $("backGo").textContent=`Continuar como ${player.nombre}`; $("backNew").textContent=`No soy ${player.nombre}`; }
   $("back").hidden=false; }
-$("backGo").onclick=()=>{ $("back").hidden=true; markSeen(); openMenu(); };
+$("backGo").onclick=()=>{ $("back").hidden=true; markSeen(); enterAdventure(); };
 $("backNew").onclick=()=>{ $("back").hidden=true; markSeen(); if(locked) askPlayer(true); else askRole(); };
 if(role==="profesor") $("teacherBtn").hidden=false;
 /* ============ Mapa de Euclidia y medallas (etapa 7c) ============
@@ -2282,7 +2302,6 @@ function paintMap(){ const cv=$("mapArt"), x=cv.getContext("2d"), st=regionStats
   const AS=advState(); Object.entries(MAP_SPOTS).forEach(([k,[a,b]])=>{ if(LEVELS.some(L=>SCENE_OF[L.id]===k&&AS.open.has(L.id))) return;
     r(a-4,b-4,1,4,"#4a4a5c"); r(a+3,b-4,1,4,"#4a4a5c"); r(a-3,b-6,6,2,"#4a4a5c"); r(a-5,b,11,8,"#4a4a5c"); r(a-4,b+1,9,6,"#f2b632"); r(a,b+2,1,3,"#4a4a5c"); });
   return st; }
-let mapFromMenu=false;
 function advListUI(){ const AS=advState();
   $("advList").innerHTML=advWorlds().map(w=>`<h4>${esc(w)}</h4><div class="vrow">`+chainsOf(w).map((c,ci)=>{
     const op=c.ls.some(L=>AS.open.has(L.id)), done=c.ls.filter(isDone).length, tut=c.ls[0].tutorial;
@@ -2295,20 +2314,20 @@ function advListUI(){ const AS=advState();
   $("advHow").textContent=free?"Como profesor ves todos los niveles abiertos. Tus estudiantes los van abriendo: el tutorial primero, luego el primer valle de cada cónica, y cada nivel superado abre el siguiente."
     :"Cada nivel superado abre el siguiente. El tutorial abre el primer valle de cada cónica, y al terminar un valle se abre el siguiente. Toca un valle para jugarlo.";
   $("advWhy").hidden=true; }
-function advGoTo(j){ $("mapa").hidden=true; mapFromMenu=false; closeMenu(); if(j<0) j=idx; openLevel(j); try{ window.scrollTo({top:0}); }catch(e){} }
+function advGoTo(j){ $("mapa").hidden=true; closeMenu(); $("howto").hidden=true; if(j<0) j=idx; openLevel(j); try{ window.scrollTo({top:0}); }catch(e){} }
 $("advGo").onclick=()=>{ const j=advResume(); advGoTo(j<0?idx:j); };
 $("advList").onclick=e=>{ const b=e.target.closest(".vl"); if(!b) return; const c=chainsOf(b.dataset.w)[+b.dataset.c]; if(!c) return;
   if(b.classList.contains("lock")){ const w=$("advWhy"); w.innerHTML=`${LOCK_SVG} «${esc(c.name)}» sigue cubierto por la Niebla. ${esc(advState().why[c.ls[0].id]||"")}.`; w.hidden=false; return; }
   const AS=advState(), L=c.ls.find(l=>AS.open.has(l.id)&&!isDone(l))||c.ls[0]; advGoTo(LEVELS.indexOf(L)); };
-function openMap(fromMenu){ mapFromMenu=fromMenu===true; const st=paintMap(); const ok=Object.values(st).filter(s=>s.all&&s.done===s.all).length;
+function openMap(){ const st=paintMap(); const ok=Object.values(st).filter(s=>s.all&&s.done===s.all).length;
   $("mapSum").textContent=`Regiones recuperadas: ${ok} de ${Object.keys(st).length}. Cada nivel que terminas le quita niebla a su región.`; advListUI();
-  $("mapClose").textContent=mapFromMenu?"Volver al menú":"Volver al juego";
   $("mapRegions").innerHTML=Object.keys(MAP_SPOTS).map(k=>`<li${st[k].done===st[k].all?' class="ok"':""}>${esc(REGIONS[k])} <b>${st[k].done}/${st[k].all}</b></li>`).join("");
   $("mapMedals").innerHTML=WORLD_ORDER.filter(w=>w!=="Tutorial").map(w=>{ const M=medalOf(w); if(!M) return "";
     const txt=M.m?`Medalla de ${M.m} · ${M.got} de ${M.all} monedas`:`${M.done} de ${M.n} niveles completados`;
     return `<li><span class="medal ${M.m||"none"}" aria-hidden="true"></span><span><b>${esc(w)}</b><br><span class="small">${txt}</span></span></li>`; }).join("");
   $("mapa").hidden=false; $("mapClose").focus({preventScroll:true}); }
-$("mapBtn").onclick=()=>openMap(false); $("mapClose").onclick=()=>{ $("mapa").hidden=true; if(mapFromMenu){ mapFromMenu=false; openMenu(); } };
+$("mapBtn").onclick=()=>openMap(false); $("mapClose").onclick=()=>{ $("mapa").hidden=true; };
+$("mapMenu").onclick=()=>{ $("mapa").hidden=true; openMenu(); };
 /* ============ Viñetas de la historia (etapa 7c) ============
    Se muestran la primera vez que se abre el juego en el dispositivo; se pueden saltar y volver a ver desde el pie de página. */
 const INTRO=[
@@ -2371,24 +2390,30 @@ function paintMenuArt(){ const cv=$("menuArt"), x=cv.getContext("2d"), r=(a,b,w,
   r(92,10,18,14,"#2a2433"); r(94,12,14,10,"#b0b0c0"); r(100,12,1,10,"#2a2433");
   const g=x.createRadialGradient(64,4,0,64,4,36); g.addColorStop(0,"rgba(255,214,102,0.4)"); g.addColorStop(1,"rgba(255,214,102,0)"); x.fillStyle=g; x.fillRect(0,0,120,56);
   miniApolonio(x,56,46,false,false); miniConi(x,80,46,false,true); }
-function openMenu(){ if(SESSION) return false; ["back","role","reg","teacher","mapa"].forEach(id=>$(id).hidden=true);
-  const prof=role==="profesor", done=LEVELS.filter(isDone).length, c=coinsTotal(), j=advResume();
+function openMenu(){ if(SESSION) return false; ["back","role","reg","teacher","mapa","howto"].forEach(id=>$(id).hidden=true);
+  const prof=role==="profesor";
   $("menuHello").textContent=prof?"Hola, profesor. Elige qué quieres hacer.":player?`Hola, ${player.nombre}. Elige qué quieres hacer.`:"Elige qué quieres hacer.";
-  $("mAdvSt").textContent=`${done} de ${LEVELS.length} niveles · ${c} ${c===1?"moneda":"monedas"}`+(j>=0?` · Sigue en: ${LEVELS[j].title}`:" · ¡Gran Mapa completo!");
+  const tut=LEVELS.filter(L=>L.tutorial), td=tut.filter(isDone).length;
+  $("mHowSt").textContent=td===tut.length?"Tutorial completo ✓":`Tutorial: ${td} de ${tut.length} pasos`;
   let pr=null; try{ pr=JSON.parse(localStorage.getItem("euclidia2-practica")||"null"); }catch(e){}
   $("mPracSt").textContent=pr&&pr.ok?`${pr.ok} ${pr.ok===1?"acierto":"aciertos"} en la práctica`+(pr.mejor?` · mejor racha ${pr.mejor}`:""):"";
   $("mTeach").hidden=!prof; $("mWho").textContent=locked?"Cambiar de estudiante":prof?"Cambiar de rol":"Cambiar de jugador";
-  paintMenuArt(); $("menu").hidden=false; $("mAdv").focus({preventScroll:true}); return true; }
+  paintMenuArt(); $("menu").hidden=false; $("mHow").focus({preventScroll:true}); return true; }
 function closeMenu(){ $("menu").hidden=true; }
 $("menuBtn").onclick=openMenu;
-$("mAdv").onclick=()=>{ closeMenu(); openMap(true); };
+// Al entrar al juego se presenta la aventura: el Gran Mapa con «Continuar la aventura». El menú queda en «☰ Menú».
+function enterAdventure(){ if(SESSION) return false; ["back","role","reg","teacher","menu","howto"].forEach(id=>$(id).hidden=true); openMap(); $("advGo").focus({preventScroll:true}); return true; }
+function openHow(){ closeMenu(); $("howFree").textContent=FREE_HINTS; $("howCost").textContent=HINT_COST; $("howto").hidden=false; $("howTut").focus({preventScroll:true}); }
+$("mHow").onclick=openHow;
+$("howBack").onclick=()=>{ $("howto").hidden=true; openMenu(); };
+$("howTut").onclick=()=>{ const tut=LEVELS.filter(L=>L.tutorial), L=tut.find(l=>!isDone(l))||tut[0]; advGoTo(LEVELS.indexOf(L)); };
 $("mLab").onclick=()=>{ closeMenu(); tAfter=openMenu; openTaller(); tPracSet(false); };
 $("mPrac").onclick=()=>{ closeMenu(); tAfter=openMenu; openTaller(); tPracSet(true); };
 $("mStory").onclick=()=>{ closeMenu(); showIntro(openMenu); };
 $("mTeach").onclick=()=>{ closeMenu(); openTeacher(); };
 $("mWho").onclick=()=>{ closeMenu(); $("whoBtn").onclick(); };
-$("mPlay").onclick=closeMenu;
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("menu").hidden) closeMenu(); });
+$("mPlay").onclick=()=>{ closeMenu(); openMap(); };
+document.addEventListener("keydown",e=>{ if(e.key!=="Escape") return; if(!$("howto").hidden){ $("howto").hidden=true; openMenu(); } else if(!$("menu").hidden) closeMenu(); });
 if(!wantTaller) beginGame();
 /* ============ El Taller de Coni (modo estudio) ============
    Laboratorio sin nota: el estudiante mueve h, k, r, a, b o p (o escribe una ecuación) y ve la curva con todas sus
@@ -2827,7 +2852,7 @@ $("tCheck").onclick=tPracCheck; $("tNext").onclick=tPracNew; $("tHint").onclick=
 if(wantTaller){ tAfter=beginGame; openTaller(); if(new URLSearchParams(location.search).get("modo")==="practica") tPracSet(true); }
 markSeen();
 requestAnimationFrame(frame);
-window.__euclidia={adv:{state:advState,next:advNext,resume:advResume,chains:chainsOf,menu:openMenu},practica:{gen:pracGen,check:pracCheck,stats:prStats,model:tModelOf,set:tPracSet,ex:()=>tPx,next:tPracNew,target:prTarget,force:X=>{ tPx=X; tPracShow(); }},taller:{model:tModel,general:tGeneral,state:()=>TS,set:(st)=>tSetConic(st.c,{...st}),open:openTaller,close:closeTaller,retos:RETOS,flip:tFlip},LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
+window.__euclidia={adv:{state:advState,next:advNext,resume:advResume,chains:chainsOf,menu:openMenu,enter:enterAdventure},practica:{gen:pracGen,check:pracCheck,stats:prStats,model:tModelOf,set:tPracSet,ex:()=>tPx,next:tPracNew,target:prTarget,force:X=>{ tPx=X; tPracShow(); }},taller:{model:tModel,general:tGeneral,state:()=>TS,set:(st)=>tSetConic(st.c,{...st}),open:openTaller,close:closeTaller,retos:RETOS,flip:tFlip},LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
     if(ivs[i]) ivs[i]=(list||[]).map(I=>({v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):"",loC:true,hiC:true})); }); renderModes(); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
   state:()=>({g2,prog,player,idx}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),
