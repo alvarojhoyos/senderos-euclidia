@@ -23,6 +23,9 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 - `tDraw` usa `tPM` en la práctica: datos en naranja, ruta fallida en rojo punteado.
 - Pruebas: `pruebas/practica.test.js` (11; ~1450 ejercicios al azar).
 
+- Registro (pedido de Alvaro, 2026-11-26): el documento y el apellido solo se piden con el enlace o QR del profesor (`needDoc()`: `?rol=estudiante`, evaluación o hoja). Por su cuenta solo se pide el nombre y no se encola nada para enviar. Pruebas: `pruebas/registro.test.js` (8).
+- Enlace privado de prueba (no es el sitio de estudiantes): https://claude.ai/artifact/S7vw43UrnusmURTwi9MY2G. Se genera de index.html quitando doctype/html/head/body y metas, con mathlive.min.js como archivo aparte.
+
 ## Para la etapa 3 (banco amplio)
 - `pracGen` ya produce datos coherentes y verificados; puede servir de semilla para el generador de niveles (cónica × tipo de dato × orientación).
 - El PR #11 (restricción obligatoria en parábola e hipérbola) sigue abierto: fusionarlo antes de generar niveles nuevos.
