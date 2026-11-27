@@ -12,7 +12,7 @@ const hid=(p,id)=>p.evaluate(i=>document.getElementById(i).hidden,id);
    await p.route(/^https?:\/\//,r=>r.abort()); if(init) await p.addInitScript(init); await p.goto('file://'+TMP+(url||'')); await p.waitForTimeout(400); return p; };
  // 1. Estudiante nuevo: historia → rol → registro → menú
  let p=await page();
- await p.click('#introSkip'); await p.click('#roleStudent'); await p.fill('#rName','Ana'); await p.fill('#rLast','Ruiz'); await p.fill('#rDoc','12'); await p.click('#regForm button[type=submit]'); await p.waitForTimeout(150);
+ await p.click('#introSkip'); await p.click('#roleStudent'); await p.fill('#rName','Ana'); await p.click('#regForm button[type=submit]'); await p.waitForTimeout(150);
  res(!(await hid(p,'menu'))&&await hid(p,'mTeach'),'Estudiante nuevo: después del registro se abre el menú (sin el panel del profesor)');
  const W=await p.evaluate(()=>{ const r=document.querySelector('.menucard').getBoundingClientRect(), t=[...document.querySelectorAll('.menucard .mtile')].map(e=>e.getBoundingClientRect()); return {ok:r.left>=0&&r.right<=document.documentElement.clientWidth&&t.every(q=>q.right<=r.right)}; });
  res(W.ok,'El menú y sus apartados caben en el ancho del celular');

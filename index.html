@@ -296,7 +296,7 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
 .t-try{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:10px}
 .t-try .tin{width:100%;min-height:44px;font:15px var(--f-mono);padding:8px 10px;border-radius:9px;border:1.5px solid var(--grid-strong);background:var(--panel);color:var(--ink);box-sizing:border-box}
 .tmsg{margin:0;font-size:14px;line-height:1.45} .tmsg.bad{color:var(--bad)} .tmsg.warn{color:var(--part)} .tmsg.ok{color:var(--ok);font-weight:700}
-.taller [hidden]{display:none!important}
+.taller [hidden],.rdoc[hidden]{display:none!important} .rdoc{display:grid;gap:inherit}
 .t-prac{display:grid;gap:10px;min-width:0}
 .t-score{margin:0;font:700 14px var(--f-mono)}
 .t-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px;min-width:0}
@@ -511,11 +511,11 @@ button.mtile{cursor:pointer} button.mtile:hover{border-color:var(--accent)}
 </div>
 <div class="modal" id="reg" hidden>
   <form class="card" id="regForm" autocomplete="off">
-    <h2>Antes de empezar</h2>
-    <p class="small">Tus datos solo los ve tu profesor, junto con tus monedas. Nadie más en la clase puede verlos.</p>
+    <h2 id="rTitle">Antes de empezar</h2>
+    <p class="small" id="rNote">Tus datos solo los ve tu profesor, junto con tus monedas. Nadie más en la clase puede verlos.</p>
     <label for="rName">Nombre</label><input id="rName" required>
-    <label for="rLast">Apellido</label><input id="rLast" required>
-    <label for="rDoc">Documento de identidad</label><input id="rDoc" inputmode="numeric" required>
+    <div class="rdoc" id="rDocBox"><label for="rLast">Apellido</label><input id="rLast">
+    <label for="rDoc">Documento de identidad</label><input id="rDoc" inputmode="numeric"></div>
     <p class="err" id="rErr" hidden>Completa los tres campos.</p>
     <button class="btn" type="submit">Entrar al juego</button>
     <button class="linkbtn" type="button" id="regBack">Volver: no soy estudiante</button>
@@ -1677,7 +1677,7 @@ function finish(){
 
 /* ============ Resultados (Google Sheets) ============ */
 function queueResult(L,coins){
-  if(!player||role!=="estudiante"){ flush(); return; }
+  if(!player||role!=="estudiante"||!player.documento){ flush(); return; }
   const q=store.get("euclidia2-queue",[]);
   q.push(resultRow(L.title,coins));
   store.set("euclidia2-queue",q); flush();
@@ -2016,11 +2016,17 @@ $("roleTeacher").onclick=()=>{ role="profesor"; store.set("euclidia2-role",role)
 $("regBack").onclick=askRole; $("teacherBack").onclick=askRole;
 $("teacherPlay").onclick=()=>{ $("teacher").hidden=true; renderScore(); };
 /* ---- Registro del estudiante ---- */
-function askPlayer(fresh){ $("reg").hidden=false; $("rErr").hidden=true; if(fresh===true){ ["rName","rLast","rDoc"].forEach(id=>$(id).value=""); } else if(player){ $("rName").value=player.nombre; $("rLast").value=player.apellido; $("rDoc").value=player.documento; } setTimeout(()=>$("rName").focus(),50); }
+// El documento solo hace falta cuando se entra con el enlace o el QR del profesor (evaluación u hoja de resultados).
+// Quien juega por su cuenta (historia, Taller, práctica) solo da su nombre.
+function needDoc(){ return locked||!!EV||!!resultsUrl(); }
+function askPlayer(fresh){ const doc=needDoc(); $("reg").hidden=false; $("rErr").hidden=true; $("rDocBox").hidden=!doc;
+  $("rTitle").textContent=doc?"Antes de empezar":"¿Cómo te llamas?";
+  $("rNote").textContent=doc?"Tus datos solo los ve tu profesor, junto con tus monedas. Nadie más en la clase puede verlos.":"Así Coni sabe cómo llamarte. Para jugar por tu cuenta no hace falta tu documento: tu avance se guarda solo en este aparato.";
+  $("rErr").textContent=doc?"Completa los tres campos.":"Escribe tu nombre."; if(fresh===true){ ["rName","rLast","rDoc"].forEach(id=>$(id).value=""); } else if(player){ $("rName").value=player.nombre; $("rLast").value=player.apellido; $("rDoc").value=player.documento; } setTimeout(()=>$("rName").focus(),50); }
 $("regForm").addEventListener("submit",e=>{ e.preventDefault();
   const n=$("rName").value.trim(), a=$("rLast").value.trim(), d=$("rDoc").value.trim();
-  if(!n||!a||!d){ $("rErr").hidden=false; return; }
-  const changed=player&&player.documento!==d;
+  if(!n||(needDoc()&&(!a||!d))){ $("rErr").hidden=false; return; }
+  const changed=player&&player.documento&&d&&player.documento!==d;
   player={nombre:n,apellido:a,documento:d}; store.set("euclidia2-player",player);
   if(changed){ prog={best:{},hintsUsed:0,hintsBought:0,shown:{}}; saveProg(); loadLevel(0); }
   $("reg").hidden=true; applySession(); if(SESSION) loadLevel(evStarted()?firstSession():0); renderScore(); tick(); flush(); markSeen(); openMenu(); });
@@ -2239,7 +2245,7 @@ let seen=false; try{ seen=sessionStorage.getItem("euclidia2-tab")==="1"; }catch(
 const markSeen=()=>{ try{ sessionStorage.setItem("euclidia2-tab","1"); }catch(e){} };
 function welcomeBack(){ const c=coinsTotal();
   if(role==="profesor"){ $("backTitle").textContent="Hola de nuevo, profesor"; $("backText").textContent="La última vez entraste como profesor en este dispositivo."; $("backGo").textContent="Continuar como profesor"; $("backNew").textContent="Cambiar de rol"; }
-  else { $("backTitle").textContent=`Hola de nuevo, ${player.nombre}`; $("backText").textContent=`${player.nombre} ${player.apellido} tiene ${c} ${c===1?"moneda guardada":"monedas guardadas"} en este dispositivo.`; $("backGo").textContent=`Continuar como ${player.nombre}`; $("backNew").textContent=`No soy ${player.nombre}`; }
+  else { $("backTitle").textContent=`Hola de nuevo, ${player.nombre}`; $("backText").textContent=`${[player.nombre,player.apellido].filter(Boolean).join(" ")} tiene ${c} ${c===1?"moneda guardada":"monedas guardadas"} en este dispositivo.`; $("backGo").textContent=`Continuar como ${player.nombre}`; $("backNew").textContent=`No soy ${player.nombre}`; }
   $("back").hidden=false; }
 $("backGo").onclick=()=>{ $("back").hidden=true; markSeen(); openMenu(); };
 $("backNew").onclick=()=>{ $("back").hidden=true; markSeen(); if(locked) askPlayer(true); else askRole(); };
@@ -2352,7 +2358,7 @@ function closeIntro(){ $("intro").hidden=true; store.set("euclidia2-intro",true)
 $("introGo").onclick=()=>{ if(introK<INTRO.length-1){ introK++; introUI(); } else closeIntro(); };
 $("introSkip").onclick=closeIntro;
 $("storyBtn").onclick=()=>showIntro();
-const startFlow=()=>{ if(!role) askRole(); else if(role==="estudiante"&&!player) askPlayer(); else if(!seen) welcomeBack(); };
+const startFlow=()=>{ if(!role) askRole(); else if(role==="estudiante"&&(!player||(needDoc()&&!player.documento))) askPlayer(); else if(!seen) welcomeBack(); };
 // ?modo=taller abre el Taller de Coni (modo estudio) antes que todo; al cerrarlo sigue el juego normal
 const wantTaller=(()=>{ try{ return ["taller","practica"].includes(new URLSearchParams(location.search).get("modo"))&&!SESSION; }catch(e){ return false; } })();
 const beginGame=()=>{ if(!store.get("euclidia2-intro",false)) showIntro(startFlow); else startFlow(); };
