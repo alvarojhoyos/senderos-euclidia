@@ -86,6 +86,7 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 - Entrada: con un solo jugador sigue «Hola de nuevo, X». Con dos o más, después de la historia sale «¿Quién va a jugar?» (`#perfiles`, `openProfiles`). «No soy X», «Cambiar de jugador» (menú y pie del juego) y «Cambiar de estudiante» abren la lista. En la lista: elegir, ✎ (renombrar o borrar, con confirmación dentro del juego), «+ Soy un jugador nuevo» (ve la historia si no la acaba de ver), «Volver: sigo siendo X», «Soy el profesor» (oculto con el QR del profesor y en modo estudio). Máximo 10 jugadores por aparato.
 - Con el enlace de una prueba: historia → «¿Quién va a presentar la prueba?» → elige su nombre → solo completa apellido y documento (el nombre del perfil ya viene) → quiz sin menú. Si alguien entra como «nuevo» con el documento de un perfil que ya existe, vuelve a ese perfil (no se duplica). No deja crear dos jugadores con el mismo nombre.
 - El profesor no tiene perfil propio: si juega, usa el perfil activo (caso raro en un aparato compartido).
+- PR #21. Enlace privado de prueba republicado (versión 17) y verificado descargando la página publicada y corriendo `perfiles.test.js` sobre ella (47/47).
 - Pruebas: `pruebas/perfiles.test.js` (47: migración, crear, elegir, renombrar, borrar, que no se mezcle el avance, prueba en aparato compartido, modo estudio; celular 320 px y laptop). `menu.test.js` ajustada: «Cambiar de jugador» abre la lista.
 
 ## Qué hay en la etapa 6 (cierre, rama `claude/project-thread-77azem`)
@@ -97,11 +98,11 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 
 ## Estado final y orden de fusión (para Alvaro)
 Todo está en ramas apiladas, sin fusionar. Cada PR tiene como base la rama del anterior:
-main ← #12 (Taller) ← #13 (práctica) ← #14 (banco) ← #15 (menú) ← #16 (modo historia) ← #17 (panel) ← #18 (saga) ← PR de la etapa 6 (cierre + #11).
-- Orden recomendado (decisión tomada de noche, para que Alvaro la revise): fusionar de abajo hacia arriba, #12 → #13 → #14 → #15 → #16 → #17 → #18 → etapa 6, cada uno con «Create a merge commit» (no squash ni rebase, para que la pila no se rompa). Al fusionar uno, GitHub cambia la base del siguiente a main. El #11 queda dentro de la etapa 6, así que GitHub lo marca como fusionado solo al llegar a main; no hay que fusionarlo aparte.
+main ← #12 (Taller) ← #13 (práctica) ← #14 (banco) ← #15 (menú) ← #16 (modo historia) ← #17 (panel) ← #18 (saga) ← #19 (etapa 6: cierre + #11) ← #20 (valles alineados) ← #21 (perfiles de jugador).
+- Orden recomendado (decisión tomada de noche, para que Alvaro la revise): fusionar de abajo hacia arriba, #12 → #13 → #14 → #15 → #16 → #17 → #18 → #19 → #20 → #21, cada uno con «Create a merge commit» (no squash ni rebase, para que la pila no se rompa). Al fusionar uno, GitHub cambia la base del siguiente a main. El #11 queda dentro de la etapa 6, así que GitHub lo marca como fusionado solo al llegar a main; no hay que fusionarlo aparte.
 - Por qué no «#11 primero» (lo que estaba anotado): el #11 está hecho sobre el banco viejo de 56 niveles y choca con el #14 en la lista de niveles. Fusionarlo primero obliga a resolver ese choque a mano al fusionar el #14. Si Alvaro prefiere ese orden, el choque se resuelve igual que aquí (campo por campo) en la rama del #14.
 - Después de fusionar: actualizar los docs del banco y la skill diseñar-nivel con la regla del #11 (restricción en la salida) y la organización por valles de una sola dificultad; pedirle a Alvaro una captura de uso antes de publicar (comparar gasto con la línea base).
-- Decisiones de noche que siguen abiertas para su revisión: las de la etapa 5 (abajo) y este orden de fusión.
+- Alvaro aprobó (2026-11-27) la etapa 5 con sus decisiones de noche y dejó el orden de fusión (#12 → … → #21) en manos del coordinador. Ya mandó la captura de uso. Pendiente: que pruebe los perfiles (#21) y la pregunta de qué pasa en el celular después de terminar una prueba.
 
 ## Qué hay en la etapa 3 (index.html)
 - Banco: 108 niveles, 294 monedas, en 30 cadenas. Cada cadena tiene UNA dificultad (pedido de Alvaro): por cónica 6 cadenas de 4 (fácil, fácil, medio, medio, difícil, difícil); identificar y mixtos 3 cadenas de 2 (fácil, medio, difícil). El mapa completo de cadenas está en el doc.
