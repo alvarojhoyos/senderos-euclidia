@@ -1,0 +1,13 @@
+PASA  | ?modo=practica abre el Taller en la práctica
+PASA  | 1450 ejercicios al azar de 29 tipos: datos coherentes, respuesta aceptada, errores rechazados con explicación y sin dar la respuesta
+PASA  | hay al menos 24 tipos de ejercicio (29)
+PASA  | una respuesta equivocada explica la matemática y cuenta un intento: 7 no es el semieje menor. Recuerda: El semieje mayor es la distancia de C a V y c la de C …
+PASA  | al acertar se cuenta un resuelto (sin racha, porque falló antes) y se guarda en el aparato: Resueltos: 1 · Racha: 0 · Mejor racha: 0
+PASA  | a la primera suma racha: {"ok":2,"tries":3,"racha":1,"mejor":1}
+PASA  | en los ejercicios de ecuación se escribe la ecuación y el error dice qué cónica es
+PASA  | la práctica no envía nada por la red (solo se piden las fuentes de letra) 
+PASA  | en un celular (320px) la práctica cabe sin desplazarse de lado []
+PASA  | el botón Explorar vuelve al taller normal
+PASA  | sin errores de JavaScript
+
+11 pasan, 0 fallan

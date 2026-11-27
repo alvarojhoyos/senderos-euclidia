@@ -1,0 +1,10 @@
+PASA  | al entrar por su cuenta como estudiante solo se pide el nombre
+PASA  | entra al juego solo con el nombre, sin documento: {"nombre":"Ana","apellido":"","documento":""}
+PASA  | el juego la saluda por su nombre
+PASA  | con el enlace del profesor (?rol=estudiante) se piden apellido y documento
+PASA  | con el enlace del profesor no deja entrar sin documento
+PASA  | al dar el documento entra y conserva lo que había jugado por su cuenta
+PASA  | con el enlace de una evaluación se pide el documento
+PASA  | sin errores de JavaScript
+
+8 pasan, 0 fallan
