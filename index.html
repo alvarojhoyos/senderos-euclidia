@@ -265,7 +265,15 @@ summary{cursor:pointer;font-weight:700}
 .tdet{padding:6px 12px 2px;font-size:14px;line-height:1.45} .tdet p{margin:0 0 6px}
 .t-try{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:10px}
 .t-try .tin{width:100%;min-height:44px;font:15px var(--f-mono);padding:8px 10px;border-radius:9px;border:1.5px solid var(--grid-strong);background:var(--panel);color:var(--ink);box-sizing:border-box}
-.tmsg{margin:0;font-size:14px;line-height:1.45} .tmsg.bad{color:var(--bad)} .tmsg.warn{color:var(--part)}
+.tmsg{margin:0;font-size:14px;line-height:1.45} .tmsg.bad{color:var(--bad)} .tmsg.warn{color:var(--part)} .tmsg.ok{color:var(--ok);font-weight:700}
+.taller [hidden]{display:none!important}
+.t-prac{display:grid;gap:10px;min-width:0}
+.t-score{margin:0;font:700 14px var(--f-mono)}
+.t-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px;min-width:0}
+.t-card ul{margin:0;padding-left:18px;display:grid;gap:4px;font:600 14.5px var(--f-mono);overflow-wrap:anywhere}
+.t-ask{margin:0;font-size:15px}
+.t-pbtns{display:flex;flex-wrap:wrap;gap:8px} .t-pbtns .btn{flex:1 1 auto}
+.t-prac .tin{width:100%;min-height:44px;font:15px var(--f-mono);padding:8px 10px;border-radius:9px;border:1.5px solid var(--grid-strong);background:var(--panel);color:var(--ink);box-sizing:border-box}
 @media (max-width:860px){ .t-main{grid-template-columns:minmax(0,1fr)} .t-stage{aspect-ratio:auto;height:min(46vh,360px);box-shadow:0 6px 14px -10px color-mix(in srgb,var(--ink) 45%,transparent)} }
 .lorecard{border-top:4px solid var(--accent)}
 .lorecard .lorereg{font:700 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
@@ -359,16 +367,26 @@ summary{cursor:pointer;font-weight:700}
 <div class="taller" id="taller" hidden role="dialog" aria-modal="true" aria-labelledby="tTitle">
   <div class="t-top"><div><span class="t-eye">Modo estudio</span><h2 id="tTitle">El Taller de Coni</h2></div><button class="btn" type="button" id="tClose">Volver al juego</button></div>
   <div class="t-apo"><canvas id="tApo" width="34" height="32" aria-hidden="true"></canvas><div class="t-say"><b>Maestro Apolonio</b><p id="tSay" aria-live="polite"></p><button class="linkbtn" type="button" id="tReto">Dame un reto</button></div></div>
+  <div class="tseg t-mode" id="tMode" role="group" aria-label="Qué hacer en el taller"><button type="button" data-m="0" aria-pressed="true">Explorar</button><button type="button" data-m="1" aria-pressed="false">Practicar sin fin</button></div>
   <div class="tseg t-tabs" id="tTabs" role="group" aria-label="Cónica"><button type="button" data-c="circ">Circunferencia</button><button type="button" data-c="elip">Elipse</button><button type="button" data-c="para">Parábola</button><button type="button" data-c="hip">Hipérbola</button></div>
   <div class="t-main">
     <div class="t-stage"><canvas id="tCanvas" aria-label="Mapa del taller con la curva y sus partes"></canvas></div>
-    <div class="t-side">
+    <div class="t-side" id="tSide">
       <div class="t-eq"><span class="small">Forma canónica</span><div class="mono" id="tEq"></div><div class="mono" id="tEq2"></div><span class="small">Forma general</span><div class="mono" id="tGen"></div></div>
       <div class="t-ctl" id="tCtl"></div>
       <div class="t-orient"><p id="tOrient"></p><button class="btn ghost" type="button" id="tFlip"></button></div>
       <h3>Partes</h3><p class="small">Toca una parte para verla resaltada en el mapa.</p>
       <ul class="t-parts" id="tParts"></ul>
       <div class="t-try"><h3>Prueba tu propia ecuación</h3><div id="tInBox"></div><button class="btn" type="button" id="tTry">Ver sus partes</button><p class="tmsg" id="tMsg" aria-live="polite"></p></div>
+    </div>
+    <div class="t-prac" id="tPrac" hidden>
+      <div class="tseg" id="tPcon" role="group" aria-label="Cónica de los ejercicios"><button type="button" data-c="all">Todas</button><button type="button" data-c="circ">Circunferencia</button><button type="button" data-c="elip">Elipse</button><button type="button" data-c="para">Parábola</button><button type="button" data-c="hip">Hipérbola</button></div>
+      <p class="t-score" id="tScore" aria-live="polite"></p>
+      <div class="t-card"><span class="small">Te dan</span><ul id="tDan"></ul><p class="t-ask"><b>Halla</b> <span id="tAsk"></span></p>
+        <div id="tAnsBox"></div>
+        <div class="t-pbtns"><button class="btn" type="button" id="tCheck">Revisar</button><button class="btn ghost" type="button" id="tHint">¿Qué fórmula uso?</button><button class="btn ghost" type="button" id="tNext">Otro ejercicio</button></div>
+        <p class="tmsg" id="tPMsg" aria-live="polite"></p></div>
+      <p class="small">Tu conteo se guarda solo en este aparato. No se envía al profesor ni cuenta para la nota.</p>
     </div>
   </div>
 </div>
@@ -2203,7 +2221,7 @@ $("introSkip").onclick=closeIntro;
 $("storyBtn").onclick=()=>showIntro();
 const startFlow=()=>{ if(!role) askRole(); else if(role==="estudiante"&&!player) askPlayer(); else if(!seen) welcomeBack(); };
 // ?modo=taller abre el Taller de Coni (modo estudio) antes que todo; al cerrarlo sigue el juego normal
-const wantTaller=(()=>{ try{ return new URLSearchParams(location.search).get("modo")==="taller"&&!SESSION; }catch(e){ return false; } })();
+const wantTaller=(()=>{ try{ return ["taller","practica"].includes(new URLSearchParams(location.search).get("modo"))&&!SESSION; }catch(e){ return false; } })();
 const beginGame=()=>{ if(!store.get("euclidia2-intro",false)) showIntro(startFlow); else startFlow(); };
 if(!wantTaller) beginGame();
 /* ============ El Taller de Coni (modo estudio) ============
@@ -2362,7 +2380,7 @@ function tSize(){ const r=tCv.getBoundingClientRect(); tD=Math.min(window.device
 function tGoal(M){ const [x0,y0,x1,y1]=M.box, w=Math.max(x1-x0,4), hh=Math.max(y1-y0,4), asp=tH/tW||0.75;
   const span=Math.max(w,hh/asp)*1.3+2; return {cx:(x0+x1)/2,cy:(y0+y1)/2,span}; }
 function tFits(V,G){ return Math.abs(G.cx-V.cx)+G.span/2<=V.span/2*1.02&&Math.abs(G.cy-V.cy)+G.span*(tH/tW)/2<=V.span*(tH/tW)/2*1.02&&G.span>V.span*0.45; }
-function tDraw(now){ if(!tOpen){ tRAF=0; return; } tRAF=requestAnimationFrame(tDraw); tPaintApolonio(now); const M=tModelCache; if(!M||!tW) return;
+function tDraw(now){ if(!tOpen){ tRAF=0; return; } tRAF=requestAnimationFrame(tDraw); tPaintApolonio(now); const M=tPrac?tPM:tModelCache; if(!M||!tW) return;
   const G=tGoal(M); if(!tTarget||!tFits(tTarget,G)) tTarget=G; if(!tView) tView={...tTarget};
   const f=reduceMotion?1:0.18; tView.cx+=(tTarget.cx-tView.cx)*f; tView.cy+=(tTarget.cy-tView.cy)*f; tView.span+=(tTarget.span-tView.span)*f;
   const s=tW/tView.span, S=(x,y)=>[(x-tView.cx)*s+tW/2,tH/2-(y-tView.cy)*s], x=tX, t=now/1000;
@@ -2388,14 +2406,16 @@ function tDraw(now){ if(!tOpen){ tRAF=0; return; } tRAF=requestAnimationFrame(tD
     else { const p=S(...d.at); x.beginPath(); if(d.r==="foco"){ for(let k=0;k<8;k++){ const r=k%2?2.5:6.5, an=k*Math.PI/4; x.lineTo(p[0]+r*Math.cos(an),p[1]+r*Math.sin(an)); } x.closePath(); } else x.arc(p[0],p[1],strong?5:4,0,7); x.fill();
       if(d.tag) lbl(strong?d.tag+" "+tP(...d.at):d.tag,p[0],p[1],col); }
     x.globalAlpha=1; };
-  M.parts.forEach(p=>{ if(p.key!==tSel) p.draw.forEach(d=>drawP(d,C.part,false)); });
+  M.parts.forEach(p=>{ if(tPrac||p.key!==tSel) p.draw.forEach(d=>drawP(d,C.part,false)); });
   // la curva
   x.strokeStyle=C.curve; x.lineWidth=3.5; x.lineJoin="round"; x.lineCap="round";
   M.curve.forEach(br=>{ x.beginPath(); br.forEach((q,i)=>{ const p=S(...q); i?x.lineTo(...p):x.moveTo(...p); }); x.stroke(); });
-  const sel=M.parts.find(p=>p.key===tSel); if(sel) sel.draw.forEach(d=>drawP(d,C.acc,true));
+  const sel=!tPrac&&M.parts.find(p=>p.key===tSel); if(sel) sel.draw.forEach(d=>drawP(d,C.acc,true));
+  if(tPrac){ M.given.forEach(d=>drawP(d,C.acc,true)); // datos del ejercicio y, si falló, solo su ruta fallida
+    if(M.bad){ const cb=css("--bad"); x.strokeStyle=cb; x.lineWidth=3; x.setLineDash([7,6]); M.bad.curve.forEach(br=>{ x.beginPath(); br.forEach((q,i)=>{ const p=S(...q); i?x.lineTo(...p):x.moveTo(...p); }); x.stroke(); }); x.setLineDash([]); M.bad.draw.forEach(d=>drawP(d,cb,true)); } }
   // Coni pasea por la curva (en la primera rama)
-  const br=M.curve[0].filter(q=>q[0]>=X0&&q[0]<=X1&&q[1]>=Y0&&q[1]<=Y1); if(br.length>2){
-    const closed=TS.c==="circ"||TS.c==="elip", n=br.length-1; if(!reduceMotion) tWalk+=0.05;
+  const br=(M.curve[0]||[]).filter(q=>q[0]>=X0&&q[0]<=X1&&q[1]>=Y0&&q[1]<=Y1); if(br.length>2){
+    const cc=tPrac?tPx.st.c:TS.c, closed=cc==="circ"||cc==="elip", n=br.length-1; if(!reduceMotion) tWalk+=0.05;
     let u=(tWalk%(closed?n:2*n)); if(!closed&&u>n) u=2*n-u; const i=Math.min(n-1,Math.floor(u)), fr=u-i, q=[br[i][0]+(br[i+1][0]-br[i][0])*fr,br[i][1]+(br[i+1][1]-br[i][1])*fr];
     const p=S(...q); x.save(); x.translate(Math.round(p[0]),Math.round(p[1])); x.scale(2.4,2.4); miniConi(x,0,1,Math.sin(t*1.3)>0.97,false); x.restore(); } }
 function openTaller(){ if(SESSION&&!evEnded()) return; tOpen=true; $("taller").hidden=false; document.body.style.overflow="hidden"; tSize(); tRender(); tView=null; tTarget=null; if(!tReto) tSay(TALK[TS.c]); if(!tRAF) tRAF=requestAnimationFrame(tDraw); $("tClose").focus({preventScroll:true}); }
@@ -2442,10 +2462,206 @@ function tCheckReto(){ if(!tReto||!tReto[1](TS)) return; const done=store.get("e
   tSay(tReto[2]); tReto=null; sfx("coin"); }
 function tPaintApolonio(now){ const cv=$("tApo"); if(!cv) return; const x=cv.getContext("2d"); x.clearRect(0,0,cv.width,cv.height);
   const talk=now-tTalkT<1800&&Math.floor(now/160)%2===0, blink=(now/1000%3.6)<0.14; miniApolonio(x,16,cv.height-1,blink,talk); }
-if(wantTaller){ tAfter=beginGame; openTaller(); }
+/* ============ Práctica sin fin (Taller, etapa 2) ============
+   Apolonio pone ejercicios al azar de «te dan esto, halla lo que falta». El conteo de aciertos se guarda solo en este
+   aparato (euclidia2-practica) y nunca se envía. Si la respuesta falla se explica la matemática y se dibuja solo lo
+   que escribió el estudiante (su ruta fallida), nunca la respuesta. */
+let tPrac=false, tPx=null, tPM=null, tPcon="all";
+const PR_KEY="euclidia2-practica";
+const prStats=()=>store.get(PR_KEY,{ok:0,tries:0,racha:0,mejor:0});
+const ri=(R,a,b)=>a+Math.floor(R()*(b-a+1)), pk=(R,a)=>a[Math.floor(R()*a.length)];
+function tModelOf(st){ const s=TS; TS={...st}; try{ return tModel(); } finally{ TS=s; } }
+const near=(u,v,t=0.01)=>Math.abs(u-v)<=t*Math.max(1,Math.abs(v));
+const nearP=(p,q)=>near(p[0],q[0])&&near(p[1],q[1]);
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+const frac=(n,d)=>{ const g=gcd(n,d); n/=g; d/=g; return d===1?String(n):`${n}/${d}`; };
+const ptx=(L,P)=>`${L} ${tP(...P)}`;
+const lineTxt=L=>L.x!=null?`x = ${tn(L.x)}`:`y = ${tn(L.y)}`;
+const ELT=[[5,4,3],[5,3,4],[10,8,6],[10,6,8]], HIT=[[3,4,5],[4,3,5],[6,8,10],[8,6,10]];
+const PDIR={arriba:[0,1],abajo:[0,-1],derecha:[1,0],izquierda:[-1,0]};
+const eqAsk=st=>({halla:"la ecuación canónica",kind:"eq",ans:st});
+const sgn=R=>R()<0.5?1:-1;
+// Distancia de un punto al centro sobre cada eje: sirve para reconocer errores típicos con los focos
+function onAxis(v,h,k,horiz){ return horiz?(near(v[1],k)?Math.abs(v[0]-h):null):(near(v[0],h)?Math.abs(v[1]-k):null); }
+const PR={
+ circ:[
+  R=>{ const h=ri(R,-4,4), k=ri(R,-4,4); let dx,dy; do{ dx=ri(R,-4,4); dy=ri(R,-4,4); }while(!dx&&!dy);
+    const P=[h+dx,k+dy], r=Math.hypot(dx,dy), st={c:"circ",h,k,r};
+    return {st,dan:[ptx("Centro C",[h,k]),ptx("Un punto de la circunferencia P",P)],draw:[{r:"centro",at:[h,k],tag:"C"},{r:"pt",at:P,tag:"P"}],
+      pista:"El radio es la distancia de C a P: r = √((x₂ − x₁)² + (y₂ − y₁)²). En la ecuación canónica va r², no r.",
+      asks:[{halla:"el radio r",kind:"num",ans:r,why:v=>v<=0?"El radio es una distancia, así que es positivo.":near(v,r*r)?"Ese número es r², no r: te falta sacar la raíz.":near(v,2*r)?"Ese es el diámetro: el radio es la mitad.":near(v,Math.abs(dx)+Math.abs(dy))?"Sumaste las diferencias de las coordenadas. La distancia no se mide así: cada diferencia se eleva al cuadrado, se suman y se saca la raíz.":null},eqAsk(st)]}; },
+  R=>{ const h=ri(R,-4,4), k=ri(R,-4,4); let dx,dy; do{ dx=ri(R,-4,4); dy=ri(R,-4,4); }while(!dx&&!dy);
+    const A=[h+dx,k+dy], B=[h-dx,k-dy], r=Math.hypot(dx,dy), st={c:"circ",h,k,r};
+    return {st,dan:[ptx("Un extremo del diámetro A",A),ptx("El otro extremo B",B)],draw:[{r:"pt",at:A,tag:"A"},{r:"pt",at:B,tag:"B"}],
+      pista:"El centro es el punto medio de A y B: ((x₁ + x₂)/2, (y₁ + y₂)/2). El radio es la mitad de la distancia de A a B.",
+      asks:[{halla:"el centro C",kind:"point",ans:[h,k],why:v=>nearP(v,[A[0]+B[0],A[1]+B[1]])?"Sumaste las coordenadas pero te faltó dividir entre 2: el centro es el punto medio.":(nearP(v,[dx,dy])||nearP(v,[-dx,-dy])||nearP(v,[2*dx,2*dy])||nearP(v,[-2*dx,-2*dy]))?"Restaste las coordenadas. El punto medio se saca sumando y dividiendo entre 2.":null},
+        eqAsk(st),{halla:"el radio r",kind:"num",ans:r,why:v=>near(v,2*r)?"Esa es la longitud del diámetro AB: el radio es la mitad.":near(v,r*r)?"Ese número es r², no r: te falta sacar la raíz.":null}]}; },
+  R=>{ let h,k; do{ h=ri(R,-4,4); k=ri(R,-4,4); }while(!h&&!k); const r=ri(R,1,6), st={c:"circ",h,k,r};
+    return {st,dan:["La ecuación general "+tGeneral(tModelOf(st).gen)],draw:[],
+      pista:"Completa cuadrados: x² + Dx = (x + D/2)² − (D/2)², y lo mismo con y. El centro es (−D/2, −E/2) y lo que queda al otro lado es r².",
+      asks:[{halla:"el centro C",kind:"point",ans:[h,k],why:v=>nearP(v,[-h,-k])?"Revisa los signos: x² + Dx queda (x + D/2)², así que la coordenada del centro es −D/2.":(nearP(v,[-2*h,-2*k])||nearP(v,[2*h,2*k]))?"Esos son los coeficientes de x y de y. Al completar cuadrados se dividen entre 2: h = −D/2 y k = −E/2.":null},
+        {halla:"el radio r",kind:"num",ans:r,why:v=>near(v,r*r)?"Ese número es r², no r: te falta sacar la raíz.":null}]}; }],
+ elip:[
+  R=>{ const [M,m,f]=pk(R,ELT), hz=R()<0.5, h=ri(R,-3,3), k=ri(R,-3,3), sv=sgn(R), sf=sgn(R), st={c:"elip",h,k,a:hz?M:m,b:hz?m:M};
+    const V=hz?[h+sv*M,k]:[h,k+sv*M], F=hz?[h+sf*f,k]:[h,k+sf*f];
+    return {st,dan:[ptx("Centro C",[h,k]),ptx("Un vértice V",V),ptx("Un foco F",F)],draw:[{r:"centro",at:[h,k],tag:"C"},{r:"pt",at:V,tag:"V"},{r:"foco",at:F,tag:"F"}],
+      pista:"El semieje mayor es la distancia de C a V y c la de C a F. En la elipse c² = (semieje mayor)² − (semieje menor)². El denominador mayor va bajo la variable del eje donde están V y F.",
+      asks:[eqAsk(st),{halla:"el semieje menor",kind:"num",ans:m,why:v=>near(v,Math.hypot(M,f))?"Sumaste los cuadrados. En la elipse se restan: (semieje menor)² = (semieje mayor)² − c².":near(v,m*m)?"Ese número es el cuadrado del semieje menor: saca la raíz.":near(v,M-f)?"Restaste las distancias. Hay que restar sus cuadrados y luego sacar la raíz.":null}]}; },
+  R=>{ const M=ri(R,2,6), m=ri(R,1,M-1), hz=R()<0.5, h=ri(R,-3,3), k=ri(R,-3,3), st={c:"elip",h,k,a:hz?M:m,b:hz?m:M}, c=Math.sqrt(M*M-m*m);
+    const V=hz?[[h-M,k],[h+M,k]]:[[h,k-M],[h,k+M]], B=hz?[[h,k-m],[h,k+m]]:[[h-m,k],[h+m,k]];
+    return {st,dan:[`Vértices ${tP(...V[0])} y ${tP(...V[1])}`,`Extremos del eje menor ${tP(...B[0])} y ${tP(...B[1])}`],draw:[...V.map(p=>({r:"pt",at:p,tag:"V"})),...B.map(p=>({r:"pt",at:p,tag:"B"}))],
+      pista:"El centro es el punto medio de los vértices. El semieje mayor va del centro a un vértice y el menor del centro a un extremo del eje menor. En la elipse c² = (semieje mayor)² − (semieje menor)².",
+      asks:[eqAsk(st),{halla:"la distancia c del centro a cada foco",kind:"num",ans:c,why:v=>near(v,Math.hypot(M,m))?"En la elipse c² = (semieje mayor)² − (semieje menor)²: se resta, no se suma.":near(v,c*c)?"Ese número es c²: saca la raíz.":near(v,M-m)?"Restaste los semiejes. Hay que restar sus cuadrados y luego sacar la raíz.":null}]}; },
+  R=>{ const [M,m,f]=pk(R,ELT), hz=R()<0.5, h=ri(R,-3,3), k=ri(R,-3,3), st={c:"elip",h,k,a:hz?M:m,b:hz?m:M};
+    const F=hz?[h+f,k]:[h,k+f], F2=hz?[h-f,k]:[h,k-f], side=hz?"de la derecha":"de arriba", X=hz?"x":"y";
+    return {st,dan:["La ecuación "+tModelOf(st).eq],draw:[],
+      pista:"Lee los denominadores: el mayor es el cuadrado del semieje mayor y dice el eje mayor. En la elipse c² = (semieje mayor)² − (semieje menor)² y e = c / (semieje mayor).",
+      asks:[{halla:"el foco "+side,kind:"point",ans:F,why:v=>{ if(nearP(v,F2)) return `Ese es el otro foco: te pido el ${side}.`; const d=onAxis(v,h,k,hz), o=onAxis(v,h,k,!hz);
+          if(d!=null&&near(d,M)) return "Ese punto es un vértice. Los focos están más adentro, a c del centro.";
+          if(d!=null&&near(d,Math.hypot(M,m))) return "Sumaste los cuadrados. En la elipse c² = (semieje mayor)² − (semieje menor)²: se resta.";
+          if(o!=null&&o>0) return `Los focos van sobre el eje mayor. Aquí el denominador mayor está bajo ${X}, así que el eje mayor es ${hz?"horizontal":"vertical"}.`;
+          return d==null?"Los focos están sobre el eje mayor, que pasa por el centro.":null; }},
+        {halla:"la excentricidad e",kind:"num",ans:f/M,why:v=>v>=1?"En la elipse 0 < e < 1, porque c es menor que el semieje mayor.":near(v,f/m)?"Dividiste entre el semieje menor. La excentricidad es e = c / (semieje mayor).":near(v,m/M)?"Ese es el cociente de los semiejes. La excentricidad usa c: e = c / (semieje mayor).":null}]}; }],
+ para:[],
+ hip:[
+  R=>{ const [a,b,c]=pk(R,HIT), hz=R()<0.5, h=ri(R,-3,3), k=ri(R,-3,3), sv=sgn(R), sf=sgn(R), st={c:"hip",h,k,a,b,hz};
+    const V=hz?[h+sv*a,k]:[h,k+sv*a], F=hz?[h+sf*c,k]:[h,k+sf*c];
+    return {st,dan:[ptx("Centro C",[h,k]),ptx("Un vértice V",V),ptx("Un foco F",F)],draw:[{r:"centro",at:[h,k],tag:"C"},{r:"pt",at:V,tag:"V"},{r:"foco",at:F,tag:"F"}],
+      pista:"a es la distancia de C a V y c la de C a F. En la hipérbola c² = a² + b². El término positivo es el de la variable del eje donde están V y F: la hipérbola abre hacia ellos.",
+      asks:[eqAsk(st),{halla:"b",kind:"num",ans:b,why:v=>near(v,Math.hypot(a,c))?"En la hipérbola c² = a² + b², así que b² = c² − a²: se resta.":near(v,b*b)?"Ese número es b²: saca la raíz.":near(v,c-a)?"Restaste las distancias. Hay que restar sus cuadrados y luego sacar la raíz.":null}]}; },
+  R=>{ const a=ri(R,1,5), b=ri(R,1,5), hz=R()<0.5, h=ri(R,-3,3), k=ri(R,-3,3), st={c:"hip",h,k,a,b,hz}, m=hz?b/a:a/b, mt=hz?frac(b,a):frac(a,b);
+    const V=hz?[[h-a,k],[h+a,k]]:[[h,k-a],[h,k+a]], ms=mt==="1"?"":(mt.includes("/")?`(${mt})`:mt), xs=tLin("x",h);
+    return {st,dan:[`Vértices ${tP(...V[0])} y ${tP(...V[1])}`,`Asíntotas ${tLin("y",k)} = ±${ms}${ms&&xs==="x"?"x":xs}`],
+      draw:[...V.map(p=>({r:"pt",at:p,tag:"V"})),{r:"asintota",at:[h,k],m,thin:true},{r:"asintota",at:[h,k],m:-m,thin:true}],
+      pista:"El centro es el punto medio de los vértices y a es la distancia a un vértice. Las asíntotas tienen pendiente ±b/a si abre a los lados y ±a/b si abre arriba y abajo: de ahí sale b.",
+      asks:[eqAsk(st),{halla:"la distancia c del centro a cada foco",kind:"num",ans:Math.hypot(a,b),why:v=>(a!==b&&near(v,Math.sqrt(Math.abs(a*a-b*b))))?"Eso sería en la elipse. En la hipérbola c² = a² + b²: se suma.":near(v,a*a+b*b)?"Ese número es c²: saca la raíz.":null}]}; },
+  R=>{ const [a,b,c]=pk(R,HIT), hz=R()<0.5, h=ri(R,-3,3), k=ri(R,-3,3), st={c:"hip",h,k,a,b,hz}, m=hz?b/a:a/b;
+    const F=hz?[h+c,k]:[h,k+c], F2=hz?[h-c,k]:[h,k-c], side=hz?"de la derecha":"de arriba";
+    return {st,dan:["La ecuación "+tModelOf(st).eq],draw:[],
+      pista:"a² está bajo el término positivo y b² bajo el negativo. En la hipérbola c² = a² + b². Las asíntotas tienen pendiente ±b/a si abre a los lados y ±a/b si abre arriba y abajo.",
+      asks:[{halla:"el foco "+side,kind:"point",ans:F,why:v=>{ if(nearP(v,F2)) return `Ese es el otro foco: te pido el ${side}.`; const d=onAxis(v,h,k,hz), o=onAxis(v,h,k,!hz);
+          if(d!=null&&near(d,a)) return "Ese es un vértice. En la hipérbola los focos están más afuera que los vértices.";
+          if(d!=null&&near(d,Math.sqrt(Math.abs(a*a-b*b)))) return "En la hipérbola c² = a² + b²: se suma (la resta es de la elipse).";
+          if(o!=null&&o>0) return "Los focos van hacia donde abre la hipérbola: sobre el eje de la variable con signo positivo.";
+          return d==null?"Los focos están sobre el eje que pasa por el centro y los vértices.":null; }},
+        {halla:"la pendiente positiva de las asíntotas",kind:"num",ans:m,why:v=>v<0?"Te pido la pendiente positiva.":(!near(m,1)&&near(v,1/m))?"Invertiste la fracción. Si abre a los lados la pendiente es b/a; si abre arriba y abajo es a/b, con a bajo el término positivo.":(!near(m,1)&&near(v,m*m))?"Usaste los denominadores. Toma sus raíces: la pendiente usa a y b, no a² y b².":null}]}; }]};
+// Parábola: p es la distancia del vértice al foco (p > 0); dir dice hacia dónde abre
+function prPara(R){ const h=ri(R,-3,3), k=ri(R,-3,3), p=pk(R,[0.5,1,1.5,2,3]), dir=pk(R,["arriba","abajo","derecha","izquierda"]), [ux,uy]=PDIR[dir], vert=!ux;
+  const st={c:"para",h,k,p,dir}, V=[h,k], F=[h+ux*p,k+uy*p], L=vert?{y:k-uy*p}:{x:h-ux*p}, Ld=vert?{r:"linea",y:L.y}:{r:"linea",x:L.x};
+  return {st,V,F,L,Ld,vert,ux,uy,p,h,k}; }
+const PPISTA="p es la distancia del vértice al foco; la directriz está a la misma distancia p, del otro lado. Si abre arriba o abajo: (x − h)² = 4p(y − k); si abre a los lados: (y − k)² = 4p(x − h). El lado recto mide |4p|.";
+function prAskFoco(B){ const {V,F,ux,uy,p,h,k,vert}=B; return {halla:"el foco F",kind:"point",ans:F,why:v=>{
+    if(nearP(v,V)) return "Ese es el vértice. El foco está a p de él, hacia donde abre la parábola.";
+    const along=vert?(near(v[0],h)?v[1]-k:null):(near(v[1],k)?v[0]-h:null), dirn=vert?uy:ux;
+    if(along==null) return "El foco está sobre el eje de simetría de la parábola, que pasa por el vértice.";
+    if(along*dirn<0) return "Ese punto está del lado de la directriz. El foco queda al otro lado del vértice: la parábola abre hacia el foco.";
+    if(near(Math.abs(along),4*p)) return "Usaste 4p. El foco está a p del vértice: 4p es el coeficiente de la ecuación.";
+    return "Vas en la dirección correcta, pero el foco está a p del vértice, a la misma distancia que la directriz."; }}; }
+function prAskDir(B){ const {L,F,p,h,k,vert}=B; return {halla:"la directriz",kind:"line",ans:L,why:u=>{
+    if(vert&&u.x!=null) return "La directriz es perpendicular al eje de la parábola. Esta abre hacia arriba o abajo, así que la directriz es horizontal: y = un número.";
+    if(!vert&&u.y!=null) return "La directriz es perpendicular al eje de la parábola. Esta abre hacia los lados, así que la directriz es vertical: x = un número.";
+    const w=vert?u.y:u.x, c0=vert?k:h, f0=vert?F[1]:F[0];
+    if(near(w,f0)) return "Esa recta pasa por el foco. La directriz está del otro lado del vértice, a la misma distancia p.";
+    if(near(w,c0)) return "Esa recta pasa por el vértice. La directriz está a p del vértice, del lado contrario al foco.";
+    if(near(Math.abs(w-c0),4*p)) return "Esa recta está a 4p del vértice; la directriz está a p.";
+    return "La directriz está a p del vértice, del lado contrario al foco."; }}; }
+function prAskLR(B){ const {p}=B; return {halla:"la longitud del lado recto",kind:"num",ans:4*p,why:v=>near(v,p)?"Ese es p. El lado recto mide |4p|.":near(v,2*p)?"El lado recto mide |4p|: pasa por el foco y llega a la curva a 2p de cada lado.":null}; }
+PR.para=[
+  R=>{ const B=prPara(R); return {st:B.st,dan:[ptx("Vértice V",B.V),ptx("Foco F",B.F)],draw:[{r:"pt",at:B.V,tag:"V"},{r:"foco",at:B.F,tag:"F"}],pista:PPISTA,asks:[eqAsk(B.st),prAskDir(B),prAskLR(B)]}; },
+  R=>{ const B=prPara(R); return {st:B.st,dan:[ptx("Vértice V",B.V),"Directriz "+lineTxt(B.L)],draw:[{r:"pt",at:B.V,tag:"V"},B.Ld],pista:PPISTA,asks:[prAskFoco(B),eqAsk(B.st)]}; },
+  R=>{ const B=prPara(R); return {st:B.st,dan:[ptx("Foco F",B.F),"Directriz "+lineTxt(B.L)],draw:[{r:"foco",at:B.F,tag:"F"},B.Ld],pista:"El vértice está en el punto medio entre el foco y la directriz, sobre el eje. "+PPISTA,
+    asks:[{halla:"el vértice V",kind:"point",ans:B.V,why:v=>nearP(v,B.F)?"Ese es el foco. El vértice está en la mitad entre el foco y la directriz.":"El vértice está en el punto medio entre el foco y la directriz, sobre el eje que pasa por el foco."},eqAsk(B.st)]}; },
+  R=>{ const B=prPara(R); return {st:B.st,dan:["La ecuación "+tModelOf(B.st).eq],draw:[],pista:PPISTA,asks:[prAskFoco(B),prAskDir(B),prAskLR(B)]}; }];
+// Ejercicio al azar. c: "all" o una cónica; bi y ai fijan el tipo (para las pruebas)
+function pracGen(c="all",R=Math.random,bi,ai){ if(c==="all") c=pk(R,["circ","elip","para","hip"]);
+  const L=PR[c], b=bi??Math.floor(R()*L.length), base=L[b](R), a=ai??Math.floor(R()*base.asks.length), q=base.asks[a];
+  return {c,tipo:`${c}${b}${a}`,st:base.st,dan:base.dan,draw:base.draw,pista:base.pista,...q,wrong:0,done:false}; }
+// Lo que el estudiante escribió, como estado del taller (para dibujar su ruta fallida)
+function tStateOf(s){ const map={"circunferencia":"circ","elipse":"elip","parábola":"para","hipérbola":"hip"}; if(!map[s.type]) return null;
+  const st={c:map[s.type],h:s.h,k:s.k};
+  if(s.type==="circunferencia") st.r=s.r;
+  if(s.type==="elipse"){ st.a=s.a; st.b=s.b; }
+  if(s.type==="hipérbola"){ st.hz=s.horiz; st.a=s.horiz?s.a:s.b; st.b=s.horiz?s.b:s.a; }
+  if(s.type==="parábola"){ const p=1/(4*s.p); st.p=Math.abs(p); st.dir=s.vert?(p>0?"arriba":"abajo"):(p>0?"derecha":"izquierda"); }
+  for(const key in st) if(typeof st[key]==="number") st[key]=Math.round(st[key]*1e6)/1e6;
+  return st; }
+const TNAME={circ:"circunferencia",elip:"elipse",para:"parábola",hip:"hipérbola"};
+const TYPEWHY={"circunferencia":"En la circunferencia x² e y² tienen el mismo coeficiente.","elipse":"En la elipse los dos cuadrados se suman y tienen denominadores distintos.","parábola":"En la parábola solo una de las variables va al cuadrado.","hipérbola":"En la hipérbola los dos cuadrados se restan."};
+function prNum(src){ const s=src.trim(); if(!s) throw new Error("Escribe un número."); return evalNum(s); }
+function prPoint(src){ let s=src.trim().replace(/^[A-Za-z]\s*=?\s*/,"").replace(/^\(|\)$/g,"").trim(); if(!s) throw new Error("Escribe un punto, por ejemplo (2, −1).");
+  let p=s.includes(";")?s.split(";"):s.split(",");
+  if(p.length!==2) throw new Error(p.length>2?"Si usas coma decimal, separa las coordenadas con punto y coma: (2,5; −1).":"Un punto lleva dos coordenadas: (x, y).");
+  return p.map(t=>evalNum(t)); }
+function prLine(src){ const e=compileEq(src), s=classify(e.F);
+  if(s.type!=="recta") throw new Error("Escribe una recta, por ejemplo y = 2 o x = −1.");
+  const K=e.F(0,0), D=e.F(1,0)-K, E=e.F(0,1)-K;
+  if(Math.abs(D)>1e-9&&Math.abs(E)>1e-9) throw new Error("La directriz de estas parábolas es horizontal o vertical, no inclinada: escríbela como y = número o x = número.");
+  return Math.abs(E)>1e-9?{y:-K/E}:{x:-K/D}; }
+function prTarget(st){ const {h,k}=st;
+  if(st.c==="circ") return {type:"circunferencia",h,k,r:st.r};
+  if(st.c==="elip") return {type:"elipse",h,k,a:st.a,b:st.b};
+  if(st.c==="hip") return {type:"hipérbola",h,k,horiz:st.hz,a:st.hz?st.a:st.b,b:st.hz?st.b:st.a};
+  const [ux,uy]=PDIR[st.dir], vert=!ux, P=st.p*(vert?uy:ux); return {type:"parábola",h,k,vert,p:1/(4*P)}; }
+// Revisa una respuesta. Devuelve {res:"ok"|"warn"|"bad", msg, bad: lo que se dibuja de la ruta fallida}
+function pracCheck(X,src){ const extra=" Recuerda: "+X.pista;
+  try{
+    if(X.kind==="num"){ const v=prNum(src); if(near(v,X.ans,0.005)) return {res:"ok"}; if(v<0&&X.ans>0) return {res:"bad",msg:"Lo que te pido es una longitud o una pendiente positiva, así que no puede ser negativo."+extra}; return {res:"bad",msg:(X.why&&X.why(v)||`${tn(Math.round(v*1000)/1000)} no es ${X.halla}.`)+extra}; }
+    if(X.kind==="point"){ const v=prPoint(src); if(near(v[0],X.ans[0],0.005)&&near(v[1],X.ans[1],0.005)) return {res:"ok"};
+      return {res:"bad",msg:(X.why&&X.why(v)||`${tP(...v)} no es ${X.halla}.`)+extra,bad:{draw:[{r:"pt",at:v,tag:"Tu punto"}],curve:[]}}; }
+    if(X.kind==="line"){ const u=prLine(src), A=X.ans, same=A.x!=null?(u.x!=null&&near(u.x,A.x,0.005)):(u.y!=null&&near(u.y,A.y,0.005));
+      if(same) return {res:"ok"}; return {res:"bad",msg:(X.why&&X.why(u)||`${lineTxt(u)} no es ${X.halla}.`)+extra,bad:{draw:[{r:"linea",...u}],curve:[]}}; }
+    // ecuación
+    const e=compileEq(src), s=classify(e.F), t=prTarget(X.st), st=tStateOf(s), bad={draw:[],curve:st?tModelOf(st).curve:[]};
+    if(!st) return {res:"bad",msg:diagnose(s,t)+extra,bad};
+    if(s.type!==t.type) return {res:"bad",msg:`Tu ecuación es ${ART[s.type]}, no ${ART[t.type]}. ${TYPEWHY[t.type]}`+extra,bad};
+    const n=(u,v)=>near(u,v,1e-4), same=n(s.h,t.h)&&n(s.k,t.k)&&(t.type==="circunferencia"?n(s.r,t.r):t.type==="parábola"?s.vert===t.vert&&n(s.p,t.p):(s.horiz===t.horiz||t.type==="elipse")&&n(s.a,t.a)&&n(s.b,t.b));
+    if(same){ const note=canonicalProblem(e)||formProblem(e);
+      return note?{res:"warn",msg:`Tu ecuación es correcta: es ${ART[t.type]} con esos datos. Pero falta pasarla a forma canónica. ${note}`}:{res:"ok"}; }
+    let why=null;
+    if(t.type==="elipse"&&n(s.h,t.h)&&n(s.k,t.k)&&n(s.a,t.b)&&n(s.b,t.a)) why=`Pusiste los denominadores al revés: el mayor va bajo ${t.a>t.b?"x":"y"}, porque el eje mayor es ${t.a>t.b?"horizontal":"vertical"}.`;
+    why=why||(diagnose(s,t)||"").replace(/el camino necesita/g,"el ejercicio pide")||"Casi: revisa los números de los denominadores.";
+    return {res:"bad",msg:why+extra,bad};
+  }catch(err){ return {res:"bad",msg:err.message,bad:null,parse:true}; } }
+/* ---- Pantalla de la práctica ---- */
+function tPracBox(){ const X=tPx, M=tModelOf(X.st), pts=[...X.draw,...(tPM&&tPM.bad?tPM.bad.draw:[])].filter(d=>d.at).map(d=>d.at); let [x0,y0,x1,y1]=M.box;
+  pts.forEach(([x,y])=>{ x0=Math.min(x0,x-1); y0=Math.min(y0,y-1); x1=Math.max(x1,x+1); y1=Math.max(y1,y+1); }); return [x0,y0,x1,y1]; }
+function tPracModel(bad){ const X=tPx, M=tModelOf(X.st); tPM={given:X.draw,bad:bad||null,curve:X.done?M.curve:[],parts:X.done?M.parts:[],box:M.box}; tPM.box=tPracBox(); tTarget=null; }
+function tPracScore(){ const S=prStats(); $("tScore").textContent=`Resueltos: ${S.ok} · Racha: ${S.racha} · Mejor racha: ${S.mejor}`; }
+function tPracShow(){ const X=tPx;
+  $("tDan").innerHTML=X.dan.map(d=>`<li>${esc(d)}</li>`).join(""); $("tAsk").textContent=X.halla+".";
+  const eq=X.kind==="eq"; $("tAnsEq").hidden=!eq; $("tAnsTx").hidden=eq;
+  $("tAnsTx").placeholder=X.kind==="point"?"(x, y)":X.kind==="line"?"por ejemplo y = 2":"un número, por ejemplo 5/3 o sqrt(7)";
+  $("tAnsTx").setAttribute("inputmode",X.kind==="num"?"decimal":"text");
+  if(eq) $("tAnsEq").value=""; else $("tAnsTx").value="";
+  $("tPMsg").textContent=""; $("tPMsg").className="tmsg"; $("tCheck").hidden=X.done; tPracScore();
+  document.querySelectorAll("#tPcon button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.c===tPcon))); tPracModel(); }
+const PR_HOLA=["Aquí va uno de mis cuadernos viejos.","A ver este, navegante.","Este me lo enseñó mi maestro hace muchos años.","Otro más. Despacio y con buena letra."];
+function tPracNew(){ tPx=pracGen(tPcon); tPracShow(); tSay(pk(Math.random,PR_HOLA)+" Te doy unos datos y tú hallas lo que falta. Si te trabas, pregúntame qué fórmula usar."); }
+function tPracCheck(){ const X=tPx; if(!X||X.done) return; const inp=X.kind==="eq"?$("tAnsEq"):$("tAnsTx"), src=inp.tagName==="MATH-FIELD"?tex2plain(inp.value):inp.value, msg=$("tPMsg");
+  if(!src.trim()){ msg.className="tmsg"; msg.textContent=X.kind==="eq"?"Escribe la ecuación.":"Escribe tu respuesta."; return; }
+  const r=pracCheck(X,src), S=prStats(); msg.className="tmsg"+(r.res==="ok"?" ok":r.res==="warn"?" warn":" bad");
+  if(r.res==="ok"){ X.done=true; S.ok++; S.tries++; if(!X.wrong){ S.racha++; S.mejor=Math.max(S.mejor,S.racha); } store.set(PR_KEY,S);
+    msg.textContent=X.wrong?"¡Ahora sí! Lo resolviste.":"¡Correcto, a la primera!"; $("tCheck").hidden=true; tPracModel(); sfx("coin");
+    tSay("¡Muy bien! Mira en el mapa la curva completa con todas sus partes. "+X.pista); }
+  else if(r.res==="warn"){ msg.textContent=r.msg; tSay("Vas bien. Solo te falta dejarla en forma canónica, como la escribimos en clase."); }
+  else { msg.textContent=r.msg; if(!r.parse){ if(!X.wrong){ S.racha=0; } X.wrong++; S.tries++; store.set(PR_KEY,S); tPracModel(r.bad); tSay(X.kind==="eq"?"En el mapa ves en rojo la curva que escribiste. Compárala con los datos.":"No te preocupes, a mí también me pasaba. Lee lo que te escribí abajo y vuelve a intentarlo."); } }
+  tPracScore(); }
+function tPracSet(on){ tPrac=!!on; document.querySelectorAll("#tMode button").forEach(b=>b.setAttribute("aria-pressed",String((b.dataset.m==="1")===tPrac)));
+  $("tTabs").hidden=tPrac; $("tSide").hidden=tPrac; $("tPrac").hidden=!tPrac; $("tReto").hidden=tPrac; tTarget=null; tView=null;
+  if(tPrac){ if(!tPx) tPracNew(); else { tPracShow(); tSay("Sigamos con este ejercicio."); } } else { tReto=null; tRender(); tSay(TALK[TS.c]); } }
+(function(){ const box=$("tAnsBox"); let el;
+  if(ML){ el=new MathfieldElement(); try{ el.smartFence=false; el.smartSuperscript=true; el.menuItems=[]; el.popoverPolicy="off"; }catch(e){} }
+  else { el=document.createElement("input"); el.placeholder="por ejemplo: (x-1)^2/9 + (y+2)^2/4 = 1"; el.spellcheck=false; el.setAttribute("autocapitalize","off"); el.setAttribute("autocorrect","off"); }
+  el.id="tAnsEq"; el.className="tin"; el.setAttribute("aria-label","Tu ecuación"); el.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); tPracCheck(); } });
+  const tx=document.createElement("input"); tx.id="tAnsTx"; tx.className="tin"; tx.spellcheck=false; tx.autocomplete="off"; tx.setAttribute("autocapitalize","off"); tx.setAttribute("autocorrect","off"); tx.setAttribute("aria-label","Tu respuesta");
+  tx.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); tPracCheck(); } }); box.append(el,tx); })();
+document.querySelectorAll("#tMode button").forEach(b=>b.onclick=()=>tPracSet(b.dataset.m==="1"));
+document.querySelectorAll("#tPcon button").forEach(b=>b.onclick=()=>{ tPcon=b.dataset.c; tPracNew(); });
+$("tCheck").onclick=tPracCheck; $("tNext").onclick=tPracNew; $("tHint").onclick=()=>{ if(tPx) tSay(tPx.pista); };
+if(wantTaller){ tAfter=beginGame; openTaller(); if(new URLSearchParams(location.search).get("modo")==="practica") tPracSet(true); }
 markSeen();
 requestAnimationFrame(frame);
-window.__euclidia={taller:{model:tModel,general:tGeneral,state:()=>TS,set:(st)=>tSetConic(st.c,{...st}),open:openTaller,close:closeTaller,retos:RETOS,flip:tFlip},LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
+window.__euclidia={practica:{gen:pracGen,check:pracCheck,stats:prStats,model:tModelOf,set:tPracSet,ex:()=>tPx,next:tPracNew,target:prTarget,force:X=>{ tPx=X; tPracShow(); }},taller:{model:tModel,general:tGeneral,state:()=>TS,set:(st)=>tSetConic(st.c,{...st}),open:openTaller,close:closeTaller,retos:RETOS,flip:tFlip},LEVELS,hiddenCoins,loadLevel,openLevel,LORE,SCENE_OF,REGIONS,itemOf,coinName,medalOf,regionStats,sound:()=>soundOn,submit:(arr)=>{ arr.forEach((v,i)=>{ if(Array.isArray(v)&&v[1]==null) v=v[0]; const eq=typeof v==="string"?v:v[0], list=typeof v==="string"?null:parseIvList([].concat(v[1]).join(";")); $("eq"+i).value=eq;
     if(ivs[i]) ivs[i]=(list||[]).map(I=>({v:I.v,lo:isFinite(I.lo)?String(I.lo):"",hi:isFinite(I.hi)?String(I.hi):"",loC:true,hiC:true})); }); renderModes(); updatePretty(); doSubmit(); },
   press:(id)=>press(K[id],id), ivs:()=>ivs, tex2plain, ML,
   state:()=>({g2,prog,player,idx}), classify:(s)=>classify(compileEq(s).F), canon:(s)=>canonicalProblem(compileEq(s)),
