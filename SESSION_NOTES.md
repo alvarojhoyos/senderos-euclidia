@@ -2,7 +2,7 @@
 
 Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 1. **Taller de Coni + maestro Apolonio** — hecho, PR #12 (rama `claude/project-thread-offm5n`), esperando revisión de Alvaro.
-2. **Práctica sin fin** — hecho, PR apilado sobre el #12 (rama `claude/project-thread-kr0m2u`), esperando revisión de Alvaro.
+2. **Práctica sin fin** — hecho y aprobado por Alvaro (2026-11-26 22:43 Bogotá), PR #13 apilado sobre el #12 (rama `claude/project-thread-kr0m2u`), sin fusionar hasta la publicación conjunta. También aprobó la entrada sin documento. Pidió un menú principal (aventura, laboratorio, etc.), que va en otro hilo.
 3. Generador + verificador de un banco muy amplio (cónica × tipo de dato × orientación × dificultad); mostrar una muestra a Alvaro antes de meterlos todos. Usar la skill diseñar-nivel. Respetar la regla del PR #11 (restricción en la salida), que conviene fusionar antes.
 4. Modo historia en el Gran Mapa: zonas que se desbloquean, cada una enseña algo (Apolonio lo explica) y luego sus niveles; enlace del profesor (`?modo=estudio`) y botón del menú.
 5. Evaluación como una sola saga: el profesor elige cuántos niveles por dificultad y el juego arma una historia seguida de Coni.
