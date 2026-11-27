@@ -10,7 +10,7 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
  const b=await chromium.launch(); const errs=[];
  const ctx=await b.newContext({...devices['iPhone SE'],deviceScaleFactor:1}); const p=await ctx.newPage(); p.on('pageerror',e=>errs.push(e.message));
  await p.route(/^https?:\/\//,r=>r.abort());
- await p.addInitScript(()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-role','"profesor"'); sessionStorage.setItem('euclidia2-tab','1');
+ await p.addInitScript(()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-pruebas','true'); localStorage.setItem('euclidia2-role','"profesor"'); sessionStorage.setItem('euclidia2-tab','1');
    // anota cada texto que el juego escribe en el mapa
    const ft=CanvasRenderingContext2D.prototype.fillText; window.__txt=new Set();
    CanvasRenderingContext2D.prototype.fillText=function(s,...a){ if(this.canvas&&this.canvas.id==='c2d') window.__txt.add(String(s)); return ft.call(this,s,...a); }; });

@@ -58,7 +58,7 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
  res(lay.sw<=lay.vw&&lay.small===0&&lay.stage>150,`En un celular (${lay.vw} px) no hay desplazamiento lateral, los botones miden 36 px o más y el mapa se ve (${Math.round(lay.stage)} px de alto)`);
  // 5. Cerrar el taller deja seguir al juego; en una evaluación el taller no se puede abrir
  await p.click('#tClose'); res(await p.evaluate(()=>document.getElementById('taller').hidden&&!document.getElementById('intro').hidden),'Al cerrar el taller sigue el juego (aparece la historia la primera vez)');
- await p.evaluate(()=>{ localStorage.clear(); localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-role','"estudiante"'); localStorage.setItem('euclidia2-player',JSON.stringify({nombre:'Ana',apellido:'Ruiz',documento:'123'})); sessionStorage.setItem('euclidia2-tab','1'); });
+ await p.evaluate(()=>{ localStorage.clear(); localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-pruebas','true'); localStorage.setItem('euclidia2-role','"estudiante"'); localStorage.setItem('euclidia2-player',JSON.stringify({nombre:'Ana',apellido:'Ruiz',documento:'123'})); sessionStorage.setItem('euclidia2-tab','1'); });
  await p.goto('file://'+TMP+'?modo=taller&ev=prueba1-C111-30&evn=Quiz'); await p.waitForTimeout(600);
  const q=await p.evaluate(()=>({open:!document.getElementById('taller').hidden,btn:document.getElementById('tallerBtn').hidden}));
  res(!q.open&&q.btn,'Durante una evaluación el taller no se abre y su botón no aparece');

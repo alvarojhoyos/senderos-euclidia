@@ -9,7 +9,7 @@ const out=[]; let pass=0, fail=0; const res=(ok,txt)=>{ ok?pass++:fail++; out.pu
 const hid=(p,id)=>p.evaluate(i=>document.getElementById(i).hidden,id);
 // Ejemplos de forma general escritos en las lecciones: deben dar exactamente la cónica del ejemplo dibujado
 const GENERAL={"El Volcán Dormido":"x^2+y^2+4x-6y-3=0","El Glaciar":"9x^2+4y^2+36x-8y+4=0","La Mina Profunda":"x^2+6x-4y+1=0","Los Túneles Profundos":"9x^2-4y^2-18x-16y-43=0"};
-const STUDENT=()=>{ localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-role','"estudiante"'); localStorage.setItem('euclidia2-player',JSON.stringify({nombre:'Ana',apellido:'Ruiz'})); };
+const STUDENT=()=>{ localStorage.setItem('euclidia2-pruebas','true'); localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-role','"estudiante"'); localStorage.setItem('euclidia2-player',JSON.stringify({nombre:'Ana',apellido:'Ruiz'})); };
 (async()=>{
  const b=await chromium.launch(); const errs=[];
  const page=async(url,init,dev)=>{ const ctx=await b.newContext(dev||{...devices['iPhone SE'],deviceScaleFactor:1}); const p=await ctx.newPage(); p.on('pageerror',e=>errs.push(e.message));

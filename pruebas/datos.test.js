@@ -9,7 +9,7 @@ fs.writeFileSync(TMP,'<!doctype html><html lang="es"><head><meta charset="utf-8"
  const b=await chromium.launch(); const ctx=await b.newContext({...devices['Pixel 7'],deviceScaleFactor:1});
  const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
  await p.route(/^https?:\/\//,r=>r.abort());
- await p.addInitScript(()=>{ localStorage.setItem('euclidia2-role','"profesor"'); localStorage.setItem('euclidia2-intro','true'); sessionStorage.setItem('euclidia2-tab','1'); });
+ await p.addInitScript(()=>{ localStorage.setItem('euclidia2-role','"profesor"'); localStorage.setItem('euclidia2-intro','true'); localStorage.setItem('euclidia2-pruebas','true'); sessionStorage.setItem('euclidia2-tab','1'); });
  await p.goto('file://'+TMP); await p.waitForTimeout(500);
  const out=await p.evaluate(()=>{ const U=window.__euclidia, T=U.t, res=[];
    const near=(u,v)=>Math.abs(u-v)<1e-6, nearP=(u,v)=>near(u[0],v[0])&&near(u[1],v[1]);

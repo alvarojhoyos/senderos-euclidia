@@ -2390,7 +2390,8 @@ function welcomeBack(){ const c=coinsTotal();
   else { $("backTitle").textContent=`Hola de nuevo, ${player.nombre}`; $("backText").textContent=`${[player.nombre,player.apellido].filter(Boolean).join(" ")} tiene ${c} ${c===1?"moneda guardada":"monedas guardadas"} en este dispositivo.`; $("backGo").textContent=`Continuar como ${player.nombre}`; $("backNew").textContent=`No soy ${player.nombre}`; }
   $("back").hidden=false; }
 $("backGo").onclick=()=>{ $("back").hidden=true; markSeen(); openMenu(); };
-$("backNew").onclick=()=>{ $("back").hidden=true; markSeen(); if(locked) askPlayer(true); else askRole(); };
+// Un jugador nuevo en el mismo aparato también ve la historia antes de registrarse
+$("backNew").onclick=()=>{ $("back").hidden=true; markSeen(); showIntro(()=>{ if(locked) askPlayer(true); else askRole(); }); };
 if(role==="profesor") $("teacherBtn").hidden=false;
 /* ============ Mapa de Euclidia y medallas (etapa 7c) ============
    Cada región del mapa sale de la niebla a medida que se completan sus niveles. Medallas por mundo:
@@ -2499,12 +2500,14 @@ function closeIntro(){ $("intro").hidden=true; store.set("euclidia2-intro",true)
 $("introGo").onclick=()=>{ if(introK<INTRO.length-1){ introK++; introUI(); } else closeIntro(); };
 $("introSkip").onclick=closeIntro;
 $("storyBtn").onclick=()=>showIntro();
-const startFlow=()=>{ if(!role) askRole(); else if(role==="estudiante"&&(!player||(needDoc()&&!player.documento))) askPlayer(); else if(!seen) welcomeBack(); };
+// «euclidia2-pruebas» solo lo ponen las pruebas automáticas: entran directo al nivel, sin historia ni menú.
+const TEST_ENTRY=store.get("euclidia2-pruebas",false);
+const startFlow=()=>{ if(!role) askRole(); else if(role==="estudiante"&&(!player||(needDoc()&&!player.documento))) askPlayer(); else if(!seen) welcomeBack(); else if(!TEST_ENTRY) openMenu(); };
 // ?modo=taller abre el Taller de Coni (modo estudio) antes que todo; al cerrarlo sigue el juego normal
 const wantTaller=(()=>{ try{ return ["taller","practica"].includes(new URLSearchParams(location.search).get("modo"))&&!SESSION; }catch(e){ return false; } })();
-// Al entrar (pestaña nueva) se presenta la historia; después vienen el rol, el registro o «Hola de nuevo» y el menú.
+// Al entrar (cada vez que se abre el juego) se presenta la historia; después vienen el rol, el registro o «Hola de nuevo» y el menú.
 // Con el enlace de una evaluación también se muestra la historia, pero después no hay menú: va directo al quiz.
-const beginGame=()=>{ if(!store.get("euclidia2-intro",false)||!seen) showIntro(startFlow); else startFlow(); };
+const beginGame=()=>{ if(TEST_ENTRY&&store.get("euclidia2-intro",false)) startFlow(); else showIntro(startFlow); };
 // ?modo=estudio (enlace del profesor): entra como estudiante sin elegir rol ni dar documento; llega al Gran Mapa con las lecciones de Apolonio
 const wantStudy=(()=>{ try{ return new URLSearchParams(location.search).get("modo")==="estudio"&&!SESSION; }catch(e){ return false; } })();
 if(wantStudy&&!role){ role="estudiante"; store.set("euclidia2-role",role); }
@@ -2539,6 +2542,8 @@ $("mLab").onclick=()=>{ closeMenu(); tAfter=openMenu; openTaller(); tPracSet(fal
 $("mPrac").onclick=()=>{ closeMenu(); tAfter=openMenu; openTaller(); tPracSet(true); };
 $("mTeach").onclick=()=>{ closeMenu(); openTeacher(); };
 $("mWho").onclick=()=>{ closeMenu(); $("whoBtn").onclick(); };
+// «Cambiar de jugador» (en el juego o en el menú): primero la historia, luego quién juega
+{ const who=$("whoBtn").onclick; $("whoBtn").onclick=()=>showIntro(()=>who()); }
 $("mPlay").onclick=closeMenu;
 document.addEventListener("keydown",e=>{ if(e.key!=="Escape") return; if(!$("howto").hidden){ $("howto").hidden=true; openMenu(); } else if(!$("menu").hidden) closeMenu(); });
 if(!wantTaller) beginGame();
