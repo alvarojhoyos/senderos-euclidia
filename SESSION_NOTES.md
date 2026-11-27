@@ -3,7 +3,7 @@
 Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 1. **Taller de Coni + maestro Apolonio** — hecho, PR #12 (rama `claude/project-thread-offm5n`), esperando revisión de Alvaro.
 2. **Práctica sin fin** — hecho, PR apilado sobre el #12 (rama `claude/project-thread-kr0m2u`), esperando revisión de Alvaro.
-3. **Banco de datos variados** — hecho (52 niveles nuevos y todo el banco en cadenas por dificultad), PR #14 apilado sobre el #13 (rama `claude/project-thread-dngk74`), esperando revisión de Alvaro. Doc: https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX
+3. **Banco de datos variados** — hecho (52 niveles nuevos y todo el banco en cadenas por dificultad), PR #14 apilado sobre el #13 (rama `claude/project-thread-dngk74`), aprobado por Alvaro el 2026-11-27. Doc: https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX
 4. Modo historia en el Gran Mapa: zonas que se desbloquean, cada una enseña algo (Apolonio lo explica) y luego sus niveles; enlace del profesor (`?modo=estudio`) y botón del menú.
 5. Evaluación como una sola saga: el profesor elige cuántos niveles por dificultad y el juego arma una historia seguida de Coni.
 6. Cierre: celular, todas las pruebas, publicación, guía del profesor.
@@ -38,7 +38,7 @@ Plan aprobado por Alvaro (2026-11-26), un PR por etapa:
 - Todas las pruebas pasan (2026-11-27): niveles 391, curvas 951, datos 193, ocultos 45 (19 de forma general), evaluación 27, historia 14, toques 13, taller 11, práctica 11, restricciones 9.
 
 ## Pendiente / preguntas abiertas
-- Alvaro revisa la versión 2 del doc del banco (https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX): cadenas por dificultad y segunda tanda de 36 niveles.
+- Etapa 3 aprobada (2026-11-27). Doc del banco v2: https://claude.ai/artifact/BzsuiVXUm2tjJuzcVgyoqX
 - Prometido: Apolonio también dirá las lecciones del tutorial y las pistas (hacerlo en la etapa 4).
 - Enlace del Taller en el panel del profesor: aún no (va con el enlace de estudio en la etapa 4).
 
